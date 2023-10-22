@@ -30,7 +30,7 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
   - 2023-10-16 2,00h
   - 2023-10-19 1,00h
 - Einarbeitung in Git
-	-2023-10-22 5,00h
+	- 2023-10-22 5,00h
 ## Werkzeuge
 
 ## Dokumentation
