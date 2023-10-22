@@ -1,10 +1,10 @@
----
+
 name: Alexei Ermysh
 imt: aermysh
 gruppe: 01
 woche: 02
 gesamtarbeitszeit: 11h
----
+
 
 # Stundenzettel des Softwaretechnikpraktikums WS 2022/23
 
