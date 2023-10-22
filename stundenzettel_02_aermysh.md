@@ -14,11 +14,11 @@ gesamtarbeitszeit: 11h
 - Zu erledigende Aufgaben ermittelt und verteilt
     -2023-10-19 1h
 ## Werkzeuge
--Nötige Software installieren und bereitstellen 
+- Nötige Software installieren und bereitstellen 
     -2023-10-19 2h
--Einarbeiten in Software
+- Einarbeiten in Software
     -2023-10-22 5h
 ## Custom Service
--Struktur des Angebots 
+- Struktur des Angebots 
     -2023-10-22 2h
 
