@@ -51,7 +51,7 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 
 ## Dokumentation
 - Anschreiben für das Angebot
-	-2023-10-22  2,00h
+	-2023-10-22 2,00h
 ## Projektmanagement
 
 ## Qualitätsmanagement
