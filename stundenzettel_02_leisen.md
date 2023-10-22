@@ -23,7 +23,7 @@ Die Datei wird wie folgt benannt: `stundenzettel_<woche (mit führender 0, falls
 also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 -->
 
-# Stundenzettel des Softwaretechnikpraktikums WS 2022/23
+# Stundenzettel des Softwaretechnikpraktikums WS 2023/24
 
 ## Implementierung
 - Android-Studio installieren und lernen
