@@ -18,26 +18,7 @@ gesamtarbeitszeit: 11h
     -2022-10-19 2h
 -Einarbeiten in Software
     -2022-10-22 5h
-## Dokumentation
-
-## Sprint Planning
-
-## Backlog
-
-## Präsentation
-
 ## Custom Service
 -Struktur des Angebots 
     -2022-10-22 2h
 
-## Implementierung
-
-## Qualitätsmanagement
-
-## Implementierung
-
-## Dokumentation
-
-## Projektmanagement
-
-## Qualitätsmanagement
