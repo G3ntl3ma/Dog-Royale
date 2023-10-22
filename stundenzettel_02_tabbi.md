@@ -25,13 +25,13 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 
 ## Projektmanagement
 - Erstes Meeting 
-  - 2022-10-16 1,30h
+  - 2023-10-16 1,30h
 ## Werkzeuge
 - Software installieren und bereitstellen.
-  - 2022-10-22 1,30h
+  - 2023-10-22 1,30h
 - Einarbeiten in Software.
-  - 2022-10-22 2,00h
+  - 2023-10-22 2,00h
 
 ## Implementierung
 - Java Grundlagen
-  - 2022-10-17 3,00h
+  - 2023-10-17 3,00h
