@@ -26,4 +26,4 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 # Stundenzettel des Softwaretechnikpraktikums WS 2023/24
 
 ## Implementierung
-- Android-Studio installieren und lernen
+- Android-Studio installieren und lernen 2023-10-22
