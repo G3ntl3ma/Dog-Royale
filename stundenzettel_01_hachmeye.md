@@ -2,7 +2,7 @@
 name: Mattes Hachmeyer
 imt: hachmeye
 gruppe: 1
-woche: 2
+woche: 1
 gesamtarbeitszeit: 4
 ---
 
