@@ -30,10 +30,13 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 ## Werkzeuge
 - Einarbeitung in Java
   - 2023-10-26 2,00h
+  - 2023-10-28 2,00h
 
 
 
 ## Dokumentation
+- Schreiben des Angebots
+  - 2023-10-29 3,00h
 
 ## Sprint Planning
 - Sprint Meeting
