@@ -1,9 +1,9 @@
 ---
-name: Abderrahmane Tabbi
-imt: tabbi
-gruppe: 01
-woche: 01
-gesamtarbeitszeit: 8,00h
+name: Abdelkarim Meziane
+imt: ameziane
+gruppe: 1
+woche: 2
+gesamtarbeitszeit: 8,00 h
 ---
 
 <!--
@@ -13,7 +13,9 @@ Sollte sich die Arbeit an diesem Eintrag über mehrere Tage erstrecken, so könn
 Zum Beispiel:
 
 ## Dokumentation
-
+- Vorbereitung des Testdokuments
+  - 2022-10-12 2,00h
+  - 2022-10-13 0,15h
 
 Die Summe aller Stunden wird oben unter `gesamtarbeitszeit` im selben Format eingetragen (also z.B. 14,45h).
 
@@ -24,14 +26,13 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 # Stundenzettel des Softwaretechnikpraktikums WS 2023/24
 
 ## Projektmanagement
-- Erstes Meeting 
-  - 2023-10-16 1,30h
-## Werkzeuge
-- Software installieren und bereitstellen.
-  - 2023-10-22 1,30h
-- Einarbeiten in Software.
-  - 2023-10-22 2,00h
+- zweites Meeting
+    - 2023-10-16 1,30h
 
-## Implementierung
-- Java Grundlagen
-  - 2023-10-17 3,00h
+## Werkzeuge
+- Git auf codecademy geübt
+    - 2023-10-28 2,00h
+    - 2023-10-29 1,30h
+- Teilnahme an Git/Build-Tool Workshop
+    - 2023-10-24 1,30h
+    - 2023-10-25 1,30h

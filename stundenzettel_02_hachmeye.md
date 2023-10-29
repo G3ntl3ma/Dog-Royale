@@ -1,9 +1,9 @@
 ---
-name: Abderrahmane Tabbi
-imt: tabbi
-gruppe: 01
-woche: 01
-gesamtarbeitszeit: 8,00h
+name: <Voller Name>
+imt: <IMT Kürzel>
+gruppe: <Gruppen Nummer als Zahl>
+woche: <Semesterwoche als Zahl>
+gesamtarbeitszeit: <Arbeitszeit dieser Woche in Stunden>
 ---
 
 <!--
@@ -13,7 +13,9 @@ Sollte sich die Arbeit an diesem Eintrag über mehrere Tage erstrecken, so könn
 Zum Beispiel:
 
 ## Dokumentation
-
+- Vorbereitung des Testdokuments
+  - 2022-10-12 2,00h
+  - 2022-10-13 0,15h
 
 Die Summe aller Stunden wird oben unter `gesamtarbeitszeit` im selben Format eingetragen (also z.B. 14,45h).
 
@@ -21,17 +23,42 @@ Die Datei wird wie folgt benannt: `stundenzettel_<woche (mit führender 0, falls
 also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 -->
 
-# Stundenzettel des Softwaretechnikpraktikums WS 2023/24
+# Stundenzettel des Softwaretechnikpraktikums WS 2022/23
 
 ## Projektmanagement
-- Erstes Meeting 
-  - 2023-10-16 1,30h
+
 ## Werkzeuge
-- Software installieren und bereitstellen.
-  - 2023-10-22 1,30h
-- Einarbeiten in Software.
-  - 2023-10-22 2,00h
+- Einarbeitung in Java
+  - 2023-10-26 2,00h
+  - 2023-10-28 2,00h
+
+
+
+## Dokumentation
+- Schreiben des Angebots
+  - 2023-10-29 3,00h
+
+## Sprint Planning
+- Sprint Meeting
+  - 2023-10-26 2,00h
+
+## Backlog
+
+## Präsentation
+
+## Öffentlichkeitsarbeit
 
 ## Implementierung
-- Java Grundlagen
-  - 2023-10-17 3,00h
+
+## Qualitätsmanagement
+
+## Implementierung
+
+## Dokumentation
+
+## Projektmanagement
+- Erstellung von Gantt-Diagrammen
+  - 2023-10-25 2,00h
+  - 2023-10-26 1,50h
+
+## Qualitätsmanagement
