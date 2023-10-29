@@ -3,7 +3,7 @@ name: Felix Werner
 imt: felixwr
 gruppe: 01
 woche: 02
-gesamtarbeitszeit: 4h
+gesamtarbeitszeit: 7h
 ---
 
 # Stundenzettel des Softwaretechnikpraktikums WS 2022/23
@@ -16,3 +16,6 @@ gesamtarbeitszeit: 4h
 ## Werkzeuge
 - Weitere Planung der Werkzeuge im Rahmen der Rolle des Werkzeugbeauftragten
     -2023-10-24 1h
+## Angebotserstellung
+- Fertigstellung des Angebots
+    -2023-10-29 3h
