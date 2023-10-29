@@ -2,7 +2,7 @@
 name: Max Eric Twardy
 imt: mtwardy
 gruppe: 01
-woche: 02
+woche: 01
 gesamtarbeitszeit: 3,00h
 ---
 

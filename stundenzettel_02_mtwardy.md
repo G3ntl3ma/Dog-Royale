@@ -3,7 +3,7 @@ name: Max Eric Twardy
 imt: mtwardy
 gruppe: 01
 woche: 02
-gesamtarbeitszeit: 0,00h
+gesamtarbeitszeit: 3,40h
 ---
 
 <!--
@@ -13,7 +13,9 @@ Sollte sich die Arbeit an diesem Eintrag über mehrere Tage erstrecken, so könn
 Zum Beispiel:
 
 ## Dokumentation
-
+- Vorbereitung des Testdokuments
+  - 2022-10-12 2,00h
+  - 2022-10-13 0,15h
 
 Die Summe aller Stunden wird oben unter `gesamtarbeitszeit` im selben Format eingetragen (also z.B. 14,45h).
 
@@ -24,9 +26,15 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 # Stundenzettel des Softwaretechnikpraktikums WS 2022/23
 
 ## Projektmanagement
-
+-Zweites Meeting
+  -2023-10-23 1,30h
 ## Werkzeuge
-
+-Installation von android studio auf anderem Gerät
+  - 2023-10-25 0,10h
+-Lernen/Auffrischen von Java 
+  - 2023-10-23 0,45h
+  - 2023-10-25 0,45h
+  - 2023-10-29 0,3h
 ## Dokumentation
 
 ## Sprint Planning
