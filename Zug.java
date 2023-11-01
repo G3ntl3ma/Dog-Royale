@@ -6,12 +6,17 @@ public class Zug  {
     boolean start; //ignore from field just put a fig on start
     Player player;
     
-    public Zug(Player player, Field from, Field to, boolean start,boolean swapfigs) {
+    public Zug(Player player, Field from, Field to, boolean swapfigs) {
 	this.player = player;
 	this.from = from;
 	this.to = to;
 	this.swapfigs = swapfigs;
-	this.start = start;
+	this.start = false;
+    }
+
+    public Zug(Player player) { //start move
+	this.player = player;
+	this.start = true;
     }
 
     public void printz(){
