@@ -18,17 +18,35 @@ public class Zug  {
 	System.out.println(this.from.val + "-" + this.to.val);
     }
 
-    public void execute() { //TODO game arg??
+    public void execute(Game game) { //TODO game arg??
 	if(swapfigs) {
-	    System.out.println("TODO: implement swapfigs");
+	    Figure temp = to.figure;
+	    Player opponent = game.players.get(to.figure.col);
+	    to.figure = from.figure;
+	    from.figure = temp;
+
+	    if (to.typ == 'k') {
+		System.out.println("player " + player.col + " karte ziehen!");
+	    }
+	    if (from.typ == 'k') {
+		System.out.println("player " + opponent.col + " karte ziehen!");
+	    }
 	}
 	else if(start) {
 	    //TODO assert figs in bank > 0
 	    System.out.println("start move");
 	    System.out.println("figs in bank before " + this.player.figsinbank);
 	    Figure figure = this.player.getfirstinbank();
+	    Field to = player.startfield;
 	    figure.inbank = false;
 	    figure.inhouse = false;
+	    
+	    if (!to.empty) {
+		Player opponent = game.players.get(to.figure.col);
+		opponent.figsinbank++;
+		to.figure.inbank = true;
+	    }
+	    
 	    player.startfield.setfigure(figure); //get first figure not on field from player
 	    this.player.figsinbank -= 1;
 
@@ -37,10 +55,25 @@ public class Zug  {
 	    System.out.println("fig col " + figure.col);
 	    System.out.println("plyer col " + this.player.col);
 	}
-	else {
-	    //can increase decrease figsinhouse
-	    //if figsinhouse==figcount won
-	    System.out.println("TODO: implement normal move");
+	else { //normal move
+	    if (!to.empty) {
+		Player opponent = game.players.get(to.figure.col);
+		opponent.figsinbank++;
+		to.figure.inbank = true;
+	    }
+
+	    if (to.typ == 'h') {
+		player.figsinhouse++;
+		from.figure.inhouse = true;
+	    }
+	    
+	    from.empty = true;
+	    to.setfigure(from.figure);
+
+	    if (to.typ == 'k') {
+		System.out.println("player " + player.col + " karte ziehen!");
+	    }
+
 	}
     }
 }

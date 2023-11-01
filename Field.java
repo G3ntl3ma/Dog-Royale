@@ -15,6 +15,13 @@ public class Field  {
 	this.empty = true; 
     }
 
+    public Field(int val, char typ) {
+	this.val = val;
+	this.typ = typ;
+	this.empty = true; 
+    }
+    
+    
     public void printval() {
 	System.out.println(this.val);
     }

@@ -66,7 +66,7 @@ public class Game {
 		this.players.get(seenstarts++).startfield = this.board.get(i); //init starts
 		int off = fieldcount;
 		for (int j = off; j < figurecount + off; j++) {
-		    this.board.add(new Field(fieldcount++));
+		    this.board.add(new Field(fieldcount++, 'h'));
 		}
 		for (int j = off; j < figurecount-1 + off; j++) {
 		    this.board.get(j).addnext(this.board.get(j+1));
@@ -74,21 +74,12 @@ public class Game {
 		}
 		
 		this.board.get(i).addnext(this.board.get(off));
-		// chain.get(0).addprev(board.get(i)); //can move out of house??
+		this.board.get(off).addprev(board.get(i)); //can move out of house??
 	    }
 	}
 	
     }
 
 
-    // public void debug(){
-    // 	//debug
-    // 	System.out.println("field count " + fieldcount);
-    //     this.board.get(fieldcount-1).printvals();
-    //     this.board.get(0).printvals();
-    // 	for (int i = 0; i < players; i++) {
-    // 	    this.players.get(i).printbank();
-    // 	}
-    // }
 }
 
