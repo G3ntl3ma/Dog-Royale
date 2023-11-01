@@ -1,0 +1,56 @@
+\begin{center}
+\begin{tabular}{llc} 
+    \toprule
+    Komplexität & Kategorie &  Einflussfaktor \\
+    \midrule
+    einfach & Externe Ein- und Ausgaben & 20 \\ 
+    mittel & Externe Ein- und Ausgaben & 40 \\
+    komplex & Externe Ein- und Ausgaben & 60 \\
+    einfach & Benutzerinteraktionen & 5 \\ 
+    mittel & Benutzerinteraktionen & 25 \\ 
+    komplex & Benutzerinteraktionen & 45 \\ 
+    einfach & Externe Schnittstellen & 15 \\
+    mittel & Externe Schnittstellen & 35 \\ 
+    komplex & Externe Schnittstellen & 55 \\ 
+    einfach & Interne Dateien & 10 \\ 
+    mittel & Interne Dateien & 30 \\ 
+    komplex & Interne Dateien & 50 \\
+    \bottomrule
+\end{tabular}
+\end{center}
+
+Die Implementierungen wurden nach Kategorie und Komplexität gewertet und dementsprechend wurde jeder ein Einflussfaktor zugeschrieben. Mit Hilfe der Function-Point-Methode wurde die Bewertung der einzelnen Entwicklungen modifiziert, wobei sich die Abweichungen zum Ursprungsaufwand um maximal 30\% unterscheiden. 
+
+\begin{equation}
+    FP_{bew.} = FP_{unbew.} \cdot (\frac{Einflussfaktor}{100} + 0,7)
+\end{equation}
+
+Pro Stunde Arbeitsaufwand haben wir Kosten in Höhe von 142,00 Euro berechnet. Die berechneten Gesamtkosten können sich auf Grund von Inflation und Zukauf von zusätzlicher Software oder unvorhersehbaren Faktoren um bis zu +/-13\% abweichen.
+
+
+\begin{center}
+    \begin{tabular}{lcccc} 
+        \toprule
+        Komplexität & FP_{ungewichtet} &  Einflussfaktor & FP_{gewichtet} & Kosten (in \euro{})  \\ 
+        \midrule
+        Android GUI entwickeln & 150 & 25 & 142.5 & 20.235,00 \\ 
+        Smartphone-Server-Connection & 100 & 35 & 105 & 14.910,00\\
+        Smartphone Backend & 100 & 55 & 125 & 17.750,00\\
+        Server-Implementation & 250 & 55 & 312.5 & 44.375,00\\ 
+        Design Patterns & 100 & 30 & 100 & 14.200,00\\ 
+        Docker-Containerisierung & 50 & 30 & 50 & 7.100,00\\
+        Ausrichter entwickeln & 50 & 25 & 47.5 & 6.745,00\\ 
+        Entwicklung eines KI Spielers & 150 & 45 & 172.5 & 24.495,00\\ 
+        PC-GUI & 150 & 25 & 142.5 & 20.235,00\\ 
+        PC-Server Connection & 150 & 35 & 157.5 & 22.365,00\\ 
+        PC Backend & 150 & 35 & 157.5 & 22.365,00\\ 
+        Erstellen einer Webseite & 150 & 20 & 135 & 19.170,00\\ 
+        QA-Dokument anfertigen & 100 & 10 & 80 & 11.360,00\\ 
+        DevOps Dokument anfertigen & 150 & 30 & 150 & 21.300,00\\ 
+        Messe-Präsentation anfertigen & 100 & 30 & 100 & 14.200,00\\ 
+        Abschlusspräs. anfertigen & 100 & 30 & 100 & 14.200,00\\ 
+        \midrule
+        Gesamt & 2000 & - & 2077.5 & 295.005,00\\
+        \bottomrule
+    \end{tabular}
+\end{center}

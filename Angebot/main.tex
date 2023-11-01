@@ -1,0 +1,113 @@
+\documentclass[11pt]{article}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[german]{babel}
+% Set page size and margins
+% Replace `letterpaper' with`a4paper' for UK/EU standard size
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
+\linespread{1.15}
+\usepackage{rotating}
+
+% Entferne Einrückungen
+\setlength{\parindent}{0in}
+
+% Useful packages
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{todonotes}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{svg}
+\usepackage{tabularx}
+\usepackage[official]{eurosym}
+\usepackage{pdfpages}
+\usepackage{microtype}
+\usepackage{booktabs} % Für schönere Listen
+\usepackage[official]{eurosym} % Für Eurozeichen
+\DeclareUnicodeCharacter{20AC}{\euro} % € wird als \euro interpretiert
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% See https://latex.org/forum/viewtopic.php?t=1735
+\usepackage{makeidx}
+\makeindex
+
+\makeatletter
+\let\thedate\@date
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\pagenumbering{Roman}
+\input{title}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Table of contents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\tableofcontents
+\thispagestyle{empty}
+%\newpage
+\includepdf{Briefanschreiben.pdf}   %Auf Anschreiben muss noch Seitenzahl entfernt werden
+\section{Projektplan}
+\includegraphics[scale=0.37]{images/Projektplan_DOG_1_Test.png}
+\setcounter{page}{1}
+\section{Erläuterungen}
+\textbf{Entwicklungsumbegung Scrum:}
+Um ihren Ansprüchen gerecht zu werden und ihre Anfrage effizient zu bearbeiten, haben wir uns bei diesem Projekt für das agile Entwicklungsmodell Scrum entschieden. \\
+%\textbf{Product Backlog-}
+%Product Backlog \\
+
+\textbf{\large{\underline{Sprint 1}}} \\
+Im ersten Sprint etablieren wir die Grundlage für unser Projekt. Wir modellieren die Anforderungen, starten die Android-GUI-Entwicklung, erstellen ein QA-Dokument und definieren das Produkt-Backlog.\\
+\\
+\textbf{\large{\underline{Sprint 2}}} \\
+In Sprint 2 setzen wir die Entwicklung unseres Projekts fort. Wir beginnen mit der Serverentwicklung, setzen die Entwicklung der Android-GUI fort und implementieren die Smartphone-Server-Verbindung. Dieser Sprint ist entscheidend, da er die Grundlage für die Zusammenarbeit zwischen Client und Server schafft und unsere Anwendung funktionsfähig macht. Durch diese Schritte werden wir unser Produkt stetig weiter vorantreiben, während wir gleichzeitig die Kommunikation zwischen den Komponenten sicherstellen.\\
+\\
+\textbf{\large{\underline{Sprint 3}}} \\
+In Sprint 3 richten wir unseren Fokus auf die Vorbereitung für eine Messepräsentation. Wir erstellen eine Messeversion unseres Produkts, verfassen das DevOps-Dokument und bereiten uns darauf vor, unser Projekt der Öffentlichkeit zu präsentieren. Dieser Sprint ist entscheidend, da er sicherstellt, dass unser Produkt für die Präsentation einsatzbereit ist und unsere Entwicklungs- und Bereitstellungsprozesse gut dokumentiert sind.\\
+\\
+\textbf{\large{\underline{Sprint 4}}} \\
+In Sprint 4 konzentrieren wir uns auf die Erstellung einer Website für unser Projekt und die Integration extern gekaufter Software. Dieser Sprint ermöglicht es uns, eine Webpräsenz für unser Projekt zu schaffen und von extern erworbenen Lösungen zu profitieren, um die Funktionalität unseres Produkts zu erweitern. Durch diese Schritte werden wir eine breitere Präsenz und zusätzliche Funktionalitäten in unser Projekt einbringen, um den Nutzen und die Sichtbarkeit unserer Anwendung zu steigern.\\
+\\
+\textbf{\large{\underline{Sprint 5}}} \\
+Im Sprint 5 liegt der Schwerpunkt auf Qualitätssicherung und der Etablierung der PC-Server-Verbindung. Wir führen umfassende Unit-Tests und Qualitätssicherungsmaßnahmen durch, um die Zuverlässigkeit und Leistung unserer Anwendung sicherzustellen. Gleichzeitig richten wir die PC-Server-Verbindung ein, um die Interaktion mit unserer Anwendung auf verschiedenen Plattformen zu ermöglichen.\\
+\\
+\textbf{\large{\underline{Sprint 6}}} \\
+In Sprint 6 stehen die Serverentwicklung und Qualitätssicherung im Mittelpunkt. Wir finalisieren die Serverentwicklung, beheben Fehler und führen Integrationstests durch. Dieser Sprint markiert einen entscheidenden Schritt in Richtung Produktvollendung, da wir die Serverkomponente abschließen, Fehler beheben, um die Stabilität zu gewährleisten, und sicherstellen, dass alle Teile unserer Anwendung nahtlos miteinander interagieren. Dies ist ein wichtiger Schritt, um unser Projekt für den Produktivbetrieb vorzubereiten.
+
+%\newpage
+
+\section{Aufwandsschätzung}
+\input{aufwandschaetzung}
+\newpage
+\section{Kontakt}
+Sollten bei ihnen Fragen zu bestimmten Bereichen aufkommen, dann ist das Team von NexusVision jederzeit für sie erreichbar.
+
+\begin{center}
+    \begin{tabular}[h]{lll}
+        \toprule
+        \textbf{Zuständigkeit} & \textbf{Kontaktperson} & \textbf{E-Mail} \\
+        \midrule
+        Scrum Master & Bengiamin Keller & kellerb@mail.uni-paderborn.de \\
+        Product Owner & Luca Timo Eisen & leisen@mail.uni-paderborn.de \\
+        Qualitätsmanager &  Danny Joschua Gehse & dgehse@campus.uni-paderborn.de\\
+        Testmanager & Felix Werner & felixwr@mail.uni-paderborn.de \\  % sind doppelte Rollen in Ordnung ?
+        Produktmanager & Bengiamin Keller & kellerb@mail.uni-paderborn.de\\
+        Dokumentationsmanager & Farah El Azzouzi-Yücel & farah-ey@mail.uni-paderborn.de\\
+        Werkzeugbeauftragter & Felix Werner & felixwr@mail.uni-paderborn.de\\
+        Komitee-Mitglied & Mattes Hachmeyer & hachmeye@mail.uni-paderborn.de \\
+        \bottomrule
+    \end{tabular}
+\end{center}
+
+%\newpage
+
+
+%\pagenumbering{arabic}
+\printindex
+
+\end{document}
