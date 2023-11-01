@@ -6,7 +6,7 @@ woche: 02
 gesamtarbeitszeit: 11h
 ---
 
-# Stundenzettel des Softwaretechnikpraktikums WS 2022/23
+# Stundenzettel des Softwaretechnikpraktikums WS 2023/24
 
 ## Projektmanagement
 - Erstes Meeting und Start des Projekts 

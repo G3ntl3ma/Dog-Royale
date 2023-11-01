@@ -1,9 +1,9 @@
 ---
-name: Max Eric Twardy
-imt: mtwardy
-gruppe: 01
-woche: 01
-gesamtarbeitszeit: 3,00h
+name: Luca Timo Eisen
+imt: leisen
+gruppe: 1
+woche: 2
+gesamtarbeitszeit: 9,30h
 ---
 
 <!--
@@ -26,33 +26,9 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 # Stundenzettel des Softwaretechnikpraktikums WS 2022/23
 
 ## Projektmanagement
--Erstes Meeting und Start des Projekts
-  -2023-10-16 1,30h
--Teammeeting
-  -2023-10-19 1,00h
-## Werkzeuge
-- Vorbereitung Git
-  - 2023-10-20 0,20h
--Installation von android studios und IntelliJ
-  - 2023-10-20 0,10h
-## Dokumentation
-
-## Sprint Planning
-
-## Backlog
-
-## Präsentation
-
-## Öffentlichkeitsarbeit
-
-## Implementierung
-
-## Qualitätsmanagement
-
-## Implementierung
-
-## Dokumentation
-
-## Projektmanagement
-
-## Qualitätsmanagement
+-Erstellen des Product-Backlogs
+    -2023-10-25 3,00h
+    -2023-10-26 3,00h
+-Meetings
+    -2023-10-23 1,30h
+    -2023-10-26 2,00h

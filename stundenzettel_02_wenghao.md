@@ -2,7 +2,7 @@
 name: WenghaoBi
 imt: wenghao
 gruppe: 1
-woche: 1
+woche: 2
 gesamtarbeitszeit: 12,50h
 ---
 

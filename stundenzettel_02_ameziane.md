@@ -1,9 +1,9 @@
 ---
-name: Max Eric Twardy
-imt: mtwardy
-gruppe: 01
-woche: 01
-gesamtarbeitszeit: 3,00h
+name: Abdelkarim Meziane
+imt: ameziane
+gruppe: 1
+woche: 2
+gesamtarbeitszeit: 8,00 h
 ---
 
 <!--
@@ -23,36 +23,16 @@ Die Datei wird wie folgt benannt: `stundenzettel_<woche (mit führender 0, falls
 also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 -->
 
-# Stundenzettel des Softwaretechnikpraktikums WS 2022/23
+# Stundenzettel des Softwaretechnikpraktikums WS 2023/24
 
 ## Projektmanagement
--Erstes Meeting und Start des Projekts
-  -2023-10-16 1,30h
--Teammeeting
-  -2023-10-19 1,00h
+- zweites Meeting
+    - 2023-10-16 1,30h
+
 ## Werkzeuge
-- Vorbereitung Git
-  - 2023-10-20 0,20h
--Installation von android studios und IntelliJ
-  - 2023-10-20 0,10h
-## Dokumentation
-
-## Sprint Planning
-
-## Backlog
-
-## Präsentation
-
-## Öffentlichkeitsarbeit
-
-## Implementierung
-
-## Qualitätsmanagement
-
-## Implementierung
-
-## Dokumentation
-
-## Projektmanagement
-
-## Qualitätsmanagement
+- Git auf codecademy geübt
+    - 2023-10-28 2,00h
+    - 2023-10-29 1,30h
+- Teilnahme an Git/Build-Tool Workshop
+    - 2023-10-24 1,30h
+    - 2023-10-25 1,30h

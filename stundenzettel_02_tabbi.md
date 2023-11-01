@@ -1,9 +1,9 @@
 ---
-name: Max Eric Twardy
-imt: mtwardy
+name: Abderrahmane Tabbi
+imt: tabbi
 gruppe: 01
-woche: 01
-gesamtarbeitszeit: 3,00h
+woche: 02
+gesamtarbeitszeit: 7,30h
 ---
 
 <!--
@@ -13,9 +13,7 @@ Sollte sich die Arbeit an diesem Eintrag über mehrere Tage erstrecken, so könn
 Zum Beispiel:
 
 ## Dokumentation
-- Vorbereitung des Testdokuments
-  - 2022-10-12 2,00h
-  - 2022-10-13 0,15h
+
 
 Die Summe aller Stunden wird oben unter `gesamtarbeitszeit` im selben Format eingetragen (also z.B. 14,45h).
 
@@ -23,36 +21,12 @@ Die Datei wird wie folgt benannt: `stundenzettel_<woche (mit führender 0, falls
 also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 -->
 
-# Stundenzettel des Softwaretechnikpraktikums WS 2022/23
+# Stundenzettel des Softwaretechnikpraktikums WS 2023/24
 
 ## Projektmanagement
--Erstes Meeting und Start des Projekts
-  -2023-10-16 1,30h
--Teammeeting
-  -2023-10-19 1,00h
-## Werkzeuge
-- Vorbereitung Git
-  - 2023-10-20 0,20h
--Installation von android studios und IntelliJ
-  - 2023-10-20 0,10h
-## Dokumentation
-
-## Sprint Planning
-
-## Backlog
-
-## Präsentation
-
-## Öffentlichkeitsarbeit
-
-## Implementierung
-
-## Qualitätsmanagement
-
-## Implementierung
-
-## Dokumentation
-
-## Projektmanagement
-
-## Qualitätsmanagement
+- Werkzeug Workshop
+  - 2023-10-24 2,00h
+  - 2023-10-25 2,00h
+- Meeting
+  - 2023-10-23 1,30h
+  - 2023-10-26 2,00h
