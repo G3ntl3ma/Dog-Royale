@@ -84,6 +84,7 @@ public class Field  {
 
     public void setfigure(Figure figure) {
 	this.figure = figure;
+	figure.field = this;
 	this.empty = false;
     }
 

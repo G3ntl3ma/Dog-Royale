@@ -53,7 +53,7 @@ public class Zug  {
 	    }
 	    
 	    player.startfield.setfigure(figure); //get first figure not on field from player
-	    this.player.figsinbank -= 1;
+	    this.player.figsinbank--;
 
 	    //TODO assert figcol == playercol
 	    System.out.println("figs in bank " + this.player.figsinbank);
@@ -80,5 +80,15 @@ public class Zug  {
 	    }
 
 	}
+    }
+
+    public void print() {
+	if(this.from != null) {
+	    this.from.printval();
+	}
+	if(this.to != null) {
+	    this.to.printval();
+	}
+	System.out.println("swap figs" + this.swapfigs + " start " + this.start + " player color " + this.player.col);
     }
 }

@@ -18,7 +18,7 @@ public class Player  {
 
     public Figure getfirstinbank() {
 	for (int i = 0; i < figures.size(); i++) {
-	    if (!this.figures.get(i).inbank) {
+	    if (this.figures.get(i).inbank) {
 		return this.figures.get(i);
 	    }
 	}

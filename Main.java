@@ -61,17 +61,26 @@ public class Main {
 	System.out.println("");
 	game.printboard();
 
-	Zug swap = new Zug(player, player.startfield, game.board.get(15),  /*swap*/ true);
-	swap.execute(game);
+	Card swapcard = new Card('s');
+	Zug swapmove = swapcard.getmoves(game, player.figures.get(0)).get(0);
+	swapmove.execute(game);
 	System.out.println("");
 	game.printboard();
-
 
 	Zug house = new Zug(player, game.board.get(15), game.board.get(22),  /*swap*/ false);
 	house.execute(game);
 	System.out.println("");
 	game.printboard();
 
+
+	Figure figg = game.players.get(0).getfirstinbank();
+	Card card = new Card('t');
+	ArrayList<Zug> züge = card.getmoves(game, figg);
+	System.out.println("anzahl züge " + züge.size());
+	Zug thirteen = züge.get(0);
+	thirteen.execute(game);
+	System.out.println("");
+	game.printboard();
 	
     }
 }

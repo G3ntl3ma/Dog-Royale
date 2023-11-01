@@ -15,9 +15,10 @@ public class Card {
     }
 
     //move generator for card
-    private ArrayList<Zug> getmoves(Game game, Figure figure) { //target figure
+    public ArrayList<Zug> getmoves(Game game, Figure figure) { //target figure
 	Player player = game.players.get(figure.col);
 	ArrayList<Zug> moves = new ArrayList<>(); //TODO pass moves as arg?
+	System.out.println("go get move");
 	switch (this.typ) {
 	case 'n': //normal
 		if (figure.inbank) break;
@@ -26,7 +27,18 @@ public class Card {
 		//check if move passes startfield
 		break;
 	case 's': //swap
-		break;
+	    for(int i = 0; i < game.players.size(); i++) {
+		if(i == figure.col) continue;
+		Player opponent = game.players.get(i);
+		for (int j = 0; j < opponent.figures.size(); j++) {
+		    Figure oppfigure = opponent.figures.get(j);
+		    if (!oppfigure.inbank && !oppfigure.inhouse /* &&  oppfigure.field.typ != 's' */) {
+			System.out.println("added move");
+			moves.add(new Zug(player ,figure.field, oppfigure.field, true));
+		    }
+		}
+	    }
+	    break;
 	case 'm':  //magnet
 		if (figure.inbank) break;
 		break;
@@ -37,10 +49,16 @@ public class Card {
 		if (figure.inbank) break;
 		break;
 	case 't':  //13
-		if (figure.inbank) {
-		}
-		break;
+	    if (figure.inbank && (player.startfield.empty ||  player.startfield.figure.col != figure.col)) {
+		moves.add(new Zug(player));
+	    }
+	    //TODO normal 13 move
+	    break;
 	case 'e':  //1, 11
+	    if (figure.inbank && (player.startfield.empty ||  player.startfield.figure.col != figure.col)) {
+		moves.add(new Zug(player));
+	    }
+	    //TODO 1 11
 	    break;
 	}
 	return moves;
