@@ -31,4 +31,14 @@ public class Player  {
 	System.out.println("player " + this.col + " figbank " + this.figsinbank + " figs in house " + this.figsinhouse);
     }
 
+    public void printhouse() {
+	Field house = this.startfield.house;
+	System.out.print("house: ");
+	while(house != null) {
+	    if(!house.empty) System.out.print(house.figure.col+"-");
+	    else         System.out.print("_"+"-");
+	    house = house.next;
+	}
+	System.out.println("");
+    }
 }

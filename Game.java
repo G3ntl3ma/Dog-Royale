@@ -17,6 +17,7 @@ public class Game {
 	for (int i = 0; i < this.players.size(); i++) {
 	    Player p = this.players.get(i);
 	    p.printinfo();
+	    p.printhouse();
 	}
 	for (int i = 0; i < this.mainfields; i++) {
 	    Field f = this.board.get(i);
@@ -26,7 +27,7 @@ public class Game {
 	for (int i = 0; i < this.mainfields; i++) {
 	    Field f = this.board.get(i);
 	    if(!f.empty) System.out.print(f.figure.col+"-");
-	    else         System.out.print(" "+"-");
+	    else         System.out.print("_"+"-");
 	}
 	System.out.println("");
 	System.out.println("===================");
@@ -73,7 +74,7 @@ public class Game {
 		    this.board.get(j+1).addprev(this.board.get(j));
 		}
 		
-		this.board.get(i).addnext(this.board.get(off));
+		this.board.get(i).addhouse(this.board.get(off));
 		this.board.get(off).addprev(board.get(i)); //can move out of house??
 	    }
 	}

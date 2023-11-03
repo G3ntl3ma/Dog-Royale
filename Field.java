@@ -7,8 +7,11 @@ public class Field  {
     Figure figure;
     boolean empty; //ignore figure if empty
     char typ;
-    ArrayList<Field> next = new ArrayList<>();
-    ArrayList<Field> prev = new ArrayList<>();
+    // ArrayList<Field> next = new ArrayList<>();
+    Field next;
+    Field house;
+    Field prev;
+
     
     public Field(int val) {
 	this.val = val;
@@ -30,13 +33,9 @@ public class Field  {
 	System.out.println("this val");
 	System.out.println(this.val);
 	System.out.println("next val");
-	for (int i = 0; i < this.next.size(); i++) {
-	    this.next.get(i).printval();
-	}
+	this.next.printval();
 	System.out.println("prev val");
-	for (int i = 0; i < this.prev.size(); i++) {
-	    this.prev.get(i).printval();
-	}
+	this.prev.printval();
 
     }
     public void printtyp() {
@@ -65,21 +64,21 @@ public class Field  {
 	System.out.println("this typ");
 	System.out.println(this.typ);
 	System.out.println("next typ");
-	for (int i = 0; i < this.next.size(); i++) {
-	    this.next.get(i).printtyp();
-	}
+	this.next.printtyp();
 	System.out.println("prev typ");
-	for (int i = 0; i < this.prev.size(); i++) {
-	    this.prev.get(i).printtyp();
-	}
+	this.prev.printtyp();
     }
 
     public void addnext(Field field) {
-	this.next.add(field);
+	this.next = field;
     }
 
-    public void addprev(Field field) {
-	this.prev.add(field);
+    public void addhouse(Field field) {
+	this.house = field;
+    }
+
+    public void addprev(Field field) { //TODO rename to set
+	this.prev = field;
     }
 
     public void setfigure(Figure figure) {

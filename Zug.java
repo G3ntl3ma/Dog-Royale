@@ -31,16 +31,16 @@ public class Zug  {
 	    from.figure = temp;
 
 	    if (to.typ == 'k') {
-		System.out.println("player " + player.col + " karte ziehen!");
+		System.out.println("not implemented: player " + player.col + " karte ziehen!");
 	    }
 	    if (from.typ == 'k') {
-		System.out.println("player " + opponent.col + " karte ziehen!");
+		System.out.println("not implemented: player " + opponent.col + " karte ziehen!");
 	    }
 	}
 	else if(start) {
 	    //TODO assert figs in bank > 0
-	    System.out.println("start move");
-	    System.out.println("figs in bank before " + this.player.figsinbank);
+	    // System.out.println("start move");
+	    // System.out.println("figs in bank before " + this.player.figsinbank);
 	    Figure figure = this.player.getfirstinbank();
 	    Field to = player.startfield;
 	    figure.inbank = false;
@@ -56,9 +56,9 @@ public class Zug  {
 	    this.player.figsinbank--;
 
 	    //TODO assert figcol == playercol
-	    System.out.println("figs in bank " + this.player.figsinbank);
-	    System.out.println("fig col " + figure.col);
-	    System.out.println("plyer col " + this.player.col);
+	    // System.out.println("figs in bank " + this.player.figsinbank);
+	    // System.out.println("fig col " + figure.col);
+	    // System.out.println("plyer col " + this.player.col);
 	}
 	else { //normal move
 	    if (!to.empty) {
@@ -76,7 +76,7 @@ public class Zug  {
 	    to.setfigure(from.figure);
 
 	    if (to.typ == 'k') {
-		System.out.println("player " + player.col + " karte ziehen!");
+		System.out.println("not implemented: player " + player.col + " karte ziehen!");
 	    }
 
 	}
