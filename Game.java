@@ -50,6 +50,7 @@ public class Game {
     public void initdeck() {
 	for (int i = 0; i < 7; i++) {
 	    for (int j = 2; j <= 12; j++) {
+		if(j == 4 || j == 7 || j == 11 ) continue;
 		this.deck.add(new Card('n', j));
 	    }
 	    this.deck.add(new Card('4'));
