@@ -11,6 +11,7 @@ public class Game {
     int figurecount;
     int mainfields; //number of fields that arent bank or house
     int playertomove;
+    int playersremaining;
     
     public Game() {
 	this.players = new ArrayList<>();
@@ -119,6 +120,7 @@ public class Game {
 		this.board.get(off).addprev(board.get(i)); //can move out of house??
 	    }
 	}
+	this.playersremaining = this.players.size();
 	
     }
 

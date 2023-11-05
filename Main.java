@@ -1,10 +1,15 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
+//TODO deck empty -> combine pile with deck and reshuffle
+//TODO if deck.size() < players.size() * handcardnum -> combine pile with deck and reshuffle
+//TODO dont allow jumping over figures in house
 //TODO random move
 //TODO test if move generator is bugfree
 //TODO rename all variables to english equivalents
-//TODO field val is its index
+//TODO zeit/zug limit
+//TODO detect when the game is over (one player full house)
+//TODO determine winner
 
 public class Main {
     public static void main(String[] args) {
@@ -15,12 +20,11 @@ public class Main {
 	Game game = new Game();
 	game.init(conf, figurecount);
 	game.initdeck();
+
+	// game.reshuffledeck();
 	game.distributecards();
 
-	Player player1 = game.players.get(0);
-	Player player2 = game.players.get(1);
-
-	for (int _i = 0; _i < 10; _i++) {
+	while (game.playersremaining > 0) {
 	    ArrayList<Zug> moves = new ArrayList<>();
 	    game.getcurplayer().genmoves(game, moves);
 	    
@@ -32,10 +36,14 @@ public class Main {
 		moves.get(0).execute(game);
 	    }
 	    else {
+		//TODO add handcards to pile if any
+		game.playersremaining--;
 		game.nextplayer();
 	    }
 	    game.printboard();
 	}
+
+	System.out.println("end of round");
 
     }
 }
