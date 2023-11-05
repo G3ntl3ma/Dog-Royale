@@ -27,7 +27,7 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 
 ## Projektmanagement
 - zweites Meeting
-    - 2023-10-16 1,30h
+    - 2023-10-23 1,30h
 
 ## Werkzeuge
 - Git auf codecademy geübt
