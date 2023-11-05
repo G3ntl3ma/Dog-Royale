@@ -31,10 +31,12 @@ public class Zug  {
 	    from.figure = temp;
 
 	    if (to.typ == 'k') {
-		System.out.println("not implemented: player " + player.col + " karte ziehen!");
+		System.out.println("player " + player.col + " draw card!");
+		player.draw(game.deck);
 	    }
 	    if (from.typ == 'k') {
-		System.out.println("not implemented: player " + opponent.col + " karte ziehen!");
+		System.out.println("player " + opponent.col + " draw card!");
+		player.draw(game.deck);
 	    }
 	}
 	else if(start) {
@@ -89,6 +91,6 @@ public class Zug  {
 	if(this.to != null) {
 	    this.to.printval();
 	}
-	System.out.println("swap figs" + this.swapfigs + " start " + this.start + " player color " + this.player.col);
+	System.out.println("swap figs " + this.swapfigs + " start " + this.start + " player color " + this.player.col);
     }
 }

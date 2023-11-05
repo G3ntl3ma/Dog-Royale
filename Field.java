@@ -46,7 +46,7 @@ public class Field  {
 	    break;
 	    
 	case 'k':
-	    System.out.println("karteziehen");
+	    System.out.println("draw card");
 	    break;
 
 	case 's':
@@ -54,7 +54,7 @@ public class Field  {
 	    break;
 
 	case 'h':
-	    System.out.println("haus");
+	    System.out.println("house");
 	    break;
 	}	
 

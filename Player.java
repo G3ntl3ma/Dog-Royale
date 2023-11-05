@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class Player  {
 
     ArrayList<Figure> figures = new ArrayList<>();
+    ArrayList<Card> cards = new ArrayList<>();
     Field startfield;
     int figsinbank;
     int figsinhouse;
@@ -28,7 +29,10 @@ public class Player  {
     }
 
     public void printinfo() {
-	System.out.println("player " + this.col + " figbank " + this.figsinbank + " figs in house " + this.figsinhouse);
+	System.out.print("player " + this.col + " figbank " + this.figsinbank + " figs in house " + this.figsinhouse);
+	System.out.print(" cards ");
+	this.printcards();
+	System.out.println("");
     }
 
     public void printhouse() {
@@ -40,5 +44,26 @@ public class Player  {
 	    house = house.next;
 	}
 	System.out.println("");
+    }
+
+    public void draw(ArrayList<Card> deck) {
+	Card pop = deck.remove(deck.size() - 1);
+	this.cards.add(pop);
+    }
+
+    public void printcards() {
+	for (int i = 0; i < this.cards.size(); i++) {
+	    System.out.print(this.cards.get(i).typ + " ");
+	}
+    }
+
+    public void genmoves(Game game, ArrayList<Zug> moves) {
+	for (int i = 0; i < this.cards.size(); i++) {
+	    // System.out.println("card " + i + ": " + this.cards.get(i).typ);
+	    for (int j = 0; j < this.figures.size(); j++) {
+		// System.out.println("figure " + j);
+		this.cards.get(i).getmoves(game, this.figures.get(j), moves); 
+	    }
+	}
     }
 }

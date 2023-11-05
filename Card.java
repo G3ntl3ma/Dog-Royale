@@ -60,10 +60,9 @@ public class Card {
     }
 
     //move generator for card
-    public ArrayList<Zug> getmoves(Game game, Figure figure) { //target figure
+    public void getmoves(Game game, Figure figure, ArrayList<Zug> moves) { //target figure
 	Player player = game.players.get(figure.col);
-	ArrayList<Zug> moves = new ArrayList<>(); //TODO pass moves as arg?
-	System.out.println("go get move");
+	// System.out.println("go get move");
 	Field to;
 	switch (this.typ) {
 	case 'n': //normal
@@ -117,13 +116,22 @@ public class Card {
 	    if (figure.inbank && (player.startfield.empty ||  player.startfield.figure.col != figure.col)) {
 		moves.add(new Zug(player));
 	    }
-	    addstepmove(moves, 1,  figure, game, player, false);
-	    addstepmove(moves, 11,  figure, game, player, false);
+	    else if (!figure.inbank){
+		addstepmove(moves, 1,  figure, game, player, false);
+		addstepmove(moves, 11,  figure, game, player, false);
+	    }
 	    break;
 	case 'c':  //copy
+	    int inx = game.pile.size() -1 ;
+	    for (int i = inx; i > 0; i--) {
+		Card lastcard = game.pile.get(game.pile.size() - 1);
+		if (lastcard.typ != 'c') {
+		    lastcard.getmoves(game, figure, moves);
+		    break; 
+		}
+	    }
 	    break;
 	}
-	return moves;
     }
 
     public void printtyp() {

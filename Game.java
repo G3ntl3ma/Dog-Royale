@@ -1,15 +1,29 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 public class Game {
 
     ArrayList<Player> players;
     ArrayList<Field> board;
+    ArrayList<Card> deck;
+    ArrayList<Card> pile;
     int figurecount;
-    int mainfields;
+    int mainfields; //number of fields that arent bank or house
     
     public Game() {
 	this.players = new ArrayList<>();
 	this.board = new ArrayList<>();
+	this.deck = new ArrayList<>();
+	this.pile = new ArrayList<>();
+    }
+
+    public void distributecards() {
+	for (int i = 0; i < 5; i++) {
+	    for (int j = 0; j < this.players.size(); j++) {
+		this.players.get(j).draw(this.deck);
+	    }
+	}
     }
 
     public void printboard() {
@@ -31,6 +45,29 @@ public class Game {
 	}
 	System.out.println("");
 	System.out.println("===================");
+    }
+
+    public void initdeck() {
+	for (int i = 0; i < 7; i++) {
+	    for (int j = 2; j <= 12; j++) {
+		this.deck.add(new Card('n', j));
+	    }
+	    this.deck.add(new Card('4'));
+	    this.deck.add(new Card('7'));
+	    this.deck.add(new Card('s'));
+	    this.deck.add(new Card('c'));
+	}
+
+	for (int i = 0; i < 10; i++) {
+	    this.deck.add(new Card('t'));
+	    this.deck.add(new Card('e'));
+	}
+	for (int i = 0; i < 6; i++) {
+	    this.deck.add(new Card('m'));
+	}
+	
+	Collections.shuffle(this.deck, new Random(666)); //deterministic seed
+	// Collections.shuffle(this.deck); //undeterministic
     }
 
     public void init(String conf, int figurecount) { //set board and players
