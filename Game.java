@@ -10,12 +10,14 @@ public class Game {
     ArrayList<Card> pile;
     int figurecount;
     int mainfields; //number of fields that arent bank or house
+    int playertomove;
     
     public Game() {
 	this.players = new ArrayList<>();
 	this.board = new ArrayList<>();
 	this.deck = new ArrayList<>();
 	this.pile = new ArrayList<>();
+	this.playertomove = 0;
     }
 
     public void distributecards() {
@@ -28,6 +30,7 @@ public class Game {
 
     public void printboard() {
 	System.out.println("BOARD=================");
+	System.out.println("player to move " + this.playertomove);
 	for (int i = 0; i < this.players.size(); i++) {
 	    Player p = this.players.get(i);
 	    p.printinfo();
@@ -119,6 +122,13 @@ public class Game {
 	
     }
 
+    public Player getcurplayer() {
+	return this.players.get(this.playertomove);
+    }
+
+    public void nextplayer() {
+	this.playertomove = (this.playertomove + 1) % this.players.size();
+    }
 
 }
 

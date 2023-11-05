@@ -5,18 +5,21 @@ public class Zug  {
     boolean swapfigs;
     boolean start; //ignore from field just put a fig on start
     Player player;
+    Card cardused;
     
-    public Zug(Player player, Field from, Field to, boolean swapfigs) {
+    public Zug(Player player, Field from, Field to, boolean swapfigs, Card cardused) {
 	this.player = player;
 	this.from = from;
 	this.to = to;
 	this.swapfigs = swapfigs;
 	this.start = false;
+	this.cardused = cardused;
     }
 
-    public Zug(Player player) { //start move
+    public Zug(Player player, Card cardused) { //start move
 	this.player = player;
 	this.start = true;
+	this.cardused = cardused;
     }
 
     public void printz(){
@@ -82,6 +85,10 @@ public class Zug  {
 	    }
 
 	}
+
+	game.nextplayer();
+	player.cards.remove(this.cardused);
+	game.pile.add(this.cardused);
     }
 
     public void print() {

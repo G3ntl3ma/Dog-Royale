@@ -16,6 +16,7 @@ public class Card {
 
     private void addstepmove(ArrayList<Zug> moves, int argsteps, Figure figure, Game game, Player player, boolean range) {
 	//check if current field startfield (check if can move into house)
+	System.out.println("argsteps " + argsteps);
 	boolean neg = argsteps < 0;
 	Field to;
 	int steps;
@@ -33,7 +34,7 @@ public class Card {
 	    return;
 	}
 	
-	if(range || steps == 0) moves.add(new Zug(player, figure.field, to, false));
+	if(range || steps == 0) moves.add(new Zug(player, figure.field, to, false, this));
 
 	while (steps != 0) {
 	    // System.out.println(steps);
@@ -47,6 +48,8 @@ public class Card {
 		if (game.players.get(figure.col).startfield == to) to = to.house;
 		else to = to.next;
 	    }
+	    if (to == null) return;
+	    
 	    //check if fields occupied and startfield of that figure
 	    //TODO bool for every start field that keeps track if occupied
 	    //TODO set to.figure to null so checking for emptyness is not necessary
@@ -54,7 +57,7 @@ public class Card {
 		return;
 	    }
 	    if (range || steps == 0) {
-		moves.add(new Zug(player, figure.field, to, false));
+		moves.add(new Zug(player, figure.field, to, false, this));
 	    }
 	}
     }
@@ -62,7 +65,7 @@ public class Card {
     //move generator for card
     public void getmoves(Game game, Figure figure, ArrayList<Zug> moves) { //target figure
 	Player player = game.players.get(figure.col);
-	// System.out.println("go get move");
+	System.out.println("get move " + this.typ);
 	Field to;
 	switch (this.typ) {
 	case 'n': //normal
@@ -77,7 +80,7 @@ public class Card {
 		    Figure oppfigure = opponent.figures.get(j);
 		    if (!oppfigure.inbank && !oppfigure.inhouse /* &&  oppfigure.field.typ != 's' */) {
 			System.out.println("added move");
-			moves.add(new Zug(player ,figure.field, oppfigure.field, true));
+			moves.add(new Zug(player ,figure.field, oppfigure.field, true, this));
 		    }
 		}
 	    }
@@ -91,7 +94,7 @@ public class Card {
 		    next = next.next;
 		}
 		if(figure.field != to) { //move that does nothing allowed???
-		    moves.add(new Zug(player, figure.field, to, false));
+		    moves.add(new Zug(player, figure.field, to, false, this));
 		}
 		break;
 	case '7':  //1-7
@@ -106,15 +109,15 @@ public class Card {
 		break;
 	case 't':  //13
 	    if (figure.inbank && (player.startfield.empty ||  player.startfield.figure.col != figure.col)) {
-		moves.add(new Zug(player));
+		moves.add(new Zug(player, this));
 	    }
-	    else {
+	    else if (!figure.inbank) {
 		addstepmove(moves, 13,  figure, game, player, false);
 	    }
 	    break;
 	case 'e':  //1, 11
 	    if (figure.inbank && (player.startfield.empty ||  player.startfield.figure.col != figure.col)) {
-		moves.add(new Zug(player));
+		moves.add(new Zug(player, this));
 	    }
 	    else if (!figure.inbank){
 		addstepmove(moves, 1,  figure, game, player, false);
