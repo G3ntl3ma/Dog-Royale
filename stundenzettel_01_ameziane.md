@@ -23,16 +23,16 @@ Die Datei wird wie folgt benannt: stundenzettel_<woche (mit führender 0, falls 
 also zum Beispiel: stundenzettel_01_maxm.md oder stundenzettel_10_maxm.md.
 -->
 
-#Stundenzettel des Softwaretechnikpraktikums WS 2023/24
+# Stundenzettel des Softwaretechnikpraktikums WS 2023/24
 
-##Projektmanagement
+## Projektmanagement
 - erstes Meeting und Verteilung der Rollen
     - 2023-10-16 1,30h
 
-##Werkzeuge
+## Werkzeuge
 - Alle Werkzeuge heruntergeladen und eingestellt
     - 2023-10-21 4,00h
 
-##Implementierung
+## Implementierung
 - Grundlagen von Java
     - 2023-10-22 3,00h
