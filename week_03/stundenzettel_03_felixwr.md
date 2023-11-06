@@ -3,7 +3,7 @@ name: Felix Werner
 imt: felixwr
 gruppe: 01
 woche: 03
-gesamtarbeitszeit: 4,5h
+gesamtarbeitszeit: 6h
 ---
 
 
@@ -16,4 +16,7 @@ gesamtarbeitszeit: 4,5h
 - Planung und Weiterbildung mit Spring Boot
     - 2023-11-01 2h
 ## QA-Dokument
-- Planung und Schreiben des Test-Teils für das QA-Dokument 1h
+- Planung und Schreiben des Test-Teils für das QA-Dokument 
+    - 2023-11-04 1h
+- Weiteres Schreiben des Test-Teils und Anlegen des Overleaf-Dokuments 
+    - 2023-11-05 1,5h
