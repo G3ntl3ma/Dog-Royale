@@ -71,7 +71,7 @@ public class Card {
 	switch (this.typ) {
 	case 'n': //normal
 	    if (figure.inbank) break;
-	    System.out.println("figure col " + figure.col);
+	    // System.out.println("figure col " + figure.col);
 	    addstepmove(moves, this.steps,  figure, game, player, false);
 	    break;
 	case 's': //swap

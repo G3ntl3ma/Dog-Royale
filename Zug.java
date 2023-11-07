@@ -83,9 +83,15 @@ public class Zug  {
 		to.figure.inbank = true;
 	    }
 
-	    if (to.typ == 'h') {
+	    if (to.typ == 'h' && from.typ != 'h') {
 		player.figsinhouse++;
 		from.figure.inhouse = true;
+	    }
+
+	    //possible??
+	    if (to.typ != 'h' && from.typ == 'h') {
+		player.figsinhouse--;
+		from.figure.inhouse = false;
 	    }
 	    
 	    from.empty = true;

@@ -21,12 +21,15 @@ public class Main {
 	game.init(conf, figurecount, handcardcount);
 	game.initdeck();
 
-	for (int round = 0; round < 2; round++) {
+	Player winner = null; //dumb
+	int round = 0;
+	
+	while (winner == null) {
 	    game.reshuffle();
 	    game.reinit();
 	    game.distributecards();
 	    
-	    while (game.playersremaining > 0) {
+	    while (game.playersremaining > 0 && winner == null) {
 		ArrayList<Zug> moves = new ArrayList<>();
 		Player curplyer = game.getcurplayer();
 		System.out.println("gen moves for player " + curplyer.col);
@@ -44,10 +47,13 @@ public class Main {
 		    System.out.println("player " + game.getcurplayer().col + "s turn");
 		}
 		game.printboard();
+		winner = game.getwinner();
 	    }
 	    
 	    System.out.println("end of round " + round);
+	    round++;
 	}
 
+	System.out.println("winner: " + winner.col);
     }
 }

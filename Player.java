@@ -66,7 +66,7 @@ public class Player  {
 	for (int i = 0; i < this.cards.size(); i++) {
 	    // System.out.println("card " + i + ": " + this.cards.get(i).typ);
 	    for (int j = 0; j < this.figures.size(); j++) {
-		System.out.println("figure " + j);
+		// System.out.println("figure " + j);
 		this.cards.get(i).getmoves(game, this.figures.get(j), moves); 
 	    }
 	}

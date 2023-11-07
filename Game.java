@@ -187,5 +187,14 @@ public class Game {
 	    throw new RuntimeException("total sum of cards is " + totalsum + " instead of 110");
 	}
     }
+
+    public Player getwinner() {
+	for (int i = 0; i < this.players.size(); i++) {
+	    if(this.players.get(i).figsinhouse == this.figurecount) {
+		return this.players.get(i);
+	    }
+	}
+	return null;
+    }
 }
 
