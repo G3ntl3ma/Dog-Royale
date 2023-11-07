@@ -53,8 +53,10 @@ public class Card {
 	    //check if fields occupied and startfield of that figure
 	    //TODO bool for every start field that keeps track if occupied
 	    //TODO set to.figure to null so checking for emptyness is not necessary
-	    if((to.typ == 's' && to == game.players.get(to.figure.col).startfield) || (to.typ == 'h' && !to.empty)) {
-		return;
+	    if (!to.empty) { //check emptyness first otherwise to.figure is null and therefore to.figure.col bug
+		if((to.typ == 's' && to == game.players.get(to.figure.col).startfield) || to.typ == 'h') {
+		    return;
+		}
 	    }
 	    if (range || steps == 0) {
 		moves.add(new Zug(player, figure.field, to, false, this));
@@ -65,20 +67,21 @@ public class Card {
     //move generator for card
     public void getmoves(Game game, Figure figure, ArrayList<Zug> moves) { //target figure
 	Player player = game.players.get(figure.col);
-	// System.out.println("get move " + this.typ);
 	Field to;
 	switch (this.typ) {
 	case 'n': //normal
-		if (figure.inbank) break;
-		addstepmove(moves, this.steps,  figure, game, player, false);
-		break;
+	    if (figure.inbank) break;
+	    System.out.println("figure col " + figure.col);
+	    addstepmove(moves, this.steps,  figure, game, player, false);
+	    break;
 	case 's': //swap
+	    if (figure.inbank || figure.inhouse /*allowed?*/) break;
 	    for(int i = 0; i < game.players.size(); i++) {
 		if(i == figure.col) continue;
 		Player opponent = game.players.get(i);
 		for (int j = 0; j < opponent.figures.size(); j++) {
 		    Figure oppfigure = opponent.figures.get(j);
-		    if (!oppfigure.inbank && !oppfigure.inhouse /* &&  oppfigure.field.typ != 's' */) {
+		    if (!oppfigure.inbank && !oppfigure.inhouse &&  oppfigure.field.typ != 's' ) {
 			// System.out.println("added move");
 			moves.add(new Zug(player ,figure.field, oppfigure.field, true, this));
 		    }
@@ -86,10 +89,10 @@ public class Card {
 	    }
 	    break;
 	case 'm':  //magnet
-		if (figure.inbank) break;
+		if (figure.inbank || figure.inhouse) break;
 		to = figure.field;
 		Field next = to.next;
-		while (next.empty) {
+		while (next.empty) { 
 		    to = next;
 		    next = next.next;
 		}

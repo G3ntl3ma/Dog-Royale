@@ -27,10 +27,10 @@ public class Zug  {
     }
 
     public void execute(Game game) {
-	System.out.println("cards num before " + this.player.cards.size());
+	// System.out.println("cards num before " + this.player.cards.size());
 	player.cards.remove(this.cardused);
 	game.pile.add(this.cardused);
-	System.out.println("cards num after 1 " + this.player.cards.size());
+	// System.out.println("cards num after 1 " + this.player.cards.size());
 	if(swapfigs) {
 	    Figure temp = to.figure;
 	    Player opponent = game.players.get(to.figure.col);
@@ -63,9 +63,11 @@ public class Zug  {
 	    if (!to.empty) {
 		Player opponent = game.players.get(to.figure.col);
 		opponent.figsinbank++;
+		//set field of figure
 		to.figure.inbank = true;
 	    }
-	    
+
+	    //set figure of field
 	    player.startfield.setfigure(figure); //get first figure not on field from player
 	    this.player.figsinbank--;
 
@@ -97,7 +99,7 @@ public class Zug  {
 	}
 
 	game.nextplayer();
-	System.out.println("cards num after 2 " + this.player.cards.size());
+	// System.out.println("cards num after 2 " + this.player.cards.size());
     }
 
     public void print() {

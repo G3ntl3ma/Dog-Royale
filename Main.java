@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-//TODO dont allow jumping over figures in house
 //TODO deck empty -> combine pile with deck and reshuffle
 //TODO if deck.size() < players.size() * handcardnum -> combine pile with deck and reshuffle
 //TODO random move
@@ -22,29 +21,33 @@ public class Main {
 	game.init(conf, figurecount, handcardcount);
 	game.initdeck();
 
-	int round = 1;
-	// for (int round = 0; round < 1; round++) {
-	    // game.reshuffle();
+	for (int round = 0; round < 2; round++) {
+	    game.reshuffle();
+	    game.reinit();
 	    game.distributecards();
 	    
 	    while (game.playersremaining > 0) {
 		ArrayList<Zug> moves = new ArrayList<>();
-		game.getcurplayer().genmoves(game, moves);
+		Player curplyer = game.getcurplayer();
+		System.out.println("gen moves for player " + curplyer.col);
+		curplyer.genmoves(game, moves);
 		
 		if(moves.size() > 0) {
 		    moves.get(0).print();
 		    moves.get(0).execute(game);
 		}
 		else {
+		    System.out.println("player " + game.getcurplayer().col + " is out");
 		    game.discardhandcards();
-		    game.playersremaining--;
+		    game.playersremaining--; //TODO BUG 
 		    game.nextplayer();
+		    System.out.println("player " + game.getcurplayer().col + "s turn");
 		}
 		game.printboard();
 	    }
 	    
 	    System.out.println("end of round " + round);
-	// }
+	}
 
     }
 }

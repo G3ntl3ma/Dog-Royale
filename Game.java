@@ -8,6 +8,7 @@ public class Game {
     ArrayList<Field> board;
     ArrayList<Card> deck;
     ArrayList<Card> pile;
+    int playertostart;
     int figurecount;
     int handcardcount;
     int mainfields; //number of fields that arent bank or house
@@ -20,22 +21,42 @@ public class Game {
 	this.deck = new ArrayList<>();
 	this.pile = new ArrayList<>();
 	this.playertomove = 0;
+	this.playertostart = 0;
     }
 
     public void reshuffle() {
+	System.out.println("reshuffle start deck size " + this.deck.size() + " pile size " + this.pile.size());
 	this.deck.addAll(this.pile);
+	//throw away hand cards
+	for (int i = 0; i < this.players.size(); i++) {
+	    this.deck.addAll(this.players.get(i).cards);
+	    this.players.get(i).cards = new ArrayList<>();
+	}
 	this.pile = new ArrayList<>();
 	Collections.shuffle(this.deck);
+	System.out.println("reshuffle done deck size " + this.deck.size() + " pile size " + this.pile.size());	
+    }
+
+    public void reinit() {
+	this.playertostart = (this.playertostart + 1) % this.players.size();
+	this.playertomove = this.playertostart;
+	this.playersremaining = this.players.size();
     }
 
     public void discardhandcards() {
 	Player player = this.getcurplayer();
 	if (player.cards.size() > 0) {
-	    //pop
-	    Card pop = this.pile.remove(this.pile.size() - 1);
-	    this.pile.addAll(player.cards);
-	    //readd
-	    this.pile.add(pop);
+	    if (this.pile.size() > 0) {
+		//pop
+		Card pop = this.pile.remove(this.pile.size() - 1);
+		this.pile.addAll(player.cards);
+		//readd
+		this.pile.add(pop);
+	    }
+	    else {
+		this.pile.addAll(player.cards);
+	    }
+	    player.cards = new ArrayList<>();
 	}
     }
 
@@ -70,6 +91,7 @@ public class Game {
 	    else         System.out.print("_"+"-");
 	}
 	System.out.println("");
+	this.printtotalcards();
 	System.out.println("===================");
     }
 
@@ -154,5 +176,16 @@ public class Game {
 	this.playertomove = (this.playertomove + 1) % this.players.size();
     }
 
+    public void printtotalcards() {
+	int handsum = 0;
+	for (int i = 0; i < this.players.size(); i++) {
+	    handsum += this.players.get(i).cards.size();
+	}
+	int totalsum = this.deck.size() + this.pile.size() + handsum;
+	System.out.println("total cards in game " + totalsum + " deck " + this.deck.size() + " pile " + this.pile.size() + " hands " + handsum);
+	if(totalsum != 110) {
+	    throw new RuntimeException("total sum of cards is " + totalsum + " instead of 110");
+	}
+    }
 }
 

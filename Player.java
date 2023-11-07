@@ -25,6 +25,7 @@ public class Player  {
 	}
 
 	System.out.println("unreachable getfirstinbank");
+	System.exit(23);
 	return this.figures.get(0);
     }
 
@@ -61,10 +62,11 @@ public class Player  {
     }
 
     public void genmoves(Game game, ArrayList<Zug> moves) {
+	System.out.println("this player color " + this.col);
 	for (int i = 0; i < this.cards.size(); i++) {
 	    // System.out.println("card " + i + ": " + this.cards.get(i).typ);
 	    for (int j = 0; j < this.figures.size(); j++) {
-		// System.out.println("figure " + j);
+		System.out.println("figure " + j);
 		this.cards.get(i).getmoves(game, this.figures.get(j), moves); 
 	    }
 	}
