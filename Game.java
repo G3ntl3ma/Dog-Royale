@@ -9,6 +9,7 @@ public class Game {
     ArrayList<Card> deck;
     ArrayList<Card> pile;
     int figurecount;
+    int handcardcount;
     int mainfields; //number of fields that arent bank or house
     int playertomove;
     int playersremaining;
@@ -21,10 +22,27 @@ public class Game {
 	this.playertomove = 0;
     }
 
+    public void reshuffle() {
+	this.deck.addAll(this.pile);
+	this.pile = new ArrayList<>();
+	Collections.shuffle(this.deck);
+    }
+
+    public void discardhandcards() {
+	Player player = this.getcurplayer();
+	if (player.cards.size() > 0) {
+	    //pop
+	    Card pop = this.pile.remove(this.pile.size() - 1);
+	    this.pile.addAll(player.cards);
+	    //readd
+	    this.pile.add(pop);
+	}
+    }
+
     public void distributecards() {
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < this.handcardcount; i++) {
 	    for (int j = 0; j < this.players.size(); j++) {
-		this.players.get(j).draw(this.deck);
+		this.players.get(j).draw(this);
 	    }
 	}
     }
@@ -37,6 +55,10 @@ public class Game {
 	    p.printinfo();
 	    p.printhouse();
 	}
+	for (int i = 0; i < this.mainfields; i++) {
+	    System.out.print(i+"-");
+	}
+	System.out.println("");
 	for (int i = 0; i < this.mainfields; i++) {
 	    Field f = this.board.get(i);
 	    System.out.print(f.typ+"-");
@@ -75,9 +97,9 @@ public class Game {
 	// Collections.shuffle(this.deck); //undeterministic
     }
 
-    public void init(String conf, int figurecount) { //set board and players
+    public void init(String conf, int figurecount,int handcardcount) { //set board and players
 	this.figurecount = figurecount;
-	
+	this.handcardcount = handcardcount;
 	int players = 0;
 	for (int i = 0; i < conf.length(); i++) {
 	    if (conf.charAt(i) == 's') players++;

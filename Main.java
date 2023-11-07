@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
+//TODO dont allow jumping over figures in house
 //TODO deck empty -> combine pile with deck and reshuffle
 //TODO if deck.size() < players.size() * handcardnum -> combine pile with deck and reshuffle
-//TODO dont allow jumping over figures in house
 //TODO random move
 //TODO test if move generator is bugfree
 //TODO rename all variables to english equivalents
@@ -16,34 +16,35 @@ public class Main {
 
         String conf = "snnnnknnnnsnnnnknnn";
 	int figurecount = 2;
-
+	int handcardcount = 10;
+	
 	Game game = new Game();
-	game.init(conf, figurecount);
+	game.init(conf, figurecount, handcardcount);
 	game.initdeck();
 
-	// game.reshuffledeck();
-	game.distributecards();
-
-	while (game.playersremaining > 0) {
-	    ArrayList<Zug> moves = new ArrayList<>();
-	    game.getcurplayer().genmoves(game, moves);
+	int round = 1;
+	// for (int round = 0; round < 1; round++) {
+	    // game.reshuffle();
+	    game.distributecards();
 	    
-	    for (int i = 0; i < moves.size(); i++) {
-		moves.get(i).print();
+	    while (game.playersremaining > 0) {
+		ArrayList<Zug> moves = new ArrayList<>();
+		game.getcurplayer().genmoves(game, moves);
+		
+		if(moves.size() > 0) {
+		    moves.get(0).print();
+		    moves.get(0).execute(game);
+		}
+		else {
+		    game.discardhandcards();
+		    game.playersremaining--;
+		    game.nextplayer();
+		}
+		game.printboard();
 	    }
-
-	    if(moves.size() > 0) {
-		moves.get(0).execute(game);
-	    }
-	    else {
-		//TODO add handcards to pile if any
-		game.playersremaining--;
-		game.nextplayer();
-	    }
-	    game.printboard();
-	}
-
-	System.out.println("end of round");
+	    
+	    System.out.println("end of round " + round);
+	// }
 
     }
 }

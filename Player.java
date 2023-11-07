@@ -46,8 +46,11 @@ public class Player  {
 	System.out.println("");
     }
 
-    public void draw(ArrayList<Card> deck) {
-	Card pop = deck.remove(deck.size() - 1);
+    public void draw(Game game) {
+	if(game.deck.size() == 0) {
+	    game.reshuffle();
+	}
+	Card pop = game.deck.remove(game.deck.size() - 1);
 	this.cards.add(pop);
     }
 

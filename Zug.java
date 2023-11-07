@@ -26,20 +26,29 @@ public class Zug  {
 	System.out.println(this.from.val + "-" + this.to.val);
     }
 
-    public void execute(Game game) { //TODO game arg??
+    public void execute(Game game) {
+	System.out.println("cards num before " + this.player.cards.size());
+	player.cards.remove(this.cardused);
+	game.pile.add(this.cardused);
+	System.out.println("cards num after 1 " + this.player.cards.size());
 	if(swapfigs) {
 	    Figure temp = to.figure;
 	    Player opponent = game.players.get(to.figure.col);
+	    //set figure of field
 	    to.figure = from.figure;
 	    from.figure = temp;
 
+	    //set field of figures
+	    to.figure.field = to;
+	    from.figure.field = from;
+
 	    if (to.typ == 'k') {
 		System.out.println("player " + player.col + " draw card!");
-		player.draw(game.deck);
+		player.draw(game);
 	    }
 	    if (from.typ == 'k') {
 		System.out.println("player " + opponent.col + " draw card!");
-		player.draw(game.deck);
+		player.draw(game);
 	    }
 	}
 	else if(start) {
@@ -81,22 +90,23 @@ public class Zug  {
 	    to.setfigure(from.figure);
 
 	    if (to.typ == 'k') {
-		System.out.println("not implemented: player " + player.col + " karte ziehen!");
+		System.out.println("player " + player.col + " karte ziehen!");
+		player.draw(game);
 	    }
 
 	}
 
 	game.nextplayer();
-	player.cards.remove(this.cardused);
-	game.pile.add(this.cardused);
+	System.out.println("cards num after 2 " + this.player.cards.size());
     }
 
     public void print() {
+	System.out.print("card type " + this.cardused.typ + " ");
 	if(this.from != null) {
-	    this.from.printval();
+	    System.out.print("from " + this.from.val + " ");
 	}
 	if(this.to != null) {
-	    this.to.printval();
+	    System.out.print("to " + this.to.val + " ");
 	}
 	System.out.println("swap figs " + this.swapfigs + " start " + this.start + " player color " + this.player.col);
     }

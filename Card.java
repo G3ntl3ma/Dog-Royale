@@ -16,7 +16,7 @@ public class Card {
 
     private void addstepmove(ArrayList<Zug> moves, int argsteps, Figure figure, Game game, Player player, boolean range) {
 	//check if current field startfield (check if can move into house)
-	System.out.println("argsteps " + argsteps);
+	// System.out.println("argsteps " + argsteps);
 	boolean neg = argsteps < 0;
 	Field to;
 	int steps;
@@ -30,7 +30,7 @@ public class Card {
 	}
 	if(to == null) return;
 	
-	if(to.typ == 's' && to == game.players.get(to.figure.col).startfield) {
+	if((to.typ == 's' && to == game.players.get(to.figure.col).startfield) || (to.typ == 'h' && !to.empty)) {
 	    return;
 	}
 	
@@ -53,7 +53,7 @@ public class Card {
 	    //check if fields occupied and startfield of that figure
 	    //TODO bool for every start field that keeps track if occupied
 	    //TODO set to.figure to null so checking for emptyness is not necessary
-	    if(to.typ == 's' && to == game.players.get(to.figure.col).startfield && !to.empty) {
+	    if((to.typ == 's' && to == game.players.get(to.figure.col).startfield) || (to.typ == 'h' && !to.empty)) {
 		return;
 	    }
 	    if (range || steps == 0) {
@@ -65,7 +65,7 @@ public class Card {
     //move generator for card
     public void getmoves(Game game, Figure figure, ArrayList<Zug> moves) { //target figure
 	Player player = game.players.get(figure.col);
-	System.out.println("get move " + this.typ);
+	// System.out.println("get move " + this.typ);
 	Field to;
 	switch (this.typ) {
 	case 'n': //normal
@@ -79,7 +79,7 @@ public class Card {
 		for (int j = 0; j < opponent.figures.size(); j++) {
 		    Figure oppfigure = opponent.figures.get(j);
 		    if (!oppfigure.inbank && !oppfigure.inhouse /* &&  oppfigure.field.typ != 's' */) {
-			System.out.println("added move");
+			// System.out.println("added move");
 			moves.add(new Zug(player ,figure.field, oppfigure.field, true, this));
 		    }
 		}
@@ -102,7 +102,7 @@ public class Card {
 		addstepmove(moves, 7,  figure, game, player, /*range*/ true);		
 		break;
 	case '4':  //+-4
-	        System.out.println("four card");
+	        // System.out.println("four card");
 		if (figure.inbank) break;
 		addstepmove(moves, 4, figure, game, player, false);
 		addstepmove(moves, -4, figure, game, player, false);		
@@ -128,8 +128,11 @@ public class Card {
 	    int inx = game.pile.size() -1 ;
 	    for (int i = inx; i > 0; i--) {
 		Card lastcard = game.pile.get(game.pile.size() - 1);
-		if (lastcard.typ != 'c') {
-		    lastcard.getmoves(game, figure, moves);
+		if (lastcard.typ != 'c') { 
+		    // lastcard.getmoves(game, figure, moves);//bug, sets wrong usedcard
+		    this.typ = lastcard.typ;
+		    this.getmoves(game, figure, moves);
+		    this.typ = 'c'; //hacky
 		    break; 
 		}
 	    }
