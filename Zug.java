@@ -43,12 +43,12 @@ public class Zug  {
 	    from.figure.field = from;
 
 	    if (to.typ == 'k') {
-		System.out.println("player " + player.col + " draw card!");
+		// System.out.println("player " + player.col + " draw card!");
 		player.draw(game);
 	    }
 	    if (from.typ == 'k') {
-		System.out.println("player " + opponent.col + " draw card!");
-		player.draw(game);
+		// System.out.println("player " + opponent.col + " draw card!");
+		opponent.draw(game);
 	    }
 	}
 	else if(start) {
@@ -98,7 +98,7 @@ public class Zug  {
 	    to.setfigure(from.figure);
 
 	    if (to.typ == 'k') {
-		System.out.println("player " + player.col + " karte ziehen!");
+		// System.out.println("player " + player.col + " karte ziehen!");
 		player.draw(game);
 	    }
 
@@ -108,7 +108,7 @@ public class Zug  {
 	// System.out.println("cards num after 2 " + this.player.cards.size());
     }
 
-    public void print() {
+    public void printcard() {
 	System.out.print("card type " + this.cardused.typ + " ");
 	if(this.from != null) {
 	    System.out.print("from " + this.from.val + " ");

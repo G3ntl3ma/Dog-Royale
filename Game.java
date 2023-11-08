@@ -25,7 +25,7 @@ public class Game {
     }
 
     public void reshuffle() {
-	System.out.println("reshuffle start deck size " + this.deck.size() + " pile size " + this.pile.size());
+	// System.out.println("reshuffle start deck size " + this.deck.size() + " pile size " + this.pile.size());
 	this.deck.addAll(this.pile);
 	//throw away hand cards
 	for (int i = 0; i < this.players.size(); i++) {
@@ -34,7 +34,7 @@ public class Game {
 	}
 	this.pile = new ArrayList<>();
 	Collections.shuffle(this.deck);
-	System.out.println("reshuffle done deck size " + this.deck.size() + " pile size " + this.pile.size());	
+	// System.out.println("reshuffle done deck size " + this.deck.size() + " pile size " + this.pile.size());	
     }
 
     public void reinit() {

@@ -62,7 +62,7 @@ public class Player  {
     }
 
     public void genmoves(Game game, ArrayList<Zug> moves) {
-	System.out.println("this player color " + this.col);
+	// System.out.println("this player color " + this.col);
 	for (int i = 0; i < this.cards.size(); i++) {
 	    // System.out.println("card " + i + ": " + this.cards.get(i).typ);
 	    for (int j = 0; j < this.figures.size(); j++) {

@@ -30,8 +30,10 @@ public class Card {
 	}
 	if(to == null) return;
 	
-	if((to.typ == 's' && to == game.players.get(to.figure.col).startfield) || (to.typ == 'h' && !to.empty)) {
-	    return;
+	if (!to.empty) { //check emptyness first otherwise to.figure is null and therefore to.figure.col bug	
+	    if((to.typ == 's' && to == game.players.get(to.figure.col).startfield) || to.typ == 'h') {
+		return;
+	    }
 	}
 	
 	if(range || steps == 0) moves.add(new Zug(player, figure.field, to, false, this));
