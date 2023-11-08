@@ -115,8 +115,8 @@ public class Game {
 	    this.deck.add(new Card('m'));
 	}
 	
-	Collections.shuffle(this.deck, new Random(666)); //deterministic seed
-	// Collections.shuffle(this.deck); //undeterministic
+	// Collections.shuffle(this.deck, new Random(666)); //deterministic seed
+	Collections.shuffle(this.deck); //undeterministic
     }
 
     public void init(String conf, int figurecount,int handcardcount) { //set board and players
@@ -131,7 +131,7 @@ public class Game {
 	int fieldcount = conf.length();
 	this.mainfields = max;
 
-	System.out.println("conf string length " + max);
+	// System.out.println("conf string length " + max);
 	
 	for (int i = 0; i < max; i++) {
 	    this.board.add(new Field(i));
