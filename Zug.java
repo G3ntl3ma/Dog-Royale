@@ -50,6 +50,7 @@ public class Zug  {
 		// System.out.println("player " + opponent.col + " draw card!");
 		opponent.draw(game);
 	    }
+	    
 	}
 	else if(start) {
 	    //TODO assert figs in bank > 0
@@ -71,6 +72,8 @@ public class Zug  {
 	    player.startfield.setfigure(figure); //get first figure not on field from player
 	    this.player.figsinbank--;
 
+	    game.occupied[player.col] = true;
+
 	    //TODO assert figcol == playercol
 	    // System.out.println("figs in bank " + this.player.figsinbank);
 	    // System.out.println("fig col " + figure.col);
@@ -83,6 +86,10 @@ public class Zug  {
 		to.figure.inbank = true;
 	    }
 
+	    if (to.typ == 'h') {
+		player.houseoccinx = to.val;
+	    }
+	    
 	    if (to.typ == 'h' && from.typ != 'h') {
 		player.figsinhouse++;
 		from.figure.inhouse = true;
@@ -102,14 +109,20 @@ public class Zug  {
 		player.draw(game);
 	    }
 
+	    if (from.typ == 's') {
+		game.occupied[player.col] = false;
+	    }
+	    if (to.typ == 's') {
+		game.occupied[player.col] = true;
+	    }
 	}
 
 	game.nextplayer();
 	// System.out.println("cards num after 2 " + this.player.cards.size());
     }
 
-    public void printcard() {
-	System.out.print("card type " + this.cardused.typ + " ");
+    public void printmove() { 
+	System.out.print("card type " + this.cardused.type + " ");
 	if(this.from != null) {
 	    System.out.print("from " + this.from.val + " ");
 	}

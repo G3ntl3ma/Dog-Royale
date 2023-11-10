@@ -5,6 +5,8 @@ public class Player  {
     ArrayList<Figure> figures = new ArrayList<>();
     ArrayList<Card> cards = new ArrayList<>();
     Field startfield;
+    int houseinx;
+    int houseoccinx; //index of housefield that with last figure 
     int figsinbank;
     int figsinhouse;
     int col;
@@ -57,17 +59,26 @@ public class Player  {
 
     public void printcards() {
 	for (int i = 0; i < this.cards.size(); i++) {
-	    System.out.print(this.cards.get(i).typ + " ");
+	    System.out.print(this.cards.get(i).type + " ");
 	}
     }
 
     public void genmoves(Game game, ArrayList<Zug> moves) {
+	boolean[] seencardtypes = new boolean[Cardtype.values().length];
+	boolean seenbankfig = false;
+	for (int i = 0; i < seencardtypes.length; i++) {
+	    seencardtypes[i] = false;
+	}
 	// System.out.println("this player color " + this.col);
 	for (int i = 0; i < this.cards.size(); i++) {
 	    // System.out.println("card " + i + ": " + this.cards.get(i).typ);
+	    if (seencardtypes[this.cards.get(i).type.ordinal()]) continue;
+	    seencardtypes[this.cards.get(i).type.ordinal()] = true;
 	    for (int j = 0; j < this.figures.size(); j++) {
 		// System.out.println("figure " + j);
-		this.cards.get(i).getmoves(game, this.figures.get(j), moves); 
+		if(seenbankfig && this.figures.get(j).inbank == true) continue;
+		if (this.figures.get(j).inbank == true && (this.cards.get(i).type == Cardtype.START_1_11 || this.cards.get(i).type == Cardtype.START_13)) seenbankfig = true;
+		this.cards.get(i).getmoves(game, this.figures.get(j), moves, this); 
 	    }
 	}
     }

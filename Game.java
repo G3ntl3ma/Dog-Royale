@@ -5,7 +5,10 @@ import java.util.Random;
 public class Game {
 
     ArrayList<Player> players;
-    ArrayList<Field> board;
+    // ArrayList<Field> board;
+    Field[] board;
+    int[] startinxs; //indeces of startfields
+    boolean[] occupied;
     ArrayList<Card> deck;
     ArrayList<Card> pile;
     int playertostart;
@@ -17,7 +20,7 @@ public class Game {
     
     public Game() {
 	this.players = new ArrayList<>();
-	this.board = new ArrayList<>();
+	// this.board = new ArrayList<>();
 	this.deck = new ArrayList<>();
 	this.pile = new ArrayList<>();
 	this.playertomove = 0;
@@ -81,12 +84,13 @@ public class Game {
 	}
 	System.out.println("");
 	for (int i = 0; i < this.mainfields; i++) {
-	    Field f = this.board.get(i);
+	    // Field f = this.board.get(i);
+	    Field f = this.board[i];
 	    System.out.print(f.typ+"-");
 	}
 	System.out.println("");
 	for (int i = 0; i < this.mainfields; i++) {
-	    Field f = this.board.get(i);
+	    Field f = this.board[i];
 	    if(!f.empty) System.out.print(f.figure.col+"-");
 	    else         System.out.print("_"+"-");
 	}
@@ -97,22 +101,26 @@ public class Game {
 
     public void initdeck() {
 	for (int i = 0; i < 7; i++) {
-	    for (int j = 2; j <= 12; j++) {
-		if(j == 4 || j == 7 || j == 11 ) continue;
-		this.deck.add(new Card('n', j));
-	    }
-	    this.deck.add(new Card('4'));
-	    this.deck.add(new Card('7'));
-	    this.deck.add(new Card('s'));
-	    this.deck.add(new Card('c'));
+	    this.deck.add(new Card(Cardtype.NORMAL_2));
+	    this.deck.add(new Card(Cardtype.NORMAL_3));
+	    this.deck.add(new Card(Cardtype.PLUS_MINUS_4));
+	    this.deck.add(new Card(Cardtype.NORMAL_5));
+	    this.deck.add(new Card(Cardtype.NORMAL_6));
+	    this.deck.add(new Card(Cardtype.RANGE_7));
+	    this.deck.add(new Card(Cardtype.NORMAL_8));
+	    this.deck.add(new Card(Cardtype.NORMAL_9));
+	    this.deck.add(new Card(Cardtype.NORMAL_10));
+	    this.deck.add(new Card(Cardtype.NORMAL_12));
+	    this.deck.add(new Card(Cardtype.SWAP));
+	    this.deck.add(new Card(Cardtype.COPY));
 	}
 
 	for (int i = 0; i < 10; i++) {
-	    this.deck.add(new Card('t'));
-	    this.deck.add(new Card('e'));
+	    this.deck.add(new Card(Cardtype.START_13));
+	    this.deck.add(new Card(Cardtype.START_1_11));
 	}
 	for (int i = 0; i < 6; i++) {
-	    this.deck.add(new Card('m'));
+	    this.deck.add(new Card(Cardtype.MAGNET));
 	}
 	
 	// Collections.shuffle(this.deck, new Random(666)); //deterministic seed
@@ -131,10 +139,18 @@ public class Game {
 	int fieldcount = conf.length();
 	this.mainfields = max;
 
+
+	int totalfieldcount = fieldcount + figurecount * players; //playercount
+	this.board = new Field[totalfieldcount];
+
+	this.startinxs = new int[players];
+	this.occupied = new boolean[players];
+
 	// System.out.println("conf string length " + max);
 	
 	for (int i = 0; i < max; i++) {
-	    this.board.add(new Field(i));
+	    // this.board.add(new Field(i));
+	    this.board[i] = new Field(i);
 	}
 
 	//add players Player
@@ -145,23 +161,41 @@ public class Game {
 	for (int i = 0; i < max; i++) {
 	    int prev = ((i - 1) + max) % max;
 	    int next = (i + 1) % max;
-	    this.board.get(i).addnext(this.board.get(next));
-	    this.board.get(i).addprev(this.board.get(prev));
-	    this.board.get(i).settyp(conf.charAt(i));
+	    
+	    // this.board.get(i).addnext(this.board.get(next));
+	    // this.board.get(i).addprev(this.board.get(prev));
+	    // this.board.get(i).settyp(conf.charAt(i));
+
+	    this.board[i].addnext(this.board[next]);
+	    this.board[i].addprev(this.board[prev]);
+	    this.board[i].settyp(conf.charAt(i));
+	    
 	    //TODO add house fields
 	    if (conf.charAt(i) == 's') {
-		this.players.get(seenstarts++).startfield = this.board.get(i); //init starts
+		// this.players.get(seenstarts++).startfield = this.board.get(i); //init starts
+		this.startinxs[seenstarts] = i;
+		this.occupied[seenstarts] = false;
+		this.players.get(seenstarts).startfield = this.board[i]; //init starts
 		int off = fieldcount;
+		this.players.get(seenstarts).houseinx = fieldcount;
 		for (int j = off; j < figurecount + off; j++) {
-		    this.board.add(new Field(fieldcount++, 'h'));
+		    // this.board.add(new Field(fieldcount++, 'h'));
+		    this.board[fieldcount] = new Field(fieldcount, 'h');
+
+		    fieldcount++;
 		}
 		for (int j = off; j < figurecount-1 + off; j++) {
-		    this.board.get(j).addnext(this.board.get(j+1));
-		    this.board.get(j+1).addprev(this.board.get(j));
+		    // this.board.get(j).addnext(this.board.get(j+1));
+		    // this.board.get(j+1).addprev(this.board.get(j));
+
+		    this.board[j].addnext(this.board[j+1]);
+		    this.board[j+1].addprev(this.board[j]);
 		}
-		
-		this.board.get(i).addhouse(this.board.get(off));
-		this.board.get(off).addprev(board.get(i)); //can move out of house??
+		seenstarts++;
+		// this.board.get(i).addhouse(this.board.get(off));
+		// this.board.get(off).addprev(board.get(i)); //can move out of house??
+		this.board[i].addhouse(this.board[off]);
+		this.board[off].addprev(this.board[i]);
 	    }
 	}
 	this.playersremaining = this.players.size();
