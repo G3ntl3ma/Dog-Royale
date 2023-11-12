@@ -3,7 +3,7 @@ name: Mattes Hachmeyer
 imt: hachmeye
 gruppe: 1
 woche: 4
-gesamtarbeitszeit: 13
+gesamtarbeitszeit: 17
 ---
 
 <!--
@@ -38,4 +38,6 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
   - 2023-11-10 2,00h
 - Einarbeitung Java
   - 2023-11-08 2,00h
+- Entwicklung User-Stories
+  - 2023-11-12 4,00
 
