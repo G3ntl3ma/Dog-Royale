@@ -3,7 +3,7 @@ name: Alexei Ermysh
 imt: aermysh
 gruppe: 01
 woche: 04
-gesamtarbeitszeit: 7,00h
+gesamtarbeitszeit: 11,00h
 ---
 
 # Stundenzettel des Softwaretechnikpraktikums WS 2023/24
@@ -19,3 +19,7 @@ gesamtarbeitszeit: 7,00h
 ## Implementierung
 - Anschauung der möglichen Implementierung der KI-Engine(Algorithmus, neuronale Netze)
     - 2023-11-06 2,00h
+
+## Backlog 
+- Erstellung von User-Storys
+    - 2023-11-12 4,00h
