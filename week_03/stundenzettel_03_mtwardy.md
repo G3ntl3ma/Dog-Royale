@@ -3,7 +3,7 @@ name: Max Eric Twardy
 imt: mtwardy
 gruppe: 01
 woche: 03
-gesamtarbeitszeit: 3,00h
+gesamtarbeitszeit: 4,00h
 ---
 
 <!--
@@ -26,15 +26,15 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 # Stundenzettel des Softwaretechnikpraktikums WS 2022/23
 
 ## Projektmanagement
--Erstes Meeting und Start des Projekts
-  -2023-10-16 1,30h
 -Teammeeting
-  -2023-10-19 1,00h
+  - 2023-10-30 1,30h
+-GUI-meeting
+  - 2023-11-04 0,30h
 ## Werkzeuge
-- Vorbereitung Git
-  - 2023-10-20 0,20h
--Installation von android studios und IntelliJ
-  - 2023-10-20 0,10h
+-Installation von android studios(Laptop)
+  - 2023-10-31 0,30h
+-Einarbeitung in android studio
+  - 2023-11-05 1,00h
 ## Dokumentation
 
 ## Sprint Planning
