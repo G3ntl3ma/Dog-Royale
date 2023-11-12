@@ -3,7 +3,7 @@ name: Felix Werner
 imt: felixwr
 gruppe: 01
 woche: 04
-gesamtarbeitszeit: 13h 
+gesamtarbeitszeit: 21h 
 ---
 
 
@@ -24,3 +24,6 @@ gesamtarbeitszeit: 13h
 ## QA-Dokument
 - Schreiben des Testplan-Teils für das QA-Dokument
     - 2023-11-09 5h
+## Backlog
+- Schreiben und Umschreiben von User-Stories
+    - 2023-11-12 8h
