@@ -3,7 +3,7 @@ name: Max Eric Twardy
 imt: mtwardy
 gruppe: 01
 woche: 04
-gesamtarbeitszeit: 5,30h
+gesamtarbeitszeit: 6,30h
 ---
 
 <!--
@@ -47,7 +47,7 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 ## Implementierung
 -GUI
   -2023-11-06 1,00h
-
+  -2023-11-12 1,00h
 ## Qualitätsmanagement
 
 ## Implementierung
