@@ -4,24 +4,24 @@ public class Player  {
 
     ArrayList<Figure> figures = new ArrayList<>();
     ArrayList<Card> cards = new ArrayList<>();
-    Field startfield;
-    int houseinx;
-    int houseoccinx; //index of housefield that with last figure 
-    int figsinbank;
-    int figsinhouse;
-    int col;
+    Field startField; //accessed a lot in other classes
+    int houseFirstIndex;
+    int houseOccupationIndex; //index of housefield that with last figure TODO unused
+    int figuresInBank;
+    int figuresInHouse;
+    int color;
     
-    public Player(int col, int figurecount) {
-	this.figsinbank = figurecount;
-	this.col = col;
+    public Player(int color, int figurecount) {
+	this.figuresInBank = figurecount;
+	this.color = color;
 	for (int i = 0; i < figurecount; i++) {
-	    figures.add(new Figure(col));
+	    figures.add(new Figure(color));
 	}
     }
 
-    public Figure getfirstinbank() {
+    public Figure getFirstFigureInBank() {
 	for (int i = 0; i < figures.size(); i++) {
-	    if (this.figures.get(i).inbank) {
+	    if (this.figures.get(i).isInBank) {
 		return this.figures.get(i);
 	    }
 	}
@@ -31,18 +31,18 @@ public class Player  {
 	return this.figures.get(0);
     }
 
-    public void printinfo() {
-	System.out.print("player " + this.col + " figbank " + this.figsinbank + " figs in house " + this.figsinhouse);
+    public void printInfo() {
+	System.out.print("player " + this.color + " figbank " + this.figuresInBank + " figs in house " + this.figuresInHouse);
 	System.out.print(" cards ");
-	this.printcards();
+	this.printCards();
 	System.out.println("");
     }
 
-    public void printhouse() {
-	Field house = this.startfield.house;
+    public void printHouse() {
+	Field house = this.startField.house;
 	System.out.print("house: ");
 	while(house != null) {
-	    if(!house.empty) System.out.print(house.figure.col+"-");
+	    if(!house.isEmpty()) System.out.print(house.figure.color+"-");
 	    else         System.out.print("_"+"-");
 	    house = house.next;
 	}
@@ -57,28 +57,28 @@ public class Player  {
 	this.cards.add(pop);
     }
 
-    public void printcards() {
+    public void printCards() {
 	for (int i = 0; i < this.cards.size(); i++) {
 	    System.out.print(this.cards.get(i).type + " ");
 	}
     }
 
-    public void genmoves(Game game, ArrayList<Zug> moves) {
-	boolean[] seencardtypes = new boolean[Cardtype.values().length];
+    public void generateMoves(Game game, ArrayList<Move> moves) {
+	boolean[] seencardtypes = new boolean[CardType.values().length];
 	boolean seenbankfig = false;
 	for (int i = 0; i < seencardtypes.length; i++) {
 	    seencardtypes[i] = false;
 	}
-	// System.out.println("this player color " + this.col);
+	// System.out.println("this player coloror " + this.color);
 	for (int i = 0; i < this.cards.size(); i++) {
 	    // System.out.println("card " + i + ": " + this.cards.get(i).typ);
 	    if (seencardtypes[this.cards.get(i).type.ordinal()]) continue;
 	    seencardtypes[this.cards.get(i).type.ordinal()] = true;
 	    for (int j = 0; j < this.figures.size(); j++) {
 		// System.out.println("figure " + j);
-		if(seenbankfig && this.figures.get(j).inbank == true) continue;
-		if (this.figures.get(j).inbank == true && (this.cards.get(i).type == Cardtype.START_1_11 || this.cards.get(i).type == Cardtype.START_13)) seenbankfig = true;
-		this.cards.get(i).getmoves(game, this.figures.get(j), moves, this); 
+		if(seenbankfig && this.figures.get(j).isInBank == true) continue;
+		if (this.figures.get(j).isInBank == true && (this.cards.get(i).type == CardType.START_1_11 || this.cards.get(i).type == CardType.START_13)) seenbankfig = true;
+		this.cards.get(i).getMoves(game, this.figures.get(j), moves, this); 
 	    }
 	}
     }

@@ -1,24 +1,22 @@
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 //TODO enums for everything
-//TODO its actually not necessary to generate all moves because most do literally the same thing
-//TODO generate moves only for every unique card type
-//TODO choose card by type
-//TODO human class?
+//TODO generate moves only for every unique card type, and only once for a figure in bank
+//TODO human input: choose card by type
 //TODO improve addstepmove function
 //TODO find best datastructures for everything
 //TODO if deck.size() < players.size() * handcardnum -> combine pile with deck and reshuffle
 //TODO test if move generator is bugfree
-//TODO rename all variables to english equivalents
 //TODO zeit/zug limit
 
 public class Main {
     public static void main(String[] args) {
-
+	//s = start field, n = normal field, k = draw (k)card
         String conf = "snnnnknnnnsnnnnknnnnsnnnnknnnn";
-	int figurecount = 4;
+	int figureCount = 4;
 
 	int players = 0;
 	for (int i = 0; i < conf.length(); i++) {
@@ -30,23 +28,23 @@ public class Main {
 	    wins[i] = 0;
 	}
 	
-	int handcardcount = 10;
+	int handCardCount = 10;
 
 	long start = System.currentTimeMillis();
 	long functime = 0;
 
-	int gamestoplay = 10000;
-	int totalmoves = 0;
+	int gamesToPlay = 1000;
+	int totalMoves = 0;
 
-	int maxmoves = 10000000;
+	int maxMoves = 10000000;
 
-	int human = 0;
+	int human = -1;
 	Scanner reader = new Scanner(System.in); 
 	
-	for (int _i = 0; _i < gamestoplay; _i++) {
+	for (int _i = 0; _i < gamesToPlay; _i++) {
 	    Game game = new Game();
-	    game.init(conf, figurecount, handcardcount);
-	    game.initdeck();
+	    game.init(conf, figureCount, handCardCount);
+	    game.initDeck();
 	    
 	    Player winner = null;
 	    int round = 0;
@@ -57,29 +55,29 @@ public class Main {
 		    game.reshuffle();
 		    game.reinit();
 		}
-		game.distributecards();
+		game.distributeCards();
 
 		
-		while (game.playersremaining > 0 && winner == null) {
+		while (game.playersRemaining > 0 && winner == null) {
 		    long startfunc = System.currentTimeMillis();
 				
-		    ArrayList<Zug> moves = new ArrayList<>();
-		    Player curplyer = game.getcurplayer();
+		    ArrayList<Move> moves = new ArrayList<>();
+		    Player curplyer = game.getCurrentPlayer();
 		    // System.out.println("gen moves for player " + curplyer.col);
-		    curplyer.genmoves(game, moves); //TODO this is the slowest function by far
+		    curplyer.generateMoves(game, moves); //TODO this is the slowest function by far
 		    long endfunc = System.currentTimeMillis();
 		    functime += (endfunc - startfunc);   
 		    if(moves.size() > 0) {
 			// moves.get(0).printcard();
-			if(curplyer.col == human) {
-			    game.printboard();
-			    ArrayList<Zug> humanmoves = new ArrayList<>();
+			if(curplyer.color == human) {
+			    game.printBoard();
+			    ArrayList<Move> humanmoves = new ArrayList<>();
 			    System.out.println("Enter a card to use: ");
 			    int cardinx = reader.nextInt();
 			    System.out.println("Enter a figure to use it on: ");
 			    int figinx = reader.nextInt();
 			    Figure chosenfigure = curplyer.figures.get(figinx);
-			    curplyer.cards.get(cardinx).getmoves(game, chosenfigure, humanmoves, curplyer);
+			    curplyer.cards.get(cardinx).getMoves(game, chosenfigure, humanmoves, curplyer);
 			    for (int ii = 0; ii < humanmoves.size(); ii++) {
 				humanmoves.get(ii).printmove();
 			    }
@@ -94,27 +92,27 @@ public class Main {
 		    }
 		    else {
 			// System.out.println("player " + game.getcurplayer().col + " is out");
-			game.discardhandcards();
-			game.playersremaining--;
-			game.nextplayer();
+			game.discardHandCards();
+			game.playersRemaining--;
+			game.nextPlayer();
 			// System.out.println("player " + game.getcurplayer().col + "s turn");
 		    }
 		    // game.printboard();
-		    winner = game.getwinner();
-		    totalmoves++;
-		    if (totalmoves >= maxmoves) break;
+		    winner = game.getWinner();
+		    totalMoves++;
+		    if (totalMoves >= maxMoves) break;
 		}
-		if (totalmoves >= maxmoves) break;
+		if (totalMoves >= maxMoves) break;
 		// System.out.println("end of round " + round);
 		round++;
 	    }
-	    if (totalmoves >= maxmoves) break;
+	    if (totalMoves >= maxMoves) break;
 	    // System.out.println("winner: " + winner.col);
-	    wins[winner.col]++;
+	    wins[winner.color]++;
 	}
 	long end = System.currentTimeMillis();
 	
-	System.out.println("total time " + (double) (end - start)/1000 + "s " + (double) gamestoplay*1000/(end-start) + "games/s " + (double) totalmoves*1000/(end-start) + " moves/s");
+	System.out.println("total time " + (double) (end - start)/1000 + "s " + (double) gamesToPlay*1000/(end-start) + "games/s " + (double) totalMoves*1000/(end-start) + " moves/s");
 	for (int i = 0; i < players; i++) {
 	    System.out.println("player " + i + ": " + wins[i] + " wins");
 	}

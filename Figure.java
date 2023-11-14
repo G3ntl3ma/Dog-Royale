@@ -1,14 +1,14 @@
 public class Figure  {
 
     Field field;
-    boolean inbank; //ignore field if inbank
-    boolean inhouse; //cant be swapped for example
-    int col;
+    boolean isInBank; //ignore field if isInBank
+    boolean isInHouse; //cant be swapped for example
+    int color;
     
-    public Figure(int col) {
-	this.inbank = true;
-	this.inhouse = false;
-	this.col = col;
+    public Figure(int color) {
+	this.isInBank = true;
+	this.isInHouse = false;
+	this.color = color;
     }
 
 }

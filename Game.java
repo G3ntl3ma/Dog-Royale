@@ -5,26 +5,25 @@ import java.util.Random;
 public class Game {
 
     ArrayList<Player> players;
-    // ArrayList<Field> board;
     Field[] board;
-    int[] startinxs; //indeces of startfields
-    boolean[] occupied;
     ArrayList<Card> deck;
     ArrayList<Card> pile;
-    int playertostart;
-    int figurecount;
-    int handcardcount;
-    int mainfields; //number of fields that arent bank or house
-    int playertomove;
-    int playersremaining;
+    private int playerToStartColor;
+    private int figureCount;
+    private int initialHandCardCount;
+    private int mainFieldCount;
+    private int playerToMoveColor;
+    int playersRemaining;
+
+    private int[] startIndexs; //indeces of startFields, unused
+    boolean[] occupied; //unused
     
     public Game() {
 	this.players = new ArrayList<>();
-	// this.board = new ArrayList<>();
 	this.deck = new ArrayList<>();
 	this.pile = new ArrayList<>();
-	this.playertomove = 0;
-	this.playertostart = 0;
+	this.playerToMoveColor = 0;
+	this.playerToStartColor = 0;
     }
 
     public void reshuffle() {
@@ -41,13 +40,13 @@ public class Game {
     }
 
     public void reinit() {
-	this.playertostart = (this.playertostart + 1) % this.players.size();
-	this.playertomove = this.playertostart;
-	this.playersremaining = this.players.size();
+	this.playerToStartColor = (this.playerToStartColor + 1) % this.players.size();
+	this.playerToMoveColor = this.playerToStartColor;
+	this.playersRemaining = this.players.size();
     }
 
-    public void discardhandcards() {
-	Player player = this.getcurplayer();
+    public void discardHandCards() {
+	Player player = this.getCurrentPlayer();
 	if (player.cards.size() > 0) {
 	    if (this.pile.size() > 0) {
 		//pop
@@ -63,73 +62,73 @@ public class Game {
 	}
     }
 
-    public void distributecards() {
-	for (int i = 0; i < this.handcardcount; i++) {
+    public void distributeCards() {
+	for (int i = 0; i < this.initialHandCardCount; i++) {
 	    for (int j = 0; j < this.players.size(); j++) {
 		this.players.get(j).draw(this);
 	    }
 	}
     }
 
-    public void printboard() {
+    public void printBoard() {
 	System.out.println("BOARD=================");
-	System.out.println("player to move " + this.playertomove);
+	System.out.println("player to move " + this.playerToMoveColor);
 	for (int i = 0; i < this.players.size(); i++) {
 	    Player p = this.players.get(i);
-	    p.printinfo();
-	    p.printhouse();
+	    p.printInfo();
+	    p.printHouse();
 	}
-	for (int i = 0; i < this.mainfields; i++) {
+	for (int i = 0; i < this.mainFieldCount; i++) {
 	    System.out.print(i+"-");
 	}
 	System.out.println("");
-	for (int i = 0; i < this.mainfields; i++) {
+	for (int i = 0; i < this.mainFieldCount; i++) {
 	    // Field f = this.board.get(i);
 	    Field f = this.board[i];
-	    System.out.print(f.typ+"-");
+	    System.out.print(f.type + "-");
 	}
 	System.out.println("");
-	for (int i = 0; i < this.mainfields; i++) {
+	for (int i = 0; i < this.mainFieldCount; i++) {
 	    Field f = this.board[i];
-	    if(!f.empty) System.out.print(f.figure.col+"-");
+	    if(!f.isEmpty()) System.out.print(f.figure.color+"-");
 	    else         System.out.print("_"+"-");
 	}
 	System.out.println("");
-	this.printtotalcards();
+	this.printTotalCards();
 	System.out.println("===================");
     }
 
-    public void initdeck() {
+    public void initDeck() {
 	for (int i = 0; i < 7; i++) {
-	    this.deck.add(new Card(Cardtype.NORMAL_2));
-	    this.deck.add(new Card(Cardtype.NORMAL_3));
-	    this.deck.add(new Card(Cardtype.PLUS_MINUS_4));
-	    this.deck.add(new Card(Cardtype.NORMAL_5));
-	    this.deck.add(new Card(Cardtype.NORMAL_6));
-	    this.deck.add(new Card(Cardtype.RANGE_7));
-	    this.deck.add(new Card(Cardtype.NORMAL_8));
-	    this.deck.add(new Card(Cardtype.NORMAL_9));
-	    this.deck.add(new Card(Cardtype.NORMAL_10));
-	    this.deck.add(new Card(Cardtype.NORMAL_12));
-	    this.deck.add(new Card(Cardtype.SWAP));
-	    this.deck.add(new Card(Cardtype.COPY));
+	    this.deck.add(new Card(CardType.NORMAL_2));
+	    this.deck.add(new Card(CardType.NORMAL_3));
+	    this.deck.add(new Card(CardType.PLUS_MINUS_4));
+	    this.deck.add(new Card(CardType.NORMAL_5));
+	    this.deck.add(new Card(CardType.NORMAL_6));
+	    this.deck.add(new Card(CardType.RANGE_7));
+	    this.deck.add(new Card(CardType.NORMAL_8));
+	    this.deck.add(new Card(CardType.NORMAL_9));
+	    this.deck.add(new Card(CardType.NORMAL_10));
+	    this.deck.add(new Card(CardType.NORMAL_12));
+	    this.deck.add(new Card(CardType.SWAP));
+	    this.deck.add(new Card(CardType.COPY));
 	}
 
 	for (int i = 0; i < 10; i++) {
-	    this.deck.add(new Card(Cardtype.START_13));
-	    this.deck.add(new Card(Cardtype.START_1_11));
+	    this.deck.add(new Card(CardType.START_13));
+	    this.deck.add(new Card(CardType.START_1_11));
 	}
 	for (int i = 0; i < 6; i++) {
-	    this.deck.add(new Card(Cardtype.MAGNET));
+	    this.deck.add(new Card(CardType.MAGNET));
 	}
 	
 	// Collections.shuffle(this.deck, new Random(666)); //deterministic seed
 	Collections.shuffle(this.deck); //undeterministic
     }
 
-    public void init(String conf, int figurecount,int handcardcount) { //set board and players
-	this.figurecount = figurecount;
-	this.handcardcount = handcardcount;
+    public void init(String conf, int figureCount,int initialHandCardCount) { //set board and players
+	this.figureCount = figureCount;
+	this.initialHandCardCount = initialHandCardCount;
 	int players = 0;
 	for (int i = 0; i < conf.length(); i++) {
 	    if (conf.charAt(i) == 's') players++;
@@ -137,80 +136,70 @@ public class Game {
 	
 	int max = conf.length(); //TODO ??
 	int fieldcount = conf.length();
-	this.mainfields = max;
+	this.mainFieldCount = max;
 
 
-	int totalfieldcount = fieldcount + figurecount * players; //playercount
+	int totalfieldcount = fieldcount + figureCount * players; //playercount
 	this.board = new Field[totalfieldcount];
 
-	this.startinxs = new int[players];
+	this.startIndexs = new int[players];
 	this.occupied = new boolean[players];
 
 	// System.out.println("conf string length " + max);
 	
 	for (int i = 0; i < max; i++) {
-	    // this.board.add(new Field(i));
 	    this.board[i] = new Field(i);
 	}
 
 	//add players Player
 	for (int plyrcol = 0; plyrcol < players; plyrcol++) { 
-	    this.players.add(new Player(plyrcol, figurecount));
+	    this.players.add(new Player(plyrcol, figureCount));
 	}
 	int seenstarts = 0;
 	for (int i = 0; i < max; i++) {
 	    int prev = ((i - 1) + max) % max;
 	    int next = (i + 1) % max;
 	    
-	    // this.board.get(i).addnext(this.board.get(next));
-	    // this.board.get(i).addprev(this.board.get(prev));
-	    // this.board.get(i).settyp(conf.charAt(i));
-
 	    this.board[i].addnext(this.board[next]);
 	    this.board[i].addprev(this.board[prev]);
-	    this.board[i].settyp(conf.charAt(i));
+	    this.board[i].settype(conf.charAt(i));
 	    
 	    //TODO add house fields
 	    if (conf.charAt(i) == 's') {
-		// this.players.get(seenstarts++).startfield = this.board.get(i); //init starts
-		this.startinxs[seenstarts] = i;
+		// this.players.get(seenstarts++).startField = this.board.get(i); //init starts
+		this.startIndexs[seenstarts] = i;
 		this.occupied[seenstarts] = false;
-		this.players.get(seenstarts).startfield = this.board[i]; //init starts
+		this.players.get(seenstarts).startField = this.board[i]; //init starts
 		int off = fieldcount;
-		this.players.get(seenstarts).houseinx = fieldcount;
-		for (int j = off; j < figurecount + off; j++) {
+		this.players.get(seenstarts).houseFirstIndex = fieldcount;
+		for (int j = off; j < figureCount + off; j++) {
 		    // this.board.add(new Field(fieldcount++, 'h'));
 		    this.board[fieldcount] = new Field(fieldcount, 'h');
 
 		    fieldcount++;
 		}
-		for (int j = off; j < figurecount-1 + off; j++) {
-		    // this.board.get(j).addnext(this.board.get(j+1));
-		    // this.board.get(j+1).addprev(this.board.get(j));
-
+		for (int j = off; j < figureCount-1 + off; j++) {
 		    this.board[j].addnext(this.board[j+1]);
 		    this.board[j+1].addprev(this.board[j]);
 		}
 		seenstarts++;
-		// this.board.get(i).addhouse(this.board.get(off));
-		// this.board.get(off).addprev(board.get(i)); //can move out of house??
 		this.board[i].addhouse(this.board[off]);
 		this.board[off].addprev(this.board[i]);
 	    }
 	}
-	this.playersremaining = this.players.size();
+	this.playersRemaining = this.players.size();
 	
     }
 
-    public Player getcurplayer() {
-	return this.players.get(this.playertomove);
+    public Player getCurrentPlayer() {
+	return this.players.get(this.playerToMoveColor);
     }
 
-    public void nextplayer() {
-	this.playertomove = (this.playertomove + 1) % this.players.size();
+    public void nextPlayer() {
+	this.playerToMoveColor = (this.playerToMoveColor + 1) % this.players.size();
     }
 
-    public void printtotalcards() {
+    public void printTotalCards() {
 	int handsum = 0;
 	for (int i = 0; i < this.players.size(); i++) {
 	    handsum += this.players.get(i).cards.size();
@@ -222,9 +211,9 @@ public class Game {
 	}
     }
 
-    public Player getwinner() {
+    public Player getWinner() {
 	for (int i = 0; i < this.players.size(); i++) {
-	    if(this.players.get(i).figsinhouse == this.figurecount) {
+	    if(this.players.get(i).figuresInHouse == this.figureCount) {
 		return this.players.get(i);
 	    }
 	}

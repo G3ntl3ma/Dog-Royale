@@ -1,0 +1,136 @@
+public class Move  {
+
+    Field from;
+    Field to;
+    boolean isSwapMove;
+    boolean isStartMove; //ignore from field just put a fig on isStartMove
+    Player player;
+    Card cardUsed;
+    
+    public Move(Player player, Field from, Field to, boolean isSwapMove, Card cardUsed) {
+	this.player = player;
+	this.from = from;
+	this.to = to;
+	this.isSwapMove = isSwapMove;
+	this.isStartMove = false;
+	this.cardUsed = cardUsed;
+    }
+
+    public Move(Player player, Card cardUsed) { //isStartMove move
+	this.player = player;
+	this.isStartMove = true;
+	this.cardUsed = cardUsed;
+    }
+
+    public void printz(){
+	System.out.println(this.from.val + "-" + this.to.val);
+    }
+
+    public void execute(Game game) {
+	// System.out.println("cards num before " + this.player.cards.size());
+	player.cards.remove(this.cardUsed);
+	game.pile.add(this.cardUsed);
+	// System.out.println("cards num after 1 " + this.player.cards.size());
+	if(isSwapMove) {
+	    Figure temp = to.figure;
+	    Player opponent = game.players.get(to.figure.color);
+	    //set figure of field
+	    to.figure = from.figure;
+	    from.figure = temp;
+
+	    //set field of figures
+	    to.figure.field = to;
+	    from.figure.field = from;
+
+	    if (to.type== 'k') {
+		// System.out.println("player " + player.color + " draw card!");
+		player.draw(game);
+	    }
+	    if (from.type== 'k') {
+		// System.out.println("player " + opponent.col + " draw card!");
+		opponent.draw(game);
+	    }
+	    
+	}
+	else if(isStartMove) {
+	    //TODO assert figs in bank > 0
+	    // System.out.println("isStartMove move");
+	    // System.out.println("figs in bank before " + this.player.figuresInBank);
+	    Figure figure = this.player.getFirstFigureInBank();
+	    Field to = player.startField;
+	    figure.isInBank = false;
+	    figure.isInHouse = false;
+	    
+	    if (!to.isEmpty()) {
+		Player opponent = game.players.get(to.figure.color);
+		opponent.figuresInBank++;
+		//set field of figure
+		to.figure.isInBank = true;
+	    }
+
+	    //set figure of field
+	    player.startField.setfigure(figure); //get first figure not on field from player
+	    this.player.figuresInBank--;
+
+	    game.occupied[player.color] = true;
+
+	    //TODO assert figcol == playercol
+	    // System.out.println("figs in bank " + this.player.figuresInBank);
+	    // System.out.println("fig col " + figure.color);
+	    // System.out.println("plyer col " + this.player.color);
+	}
+	else { //normal move
+	    if (!to.isEmpty()) {
+		Player opponent = game.players.get(to.figure.color);
+		opponent.figuresInBank++;
+		to.figure.isInBank = true;
+	    }
+
+	    if (to.type== 'h') {
+		player.houseOccupationIndex = to.val;
+	    }
+	    
+	    if (to.type== 'h' && from.type!= 'h') {
+		player.figuresInHouse++;
+		from.figure.isInHouse = true;
+	    }
+
+	    //possible??
+	    if (to.type!= 'h' && from.type== 'h') {
+		player.figuresInHouse--;
+		from.figure.isInHouse = false;
+	    }
+	    
+	    // from.empty() = true;
+	    to.setfigure(from.figure);
+	    from.setEmpty();
+
+
+	    if (to.type== 'k') {
+		// System.out.println("player " + player.color + " karte ziehen!");
+		player.draw(game);
+	    }
+
+	    if (from.type== 's') {
+		game.occupied[player.color] = false;
+	    }
+	    if (to.type== 's') {
+		game.occupied[player.color] = true;
+	    }
+	}
+
+	game.nextPlayer();
+	// System.out.println("cards num after 2 " + this.player.cards.size());
+    }
+
+    public void printmove() { 
+	System.out.print("card type " + this.cardUsed.type + " ");
+	if(this.from != null) {
+	    System.out.print("from " + this.from.val + " ");
+	}
+	if(this.to != null) {
+	    System.out.print("to " + this.to.val + " ");
+	}
+	System.out.println("swap figs " + this.isSwapMove + " isStartMove " + this.isStartMove + " player.coloror " + this.player.color);
+    }
+}
