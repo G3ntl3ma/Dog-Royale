@@ -5,7 +5,6 @@ import java.util.Scanner;
 //TODO enums for everything
 //TODO its actually not necessary to generate all moves because most do literally the same thing
 //TODO generate moves only for every unique card type
-//TODO print normal cards as numbers
 //TODO choose card by type
 //TODO human class?
 //TODO improve addstepmove function
