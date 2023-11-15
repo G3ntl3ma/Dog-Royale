@@ -1,15 +1,16 @@
 import java.util.ArrayList;
 
-public class Player  {
+public final class Player  {
 
     ArrayList<Figure> figures = new ArrayList<>();
     ArrayList<Card> cards = new ArrayList<>();
     Field startField; //accessed a lot in other classes
     int houseFirstIndex;
-    int houseOccupationIndex; //index of housefield that with last figure TODO unused
     int figuresInBank;
     int figuresInHouse;
-    int color;
+    final int color;
+    
+    int houseOccupationIndex; //index of housefield that with last figure TODO unused
     
     public Player(int color, int figurecount) {
 	this.figuresInBank = figurecount;
@@ -64,20 +65,22 @@ public class Player  {
     }
 
     public void generateMoves(Game game, ArrayList<Move> moves) {
-	boolean[] seencardtypes = new boolean[CardType.values().length];
-	boolean seenbankfig = false;
-	for (int i = 0; i < seencardtypes.length; i++) {
-	    seencardtypes[i] = false;
+	boolean[] seenCardTypes = new boolean[CardType.values().length];
+	boolean seenBankFigure = false;
+	for (int i = 0; i < seenCardTypes.length; i++) {
+	    seenCardTypes[i] = false;
 	}
 	// System.out.println("this player coloror " + this.color);
 	for (int i = 0; i < this.cards.size(); i++) {
 	    // System.out.println("card " + i + ": " + this.cards.get(i).typ);
-	    if (seencardtypes[this.cards.get(i).type.ordinal()]) continue;
-	    seencardtypes[this.cards.get(i).type.ordinal()] = true;
+	    if (seenCardTypes[this.cards.get(i).type.ordinal()]) continue;
+	    seenCardTypes[this.cards.get(i).type.ordinal()] = true;
 	    for (int j = 0; j < this.figures.size(); j++) {
 		// System.out.println("figure " + j);
-		if(seenbankfig && this.figures.get(j).isInBank == true) continue;
-		if (this.figures.get(j).isInBank == true && (this.cards.get(i).type == CardType.START_1_11 || this.cards.get(i).type == CardType.START_13)) seenbankfig = true;
+		if(seenBankFigure && this.figures.get(j).isInBank == true) continue;
+		if (this.figures.get(j).isInBank == true && (this.cards.get(i).type == CardType.START_1_11 || this.cards.get(i).type == CardType.START_13)) {
+		    seenBankFigure = true;
+		}
 		this.cards.get(i).getMoves(game, this.figures.get(j), moves, this); 
 	    }
 	}

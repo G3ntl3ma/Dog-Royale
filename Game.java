@@ -2,28 +2,31 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class Game {
+public final class Game {
 
     ArrayList<Player> players;
-    Field[] board;
+    private Field[] board;
     ArrayList<Card> deck;
     ArrayList<Card> pile;
-    private int playerToStartColor;
-    private int figureCount;
-    private int initialHandCardCount;
+    private final int figureCount;
+    private final int initialHandCardCount;
     private int mainFieldCount;
+    private int playerToStartColor;
     private int playerToMoveColor;
     int playersRemaining;
 
     private int[] startIndexs; //indeces of startFields, unused
     boolean[] occupied; //unused
     
-    public Game() {
+    public Game(String conf, int figureCount, int initialHandCardCount) {
 	this.players = new ArrayList<>();
 	this.deck = new ArrayList<>();
 	this.pile = new ArrayList<>();
 	this.playerToMoveColor = 0;
 	this.playerToStartColor = 0;
+	this.figureCount = figureCount;
+	this.initialHandCardCount = initialHandCardCount;
+	init(conf);
     }
 
     public void reshuffle() {
@@ -126,9 +129,7 @@ public class Game {
 	Collections.shuffle(this.deck); //undeterministic
     }
 
-    public void init(String conf, int figureCount,int initialHandCardCount) { //set board and players
-	this.figureCount = figureCount;
-	this.initialHandCardCount = initialHandCardCount;
+    private void init(String conf) { //set board and players
 	int players = 0;
 	for (int i = 0; i < conf.length(); i++) {
 	    if (conf.charAt(i) == 's') players++;
@@ -148,7 +149,7 @@ public class Game {
 	// System.out.println("conf string length " + max);
 	
 	for (int i = 0; i < max; i++) {
-	    this.board[i] = new Field(i);
+	    this.board[i] = new Field(i, conf.charAt(i));
 	}
 
 	//add players Player
@@ -160,9 +161,9 @@ public class Game {
 	    int prev = ((i - 1) + max) % max;
 	    int next = (i + 1) % max;
 	    
-	    this.board[i].addnext(this.board[next]);
-	    this.board[i].addprev(this.board[prev]);
-	    this.board[i].settype(conf.charAt(i));
+	    this.board[i].setNext(this.board[next]);
+	    this.board[i].setPrev(this.board[prev]);
+	    // this.board[i].settype(conf.charAt(i));
 	    
 	    //TODO add house fields
 	    if (conf.charAt(i) == 's') {
@@ -174,17 +175,17 @@ public class Game {
 		this.players.get(seenstarts).houseFirstIndex = fieldcount;
 		for (int j = off; j < figureCount + off; j++) {
 		    // this.board.add(new Field(fieldcount++, 'h'));
-		    this.board[fieldcount] = new Field(fieldcount, 'h');
+		    this.board[fieldcount] = new Field(fieldcount, FieldType.HOUSE);
 
 		    fieldcount++;
 		}
 		for (int j = off; j < figureCount-1 + off; j++) {
-		    this.board[j].addnext(this.board[j+1]);
-		    this.board[j+1].addprev(this.board[j]);
+		    this.board[j].setNext(this.board[j+1]);
+		    this.board[j+1].setPrev(this.board[j]);
 		}
 		seenstarts++;
-		this.board[i].addhouse(this.board[off]);
-		this.board[off].addprev(this.board[i]);
+		this.board[i].setHouse(this.board[off]);
+		this.board[off].setPrev(this.board[i]);
 	    }
 	}
 	this.playersRemaining = this.players.size();

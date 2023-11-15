@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-//TODO enums for everything
 //TODO generate moves only for every unique card type, and only once for a figure in bank
 //TODO human input: choose card by type
 //TODO improve addstepmove function
@@ -42,8 +41,7 @@ public class Main {
 	Scanner reader = new Scanner(System.in); 
 	
 	for (int _i = 0; _i < gamesToPlay; _i++) {
-	    Game game = new Game();
-	    game.init(conf, figureCount, handCardCount);
+	    Game game = new Game(conf, figureCount, handCardCount);
 	    game.initDeck();
 	    
 	    Player winner = null;

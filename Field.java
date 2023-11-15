@@ -1,28 +1,52 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Field  {
+enum FieldType {
+    NORMAL,
+    DRAW,
+    START,
+    HOUSE,
+}
 
-    int val; //TODO better name 
+public final class Field  {
+
+    final int val; //TODO better name
+    final FieldType type;
+    
     Figure figure;
-    // boolean empty; //ignore figure if empty
-    char type;
+    
     Field next;
     Field house;
-    Field prev;
-
+    Field prev;  //these should be final
     
-    public Field(int val) {
+    public Field(int val, FieldType type) {
 	this.val = val;
 	this.figure = null;
-	// this.empty = true; 
+	this.type = type;
     }
 
-    public Field(int val, char type) {
+    public Field(int val, char typeChar) {
 	this.val = val;
-	this.type = type;
 	this.figure = null;
-	// this.empty = true; 
+	switch (typeChar)
+	    {
+	    case 'h':
+		this.type = FieldType.HOUSE;
+		break;
+	    case 'k':
+		this.type = FieldType.DRAW;		
+		break;
+	    case 's':
+		this.type = FieldType.START;
+		break;
+	    case 'n':
+		this.type = FieldType.NORMAL;
+		break;
+	    default:
+		System.out.println("parsing error");
+		this.type = FieldType.NORMAL;
+		break;
+	    }
     }
 
     public boolean isEmpty() {
@@ -40,24 +64,24 @@ public class Field  {
 	this.next.printval();
 	System.out.println("prev val");
 	this.prev.printval();
-
     }
+    
     public void printtype() {
 
 	switch (type) {
-	case 'n':
+	case FieldType.NORMAL:
 	    System.out.println("normal");
 	    break;
 	    
-	case 'k':
+	case FieldType.DRAW:
 	    System.out.println("draw card");
 	    break;
 
-	case 's':
+	case FieldType.START:
 	    System.out.println("start");
 	    break;
 
-	case 'h':
+	case FieldType.HOUSE:
 	    System.out.println("house");
 	    break;
 	}	
@@ -73,29 +97,26 @@ public class Field  {
 	this.prev.printtype();
     }
 
-    public void addnext(Field field) {
+    public void setNext(Field field) {
 	this.next = field;
     }
 
-    public void addhouse(Field field) {
+    public void setHouse(Field field) {
 	this.house = field;
     }
 
-    public void addprev(Field field) { //TODO rename to set
+    public void setPrev(Field field) { //TODO rename to set
 	this.prev = field;
     }
 
     public void setfigure(Figure figure) {
 	this.figure = figure;
 	figure.field = this;
-	// this.empty = false;
     }
 
     public void setEmpty() {
 	this.figure = null;
     }
 
-    public void settype(char type) {
-	this.type = type;
-    }
+
 }

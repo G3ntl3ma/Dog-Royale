@@ -45,7 +45,7 @@ public class Card {
 	if(to == null) return;
 	
 	if (!to.isEmpty()) { //check.isEmpty()ness first otherwise to.figure is null and therefore to.figure.color bug	
-	    if((to.type== 's' && to == game.players.get(to.figure.color).startField) || to.type== 'h') {
+	    if((to.type== FieldType.START && to == game.players.get(to.figure.color).startField) || to.type== FieldType.HOUSE) {
 		return;
 	    }
 	}
@@ -70,7 +70,7 @@ public class Card {
 	    //TODO bool for every start field that keeps track if occupied
 	    //TODO set to.figure to null so checking for.isEmpty()ness is not necessary
 	    if (!to.isEmpty()) { //check.isEmpty()ness first otherwise to.figure is null and therefore to.figure.color bug
-		if((to.type== 's' && to == game.players.get(to.figure.color).startField) || to.type== 'h') {
+		if((to.type== FieldType.START && to == game.players.get(to.figure.color).startField) || to.type== FieldType.HOUSE) {
 		    return;
 		}
 	    }
@@ -91,7 +91,7 @@ public class Card {
 		Player opponent = game.players.get(i);
 		for (int j = 0; j < opponent.figures.size(); j++) {
 		    Figure oppfigure = opponent.figures.get(j);
-		    if (!oppfigure.isInBank && !oppfigure.isInHouse &&  oppfigure.field.type!= 's' ) {
+		    if (!oppfigure.isInBank && !oppfigure.isInHouse &&  oppfigure.field.type!= FieldType.START ) {
 			moves.add(new Move(player ,figure.field, oppfigure.field, true, this));
 		    }
 		}

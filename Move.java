@@ -1,11 +1,11 @@
-public class Move  {
+public final class Move  {
 
-    Field from;
-    Field to;
-    boolean isSwapMove;
-    boolean isStartMove; //ignore from field just put a fig on isStartMove
-    Player player;
-    Card cardUsed;
+    private final Field from;
+    private final Field to;
+    private final boolean isSwapMove;
+    private final boolean isStartMove; //ignore from field just put a fig on isStartMove
+    private final Player player;
+    private final Card cardUsed;
     
     public Move(Player player, Field from, Field to, boolean isSwapMove, Card cardUsed) {
 	this.player = player;
@@ -20,6 +20,9 @@ public class Move  {
 	this.player = player;
 	this.isStartMove = true;
 	this.cardUsed = cardUsed;
+	this.from = null;
+	this.to = null;
+	this.isSwapMove = false;
     }
 
     public void printz(){
@@ -42,11 +45,11 @@ public class Move  {
 	    to.figure.field = to;
 	    from.figure.field = from;
 
-	    if (to.type== 'k') {
+	    if (to.type== FieldType.DRAW) {
 		// System.out.println("player " + player.color + " draw card!");
 		player.draw(game);
 	    }
-	    if (from.type== 'k') {
+	    if (from.type== FieldType.DRAW) {
 		// System.out.println("player " + opponent.col + " draw card!");
 		opponent.draw(game);
 	    }
@@ -86,17 +89,17 @@ public class Move  {
 		to.figure.isInBank = true;
 	    }
 
-	    if (to.type== 'h') {
+	    if (to.type== FieldType.HOUSE) {
 		player.houseOccupationIndex = to.val;
 	    }
 	    
-	    if (to.type== 'h' && from.type!= 'h') {
+	    if (to.type== FieldType.HOUSE && from.type!= FieldType.HOUSE) {
 		player.figuresInHouse++;
 		from.figure.isInHouse = true;
 	    }
 
 	    //possible??
-	    if (to.type!= 'h' && from.type== 'h') {
+	    if (to.type!= FieldType.HOUSE && from.type== FieldType.HOUSE) {
 		player.figuresInHouse--;
 		from.figure.isInHouse = false;
 	    }
@@ -106,15 +109,15 @@ public class Move  {
 	    from.setEmpty();
 
 
-	    if (to.type== 'k') {
+	    if (to.type== FieldType.DRAW) {
 		// System.out.println("player " + player.color + " karte ziehen!");
 		player.draw(game);
 	    }
 
-	    if (from.type== 's') {
+	    if (from.type== FieldType.START) {
 		game.occupied[player.color] = false;
 	    }
-	    if (to.type== 's') {
+	    if (to.type== FieldType.START) {
 		game.occupied[player.color] = true;
 	    }
 	}
