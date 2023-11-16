@@ -3,19 +3,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-//TODO generate moves only for every unique card type, and only once for a figure in bank
+//TODO junit
+//TODO 2 types of moves not implemented yet
+//TODO game time limit
 //TODO human input: choose card by type
 //TODO improve addstepmove function
 //TODO find best datastructures for everything
 //TODO if deck.size() < players.size() * handcardnum -> combine pile with deck and reshuffle
 //TODO test if move generator is bugfree
-//TODO zeit/zug limit
 
 public class Main {
     public static void main(String[] args) {
 	//s = start field, n = normal field, k = draw (k)card
         String conf = "snnnnknnnnsnnnnknnnnsnnnnknnnn";
 	int figureCount = 4;
+	int maxMoves = 10000000;
+		
 
 	int players = 0;
 	for (int i = 0; i < conf.length(); i++) {
@@ -32,21 +35,19 @@ public class Main {
 	long start = System.currentTimeMillis();
 	long functime = 0;
 
-	int gamesToPlay = 1000;
+	int gamesToPlay = 10;
 	int totalMoves = 0;
-
-	int maxMoves = 10000000;
 
 	int human = -1;
 	Scanner reader = new Scanner(System.in); 
 	
 	for (int _i = 0; _i < gamesToPlay; _i++) {
-	    Game game = new Game(conf, figureCount, handCardCount);
+	    Game game = new Game(conf, figureCount, handCardCount, maxMoves);
 	    game.initDeck();
 	    
 	    Player winner = null;
+	    ArrayList<Player> winners = new ArrayList<>();
 	    int round = 0;
-	    
 	    
 	    while (winner == null) {
 		if(round != 0) {
@@ -55,7 +56,6 @@ public class Main {
 		}
 		game.distributeCards();
 
-		
 		while (game.playersRemaining > 0 && winner == null) {
 		    long startfunc = System.currentTimeMillis();
 				
@@ -84,7 +84,7 @@ public class Main {
 			    humanmoves.get(moveinx).printmove();
 			    humanmoves.get(moveinx).execute(game);
 			}
-			else {
+			else { //computer move
 			    moves.get(0).execute(game);
 			}
 		    }
@@ -96,16 +96,21 @@ public class Main {
 			// System.out.println("player " + game.getcurplayer().col + "s turn");
 		    }
 		    // game.printboard();
-		    winner = game.getWinner();
+		    winners = game.getWinners();
+		    winner = winners.get(0);
 		    totalMoves++;
 		    if (totalMoves >= maxMoves) break;
 		}
 		if (totalMoves >= maxMoves) break;
 		// System.out.println("end of round " + round);
 		round++;
-	    }
-	    if (totalMoves >= maxMoves) break;
-	    // System.out.println("winner: " + winner.col);
+	    }//end of game
+	    
+	    //print winners in ordre
+	    // for (int i = 0; i < winners.size(); i++) {
+	    // 	System.out.println("rank " + i + ":" + winners.get(i).color);
+	    // }
+	    
 	    wins[winner.color]++;
 	}
 	long end = System.currentTimeMillis();

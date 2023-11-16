@@ -95,6 +95,7 @@ public final class Move  {
 	    
 	    if (to.type== FieldType.HOUSE && from.type!= FieldType.HOUSE) {
 		player.figuresInHouse++;
+		player.lastMoveCountFigureMovedIntoHouse = game.movesMade;
 		from.figure.isInHouse = true;
 	    }
 
@@ -121,7 +122,8 @@ public final class Move  {
 		game.occupied[player.color] = true;
 	    }
 	}
-
+	
+	game.increaseMovesCounter();
 	game.nextPlayer();
 	// System.out.println("cards num after 2 " + this.player.cards.size());
     }

@@ -9,12 +9,14 @@ public final class Player  {
     int figuresInBank;
     int figuresInHouse;
     final int color;
+    int lastMoveCountFigureMovedIntoHouse;
     
     int houseOccupationIndex; //index of housefield that with last figure TODO unused
     
     public Player(int color, int figurecount) {
 	this.figuresInBank = figurecount;
 	this.color = color;
+	this.lastMoveCountFigureMovedIntoHouse = 0;
 	for (int i = 0; i < figurecount; i++) {
 	    figures.add(new Figure(color));
 	}

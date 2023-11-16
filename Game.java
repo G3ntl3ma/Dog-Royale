@@ -4,7 +4,7 @@ import java.util.Random;
 
 public final class Game {
 
-    ArrayList<Player> players;
+    ArrayList<Player> players; //TODO should not be arraylist
     private Field[] board;
     ArrayList<Card> deck;
     ArrayList<Card> pile;
@@ -13,20 +13,28 @@ public final class Game {
     private int mainFieldCount;
     private int playerToStartColor;
     private int playerToMoveColor;
+    final int maxMoves;
+    int movesMade;
     int playersRemaining;
 
     private int[] startIndexs; //indeces of startFields, unused
     boolean[] occupied; //unused
     
-    public Game(String conf, int figureCount, int initialHandCardCount) {
+    public Game(String conf, int figureCount, int initialHandCardCount, int maxMoves) {
 	this.players = new ArrayList<>();
 	this.deck = new ArrayList<>();
 	this.pile = new ArrayList<>();
 	this.playerToMoveColor = 0;
 	this.playerToStartColor = 0;
+	this.movesMade = 0;
+	this.maxMoves = maxMoves;
 	this.figureCount = figureCount;
 	this.initialHandCardCount = initialHandCardCount;
 	init(conf);
+    }
+
+    public void increaseMovesCounter() {
+	this.movesMade++;
     }
 
     public void reshuffle() {
@@ -212,13 +220,52 @@ public final class Game {
 	}
     }
 
-    public Player getWinner() {
+    public int compare(Player p1, Player p2) {
+	if(p1.figuresInHouse > p2.figuresInHouse) return 1;
+	if(p1.figuresInHouse < p2.figuresInHouse) return -1;
+	if(p1.lastMoveCountFigureMovedIntoHouse < p2.lastMoveCountFigureMovedIntoHouse) return 1;
+	if(p1.lastMoveCountFigureMovedIntoHouse > p2.lastMoveCountFigureMovedIntoHouse) return -1;
+	//0 figures moved in
+	return 0;
+    }
+
+    public ArrayList<Player> getWinners() {
+	ArrayList<Player> ret = new ArrayList<>();
+	boolean gameOver = false;
+	
 	for (int i = 0; i < this.players.size(); i++) {
 	    if(this.players.get(i).figuresInHouse == this.figureCount) {
-		return this.players.get(i);
+		gameOver = true;
+		break;
 	    }
 	}
-	return null;
+
+	if (this.movesMade >= this.maxMoves) gameOver = true;
+
+	if(gameOver) {
+
+	    //iterate through players in random order to make ties random order
+	    ArrayList<Player> randomOrderPlayers = new ArrayList<>(this.players);
+	    Collections.shuffle(randomOrderPlayers);
+	    for (int i = 0; i < randomOrderPlayers.size(); i++) {
+		//find first 1, insert before
+		boolean foundInx = false;
+		for (int j = 0; j < ret.size(); j++) {
+		    if(compare(ret.get(j), randomOrderPlayers.get(i)) == 1) {
+			ret.add(j, randomOrderPlayers.get(i));
+			foundInx = true;
+			break;
+		    }
+		}
+		//if no 1 then append
+		if(!foundInx) {
+		    ret.add(randomOrderPlayers.get(i));
+		}
+	    }
+	    return ret;
+	}
+	ret.add(null);
+	return ret;
     }
 }
 
