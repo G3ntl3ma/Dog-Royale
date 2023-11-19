@@ -10,27 +10,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.myapplication.databinding.FragmentCurrentGamesBinding;
+import com.example.myapplication.databinding.FragmentSpectateGamesBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link CurrentGames#newInstance} factory method to
+ * Use the {@link SpectateGames#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class current_games extends Fragment {
+public class SpectateGames extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
 
-    private FragmentCurrentGamesBinding binding;
+    private FragmentSpectateGamesBinding binding;
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    public current_games() {
+    public SpectateGames() {
         // Required empty public constructor
     }
 
@@ -43,8 +43,8 @@ public class current_games extends Fragment {
      * @return A new instance of fragment CurrentGames.
      */
     // TODO: Rename and change types and number of parameters
-    public static current_games newInstance(String param1, String param2) {
-        current_games fragment = new current_games();
+    public static SpectateGames newInstance(String param1, String param2) {
+        SpectateGames fragment = new SpectateGames();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,7 +65,7 @@ public class current_games extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentCurrentGamesBinding.inflate(inflater, container, false);
+        binding = FragmentSpectateGamesBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -76,7 +76,7 @@ public class current_games extends Fragment {
         binding.currentBackToMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(current_games.this)
+                NavHostFragment.findNavController(SpectateGames.this)
                         .navigate(R.id.action_current_games_to_FirstFragment);
 
             }

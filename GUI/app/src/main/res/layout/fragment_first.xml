@@ -26,13 +26,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="kommende Spiele"
-            app:layout_constraintBottom_toTopOf="@+id/done_games"
+            app:layout_constraintBottom_toTopOf="@+id/button_match_history"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/current_games_button" />
 
         <Button
-            android:id="@+id/done_games"
+            android:id="@+id/button_match_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="gelaufene Spiele"
@@ -41,12 +41,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/soon_games" />
 
-        <Button
-            android:id="@+id/button_first"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button"
-            tools:layout_editor_absoluteX="125dp"
-            tools:layout_editor_absoluteY="49dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

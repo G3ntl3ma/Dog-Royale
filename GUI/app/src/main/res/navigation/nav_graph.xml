@@ -16,13 +16,13 @@
             app:destination="@id/SecondFragment" />
         <action
             android:id="@+id/main_to_current"
-            app:destination="@id/current_games" />
+            app:destination="@id/SpectateGames" />
         <action
             android:id="@+id/action_Main_to_upcomming"
-            app:destination="@id/upcomming_games" />
+            app:destination="@id/StartingGames" />
         <action
-            android:id="@+id/action_Main_to_past"
-            app:destination="@id/past_games" />
+            android:id="@+id/action_FirstFragment_to_matchHistory"
+            app:destination="@id/matchHistory" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -35,22 +35,34 @@
             app:destination="@id/FirstFragment" />
     </fragment>
     <fragment
-        android:id="@+id/current_games"
-        android:name="com.example.myapplication.current_games"
-        android:label="fragment_current_games"
-        tools:layout="@layout/fragment_current_games" >
+        android:id="@+id/SpectateGames"
+        android:name="com.example.myapplication.SpectateGames"
+        android:label="fragment_spectate_games"
+        tools:layout="@layout/fragment_spectate_games">
         <action
             android:id="@+id/action_current_games_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
     <fragment
-        android:id="@+id/upcomming_games"
-        android:name="com.example.myapplication.upcomming_games"
-        android:label="fragment_upcomming_games"
-        tools:layout="@layout/fragment_upcomming_games" />
+        android:id="@+id/StartingGames"
+        android:name="com.example.myapplication.StartingGames"
+        android:label="fragment_starting_games"
+        tools:layout="@layout/fragment_starting_games" />
     <fragment
-        android:id="@+id/past_games"
-        android:name="com.example.myapplication.past_games"
-        android:label="fragment_past_games"
-        tools:layout="@layout/fragment_past_games" />
+        android:id="@+id/Game"
+        android:name="com.example.myapplication.Game"
+        android:label="fragment_game"
+        tools:layout="@layout/fragment_game" />
+    <fragment
+        android:id="@+id/matchHistory"
+        android:name="com.example.myapplication.MatchHistory"
+        android:label="fragment_match_history"
+        tools:layout="@layout/fragment_match_history" >
+        <action
+            android:id="@+id/action_matchHistory_to_FirstFragment2"
+            app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_matchHistory_to_Game"
+            app:destination="@id/Game" />
+    </fragment>
 </navigation>

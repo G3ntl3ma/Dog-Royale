@@ -38,11 +38,11 @@ public class FirstFragment extends Fragment {
             }
 
         });
-        binding.doneGames.setOnClickListener(new View.OnClickListener() {
+        binding.buttonMatchHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_Main_to_past);
+                        .navigate(R.id.action_FirstFragment_to_matchHistory);
 
             }
 

@@ -10,28 +10,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.myapplication.databinding.FragmentCurrentGamesBinding;
+
 import com.example.myapplication.databinding.FragmentFirstBinding;
+import com.example.myapplication.databinding.FragmentMatchHistoryBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link CurrentGames#newInstance} factory method to
+ * Use the {@link MatchHistory#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CurrentGames extends Fragment {
+public class MatchHistory extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-
-    private FragmentCurrentGamesBinding binding;
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    public CurrentGames() {
+    private FragmentMatchHistoryBinding binding;
+
+    public MatchHistory() {
         // Required empty public constructor
     }
 
@@ -41,16 +42,17 @@ public class CurrentGames extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment CurrentGames.
+     * @return A new instance of fragment MatchHistory.
      */
     // TODO: Rename and change types and number of parameters
-    public static CurrentGames newInstance(String param1, String param2) {
-        CurrentGames fragment = new CurrentGames();
+    public static MatchHistory newInstance(String param1, String param2) {
+        MatchHistory fragment = new MatchHistory();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+
     }
 
     @Override
@@ -66,22 +68,22 @@ public class CurrentGames extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentCurrentGamesBinding.inflate(inflater, container, false);
+
+        binding = FragmentMatchHistoryBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
-    @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        binding.currentBackToMain.setOnClickListener(new View.OnClickListener() {
+        binding.Game00001.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(CurrentGames.this)
-                        .navigate(R.id.action_current_games_to_FirstFragment);
+                NavHostFragment.findNavController(MatchHistory.this)
+                        .navigate(R.id.action_matchHistory_to_Game);
+
 
             }
-
         });
+
     }
 }
