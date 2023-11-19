@@ -37,7 +37,7 @@
     <fragment
         android:id="@+id/SpectateGames"
         android:name="com.example.myapplication.SpectateGames"
-        android:label="fragment_spectate_games"
+        android:label="Spectate running Games"
         tools:layout="@layout/fragment_spectate_games">
         <action
             android:id="@+id/action_current_games_to_FirstFragment"
@@ -46,7 +46,7 @@
     <fragment
         android:id="@+id/StartingGames"
         android:name="com.example.myapplication.StartingGames"
-        android:label="fragment_starting_games"
+        android:label="Starting Games"
         tools:layout="@layout/fragment_starting_games" />
     <fragment
         android:id="@+id/Game"
@@ -56,8 +56,8 @@
     <fragment
         android:id="@+id/matchHistory"
         android:name="com.example.myapplication.MatchHistory"
-        android:label="fragment_match_history"
-        tools:layout="@layout/fragment_match_history" >
+        android:label="Match History"
+        tools:layout="@layout/fragment_match_history">
         <action
             android:id="@+id/action_matchHistory_to_FirstFragment2"
             app:destination="@id/FirstFragment" />
