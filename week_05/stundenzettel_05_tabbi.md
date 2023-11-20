@@ -3,7 +3,7 @@ name: Abderrahmane Tabbi
 imt: tabbi
 gruppe: 01
 woche: 05
-gesamtarbeitszeit: 3,00h
+gesamtarbeitszeit: 4,00h
 ---
 
 <!--
@@ -27,6 +27,7 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 
 - Meeting
   - 2023-11-13 1,30h
+  - 2023-11-13 1,00h
 ## Implementierung
 - Vorbereitung von Werkzeuge
   - 2023-11-16 0,30h
