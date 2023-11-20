@@ -29,6 +29,7 @@ public class FirstFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //gehe von "laufende Spiele"-Button zum Select screen.
         binding.currentGamesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -38,6 +39,8 @@ public class FirstFragment extends Fragment {
             }
 
         });
+
+        //gehe von "Match history"-Button zum Select screen.
         binding.buttonMatchHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,7 +50,9 @@ public class FirstFragment extends Fragment {
             }
 
         });
-        binding.soonGames.setOnClickListener(new View.OnClickListener() {
+
+        //gehe von "upcomming Games"-Button zum Select screen.
+        binding.upcommingGames.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(FirstFragment.this)
