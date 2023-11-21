@@ -1,4 +1,6 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="game_board"> 400dp</dimen>
+    <dimen name="game_board_margin">200dp</dimen>
 </resources>
