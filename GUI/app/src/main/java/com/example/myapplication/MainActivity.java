@@ -1,11 +1,20 @@
 package com.example.myapplication;
 
+
+
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+//for display size
+import android.util.DisplayMetrics;
+
+import androidx.fragment.app.Fragment;
+
+
+import android.view.Display;
 import android.view.View;
 
 import androidx.core.view.WindowCompat;
@@ -18,6 +27,10 @@ import com.example.myapplication.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
+
+
+import android.util.DisplayMetrics;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,4 +78,6 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+
 }
