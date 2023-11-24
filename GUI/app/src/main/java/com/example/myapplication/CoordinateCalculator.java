@@ -9,19 +9,19 @@ public class CoordinateCalculator {
     // Instance variables
     private int fieldsize;
     private int playerCount;
-    private int figuresPerPlayer;
+    private int radius;
 
     /**
      * Constructor for the CoordinateCalculator class.
      *
      * @param fieldsize        The size of the game field.
      * @param playerCount      The number of players.
-     * @param figuresPerPlayer The number of figures per player.
+     * @param radius The number of figures per player.
      */
-    public CoordinateCalculator(int fieldsize, int playerCount, int figuresPerPlayer) {
+    public CoordinateCalculator(int fieldsize, int playerCount, int radius) {
         this.fieldsize = fieldsize;
         this.playerCount = playerCount;
-        this.figuresPerPlayer = figuresPerPlayer;
+        this.radius = radius;
     }
 
     /**
@@ -38,8 +38,8 @@ public class CoordinateCalculator {
      *
      * @return The number of figures per player.
      */
-    public int getFiguresPerPlayer() {
-        return figuresPerPlayer;
+    public int getradius() {
+        return radius;
     }
 
     /**
@@ -56,56 +56,50 @@ public class CoordinateCalculator {
      *
      * @return An array of strings representing the calculated polar coordinates.
      */
-    public Tuple[] calculateCoordinates() {
+    public Tuple calculateCoordinates(int i) {
         // Initialize array for coordinates
-        Tuple[] coordinates = new Tuple[fieldsize];
+        Tuple coordinates = new Tuple(0,0);
 
         // Calculate angle for each position on the game field
-        double r = 0;
-        for (int i = 0; i < fieldsize; i++) {
-            r += 360.0 / fieldsize;
+        double r = i * 360.0 / fieldsize;
 
             // Create PolarCoordinate object
-            PolarCoordinate polarCoordinate = new PolarCoordinate(figuresPerPlayer, r);
+            PolarCoordinate polarCoordinate = new PolarCoordinate(radius, r);
 
             // Convert polar coordinates to a string
             Tuple polarCoordinateTuple = polarCoordinate.toTuple();
 
             // Insert coordinates into the array
-            coordinates[i] = polarCoordinateTuple;
-        }
+            coordinates = polarCoordinateTuple;
+
 
         // Return array with calculated coordinates
          return coordinates;
     }
-    public Tuple[] calculateCartesicCoordinates() {
-        Tuple[] polarCoordinates = new Tuple[fieldsize];
-        Tuple[] result = new Tuple[fieldsize];
-        polarCoordinates = calculateCoordinates();
-        for (int i = 0; i < fieldsize; i++) {
-            double radius = polarCoordinates[i].getX();              // get radius of polarcoordinate
-            double degree = polarCoordinates[i].getY();              // get degree of polarcoordinate
+    public Tuple calculateCartesicCoordinates(int i) {
+        Tuple polarCoordinates = new Tuple(0,0);
+        polarCoordinates = calculateCoordinates(i);
+            double radius = polarCoordinates.getX();              // get radius of polarcoordinate
+            double degree = polarCoordinates.getY();              // get degree of polarcoordinate
             double cartesicX = radius * Math.cos(degree);
             double cartesicY = radius * Math.sin(degree);
             Tuple cartesicCoordinates = new Tuple(cartesicX, cartesicY); // insert x and y into tuple
-            result[i] = cartesicCoordinates;
-        }
-        return result;
+
+        return cartesicCoordinates;
 
     }
 
-        public Tuple[] calculateFloatCoordinates() {
-            Tuple[]  cartesicCoordinates = new Tuple[fieldsize];
-            cartesicCoordinates = calculateCartesicCoordinates();
-            Tuple[] floatCoordinates = new Tuple[fieldsize];
-            for (int i = 0; i < fieldsize; i++) {
-                float x = (float) cartesicCoordinates[i].getX();
-                float y = (float) cartesicCoordinates[i].getY();
+        public Tuple calculateFloatCoordinates(int i) {
+            Tuple  cartesicCoordinates = new Tuple(0,0);
+            cartesicCoordinates = calculateCartesicCoordinates(i);
+            Tuple floatCoordinates = new Tuple(0,0);
+                float x = (float) cartesicCoordinates.getX();
+                float y = (float) cartesicCoordinates.getY();
 
                 Tuple coordinate = new Tuple(x, y);
-                floatCoordinates[i] = coordinate;
+                floatCoordinates = coordinate;
 
-            }
+
             return floatCoordinates;
         }
 

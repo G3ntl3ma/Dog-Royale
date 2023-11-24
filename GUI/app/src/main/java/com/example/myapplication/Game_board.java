@@ -65,8 +65,6 @@ public class Game_board extends Fragment {
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
-        //
-        System.out.println("Gameboard created");
         return fragment;
     }
 
@@ -76,7 +74,6 @@ public class Game_board extends Fragment {
 
 
         if (getArguments() != null) {
-            System.out.println("da hail this");
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
@@ -119,30 +116,18 @@ public class Game_board extends Fragment {
 
         createFields(GameBoard, pxWidth, 40);
 
-        CoordinateCalculator playingField = new CoordinateCalculator(360, 4, 400);
-        Tuple[] result = new Tuple[playingField.getFieldsize()];
-        result = playingField.calculateFloatCoordinates();
-        FileWriter writer;
-        File coordinates = new File("Koordinaten.txt");
-        try {
-            writer = new FileWriter(coordinates, true);
-            for (int i = 0; i < result.length; i++) {
-                String coordinateAsString = result[i].toString();
-                writer.write(coordinateAsString);
-            }
+        //instanziere Calculator
 
-
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("I did it");
     }
     public void createFields(RelativeLayout layout, int width, int n){
-            for (int i = 0; i < n; i++) {
-                createField(layout, width/n, width/n, fx(i, j, width, n), fy(i, j, width, n));
 
+        CoordinateCalculator playingField = new CoordinateCalculator(n, 4, width/2);
+
+        Tuple result = new Tuple(0,0);
+            for (int i = 0; i < n; i++) {
+                result = playingField.calculateFloatCoordinates(i);
+                createField(layout, width/n * 3, width/n * 3, (int) Math.round(result.getX() + width/2), (int) Math.round(result.getY() + width/2));
+                System.out.println(result.getX());
         }
     }
     /*public int fx(int x, int turn, int width, int n)
