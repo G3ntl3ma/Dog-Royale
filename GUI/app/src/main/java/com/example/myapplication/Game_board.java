@@ -114,19 +114,19 @@ public class Game_board extends Fragment {
         //System.out.println(displayMetrics.heightPixels);
         //System.out.println(displayMetrics.widthPixels);
 
-        createFields(GameBoard, pxWidth, 1000);
+        createFields(GameBoard, pxWidth, 200);
 
         //instanziere Calculator
 
     }
     public void createFields(RelativeLayout layout, int width, int n){
 
-        CoordinateCalculator playingField = new CoordinateCalculator(n, 4, width/2);
+        CoordinateCalculator playingField = new CoordinateCalculator(n, 4, width/2 - 3* width/n);
 
         Tuple result = new Tuple(0,0);
             for (int i = 0; i < n; i++) {
                 result = playingField.calculateFloatCoordinates(i);
-                createField(layout, width/n * 3, width/n * 3, (int) Math.round(result.getX() + width/2), (int) Math.round(result.getY() + width/2), i);
+                createField(layout, width/n * 3, width/n * 3, (int) Math.round(result.getX() + width/2 - width/n * 1.5)  , (int) Math.round(result.getY()  + width/2 - width/n * 1.5), i);
                 System.out.println(result.getX());
         }
     }
