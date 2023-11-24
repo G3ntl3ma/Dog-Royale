@@ -1,0 +1,10 @@
+com/example/myrecyclerviewdemo/MainActivity.java
+ com.example.myrecyclerviewdemo.MainActivity
+com/example/myrecyclerviewdemo/Item.java
+ com.example.myrecyclerviewdemo.Item
+com/example/myrecyclerviewdemo/MyViewHolder.java
+ com.example.myrecyclerviewdemo.MyViewHolder
+com/example/myrecyclerviewdemo/BuildConfig.java
+ com.example.myrecyclerviewdemo.BuildConfig
+com/example/myrecyclerviewdemo/MyAdapter.java
+ com.example.myrecyclerviewdemo.MyAdapter
