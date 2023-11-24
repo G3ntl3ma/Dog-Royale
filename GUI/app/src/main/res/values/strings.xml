@@ -4,17 +4,9 @@
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
-    <string name="running_games">Running Games</string>
-    <string name="upcoming_games">Starting Games</string>
-    <string name="finished_games">Finished Games</string>
-    <string name="start_menue">Hauptmenü</string>
-    <string name="logo">logo</string>
     <string name="next">Next</string>
     <string name="menu">Menu</string>
     <string name="spectate">SPECTATE</string>
-    <string name="gameId">GameID</string>
-    <string name="playerCount">Player</string>
-    <string name="gameTime">Time</string>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus

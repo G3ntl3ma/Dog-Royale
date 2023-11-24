@@ -9,75 +9,38 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#472658"
-        android:backgroundTint="#472658"
-        android:padding="16dp"
-        tools:layout_editor_absoluteX="59dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:padding="16dp">
 
         <Button
             android:id="@+id/current_games_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:backgroundTint="@color/material_dynamic_primary20"
-            android:text="@string/running_games"
-            android:textColor="?android:attr/colorActivatedHighlight"
-            app:layout_constraintBottom_toTopOf="@+id/upcomming_games"
+            android:text="laufende Spiele"
+            app:layout_constraintBottom_toTopOf="@id/upcomming_games"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.515"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/upcomming_games"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:backgroundTint="@color/material_dynamic_primary20"
-            android:text="@string/upcoming_games"
-            android:textColor="?android:attr/colorActivatedHighlight"
+            android:text="kommende Spiele"
             app:layout_constraintBottom_toTopOf="@+id/button_match_history"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/current_games_button" />
 
         <Button
             android:id="@+id/button_match_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:backgroundTint="@color/material_dynamic_primary20"
-            android:text="@string/finished_games"
-            android:textColor="?android:attr/colorActivatedHighlight"
+            android:text="gelaufene Spiele"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="188dp"
-            android:layout_height="211dp"
-            android:layout_marginTop="50dp"
-            android:contentDescription="@string/logo"
-            android:src="@mipmap/ic_launcher_round"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/menu_title" />
-
-        <TextView
-            android:id="@+id/menu_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/lobster"
-            android:text="@string/start_menue"
-            android:textAlignment="center"
-            android:textColor="?android:attr/colorActivatedHighlight"
-            android:textSize="50sp"
-            android:textStyle="italic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/upcomming_games" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
