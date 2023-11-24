@@ -89,6 +89,9 @@ public class CoordinateCalculator {
 
     }
 
+    /*
+    i = wievielte spielfeldx
+     */
         public Tuple calculateFloatCoordinates(int i) {
             Tuple  cartesicCoordinates = new Tuple(0,0);
             cartesicCoordinates = calculateCartesicCoordinates(i);

@@ -114,7 +114,7 @@ public class Game_board extends Fragment {
         //System.out.println(displayMetrics.heightPixels);
         //System.out.println(displayMetrics.widthPixels);
 
-        createFields(GameBoard, pxWidth, 40);
+        createFields(GameBoard, pxWidth, 1000);
 
         //instanziere Calculator
 
@@ -126,7 +126,7 @@ public class Game_board extends Fragment {
         Tuple result = new Tuple(0,0);
             for (int i = 0; i < n; i++) {
                 result = playingField.calculateFloatCoordinates(i);
-                createField(layout, width/n * 3, width/n * 3, (int) Math.round(result.getX() + width/2), (int) Math.round(result.getY() + width/2));
+                createField(layout, width/n * 3, width/n * 3, (int) Math.round(result.getX() + width/2), (int) Math.round(result.getY() + width/2), i);
                 System.out.println(result.getX());
         }
     }
@@ -169,12 +169,13 @@ public class Game_board extends Fragment {
         }
         return (0);
     } */
-    public void createField(RelativeLayout layout, int width, int height, int x, int y){
+    public void createField(RelativeLayout layout, int width, int height, int x, int y, int id){
         ImageView imageView = new ImageView(getContext());
         imageView.setImageResource(R.drawable.spielfeld);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
         params.setMargins(x, y, 0, 0);
         imageView.setLayoutParams(params);
+        imageView.setId(id);
         layout.addView(imageView);
     }
 }
