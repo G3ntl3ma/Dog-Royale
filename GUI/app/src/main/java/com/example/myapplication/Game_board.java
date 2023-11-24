@@ -22,6 +22,10 @@ import android.widget.RelativeLayout;
 //databinding
 import com.example.myapplication.databinding.FragmentGameBoardBinding;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link Game_board#newInstance} factory method to
@@ -114,15 +118,34 @@ public class Game_board extends Fragment {
         //System.out.println(displayMetrics.widthPixels);
 
         createFields(GameBoard, pxWidth, 40);
+
+        CoordinateCalculator playingField = new CoordinateCalculator(360, 4, 400);
+        Tuple[] result = new Tuple[playingField.getFieldsize()];
+        result = playingField.calculateFloatCoordinates();
+        FileWriter writer;
+        File coordinates = new File("Koordinaten.txt");
+        try {
+            writer = new FileWriter(coordinates, true);
+            for (int i = 0; i < result.length; i++) {
+                String coordinateAsString = result[i].toString();
+                writer.write(coordinateAsString);
+            }
+
+
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("I did it");
     }
     public void createFields(RelativeLayout layout, int width, int n){
-        for (int j = 4; j > 0; j--) {
             for (int i = 0; i < n; i++) {
                 createField(layout, width/n, width/n, fx(i, j, width, n), fy(i, j, width, n));
-            }
+
         }
     }
-    public int fx(int x, int turn, int width, int n)
+    /*public int fx(int x, int turn, int width, int n)
     {
         int w_f  = width/n;
 
@@ -160,15 +183,13 @@ public class Game_board extends Fragment {
 
         }
         return (0);
-    }
+    } */
     public void createField(RelativeLayout layout, int width, int height, int x, int y){
-    ImageView imageView = new ImageView(getContext());
-    imageView.setImageResource(R.drawable.spielfeld);
-    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
-    params.setMargins(x, y, 0, 0);
-    imageView.setLayoutParams(params);
-    layout.addView(imageView);
-
-
+        ImageView imageView = new ImageView(getContext());
+        imageView.setImageResource(R.drawable.spielfeld);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
+        params.setMargins(x, y, 0, 0);
+        imageView.setLayoutParams(params);
+        layout.addView(imageView);
     }
 }
