@@ -97,6 +97,9 @@ public class Game_board extends Fragment {
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         */
 
+        int pxWidth = displayMetrics.widthPixels;
+        int pxHeight = displayMetrics.heightPixels;
+
         //set board in middle
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -110,47 +113,50 @@ public class Game_board extends Fragment {
         //System.out.println(displayMetrics.heightPixels);
         //System.out.println(displayMetrics.widthPixels);
 
-        createFields(GameBoard);
+        createFields(GameBoard, pxWidth, 40);
     }
-    public void createFields(RelativeLayout layout){
+    public void createFields(RelativeLayout layout, int width, int n){
         for (int j = 4; j > 0; j--) {
-            for (int i = 0; i < 10; i++) {
-                createField(layout, 100, 100, fx(i, j), fy(i, j));
+            for (int i = 0; i < n; i++) {
+                createField(layout, width/n, width/n, fx(i, j, width, n), fy(i, j, width, n));
             }
         }
     }
-    public int fx(int x, int turn)
+    public int fx(int x, int turn, int width, int n)
     {
+        int w_f  = width/n;
+
 
         switch(turn) {
             case 1:
-                return(100* x + 200);
+                return( x* w_f + w_f);
 
             case 2:
-                return(1200);
+                return(width - 2* w_f);
 
             case 3:
-                return(1200- 100*x);
+                return( width - 2*w_f -  x* w_f );
 
             case 4:
-                return(200);
+                return(w_f);
         }
         return(0);
     }
-    public int fy(int x, int turn)
+    public int fy(int x, int turn, int width, int n)
     {
+        int w_f  = width/n;
         switch(turn) {
             case 1:
-                return(200);
+                return(w_f);
 
             case 2:
-                return( 100* x + 200);
+                return( x* w_f + w_f);
 
             case 3:
-                return(1200);
+                return( width - 2 * w_f);
 
             case 4:
-                return(1200 - 100*x);
+                return( width - 2* w_f -  x* w_f );
 
         }
         return (0);

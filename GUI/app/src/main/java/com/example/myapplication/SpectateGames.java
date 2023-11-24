@@ -73,7 +73,7 @@ public class SpectateGames extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        /*binding.currentBackToMain.setOnClickListener(new View.OnClickListener() {
+        binding.currentBackToMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(SpectateGames.this)
@@ -82,6 +82,6 @@ public class SpectateGames extends Fragment {
             }
 
         });
-         */
+
     }
 }
