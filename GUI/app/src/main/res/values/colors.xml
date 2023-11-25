@@ -7,4 +7,7 @@
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
+    <color name="violett_background">#FF472658</color>
+    <color name="orange_text">#FFF17a0a</color>
+    <color name="button_color">#FF003549</color>
 </resources>
