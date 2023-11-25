@@ -7,6 +7,9 @@
     <string name="next">Next</string>
     <string name="menu">Menu</string>
     <string name="spectate">SPECTATE</string>
+    <string name="gameIDSubtitel">GameID</string>
+    <string name="playerSubtitel">Player</string>
+    <string name="timeSubtitel">Time</string>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
