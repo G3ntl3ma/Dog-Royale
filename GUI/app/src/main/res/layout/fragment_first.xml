@@ -9,38 +9,70 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="@android:color/holo_red_dark"
+        android:background="@color/violett_background"
+        android:backgroundTint="@color/violett_background"
         android:padding="16dp">
 
         <Button
             android:id="@+id/current_games_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="laufende Spiele"
-            app:layout_constraintBottom_toTopOf="@id/upcomming_games"
+            android:layout_marginBottom="50dp"
+            android:backgroundTint="@color/button_color"
+            android:text="@string/current_games_button"
+            android:textColor="@color/orange_text"
+            app:layout_constraintBottom_toTopOf="@+id/upcomming_games"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/upcomming_games"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="kommende Spiele"
+            android:layout_marginBottom="50dp"
+            android:backgroundTint="@color/button_color"
+            android:text="@string/upcomming_games"
+            android:textColor="@color/orange_text"
             app:layout_constraintBottom_toTopOf="@+id/button_match_history"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_games_button" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/button_match_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="gelaufene Spiele"
+            android:layout_marginBottom="50dp"
+            android:backgroundTint="@color/button_color"
+            android:text="@string/button_match_history"
+            android:textColor="@color/orange_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="156dp"
+            android:layout_height="157dp"
+            android:layout_marginBottom="60dp"
+            android:contentDescription="@null"
+            android:src="@mipmap/ic_launcher_round"
+            app:layout_constraintBottom_toTopOf="@+id/current_games_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/menu_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_title"
+            android:textAlignment="center"
+            android:textColor="@color/orange_text"
+            android:textSize="57sp"
+            app:layout_constraintBottom_toTopOf="@+id/imageView"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/upcomming_games" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
