@@ -46,7 +46,7 @@ public class gameConfig {
                     return;
                 }
                 else{
-                    System.out.println("alles gut");
+                    System.out.println("alles gut");// perform a saving dialog TODO
                 }
                 closeWindow();
 
@@ -60,16 +60,22 @@ public class gameConfig {
                     return;
                 }
                 else{
-                    System.out.println("alles gut");
+                    System.out.println("alles gut");// perform a  game initiation
                 }
+                closeWindow();
             }
         });
 
 
     }
 
+    /**
+     *
+     * @return false: if the entered data is invalid, true: if the data is valide
+     */
     private boolean validateAndEnableButtons() {
         try {
+            //gets the values from the text boxes entered by user
             int playerCountValue = Integer.parseInt(playerCount.getText());
             int figureCountValue = Integer.parseInt(figureCount.getText());
             int fieldSizeValue = Integer.parseInt(fieldSize.getText());
@@ -110,9 +116,9 @@ public class gameConfig {
                 showError("Time values and maximum moves must be non-negative integers.");
                 return false;
             }
-            return true;
+            return true;// If all validations pass, return true
 
-            // If all validations pass, enable the buttons
+
         } catch (NumberFormatException ex) {
             showError("Please enter valid numerical values for the configuration.");
             return false;

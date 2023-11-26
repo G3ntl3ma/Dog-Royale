@@ -25,6 +25,9 @@ public class lobby {
         // Other initialization and logic for the lobby class
     }
 
+    /**
+     * method for opening gameConfig window that lets you config and initiate a new game
+     */
     private void openGameConfigWindow() {
         // Create and show the gameConfig window
         JFrame gameConfigFrame = new JFrame("Game Configuration");
