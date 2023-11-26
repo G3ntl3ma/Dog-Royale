@@ -2,38 +2,110 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 public final class Game {
-
-    ArrayList<Player> players; //TODO should not be arraylist
+	int id;
+    public ArrayList<org.example.Player> players; //TODO should not be arraylist,maybe hashmap?
     private Field[] board;
     ArrayList<Card> deck;
     ArrayList<Card> pile;
-    private final int figureCount;
-    private final int initialHandCardCount;
+	int playerCount;
+    private final int figuresPerPlayer;
+    private final int initialCardsPerPlayer;
     private int mainFieldCount;
     private int playerToStartColor;
     private int playerToMoveColor;
-    final int maxMoves;
+    final int maximumTotalMoves;
     int movesMade;
     int playersRemaining;
-
+	int thinkTimePerMove;
+	public enum Penalty{
+		EXCLUDE_FROM_ROUND, KICK_FROM_GAME
+	};
+	public enum OrderType{
+		FIXED, RANDOM
+	}
+	Penalty penalty;
+	OrderType orderType;
+	int visualizationTimePerMove;
+	int maximumGameDuration;
+	int drawCardFieldCount;
     private int[] startIndexs; //indeces of startFields, unused
     boolean[] occupied; //unused
     
-    public Game(String conf, int figureCount, int initialHandCardCount, int maxMoves) {
+    public Game(int id, int mainFieldCount, int figuresPerPlayer,int drawCardFieldCount, int initialCardsPerPlayer, int maximumTotalMoves, int playerCount,
+				int thinkTimePerMove,Penalty penalty, OrderType orderType, int maximumGameDuration, int visualizationTimePerMove) {
+	this.id = id;
+	this.mainFieldCount = mainFieldCount;
 	this.players = new ArrayList<>();
 	this.deck = new ArrayList<>();
 	this.pile = new ArrayList<>();
 	this.playerToMoveColor = 0;
 	this.playerToStartColor = 0;
 	this.movesMade = 0;
-	this.maxMoves = maxMoves;
-	this.figureCount = figureCount;
-	this.initialHandCardCount = initialHandCardCount;
-	init(conf);
+	this.maximumTotalMoves = maximumTotalMoves;
+	this.figuresPerPlayer = figuresPerPlayer;
+	this.initialCardsPerPlayer = initialCardsPerPlayer;
+	this.thinkTimePerMove = thinkTimePerMove;
+	this.penalty = penalty;
+	this.orderType = orderType;
+	this.maximumGameDuration = maximumGameDuration;
+	this.visualizationTimePerMove = visualizationTimePerMove;
+	this.playerCount = playerCount;
+	this.drawCardFieldCount = drawCardFieldCount;
+	//init(conf);//leave it out first
     }
+	public int getId() {
+		return id;
+	}
+
+	public int getPlayerCount() {
+		return playerCount;
+	}
+
+	public int getFieldSize() {
+		return mainFieldCount;
+	}
+
+	public ArrayList<org.example.Player> getPlayers() {
+		return players;
+	}
+
+	public int getDrawCardFieldCount() {
+		return drawCardFieldCount;
+	}
+
+	public int getFiguresPerPlayer() {
+		return figuresPerPlayer;
+	}
+
+	public int getInitialCardsPerPlayer() {
+		return initialCardsPerPlayer;
+	}
+
+	public int getThinkTimePerMove() {
+		return thinkTimePerMove;
+	}
+
+	public int getVisualizationTimePerMove() {
+		return visualizationTimePerMove;
+	}
+
+	public int getMaximumGameDuration() {
+		return maximumGameDuration;
+	}
+
+	public Penalty getPenalty() {
+		return penalty;
+	}
+
+	public int getMaximumTotalMoves() {
+		return maximumTotalMoves;
+	}
+
+	public OrderType getOrderType() {
+		return orderType;
+	}
 
     public void increaseMovesCounter() {
 	this.movesMade++;
@@ -76,7 +148,7 @@ public final class Game {
     }
 
     public void distributeCards() {
-	for (int i = 0; i < this.initialHandCardCount; i++) {
+	for (int i = 0; i < this.initialCardsPerPlayer; i++) {
 	    for (int j = 0; j < this.players.size(); j++) {
 		this.players.get(j).draw(this);
 	    }
@@ -150,7 +222,7 @@ public final class Game {
 	this.mainFieldCount = max;
 
 
-	int totalfieldcount = fieldcount + figureCount * players; //playercount
+	int totalfieldcount = fieldcount + figuresPerPlayer * players; //playercount
 	this.board = new Field[totalfieldcount];
 
 	this.startIndexs = new int[players];
@@ -164,7 +236,7 @@ public final class Game {
 
 	//add players Player
 	for (int plyrcol = 0; plyrcol < players; plyrcol++) { 
-	    this.players.add(new Player(plyrcol, figureCount));
+	    //this.players.add(new Player(plyrcol, figuresPerPlayer));
 	}
 	int seenstarts = 0;
 	for (int i = 0; i < max; i++) {
@@ -183,13 +255,13 @@ public final class Game {
 		this.players.get(seenstarts).startField = this.board[i]; //init starts
 		int off = fieldcount;
 		this.players.get(seenstarts).houseFirstIndex = fieldcount;
-		for (int j = off; j < figureCount + off; j++) {
+		for (int j = off; j < figuresPerPlayer + off; j++) {
 		    // this.board.add(new Field(fieldcount++, 'h'));
 		    this.board[fieldcount] = new Field(fieldcount, FieldType.HOUSE);
 
 		    fieldcount++;
 		}
-		for (int j = off; j < figureCount-1 + off; j++) {
+		for (int j = off; j < figuresPerPlayer -1 + off; j++) {
 		    this.board[j].setNext(this.board[j+1]);
 		    // this.board[j+1].setPrev(this.board[j]); //house fields dont have prev field
 		}
@@ -236,13 +308,13 @@ public final class Game {
 	boolean gameOver = false;
 	
 	for (int i = 0; i < this.players.size(); i++) {
-	    if(this.players.get(i).figuresInHouse == this.figureCount) {
+	    if(this.players.get(i).figuresInHouse == this.figuresPerPlayer) {
 		gameOver = true;
 		break;
 	    }
 	}
 
-	if (this.movesMade >= this.maxMoves) gameOver = true;
+	if (this.movesMade >= this.maximumTotalMoves) gameOver = true;
 
 	if(gameOver) {
 
@@ -273,5 +345,22 @@ public final class Game {
     public Field getField(int inx) {
 	return this.board[inx];
     }
+	@Override
+	public String toString() {
+		return "Game{" +
+				"id=" + id +
+				", playerCount=" + playerCount +
+				", fieldSize=" + mainFieldCount +
+				", drawCardFieldCount=" + drawCardFieldCount +
+				", figuresPerPlayer=" + figuresPerPlayer +
+				", initialCardsPerPlayer=" + initialCardsPerPlayer +
+				", thinkTimePerMove=" + thinkTimePerMove +
+				", visualizationTimePerMove=" + visualizationTimePerMove +
+				", maximumGameDuration=" + maximumGameDuration +
+				", penalty=" + penalty +
+				", maximumTotalMoves=" + maximumTotalMoves +
+				", orderType=" + orderType +
+				'}';
+	}
 }
 

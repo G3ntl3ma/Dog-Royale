@@ -7,15 +7,17 @@ public final class Player  {
     ArrayList<Figure> figures = new ArrayList<>();
     ArrayList<Card> cards = new ArrayList<>();
     Field startField; //accessed a lot in other classes
+	int id;
     int houseFirstIndex;
     int figuresInBank;
     int figuresInHouse;
-    final int color;
+    public int color;
     int lastMoveCountFigureMovedIntoHouse;
     
     int houseOccupationIndex; //index of housefield that with last figure TODO unused
     
-    public Player(int color, int figurecount) {
+    public Player(int id,int color, int figurecount) {
+	this.id = id;
 	this.figuresInBank = figurecount;
 	this.color = color;
 	this.lastMoveCountFigureMovedIntoHouse = 0;
@@ -88,5 +90,8 @@ public final class Player  {
 		this.cards.get(i).getMoves(game, this.figures.get(j), moves, this); 
 	    }
 	}
+
+		}
+
     }
-}
+
