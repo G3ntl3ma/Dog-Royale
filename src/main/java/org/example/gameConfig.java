@@ -1,5 +1,7 @@
 package src.main.java.org.example;
 
+import org.example.Game;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +26,8 @@ public class gameConfig {
         private JButton saveConfigButton;
         private JButton initiateGameButton;
         private JButton loadConficButton;
+        Game.Penalty penalty;
+        Game.OrderType orderType;
 
     public gameConfig() {
         ButtonGroup group1 = new ButtonGroup();
@@ -38,7 +42,6 @@ public class gameConfig {
         // Set initial selection
         kickFromGameRB.setSelected(true);
         randomRB.setSelected(true);
-
         saveConfigButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,8 +63,27 @@ public class gameConfig {
                     return;
                 }
                 else{
-                    System.out.println("alles gut");// perform a  game initiation
+                    if(kickFromGameRB.isSelected()){
+                        penalty = Game.Penalty.KICK_FROM_GAME;
+                    }
+                    else if(kickFromRoundRB.isSelected()){penalty = Game.Penalty.EXCLUDE_FROM_ROUND;}
+                    if(randomRB.isSelected()){
+                        orderType = Game.OrderType.RANDOM;
+                    }
+                    else if(notRandomRB.isSelected()){orderType = Game.OrderType.FIXED;}
+                    int playerCountValue = Integer.parseInt(playerCount.getText());
+                    int figureCountValue = Integer.parseInt(figureCount.getText());
+                    int fieldSizeValue = Integer.parseInt(fieldSize.getText());
+                    int drawCardCountValue = Integer.parseInt(drawcardCount.getText());
+                    int initialCardsPerPlayerValue = Integer.parseInt(initialCardsPerPlayer.getText());
+                    int thinkTimePerMoveValue = Integer.parseInt(thinkTimePerMove.getText());
+                    int visualTimeValue = Integer.parseInt(visualTime.getText());
+                    int maxTimeValue = Integer.parseInt(maxTime.getText());
+                    int maxMovesValue = Integer.parseInt(maxMoves.getText());
+                    Ausrichter.initiateGame(playerCountValue,fieldSizeValue,drawCardCountValue,figureCountValue,initialCardsPerPlayerValue,
+                            thinkTimePerMoveValue,visualTimeValue,maxTimeValue,penalty,maxMovesValue,orderType);
                 }
+
                 closeWindow();
             }
         });
