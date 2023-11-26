@@ -3,7 +3,7 @@ name: Luca Timo Eisen
 imt: leisen
 gruppe: 1
 woche: 6
-gesamtarbeitszeit: <Arbeitszeit dieser Woche in Stunden>
+gesamtarbeitszeit: 8,30h
 ---
 
 <!--
@@ -30,6 +30,6 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
      - 2023-11-20 2,00h
      - 2023-11-23 0,30h
 ## Implementierung
-    - Implementierung der GUI
-     -2023-11-21 4,00h
-     -2023-11-26 2,00h
+   - Implementierung der GUI
+     - 2023-11-21 4,00h
+     - 2023-11-26 2,00h
