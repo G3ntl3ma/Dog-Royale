@@ -37,6 +37,7 @@ public class Game_board extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private int pxWidth;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -98,7 +99,7 @@ public class Game_board extends Fragment {
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         */
 
-        int pxWidth = displayMetrics.widthPixels;
+        pxWidth = displayMetrics.widthPixels;
         int pxHeight = displayMetrics.heightPixels;
 
         //set board in middle
@@ -114,21 +115,31 @@ public class Game_board extends Fragment {
         //System.out.println(displayMetrics.heightPixels);
         //System.out.println(displayMetrics.widthPixels);
 
-        createFields(GameBoard, pxWidth, 200);
+        createFields(GameBoard, pxWidth, 19 );
 
         //instanziere Calculator
 
     }
     public void createFields(RelativeLayout layout, int width, int n){
-
-        CoordinateCalculator playingField = new CoordinateCalculator(n, 4, width/2 - 3* width/n);
+        CoordinateCalculator playingField = new CoordinateCalculator(n, 4, 740);
+        if (n<= 20) {
+            playingField = new CoordinateCalculator(n, 4, width / 2 - 3 * width / 20);
+        }
+        else {
+            playingField = new CoordinateCalculator(n, 4, width / 2 - 3 * width / n);
+        }
 
         Tuple result = new Tuple(0,0);
             for (int i = 0; i < n; i++) {
                 result = playingField.calculateFloatCoordinates(i);
-                createField(layout, width/n * 3, width/n * 3, (int) Math.round(result.getX() + width/2 - width/n * 1.5)  , (int) Math.round(result.getY()  + width/2 - width/n * 1.5), i);
-                System.out.println(result.getX());
-        }
+                if (n<= 20) {
+                    createField(layout, width/n * 3, (int) Math.round(result.getX() + width/2 - (  width/20 ))  , (int) Math.round(result.getY()  + width/2 - (width/20)), i);
+                }
+                else {
+                    createField(layout, width / n * 3, (int) Math.round(result.getX() + width / 2 - ( width / n)), (int) Math.round(result.getY() + width / 2 - (width / n)), i);
+                }
+            }
+
     }
     /*public int fx(int x, int turn, int width, int n)
     {
@@ -169,10 +180,17 @@ public class Game_board extends Fragment {
         }
         return (0);
     } */
-    public void createField(RelativeLayout layout, int width, int height, int x, int y, int id){
+    public void createField(RelativeLayout layout, int width, int x, int y, int id){
         ImageView imageView = new ImageView(getContext());
         imageView.setImageResource(R.drawable.spielfeld);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(1, 1);
+        if (width <= pxWidth/20)
+        {
+            params = new RelativeLayout.LayoutParams(width, width);
+        }
+        else {
+            params = new RelativeLayout.LayoutParams(pxWidth/10, pxWidth/10);
+        }
         params.setMargins(x, y, 0, 0);
         imageView.setLayoutParams(params);
         imageView.setId(id);

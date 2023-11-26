@@ -14,7 +14,7 @@ public class CoordinateCalculator {
     /**
      * Constructor for the CoordinateCalculator class.
      *
-     * @param fieldsize        The size of the game field.
+     * @param fieldsize        The size of the game field. (number of fields)
      * @param playerCount      The number of players.
      * @param radius The number of figures per player.
      */
@@ -61,7 +61,7 @@ public class CoordinateCalculator {
         Tuple coordinates = new Tuple(0,0);
 
         // Calculate angle for each position on the game field
-        double r = i * 360.0 / fieldsize;
+        double r = i * 360.0 / fieldsize / 57.296;
 
             // Create PolarCoordinate object
             PolarCoordinate polarCoordinate = new PolarCoordinate(radius, r);
