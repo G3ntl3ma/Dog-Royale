@@ -18,7 +18,7 @@ gesamtarbeitszeit: 45,45h
     - 2023-11-21 2,00h
     - 2023-11-26 1,50h
 ## Werkzeuge
--Einarbeitung in JUnit 5
+- Einarbeitung in JUnit 5
     - 2023-11-25 1,00h
     - 2023-11-26 2,00h
 
