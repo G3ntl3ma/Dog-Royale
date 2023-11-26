@@ -12,9 +12,6 @@
         tools:layout="@layout/fragment_first">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-        <action
             android:id="@+id/main_to_current"
             app:destination="@id/SpectateGames" />
         <action
@@ -23,16 +20,6 @@
         <action
             android:id="@+id/action_FirstFragment_to_matchHistory"
             app:destination="@id/matchHistory" />
-    </fragment>
-    <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.myapplication.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
     </fragment>
     <fragment
         android:id="@+id/SpectateGames"
@@ -50,7 +37,14 @@
         android:id="@+id/StartingGames"
         android:name="com.example.myapplication.StartingGames"
         android:label="Starting Games"
-        tools:layout="@layout/fragment_starting_games" />
+        tools:layout="@layout/fragment_starting_games" >
+        <action
+            android:id="@+id/action_StartingGames_to_game_board_layout"
+            app:destination="@id/game_board_layout" />
+        <action
+            android:id="@+id/action_StartingGames_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
     <fragment
         android:id="@+id/matchHistory"
         android:name="com.example.myapplication.MatchHistory"
@@ -59,9 +53,6 @@
         <action
             android:id="@+id/action_matchHistory_to_FirstFragment2"
             app:destination="@id/FirstFragment" />
-        <action
-            android:id="@+id/action_matchHistory_to_game_board"
-            app:destination="@id/game_board_layout" />
     </fragment>
     <fragment
         android:id="@+id/game_board_layout"

@@ -75,11 +75,11 @@ public class MatchHistory extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.Game00001.setOnClickListener(new View.OnClickListener() {
+        binding.currentBackToMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(MatchHistory.this)
-                        .navigate(R.id.action_matchHistory_to_game_board);
+                        .navigate(R.id.action_matchHistory_to_FirstFragment2);
 
 
             }
