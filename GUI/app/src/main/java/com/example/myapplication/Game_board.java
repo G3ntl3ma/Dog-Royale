@@ -115,7 +115,7 @@ public class Game_board extends Fragment {
         //System.out.println(displayMetrics.heightPixels);
         //System.out.println(displayMetrics.widthPixels);
 
-        createFields(GameBoard, pxWidth, 19 );
+        createFields(GameBoard, pxWidth, 100 );
 
         //instanziere Calculator
 

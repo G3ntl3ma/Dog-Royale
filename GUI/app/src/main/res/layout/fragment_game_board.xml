@@ -5,6 +5,7 @@
     android:id="@+id/gaBo_const_l"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/violett_background"
     tools:context=".Game_board">
 
     <!-- TODO: Update blank fragment layout -->
@@ -12,6 +13,17 @@
         android:id="@+id/textView6"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <EditText
+        android:id="@+id/editTextTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="time"
+        app:layout_constraintBottom_toTopOf="@+id/game_board_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <RelativeLayout
         android:id="@+id/game_board_layout"
@@ -23,9 +35,7 @@
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#D13D3D"
-            android:backgroundTint="#D12121" />
+            android:layout_height="match_parent" />
 
     </RelativeLayout>
 
