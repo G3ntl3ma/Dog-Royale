@@ -42,6 +42,9 @@
         <action
             android:id="@+id/action_current_games_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_SpectateGames_to_game_board_layout"
+            app:destination="@id/game_board_layout" />
     </fragment>
     <fragment
         android:id="@+id/StartingGames"

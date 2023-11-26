@@ -82,6 +82,15 @@ public class SpectateGames extends Fragment {
             }
 
         });
+        binding.spectateGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(SpectateGames.this)
+                        .navigate(R.id.action_SpectateGames_to_game_board_layout);
+
+            }
+
+        });
 
     }
 }
