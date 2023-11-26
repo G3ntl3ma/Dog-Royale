@@ -1,6 +1,7 @@
 package src.main.java.org.example;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.ArrayList;
 
@@ -15,8 +16,8 @@ public class Ausrichter {
     public enum Penalty{
         excludeFromRound, kickFromGame
     }
-    private Map<Integer, org.example.Game> games;
-    private AtomicInteger gameIdCounter;
+    private final Map<Integer, org.example.Game> games;
+    private final AtomicInteger gameIdCounter;
     public Ausrichter()
     {
         this.games = new HashMap<>();
