@@ -2,8 +2,8 @@
 name: Felix Werner
 imt: felixwr
 gruppe: 01
-woche: 05
-gesamtarbeitszeit: 5,5h
+woche: 06
+gesamtarbeitszeit: 10h
 ---
 
 
