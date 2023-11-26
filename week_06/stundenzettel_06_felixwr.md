@@ -21,4 +21,4 @@ gesamtarbeitszeit: 5,5h
 - Programmieren, Code lesen und recherchieren
     - 2023-11-24 2h
     - 2023-11-25 3h
-    - 2023-11-26 1h
+    - 2023-11-26 3h
