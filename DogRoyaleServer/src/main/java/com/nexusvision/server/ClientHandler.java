@@ -9,6 +9,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * ClientHandler, der sich dem übergebenem ClientSocket widmet
+ * und mit diesem kommuniziert
+ *
+ * @author felixwr
+ */
 public class ClientHandler implements Runnable {
     private static final Logger logger = LogManager.getLogger(ClientHandler.class);
     private final Socket clientSocket;

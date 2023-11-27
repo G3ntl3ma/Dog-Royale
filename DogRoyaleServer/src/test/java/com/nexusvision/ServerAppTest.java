@@ -1,34 +1,75 @@
 package com.nexusvision;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import com.nexusvision.server.ServerApp;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit test for simple App.
  */
-public class ServerAppTest
-        extends TestCase {
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public ServerAppTest(String testName) {
-        super(testName);
+public class ServerAppTest {
+
+    private static final String SERVER_ADDRESS = "localhost";
+    private static final int PORT = 8088;
+    private static Thread serverThread;
+
+    @BeforeAll
+    public static void setup() {
+        ServerApp server = new ServerApp();
+        serverThread = new Thread(() ->
+                server.startServer(PORT)
+        );
+        serverThread.start();
+
+        // Warte eine kurze Zeit, um dem Server Zeit zum Starten zu geben
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite() {
-        return new TestSuite(ServerAppTest.class);
+    @AfterAll
+    public static void tearDown() {
+        serverThread.interrupt();
     }
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp() {
-        assertTrue(true);
+    @Test
+    public void testServerStartup() {
+        assertTrue(serverThread.isAlive());
+    }
+
+    @Test
+    public void testClientConnection() {
+        try {
+            Socket clientSocket = new Socket(SERVER_ADDRESS, PORT);
+
+            assertTrue(clientSocket.isConnected());
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(clientSocket.getInputStream()));
+            PrintWriter writer = new PrintWriter(
+                    clientSocket.getOutputStream(), true);
+
+            writer.println("{test: test}");
+            assertTrue(serverThread.isAlive());
+
+            String serverMessage = reader.readLine();
+            assertNotNull(serverMessage);
+            assertTrue(serverThread.isAlive());
+
+            clientSocket.close();
+        } catch (IOException e) {
+            fail("Fehler bei der Verbindung zum Server: " + e.getMessage());
+        }
     }
 }

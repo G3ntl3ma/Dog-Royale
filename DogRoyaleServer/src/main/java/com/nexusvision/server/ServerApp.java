@@ -10,7 +10,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Hello world!
+ * Die Server-Applikation, die den Server startet
+ *
+ * @author felixwr
  */
 public class ServerApp {
     private static final Logger logger = LogManager.getLogger(ServerApp.class);
@@ -18,8 +20,18 @@ public class ServerApp {
     private static final ExecutorService executorService = Executors.newFixedThreadPool(100);
 
     public static void main(String[] args) {
-        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            logger.info("ServerSocket erfolgreich gestartet");
+        new ServerApp().startServer(PORT);
+    }
+
+    /**
+     * Setzt ServerSocket auf und erstellt für eingehende Verbindungen
+     * einen Thread und fügt diese zum Threadpool hinzu
+     *
+     * @param port Der Port mit dem der ServerSocket gestartet wird
+     */
+    public void startServer(int port) {
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            logger.info("ServerSocket erfolgreich gestartet unter Port " + port);
             logger.info("Warte auf Verbindungen...");
 
             while (true) {
