@@ -126,16 +126,12 @@ public class Game_board extends Fragment {
         //System.out.println(displayMetrics.heightPixels);
         //System.out.println(displayMetrics.widthPixels);
 
-        createFields(GameBoard, pxWidth, 100);
+        createFields(GameBoard, pxWidth, 5);
         int[] start_colors = {R.color.p1_color, R.color.p2_color, R.color.p3_color, R.color.p4_color, R.color.p5_color, R.color.p6_color};
         int pcolor = 0;
-        System.out.println(start_colors[0]);
-        System.out.println(start_colors[1]);
-        System.out.println(start_colors[2]);
-        System.out.println(start_colors[3]);
-        System.out.println(R.color.p1_color);
-        System.out.println(R.color.p2_color);
-        Start_positions = new int[]{0, 2, 4, 6 ,8, 10};
+        //testweise
+        Start_positions = new int[]{0, 2, 4, 0 ,0, 0};
+
         for(int x = 1 ; x<=Start_positions.length; x++)
         {
             ImageView imageView = GameBoard.findViewWithTag(Start_positions[x-1]);
@@ -148,21 +144,22 @@ public class Game_board extends Fragment {
     }
     public void createFields(RelativeLayout layout, int width, int n){
         CoordinateCalculator playingField = new CoordinateCalculator(n, 4, 740);
-        if (n<= 20) {
+        /*if (n<= 20) {
             playingField = new CoordinateCalculator(n, 4, width / 2 - 3 * width / 20);
         }
         else {
             playingField = new CoordinateCalculator(n, 4, width / 2 - 3 * width / n);
-        }
+        }*/
+        playingField = new CoordinateCalculator(n, 4, width / 2 - 3 * width / n);
 
         Tuple result = new Tuple(0,0);
             for (int i = 0; i < n; i++) {
                 result = playingField.calculateFloatCoordinates(i);
                 if (n<= 20) {
-                    createField(layout, width/n * 3, (int) Math.round(result.getX() + width/2 - (  width/20 ))  , (int) Math.round(result.getY()  + width/2 - (width/20)), i);
+                    createField(layout, width/10, (int) Math.round(result.getX() + width/2 - (  width/20 ))  , (int) Math.round(result.getY()  + width/2 - (width/20)), i);
                 }
                 else {
-                    createField(layout, width / n * 3, (int) Math.round(result.getX() + width / 2 - ( width / n)), (int) Math.round(result.getY() + width / 2 - (width / n)), i);
+                    createField(layout, width/n * 2, (int) Math.round(result.getX() + width / 2 - ( width / n)), (int) Math.round(result.getY() + width / 2 - (width / n)), i);
                 }
             }
 
@@ -221,13 +218,7 @@ public class Game_board extends Fragment {
         ImageView imageView = new ImageView(getContext());
         imageView.setImageResource(R.drawable.spielfeld);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(1, 1);
-        if (width <= pxWidth/20)
-        {
-            params = new RelativeLayout.LayoutParams(width, width);
-        }
-        else {
-            params = new RelativeLayout.LayoutParams(pxWidth/10, pxWidth/10);
-        }
+        params = new RelativeLayout.LayoutParams(width, width);
         params.setMargins(x, y, 0, 0);
         positions.add(new Tuple(x, y));
         //if (Arrays.stream(Start_positions).anyMatch(z -> z==id))
