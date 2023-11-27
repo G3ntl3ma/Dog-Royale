@@ -1,10 +1,13 @@
 package com.example.myapplication;
 
 import android.app.ActionBar;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 
@@ -25,6 +28,8 @@ import com.example.myapplication.databinding.FragmentGameBoardBinding;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,13 +42,19 @@ public class Game_board extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private int pxWidth;
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private int pxWidth;
     private FragmentGameBoardBinding binding;
+    //save positions
+    private ArrayList<Tuple> positions = new ArrayList<Tuple>();
+    //Anzahl Spielfelder
+    private int field_size = 1;
+    //Anzahl Spieler
+    private int player_count = 2;
+    //die wievielten Spielfelder Startfelder sind.
+    private int[] Start_positions = new int[6];
 
     public Game_board() {
         // Required empty public constructor
@@ -115,9 +126,24 @@ public class Game_board extends Fragment {
         //System.out.println(displayMetrics.heightPixels);
         //System.out.println(displayMetrics.widthPixels);
 
-        createFields(GameBoard, pxWidth, 100 );
+        createFields(GameBoard, pxWidth, 100);
+        int[] start_colors = {R.color.p1_color, R.color.p2_color, R.color.p3_color, R.color.p4_color, R.color.p5_color, R.color.p6_color};
+        int pcolor = 0;
+        System.out.println(start_colors[0]);
+        System.out.println(start_colors[1]);
+        System.out.println(start_colors[2]);
+        System.out.println(start_colors[3]);
+        System.out.println(R.color.p1_color);
+        System.out.println(R.color.p2_color);
+        Start_positions = new int[]{0, 2, 4, 6 ,8, 10};
+        for(int x = 1 ; x<=Start_positions.length; x++)
+        {
+            ImageView imageView = GameBoard.findViewWithTag(Start_positions[x-1]);
+            imageView.setColorFilter(ContextCompat.getColor(getContext(), start_colors[pcolor]), PorterDuff.Mode.MULTIPLY);
+            //imageView.setImageTintMode(PorterDuff.Mode.MULTIPLY);
 
-        //instanziere Calculator
+            pcolor +=1;
+        }
 
     }
     public void createFields(RelativeLayout layout, int width, int n){
@@ -180,6 +206,17 @@ public class Game_board extends Fragment {
         }
         return (0);
     } */
+
+    /*
+    *Use this  to create a single gamefield on your board
+    *
+    *
+    * @layout is the layout the View is added to. (only RelativeLayout works rn)
+    * @width is the width and height of the image
+    * @x is the x position
+    * @y is the y position
+    * @id is the id you want to give the image.
+     */
     public void createField(RelativeLayout layout, int width, int x, int y, int id){
         ImageView imageView = new ImageView(getContext());
         imageView.setImageResource(R.drawable.spielfeld);
@@ -192,8 +229,11 @@ public class Game_board extends Fragment {
             params = new RelativeLayout.LayoutParams(pxWidth/10, pxWidth/10);
         }
         params.setMargins(x, y, 0, 0);
+        positions.add(new Tuple(x, y));
+        //if (Arrays.stream(Start_positions).anyMatch(z -> z==id))
+
+        imageView.setTag(id);
         imageView.setLayoutParams(params);
-        imageView.setId(id);
         layout.addView(imageView);
     }
 }
