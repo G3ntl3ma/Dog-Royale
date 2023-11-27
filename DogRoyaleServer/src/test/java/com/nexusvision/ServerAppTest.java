@@ -17,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Unit- und IT-Tests die den ServerSocket
  * und die Verbindung zum ClientSocket testen
+ *
+ * @author felixwr
  */
 public class ServerAppTest {
 
