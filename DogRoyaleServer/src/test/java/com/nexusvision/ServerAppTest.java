@@ -15,7 +15,8 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit test for simple App.
+ * Unit- und IT-Tests die den ServerSocket
+ * und die Verbindung zum ClientSocket testen
  */
 public class ServerAppTest {
 
