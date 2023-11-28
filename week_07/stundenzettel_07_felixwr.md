@@ -3,7 +3,7 @@ name: Felix Werner
 imt: felixwr
 gruppe: 01
 woche: 07
-gesamtarbeitszeit: 3h
+gesamtarbeitszeit: 7h
 ---
 
 
@@ -15,3 +15,4 @@ gesamtarbeitszeit: 3h
 ## Server-Client-Interface
 - Programmieren, Code lesen und recherchieren
     - 2023-11-27 1,5h
+    - 2023-11-28 4h
