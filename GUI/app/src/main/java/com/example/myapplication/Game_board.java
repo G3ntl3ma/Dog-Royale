@@ -1,5 +1,5 @@
 package com.example.myapplication;
-import java.util.concurrent.TimeUnit;
+
 import android.app.ActionBar;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 
-import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +18,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 //databinding
 import com.example.myapplication.databinding.FragmentGameBoardBinding;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +48,7 @@ public class Game_board extends Fragment {
     private int player_count = 6;
     //die wievielten Spielfelder Startfelder sind.
     private int[] Start_positions = new int[6];
+
     public Game_board() {
         // Required empty public constructor
     }
@@ -78,6 +76,8 @@ public class Game_board extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -139,8 +139,6 @@ public class Game_board extends Fragment {
         // TODO: createHomeFields(GameBoard, );
 
 
-        Timer timer = new Timer (600_000, binding);
-        timer.startTimer();
     }
 
     /**
