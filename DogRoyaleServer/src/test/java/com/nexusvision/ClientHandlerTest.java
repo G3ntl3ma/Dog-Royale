@@ -1,30 +1,38 @@
+package com.nexusvision;
+
+import com.nexusvision.server.ClientHandler;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.MockitoRule;
-import org.junit.Rule;
-import org.junit.runner.RunWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ClientHandlerTest {
-
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnitRunner.rule();
-
     @Mock
     private BufferedReader reader;
 
     @Mock
     private PrintWriter writer;
 
+    @InjectMocks
+    private ClientHandler clientHandler;
+
     @Test
     public void testRun() throws IOException {
         when(reader.readLine()).thenReturn("Hello", "World", null);
 
-        ClientHandler clientHandler = new ClientHandler(new Socket());
+        clientHandler = new ClientHandler(new Socket());
         clientHandler.run();
 
         // Verify that the processMessage method was called for each received message
