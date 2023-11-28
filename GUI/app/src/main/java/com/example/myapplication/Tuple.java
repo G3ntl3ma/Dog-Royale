@@ -47,4 +47,9 @@ public class Tuple {
     public double getY() {
         return y;
     }
+
+    public double vek_length()
+    {
+        return (Math.sqrt(Math.pow(this.getX(),2 ) + Math.pow(this.getY(), 2)));
+    }
 }
