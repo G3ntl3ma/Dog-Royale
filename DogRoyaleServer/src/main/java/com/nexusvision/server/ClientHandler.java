@@ -33,7 +33,9 @@ public class ClientHandler implements Runnable {
 
             String clientMessage;
             while ((clientMessage = reader.readLine()) != null) {
-                // TODO: MessageHandling
+                //  MessageHandling
+                String messageResponse = processMessage(clientMessage);
+                writer.println(messageResponse);
                 logger.info("Von Client wurde folgendes empfangen: " + clientMessage);
 
                 writer.println("Nachricht erhalten");
@@ -49,4 +51,12 @@ public class ClientHandler implements Runnable {
             }
         }
     }
+    private String processMessage(String clientMessage) {
+        // Implement message processing logic here
+        // ...
+
+        // Return a response message
+        return "Message processed: " + clientMessage;
+    }
+
 }
