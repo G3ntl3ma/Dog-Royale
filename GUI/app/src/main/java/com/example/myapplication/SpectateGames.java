@@ -1,16 +1,22 @@
 package com.example.myapplication;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.databinding.FragmentSpectateGamesBinding;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +29,7 @@ public class SpectateGames extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
 
+    int counter = 0;
     private FragmentSpectateGamesBinding binding;
     private static final String ARG_PARAM2 = "param2";
 
@@ -59,12 +66,20 @@ public class SpectateGames extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        List<String> items= new LinkedList<String>();
+        items.add("Code it");
+        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.spectate_games_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        spectatingGamesAdapter adapter = new spectatingGamesAdapter(items);
+        recyclerView.setAdapter(adapter);
+        System.out.println("Point A has been reached");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         binding = FragmentSpectateGamesBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
