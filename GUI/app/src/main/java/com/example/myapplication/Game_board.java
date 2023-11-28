@@ -50,6 +50,7 @@ public class Game_board extends Fragment {
     //Anzahl Spieler
     private int player_count = 6;
     //die wievielten Spielfelder Startfelder sind.
+    private int figure_count = 4;
     private int[] Start_positions = new int[6];
     public Game_board() {
         // Required empty public constructor
@@ -119,12 +120,12 @@ public class Game_board extends Fragment {
         //System.out.println(displayMetrics.heightPixels);
         //System.out.println(displayMetrics.widthPixels);
 
-        createFields(GameBoard, pxWidth, 5, player_count);
+        createFields(GameBoard, pxWidth, 12, player_count);
         int[] start_colors = {R.color.p1_color, R.color.p2_color, R.color.p3_color, R.color.p4_color, R.color.p5_color, R.color.p6_color};
         int pcolor = 0;
         //testweise
-        Start_positions = new int[]{0, 2, 4, 0 ,0, 0};
-        //TODO: ImageView[] homefields = new ImageView[6];
+        Start_positions = new int[]{0, 2, 4, 6 ,8, 10};
+        Tuple[] homefields = new Tuple[6];
 
         for(int x = 1 ; x<=Start_positions.length; x++)
         {
@@ -132,11 +133,15 @@ public class Game_board extends Fragment {
             imageView.setColorFilter(ContextCompat.getColor(getContext(), start_colors[pcolor]), PorterDuff.Mode.MULTIPLY);
             //imageView.setImageTintMode(PorterDuff.Mode.MULTIPLY);
             pcolor +=1;
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) imageView.getLayoutParams();
+
             //TODO: if ()
+            homefields[x-1] = new Tuple(lp.leftMargin, lp.topMargin);
+            System.out.println(homefields[x-1]);
 
         }
-
-        // TODO: createHomeFields(GameBoard, );
+        System.out.println(homefields[1].getX());
+        createHomeFields(GameBoard, homefields, pxWidth, figure_count);
 
 
         Timer timer = new Timer (600_000, binding);
@@ -239,17 +244,27 @@ public class Game_board extends Fragment {
         layout.addView(imageView);
     }
 
+    /**
+     *
+     * @param layout layout the Views get added to
+     * @param homefields Array of the homefields
+     * @param width Width of the Layout the fields are added to
+     * @param n number of figurines
+     */
     public void createHomeFields(RelativeLayout layout, Tuple[] homefields, int width, int n )
     {
         Tuple mid = new Tuple(width /2, width/2);
         for (int j = homefields.length; j >=1; j--)
         {
+            Tuple vek = new Tuple((mid.getX() - homefields[j-1].getX()) , (mid.getY() - homefields[j-1].getY()) );
+            System.out.println(mid.getX() + " und " + homefields[j-1].getX() + " also " + (mid.getX() - homefields[j-1].getX()) );
             for (int k = 0; k<n;k++) {
-                Tuple pos = fh(width/n, homefields[j], mid, k, n);
-                createField(layout, width / n, (int) Math.round(pos.getX()), (int) Math.round(pos.getY()), j, "hausfeld_" + j + "_" );
+                Tuple pos = fh(width/n, vek, homefields[j-1], k + 1, n + 2);
+                createField(layout, (int) Math.round(mid.vek_length()/n), (int) Math.round(pos.getX()), (int) Math.round(pos.getY()), k, "homefield" + j + "_" );
             }
         }
     }
+
 
     /**
      *
@@ -260,8 +275,15 @@ public class Game_board extends Fragment {
      * @param n Anzahl an Hausfeldern/Spielfiguren
      * @return gibt Tupel mit Position eine Hausfeldes wieder.
      */
-    public Tuple fh(int width, Tuple homefield_pos, Tuple mid, int i, int n)
+    public Tuple fh(int width, Tuple vek, Tuple home, int i, int n)
     {
-        return (new Tuple(homefield_pos.getX() + (mid.getX() - 2* width/n - homefield_pos.getX())/n * i,homefield_pos.getY() + (mid.getY() - homefield_pos.getY())/n * i));
+        double home_x = home.getX();
+        double home_y = home.getY();
+        double vek_x = vek.getX();
+        double vek_y = vek.getY();
+        //System.out.println(home_x);
+        //System.out.println(vek_x);
+        //System.out.println(home_x + vek_x);
+        return (new Tuple(home_x + vek_x/n * i,home_y + vek_y/n * i));
     }
 }
