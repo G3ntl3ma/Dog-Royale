@@ -139,6 +139,9 @@ public class Game_board extends Fragment {
         // TODO: createHomeFields(GameBoard, );
 
 
+        Timer timer = new Timer (600_000, binding);
+        timer.startTimer();
+
     }
 
     /**
