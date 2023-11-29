@@ -3,7 +3,7 @@ name: Mattes Hachmeyer
 imt: hachmeye
 gruppe: 01
 woche: 07
-gesamtarbeitszeit: 5,30h
+gesamtarbeitszeit: 8,30h
 ---
 
 <!--
@@ -30,6 +30,12 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 ## Entwicklung
 - Serializing von Objekten (clientseitig)
   - 2023-11-27 4,00h
+  - 2023-11-28 2,00h
+- Anpassen der Message-Klassen
+  - 2023-11-29 1,00h
+- Schreiben und verstehen einer MessageHandling-Methode
+  - 2023-11-30 2,00h
+
 
 ## Sprint Planning
 - Sprint Meeting
