@@ -1,5 +1,6 @@
-package com.nexusvision.messages.game;
+package com.nexusvision.messages.menu;
 
+import com.nexusvision.messages.game.AbstractGameMessage;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class FindTournament extends AbstractGameMessage{
+public class FindTournament extends AbstractMenuMessage {
     private int clientId;
     private int tournamentStarting;
     private int tournamentInProgress;

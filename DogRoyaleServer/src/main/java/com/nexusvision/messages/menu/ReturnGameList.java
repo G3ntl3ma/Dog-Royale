@@ -1,5 +1,6 @@
-package com.nexusvision.messages.game;
+package com.nexusvision.messages.menu;
 
+import com.nexusvision.messages.game.AbstractGameMessage;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class ReturnGameList extends AbstractGameMessage {
+public class ReturnGameList extends AbstractMenuMessage {
 
     @Data
     public static class startingGames{

@@ -1,6 +1,7 @@
-package com.nexusvision.messages.game;
+package com.nexusvision.messages.menu;
 
 
+import com.nexusvision.messages.game.AbstractGameMessage;
 import lombok.Data;
 
 /**
@@ -9,7 +10,7 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class JoinGameAsParticipant extends AbstractGameMessage {
+public class JoinGameAsParticipant extends AbstractMenuMessage {
     private int gameId;
     private int clientId;
     private String playerName;
