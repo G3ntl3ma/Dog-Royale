@@ -3,6 +3,8 @@ package com.nexusvision.messages.menu;
 import com.nexusvision.messages.game.AbstractGameMessage;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Rückgabe der gestarteten, laufenden und beendeten Spielen
  *
@@ -10,23 +12,26 @@ import lombok.Data;
  */
 @Data
 public class ReturnGameList extends AbstractMenuMessage {
+    private List<StartingGame> startingGames;
+    private List<RunningGame> runningGames;
+    private List<FinishingGame> finishedGames;
 
     @Data
-    public static class startingGames{
+    public static class StartingGame{
         private int gameId;
         private int currentPlayerCount;
         private int maxPlayerCount;
     }
 
     @Data
-    public static class runningGames{
+    public static class RunningGame{
         private int gameId;
         private int currentPlayerCount;
         private int maxPlayerCount;
     }
 
     @Data
-    public static class finishedGames{
+    public static class FinishingGame{
         private int gameId;
         private int winnerPlayerId;
     }
