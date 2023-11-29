@@ -29,7 +29,7 @@ public class ClientHandler implements Runnable {
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(clientSocket.getInputStream()));
             PrintWriter writer = new PrintWriter(
-                    clientSocket.getOutputStream(), true);
+                    clientSocket.getOutputStream(), false);
 
             String clientMessage;
             while ((clientMessage = reader.readLine()) != null) {
@@ -39,6 +39,7 @@ public class ClientHandler implements Runnable {
                 logger.info("Von Client wurde folgendes empfangen: " + clientMessage);
 
                 writer.println("Nachricht erhalten");
+		writer.flush();
             }
 
         } catch (IOException e) {

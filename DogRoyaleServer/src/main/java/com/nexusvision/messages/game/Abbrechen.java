@@ -8,7 +8,7 @@ import lombok.Data;
  */
 @Data
 public class Abbrechen extends AbstractGameMessage{
-    private List<WinnerOrder> winnerOrder;
+    //private List<WinnerOrder> winnerOrder;
 
     @Data
     public static class Winnerorder{

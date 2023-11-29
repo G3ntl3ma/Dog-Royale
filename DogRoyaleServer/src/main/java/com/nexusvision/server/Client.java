@@ -45,8 +45,10 @@ public class Client {
 
                 writer.println(userInput); // Nachricht an den Server senden
 
-                String serverResponse = reader.readLine(); // Auf Antwort des Servers warten
-                logger.info("Antwort vom Server: " + serverResponse);
+		do {
+		    String serverResponse = reader.readLine(); // Auf Antwort des Servers warten
+		    logger.info("Antwort vom Server: " + serverResponse);
+		} while (reader.ready());
             }
         } catch (IOException e) {
             logger.error("Fehler bei der Kommunikation mit dem Server: " + e.getMessage());
