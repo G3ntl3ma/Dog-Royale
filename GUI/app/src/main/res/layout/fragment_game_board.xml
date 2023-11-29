@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:theme="@style/gameBoardTHeme"
     android:id="@+id/gaBo_const_l"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,6 +14,9 @@
         android:id="@+id/textView6"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
@@ -68,25 +70,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
+                android:minWidth="75dp"
+                android:minHeight="100dp"
                 android:orientation="vertical">
 
                 <TextView
+
+                    style="@style/gameBoardTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Player1" />
 
                 <TextView
+
                     android:id="@+id/textView74"
+                    style="@style/gameBoardTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:text="@string/figures_left_text" />
 
                 <TextView
-                    android:id="@+id/textView75"
+
+                    android:id="@+id/figures_player1"
+                    style="@style/gameBoardTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="x" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cards_left_text"
+                    style = "@style/gameBoardTheme"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:id="@+id/cards_p1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="x"
+                    style = "@style/gameBoardTheme"
+                    /> />
             </LinearLayout>
 
             <LinearLayout
@@ -94,105 +120,189 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
+                android:minWidth="75dp"
+                android:minHeight="100dp"
                 android:orientation="vertical">
 
                 <TextView
+                    style="@style/gameBoardTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Player2" />
 
                 <TextView
+                    style="@style/gameBoardTheme"
                     android:id="@+id/textView76"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:text="@string/figures_left_text" />
 
                 <TextView
-                    android:id="@+id/textView77"
+                    style="@style/gameBoardTheme"
+                    android:id="@+id/figures_player2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="x" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cards_left_text"
+                    style = "@style/gameBoardTheme"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:id="@+id/cards_p2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="x"
+                    style = "@style/gameBoardTheme"
+                    /> />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/Player3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="5dp"
+                android:layout_marginHorizontal="10dp"
+                android:minWidth="75dp"
+                android:minHeight="100dp"
                 android:orientation="vertical">
 
                 <TextView
+                    style="@style/gameBoardTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Player3" />
 
                 <TextView
+                    style="@style/gameBoardTheme"
                     android:id="@+id/textView78"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:text="@string/figures_left_text" />
 
                 <TextView
-                    android:id="@+id/textView79"
+                    style="@style/gameBoardTheme"
+                    android:id="@+id/figures_player3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="x" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cards_left_text"
+                    style = "@style/gameBoardTheme"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:id="@+id/cards_p3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="x"
+                    style = "@style/gameBoardTheme"
+                    />/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/Payer4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="5dp"
+                android:layout_marginHorizontal="10dp"
+                android:minWidth="75dp"
+                android:minHeight="100dp"
                 android:orientation="vertical">
 
                 <TextView
+                    style="@style/gameBoardTheme"
                     android:id="@+id/textView44"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Player4" />
 
                 <TextView
+                    style="@style/gameBoardTheme"
                     android:id="@+id/textView80"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:text="@string/figures_left_text" />
 
                 <TextView
-                    android:id="@+id/textView81"
+                    style="@style/gameBoardTheme"
+                    android:id="@+id/figures_player4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="x" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cards_left_text"
+                    style = "@style/gameBoardTheme"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:id="@+id/cards_p4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="x"
+                    style = "@style/gameBoardTheme"
+                    /> />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/Player5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="5dp"
+                android:layout_marginHorizontal="10dp"
+                android:minWidth="75dp"
+                android:minHeight="100dp"
                 android:orientation="vertical">
 
                 <TextView
+                    style="@style/gameBoardTheme"
                     android:id="@+id/textView45"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Player5" />
 
                 <TextView
+                    style="@style/gameBoardTheme"
                     android:id="@+id/textView82"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:text="@string/figures_left_text" />
 
                 <TextView
-                    android:id="@+id/textView83"
+                    style="@style/gameBoardTheme"
+                    android:id="@+id/figures_player5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="x" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cards_left_text"
+                    style = "@style/gameBoardTheme"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:id="@+id/cards_p5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="x"
+                    style = "@style/gameBoardTheme"
+                    /> />
             </LinearLayout>
 
             <LinearLayout
@@ -200,27 +310,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
+                android:minWidth="75dp"
+                android:minHeight="100dp"
                 android:orientation="vertical">
 
                 <TextView
+                    style="@style/gameBoardTheme"
                     android:id="@+id/textView64"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginHorizontal="10dp"
                     android:text="Player6" />
 
                 <TextView
+                    style="@style/gameBoardTheme"
                     android:id="@+id/textView84"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:text="@string/figures_left_text" />
 
                 <TextView
-                    android:id="@+id/textView85"
+                    android:id="@+id/figures_player6"
+                    style="@style/gameBoardTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="x" />
+
+                <TextView
+                    android:id="@+id/textView65"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cards_left_text"
+                    style = "@style/gameBoardTheme"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:id="@+id/cards_p6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="x"
+                    style = "@style/gameBoardTheme"
+                    />
             </LinearLayout>
         </LinearLayout>
     </HorizontalScrollView>

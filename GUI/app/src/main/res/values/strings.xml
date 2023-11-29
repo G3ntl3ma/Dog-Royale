@@ -15,7 +15,8 @@
     <string name="playerSubtitel">Player</string>
     <string name="timeSubtitel">Time</string>
     <string name="winnerID">Winner</string>
-    <string name="figures_left_text">Figures:</string>
+    <string name="figures_left_text">Figures in Bank:</string>
+    <string name="cards_left_text">Cards in Hand:</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
