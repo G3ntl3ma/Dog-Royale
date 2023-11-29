@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.app.ActionBar;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -49,11 +50,12 @@ public class Game_board extends Fragment {
     private int player_count = 6;
     //die wievielten Spielfelder Startfelder sind.
     private int figure_count = 100;
-    private int[] Start_positions = new int[6];
+    private int[] Start_positions = new int[player_count];
 
     //Farben der Start/hausfelder
     private int[] start_colors = {R.color.p1_color, R.color.p2_color, R.color.p3_color, R.color.p4_color, R.color.p5_color, R.color.p6_color};
 
+    private int[] draw_fields = new int[5];
     public Game_board() {
         // Required empty public constructor
     }
@@ -149,6 +151,8 @@ public class Game_board extends Fragment {
 
         //Erstellung der Hausfelder
         createHomeFields(GameBoard, homefields, pxWidth, figure_count);
+        draw_fields = new int[]{3, 5, 7, 13, 15};
+        createDrawFields(GameBoard, draw_fields);
 
         Timer timer = new Timer (600_000, binding);
         timer.startTimer();
@@ -334,6 +338,15 @@ public class Game_board extends Fragment {
         //System.out.println(vek_x);
         //System.out.println(home_x + vek_x);
         return (new Tuple(home_x + 1/offset*vek_x + vek_x/n * i,home_y + 1/offset*vek_y + vek_y/n * i));
+    }
+
+    public void createDrawFields(RelativeLayout layout, int[] positions)
+    {
+        for (int i = 0; i< positions.length; i++) {
+
+            ImageView imageView = layout.findViewWithTag("normal"+positions[i]);
+            imageView.setImageResource(R.drawable.ziehfeld);
+        }
     }
 }
 
