@@ -51,6 +51,9 @@ public class Game_board extends Fragment {
     private int figure_count = 7;
     private int[] Start_positions = new int[6];
 
+    //Farben der Start/hausfelder
+    private int[] start_colors = {R.color.p1_color, R.color.p2_color, R.color.p3_color, R.color.p4_color, R.color.p5_color, R.color.p6_color};
+
     public Game_board() {
         // Required empty public constructor
     }
@@ -117,16 +120,16 @@ public class Game_board extends Fragment {
         RelativeLayout GameBoard = binding.gameBoardLayout;
         GameBoard.setLayoutParams(params);
 
-        field_size = 60;
+        field_size = 11;
         //Erstellung der Spielfelder
         createFields(GameBoard, pxWidth, field_size, player_count);
 
         //Farben der Hausfelder/Startfelder
-        int[] start_colors = {R.color.p1_color, R.color.p2_color, R.color.p3_color, R.color.p4_color, R.color.p5_color, R.color.p6_color};
+
         int pcolor = 0;
 
         //testweise
-        Start_positions = new int[]{0, 10, 20, 30 ,40, 50};
+        Start_positions = new int[]{0, 2, 4, 6 ,8, 10};
         Tuple[] homefields = new Tuple[6];
 
         //Farbenzuweisung der Startfelder
@@ -138,8 +141,8 @@ public class Game_board extends Fragment {
             pcolor +=1;
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) imageView.getLayoutParams();
 
-            //TODO: if ()
             homefields[x-1] = new Tuple(lp.leftMargin + lp.width/2, lp.topMargin + lp.width/2);
+
 
 
         }
@@ -170,7 +173,7 @@ public class Game_board extends Fragment {
             for (int i = 0; i < n; i++) {
                 result = playingField.calculateFloatCoordinates(i); //berechne x,y Koordinaten eines Feldes
                 //erstelle Feld und Zentrierung
-                createField(layout, width/10, (int) Math.round(result.getX() + width/2 - (  width/20 ))  , (int) Math.round(result.getY()  + width/2 - (width/20)), i, "normal");
+                createField(layout, width/10, (int) Math.round(result.getX() + width/2 - (  width/20 ))  , (int) Math.round(result.getY()  + width/2 - (width/20)), i, "normal", 0);
             }
         }
         else {
@@ -179,9 +182,7 @@ public class Game_board extends Fragment {
             for (int i = 0; i < n; i++) {
                 result = playingField.calculateFloatCoordinates(i); //berechne x,y Koordinaten eines Feldes
                 //erstelle Feld und Zentrierung
-                createField(layout, width/n * 2, (int) Math.round(result.getX() + width / 2 - ( width / n)), (int) Math.round(result.getY() + width / 2 - (width / n)), i, "normal");
-                System.out.println(width/n * 2);
-                System.out.println(pxWidth/field_size * 2);
+                createField(layout, width/n * 2, (int) Math.round(result.getX() + width / 2 - ( width / n)), (int) Math.round(result.getY() + width / 2 - (width / n)), i, "normal", 0);
             }
         }
     }
@@ -235,16 +236,29 @@ public class Game_board extends Fragment {
      * @param y is the y position
      * @param id is the id you want to give the image.
      * @param type is the type of the Field (normal/homefield_playernumber)
+     * @param j is the int for the color and player number, nomral fields just use 0
      **/
-    public void createField(RelativeLayout layout, int width, int x, int y, int id, String type){
+    public void createField(RelativeLayout layout, int width, int x, int y, int id, String type, int j){
         ImageView imageView = new ImageView(getContext()); //erstelle ImageView
         imageView.setImageResource(R.drawable.spielfeld); //hinzufügen von Bildressource
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(1, 1);
         params = new RelativeLayout.LayoutParams(width, width); //Größe des Bildes einstellen
         params.setMargins(x, y, 0, 0); //Position in layout einstellen (mithilfe von margins)
-        String tag = type + id;
-        imageView.setTag(tag); //Füge der View einen Tag zu
+        String tag;
         imageView.setLayoutParams(params); // Position des Views setzen
+        if (type == "homefield")
+        {
+            imageView.setColorFilter(ContextCompat.getColor(getContext(), start_colors[j-1]), PorterDuff.Mode.MULTIPLY);
+
+            tag = type + j + "_" + id;
+            imageView.setTag(tag);
+
+        }
+        else
+        {
+            tag = type + id;
+            imageView.setTag(tag); //Füge der View einen Tag zu
+        }
         layout.addView(imageView); //füge dem Layout das View hinzu
         /* For testing
         TextView textView = new TextView(getContext());
@@ -269,15 +283,21 @@ public class Game_board extends Fragment {
         for (int j = homefields.length; j >=1; j--)
         {
             Tuple vek = new Tuple((mid.getX() - homefields[j-1].getX()) , (mid.getY() - homefields[j-1].getY()) ); //berechnet den Vektor zwischen der Mitte und einem Hausfeld
-            vek.setX(vek.getX() - 1/(vek.vek_length()/(2*pxWidth/field_size)) * vek.getX());
-            vek.setY(vek.getY() - 1/(vek.vek_length()/(2*pxWidth/field_size)) * vek.getY());
+            if(field_size>20) {
+                vek.setX(vek.getX() - 1/(vek.vek_length()/(2*pxWidth/field_size)) * vek.getX());
+                vek.setY(vek.getY() - 1/(vek.vek_length()/(2*pxWidth/field_size)) * vek.getY());
+            }
+            else{
+                vek.setX(vek.getX() - 1/(vek.vek_length()/(2*pxWidth/20)) * vek.getX());
+                vek.setY(vek.getY() - 1/(vek.vek_length()/(2*pxWidth/20)) * vek.getY());
+            }
             //System.out.println(mid.getX() + " und " + homefields[j-1].getX() + " also " + (mid.getX() - homefields[j-1].getX()) ); //fürs testen
             System.out.println("Hausfeld" + homefields[j-1]);
             System.out.println("Länge: " + vek.vek_length());
             System.out.println("Vektor: " + vek);
             for (int k = 0; k<n;k++) {
                 Tuple pos = fh(width/n, vek, homefields[j-1] , k , n + 2 ); //berechnet position auf dem Vektor
-                createField(layout, (int) Math.round(vek.vek_length()/(n + 1)), (int) Math.round(pos.getX() - (vek.vek_length()/(n + 1))/2), (int) Math.round(pos.getY() -  (vek.vek_length()/(n + 1))/2), k, "homefield" + j + "_" ); // erstellt das Feld
+                createField(layout, (int) Math.round(vek.vek_length()/(n + 1)), (int) Math.round(pos.getX() - (vek.vek_length()/(n + 1))/2), (int) Math.round(pos.getY() -  (vek.vek_length()/(n + 1))/2), k, "homefield", j ); // erstellt das Feld
             }
         }
     }
@@ -300,8 +320,12 @@ public class Game_board extends Fragment {
         double vek_y = vek.getY();
         double offset;
 
-        offset = vek.vek_length()/(2* pxWidth/field_size) ;
-
+        if (field_size<= 20){
+            offset = vek.vek_length()/(1.5 * pxWidth/20) ;
+        }
+        else {
+            offset = vek.vek_length() / ( 1.5 * pxWidth / field_size);
+        }
         System.out.println(offset);
         //ome_x + = vek.vek_length()/n
 

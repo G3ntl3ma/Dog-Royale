@@ -31,7 +31,7 @@ public class Timer  extends AppCompatActivity{
             @Override
             public void onTick(long l) {
                 timeLeftMillis = l;
-                System.out.println("Timer ist Ticking!");
+                //System.out.println("Timer ist Ticking!");
                 updateCountdown();
             }
 
@@ -40,7 +40,7 @@ public class Timer  extends AppCompatActivity{
                 hasFinished = true;
             }
         }.start();
-        System.out.println("Timer has Started!");
+        //System.out.println("Timer has Started!");
         timerRunning = true;
         countdowntimer.start();
     }
@@ -90,11 +90,11 @@ public class Timer  extends AppCompatActivity{
         timeLeftMillis = millis;
     }
     private void updateCountdown(){
-        System.out.println("Counter is getting updated!");
+        //System.out.println("Counter is getting updated!");
         int minutes = (int) Math.floor(timeLeftMillis / 1000 / 60);
         int seconds = (int) Math.floor(timeLeftMillis / 1000 % 60);
         String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d",minutes, seconds);
-        System.out.println(timeLeftFormatted);
+        //System.out.println(timeLeftFormatted);
         binding.timerView.setText(timeLeftFormatted);
     }
 }
