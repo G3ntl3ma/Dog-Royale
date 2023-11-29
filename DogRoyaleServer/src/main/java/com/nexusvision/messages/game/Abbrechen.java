@@ -1,6 +1,7 @@
 package com.nexusvision.messages.game;
 
 import lombok.Data;
+import java.util.List;
 
 /**
  * Abbrechen

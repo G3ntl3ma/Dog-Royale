@@ -1,5 +1,13 @@
 package com.nexusvision.server;
 
+import com.google.gson.Gson;
+import com.nexusvision.messages.menu.*;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,7 +62,77 @@ public class ClientHandler implements Runnable {
     }
     private String processMessage(String clientMessage) {
         // Implement message processing logic here
-        // ...
+        try {
+            logger.info("try");
+            Gson gson = new Gson();
+            JsonElement jsonElement = JsonParser.parseString(clientMessage);
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            //if in key
+            int typeInx = jsonObject.get("type").getAsInt() - 100; //minus 100
+            AbstractMenuMessage.TypeMenue typeM = AbstractMenuMessage.TypeMenue.values()[typeInx];
+            logger.info("typeM " + typeM);
+            switch (typeM) {
+                case connectedToGame:
+                    ConnectedToGame connedToGame = gson.fromJson(clientMessage, ConnectedToGame.class);
+                    break;
+                case connectedToServer:
+                    ConnectedToServer connedToServer = gson.fromJson(clientMessage, ConnectedToServer.class);
+                    break;
+                case connectToServer:
+                    ConnectToServer connToServer = gson.fromJson(clientMessage, ConnectToServer.class);
+                    break;
+                case error:
+                    //Error error = gson.fromJson(clientMessage, Error.class); //Error class multiple choices
+                    break;
+                case findTournament:
+                    FindTournament findTournament = gson.fromJson(clientMessage, FindTournament.class);
+                    break;
+                case joinGameAsObserver:
+                    JoinGameAsObserver joinGameAsObserver = gson.fromJson(clientMessage, JoinGameAsObserver.class);
+                    break;
+                case joinGameAsParticipant:
+                    JoinGameAsParticipant joinGameAsParticipant = gson.fromJson(clientMessage, JoinGameAsParticipant.class);
+                    break;
+                case registeredForTournament:
+                    RegisteredForTournament registeredForTournament = gson.fromJson(clientMessage, RegisteredForTournament.class);
+                    break;
+                case registerForTournament:
+                    RegisterForTournament registerForTournament = gson.fromJson(clientMessage, RegisterForTournament.class);
+                    break;
+                case requestGameList:
+                    RequestGameList requestGameList = gson.fromJson(clientMessage, RequestGameList.class);
+                    break;
+                case requestTechData:
+                    RequestTechData requestTechData = gson.fromJson(clientMessage, RequestTechData.class);
+                    break;
+                case requestTournamentInfo:
+                    RequestTournamentInfo requestTournamentInfo = gson.fromJson(clientMessage, RequestTournamentInfo.class);
+                    break;
+                case returnFindTournament:
+                    ReturnFindTournament returnFindTournament = gson.fromJson(clientMessage, ReturnFindTournament.class);
+                    break;
+                case returnGameList:
+                    ReturnGameList returnGameList = gson.fromJson(clientMessage, ReturnGameList.class);
+                    break;
+                case returnLobbyConfig:
+                    ReturnLobbyConfig returnLobbyConfig = gson.fromJson(clientMessage, ReturnLobbyConfig.class);
+                    break;
+                case returnTechData:
+                    ReturnTechData returnTechData = gson.fromJson(clientMessage, ReturnTechData.class);
+                    break;
+                case returnTournamentInfo:
+                    ReturnTournamentInfo returnTournamentInfo = gson.fromJson(clientMessage, ReturnTournamentInfo.class);
+                    break;
+                default:
+                    logger.info("type unknown");
+                    break;
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
 
         // Return a response message
         return "Message processed: " + clientMessage;

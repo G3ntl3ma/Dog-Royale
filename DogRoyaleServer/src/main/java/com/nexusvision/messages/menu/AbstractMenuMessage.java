@@ -7,7 +7,7 @@ import lombok.Data;
  */
 @Data
 public abstract class AbstractMenuMessage {
-    protected enum TypeMenue {
+    public enum TypeMenue {
         connectToServer,
         connectedToServer,
         disconnect,
