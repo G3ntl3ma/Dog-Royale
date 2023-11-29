@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 //databinding
 import com.example.myapplication.databinding.FragmentGameBoardBinding;
@@ -47,6 +48,7 @@ public class Game_board extends Fragment {
     //Anzahl Spieler
     private int player_count = 6;
     //die wievielten Spielfelder Startfelder sind.
+    private int figure_count = 7;
     private int[] Start_positions = new int[6];
 
     public Game_board() {
@@ -102,11 +104,10 @@ public class Game_board extends Fragment {
         float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
         */
-
         pxWidth = displayMetrics.widthPixels;
         int pxHeight = displayMetrics.heightPixels;
 
-        //set board in middle
+        //set board in middle of screen
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 Math.round(displayMetrics.widthPixels)
@@ -116,28 +117,35 @@ public class Game_board extends Fragment {
         RelativeLayout GameBoard = binding.gameBoardLayout;
         GameBoard.setLayoutParams(params);
 
-        //System.out.println(displayMetrics.heightPixels);
-        //System.out.println(displayMetrics.widthPixels);
+        field_size = 60;
+        //Erstellung der Spielfelder
+        createFields(GameBoard, pxWidth, field_size, player_count);
 
-        createFields(GameBoard, pxWidth, 5, player_count);
+        //Farben der Hausfelder/Startfelder
         int[] start_colors = {R.color.p1_color, R.color.p2_color, R.color.p3_color, R.color.p4_color, R.color.p5_color, R.color.p6_color};
         int pcolor = 0;
-        //testweise
-        Start_positions = new int[]{0, 2, 4, 0 ,0, 0};
-        //TODO: ImageView[] homefields = new ImageView[6];
 
+        //testweise
+        Start_positions = new int[]{0, 10, 20, 30 ,40, 50};
+        Tuple[] homefields = new Tuple[6];
+
+        //Farbenzuweisung der Startfelder
         for(int x = 1 ; x<=Start_positions.length; x++)
         {
             ImageView imageView = GameBoard.findViewWithTag("normal" + Start_positions[x-1]);
             imageView.setColorFilter(ContextCompat.getColor(getContext(), start_colors[pcolor]), PorterDuff.Mode.MULTIPLY);
             //imageView.setImageTintMode(PorterDuff.Mode.MULTIPLY);
             pcolor +=1;
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) imageView.getLayoutParams();
+
             //TODO: if ()
+            homefields[x-1] = new Tuple(lp.leftMargin + lp.width/2, lp.topMargin + lp.width/2);
+
 
         }
 
-        // TODO: createHomeFields(GameBoard, );
-
+        //Erstellung der Hausfelder
+        createHomeFields(GameBoard, homefields, pxWidth, figure_count);
 
         Timer timer = new Timer (600_000, binding);
         timer.startTimer();
@@ -145,33 +153,35 @@ public class Game_board extends Fragment {
     }
 
     /**
-    *erstellt die Spiefleder für das Spielbrett
-    *
-    * @param layout ist das layout in das die Felder gesetzt werden
-    * @param width ist die Weite des Spielbrett
-    * @param n ist die Anzahl der Felder
+     *erstellt die Spiefleder für das Spielbrett
+     *
+     * @param layout ist das layout in das die Felder gesetzt werden
+     * @param width ist die Weite des Spielbrett
+     * @param n ist die Anzahl der Felder
      * @param figure_count Anzahl der Figuren
      **/
     public void createFields(RelativeLayout layout, int width, int n, int figure_count){
         CoordinateCalculator playingField = new CoordinateCalculator(n, 4, 540);
-        if (width/n * figure_count <= width/2 - 4)
-        {
 
-        }
+        //Falls weniger als 20 Felder erstellt werden feste Spielfeldgröße
         if (n<= 20) {
             playingField = new CoordinateCalculator(n, player_count, width /2 - width/10);
-            Tuple result = new Tuple(0,0);
+            Tuple result = new Tuple(0,0);  //Tuple in das die Werte der Koordinaten kommen
             for (int i = 0; i < n; i++) {
-                result = playingField.calculateFloatCoordinates(i);
+                result = playingField.calculateFloatCoordinates(i); //berechne x,y Koordinaten eines Feldes
+                //erstelle Feld und Zentrierung
                 createField(layout, width/10, (int) Math.round(result.getX() + width/2 - (  width/20 ))  , (int) Math.round(result.getY()  + width/2 - (width/20)), i, "normal");
             }
         }
         else {
             playingField = new CoordinateCalculator(n, player_count, width /2 - width / n);
-            Tuple result = new Tuple(0,0);
+            Tuple result = new Tuple(0,0); //Tuple in das die Werte der Koordinaten kommen
             for (int i = 0; i < n; i++) {
-                result = playingField.calculateFloatCoordinates(i);
+                result = playingField.calculateFloatCoordinates(i); //berechne x,y Koordinaten eines Feldes
+                //erstelle Feld und Zentrierung
                 createField(layout, width/n * 2, (int) Math.round(result.getX() + width / 2 - ( width / n)), (int) Math.round(result.getY() + width / 2 - (width / n)), i, "normal");
+                System.out.println(width/n * 2);
+                System.out.println(pxWidth/field_size * 2);
             }
         }
     }
@@ -216,53 +226,90 @@ public class Game_board extends Fragment {
     } */
 
     /**
-    *Use this  to create a single gamefield on your board
-    *
-    *
-    * @param layout is the layout the View is added to. (only RelativeLayout works rn)
-    * @param width is the width and height of the image
-    * @param x is the x position
-    * @param y is the y position
-    * @param id is the id you want to give the image.
+     *Use this  to create a single gamefield on your board
+     *
+     *
+     * @param layout is the layout the View is added to. (only RelativeLayout works rn)
+     * @param width is the width and height of the image
+     * @param x is the x position
+     * @param y is the y position
+     * @param id is the id you want to give the image.
      * @param type is the type of the Field (normal/homefield_playernumber)
      **/
     public void createField(RelativeLayout layout, int width, int x, int y, int id, String type){
-        ImageView imageView = new ImageView(getContext());
-        imageView.setImageResource(R.drawable.spielfeld);
+        ImageView imageView = new ImageView(getContext()); //erstelle ImageView
+        imageView.setImageResource(R.drawable.spielfeld); //hinzufügen von Bildressource
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(1, 1);
-        params = new RelativeLayout.LayoutParams(width, width);
-        params.setMargins(x, y, 0, 0);
-        positions.add(new Tuple(x, y));
-        //if (Arrays.stream(Start_positions).anyMatch(z -> z==id))
+        params = new RelativeLayout.LayoutParams(width, width); //Größe des Bildes einstellen
+        params.setMargins(x, y, 0, 0); //Position in layout einstellen (mithilfe von margins)
         String tag = type + id;
-        imageView.setTag(tag);
-        imageView.setLayoutParams(params);
-        layout.addView(imageView);
+        imageView.setTag(tag); //Füge der View einen Tag zu
+        imageView.setLayoutParams(params); // Position des Views setzen
+        layout.addView(imageView); //füge dem Layout das View hinzu
+        /* For testing
+        TextView textView = new TextView(getContext());
+        String id_s = "" + id;
+        textView.setText(id_s);
+        textView.setLayoutParams(params);
+        layout.addView(textView);
+        For testing */
+
     }
 
+    /**
+     *
+     * @param layout layout the Views get added to
+     * @param homefields Array of the homefields
+     * @param width Width of the Layout the fields are added to
+     * @param n number of figurines
+     */
     public void createHomeFields(RelativeLayout layout, Tuple[] homefields, int width, int n )
     {
         Tuple mid = new Tuple(width /2, width/2);
         for (int j = homefields.length; j >=1; j--)
         {
+            Tuple vek = new Tuple((mid.getX() - homefields[j-1].getX()) , (mid.getY() - homefields[j-1].getY()) ); //berechnet den Vektor zwischen der Mitte und einem Hausfeld
+            vek.setX(vek.getX() - 1/(vek.vek_length()/(2*pxWidth/field_size)) * vek.getX());
+            vek.setY(vek.getY() - 1/(vek.vek_length()/(2*pxWidth/field_size)) * vek.getY());
+            //System.out.println(mid.getX() + " und " + homefields[j-1].getX() + " also " + (mid.getX() - homefields[j-1].getX()) ); //fürs testen
+            System.out.println("Hausfeld" + homefields[j-1]);
+            System.out.println("Länge: " + vek.vek_length());
+            System.out.println("Vektor: " + vek);
             for (int k = 0; k<n;k++) {
-                Tuple pos = fh(width/n, homefields[j], mid, k, n);
-                createField(layout, width / n, (int) Math.round(pos.getX()), (int) Math.round(pos.getY()), j, "hausfeld_" + j + "_" );
+                Tuple pos = fh(width/n, vek, homefields[j-1] , k , n + 2 ); //berechnet position auf dem Vektor
+                createField(layout, (int) Math.round(vek.vek_length()/(n + 1)), (int) Math.round(pos.getX() - (vek.vek_length()/(n + 1))/2), (int) Math.round(pos.getY() -  (vek.vek_length()/(n + 1))/2), k, "homefield" + j + "_" ); // erstellt das Feld
             }
         }
     }
 
-    /**
+
+    /** berechnet i.te von n Position auf Vektor (für Hausfelder)
      *
      * @param width
-     * @param homefield_pos Position des Hausfeldes von der es zur Mitte geht
-     * @param mid Position der Mitte des Spielfeldes
+     * @param vek Vektor auf dem der Punkt liegen soll
+     * @param home Position eines Hausfeldes als Tupel
      * @param i Wievielte Hausfeld in einer Reihe
      * @param n Anzahl an Hausfeldern/Spielfiguren
      * @return gibt Tupel mit Position eine Hausfeldes wieder.
      */
-    public Tuple fh(int width, Tuple homefield_pos, Tuple mid, int i, int n)
+    public Tuple fh(int width, Tuple vek, Tuple home, int i, int n)
     {
-        return (new Tuple(homefield_pos.getX() + (mid.getX() - 2* width/n - homefield_pos.getX())/n * i,homefield_pos.getY() + (mid.getY() - homefield_pos.getY())/n * i));
+        double home_x = home.getX() ;
+        double home_y = home.getY() ;
+        double vek_x = vek.getX();
+        double vek_y = vek.getY();
+        double offset;
+
+        offset = vek.vek_length()/(2* pxWidth/field_size) ;
+
+        System.out.println(offset);
+        //ome_x + = vek.vek_length()/n
+
+
+        //System.out.println(home_x);
+        //System.out.println(vek_x);
+        //System.out.println(home_x + vek_x);
+        return (new Tuple(home_x + 1/offset*vek_x + vek_x/n * i,home_y + 1/offset*vek_y + vek_y/n * i));
     }
 }
+
