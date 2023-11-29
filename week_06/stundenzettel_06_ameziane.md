@@ -3,7 +3,7 @@ name: Abdelkarim Meziane
 imt: 6932497
 gruppe: 1
 woche: 6
-gesamtarbeitszeit: 16,00h
+gesamtarbeitszeit: 19,00h
 ---
 
 <!--
@@ -36,7 +36,8 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 - Implementierung der Ausrichter & GUI für Ausrichter
     - 2023-11-23 4,30h
     - 2023-11-25 6,00h
-  
+    - 2023-11-26 3,00h
+
 
 - Durchlesen des Spiel logik Codes
     - 2023-11-25 2,00h
