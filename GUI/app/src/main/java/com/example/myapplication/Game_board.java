@@ -48,7 +48,7 @@ public class Game_board extends Fragment {
     //Anzahl Spieler
     private int player_count = 6;
     //die wievielten Spielfelder Startfelder sind.
-    private int figure_count = 7;
+    private int figure_count = 100;
     private int[] Start_positions = new int[6];
 
     //Farben der Start/hausfelder
@@ -120,7 +120,7 @@ public class Game_board extends Fragment {
         RelativeLayout GameBoard = binding.gameBoardLayout;
         GameBoard.setLayoutParams(params);
 
-        field_size = 11;
+        field_size = 100;
         //Erstellung der Spielfelder
         createFields(GameBoard, pxWidth, field_size, player_count);
 
