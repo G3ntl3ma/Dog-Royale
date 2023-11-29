@@ -62,6 +62,7 @@ public class ClientHandler implements Runnable {
     }
     private String processMessage(String clientMessage) {
         // Implement message processing logic here
+	String returnMessage = null;
         try {
             logger.info("try");
             Gson gson = new Gson();
@@ -72,14 +73,15 @@ public class ClientHandler implements Runnable {
             AbstractMenuMessage.TypeMenue typeM = AbstractMenuMessage.TypeMenue.values()[typeInx];
             logger.info("typeM " + typeM);
             switch (typeM) {
-                case connectedToGame:
-                    ConnectedToGame connedToGame = gson.fromJson(clientMessage, ConnectedToGame.class);
-                    break;
-                case connectedToServer:
-                    ConnectedToServer connedToServer = gson.fromJson(clientMessage, ConnectedToServer.class);
-                    break;
+                //case connectedToGame:
+                 //   ConnectedToGame connectedToGame = gson.fromJson(clientMessage, ConnectedToGame.class);
+                //    break;
+                // case connectedToServer:
+                    // ConnectedToServer connectedToServer = gson.fromJson(clientMessage, ConnectedToServer.class);
+                    // break;
                 case connectToServer:
-                    ConnectToServer connToServer = gson.fromJson(clientMessage, ConnectToServer.class);
+                    ConnectToServer connectToServer = gson.fromJson(clientMessage, ConnectToServer.class);
+                    returnMessage = connectToServer.getResponse();
                     break;
                 case error:
                     //Error error = gson.fromJson(clientMessage, Error.class); //Error class multiple choices
@@ -93,9 +95,9 @@ public class ClientHandler implements Runnable {
                 case joinGameAsParticipant:
                     JoinGameAsParticipant joinGameAsParticipant = gson.fromJson(clientMessage, JoinGameAsParticipant.class);
                     break;
-                case registeredForTournament:
-                    RegisteredForTournament registeredForTournament = gson.fromJson(clientMessage, RegisteredForTournament.class);
-                    break;
+                // case registeredForTournament:
+                    // RegisteredForTournament registeredForTournament = gson.fromJson(clientMessage, RegisteredForTournament.class);
+                    // break;
                 case registerForTournament:
                     RegisterForTournament registerForTournament = gson.fromJson(clientMessage, RegisterForTournament.class);
                     break;
@@ -111,18 +113,18 @@ public class ClientHandler implements Runnable {
                 case returnFindTournament:
                     ReturnFindTournament returnFindTournament = gson.fromJson(clientMessage, ReturnFindTournament.class);
                     break;
-                case returnGameList:
-                    ReturnGameList returnGameList = gson.fromJson(clientMessage, ReturnGameList.class);
-                    break;
-                case returnLobbyConfig:
-                    ReturnLobbyConfig returnLobbyConfig = gson.fromJson(clientMessage, ReturnLobbyConfig.class);
-                    break;
-                case returnTechData:
-                    ReturnTechData returnTechData = gson.fromJson(clientMessage, ReturnTechData.class);
-                    break;
-                case returnTournamentInfo:
-                    ReturnTournamentInfo returnTournamentInfo = gson.fromJson(clientMessage, ReturnTournamentInfo.class);
-                    break;
+                // case returnGameList:
+                    // ReturnGameList returnGameList = gson.fromJson(clientMessage, ReturnGameList.class);
+                    // break;
+                // case returnLobbyConfig:
+                    // ReturnLobbyConfig returnLobbyConfig = gson.fromJson(clientMessage, ReturnLobbyConfig.class);
+                    // break;
+                // case returnTechData:
+                    // ReturnTechData returnTechData = gson.fromJson(clientMessage, ReturnTechData.class);
+                    // break;
+                // case returnTournamentInfo:
+                    // ReturnTournamentInfo returnTournamentInfo = gson.fromJson(clientMessage, ReturnTournamentInfo.class);
+                    // break;
                 default:
                     logger.info("type unknown");
                     break;
@@ -135,7 +137,8 @@ public class ClientHandler implements Runnable {
 
 
         // Return a response message
-        return "Message processed: " + clientMessage;
+	    if (returnMessage == null) returnMessage = "response not found, received: " + clientMessage;
+        return returnMessage;
     }
 
 }

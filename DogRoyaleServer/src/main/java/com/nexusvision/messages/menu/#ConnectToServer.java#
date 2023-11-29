@@ -22,9 +22,7 @@ public class ConnectToServer extends AbstractMenuMessage {
          */
 	
         String response = null;
-
-
-	//TODO 
+	//TODO if no name null
 
 	if(response == null) {
 	    response = "{\"type\": " + (TypeMenue.error.ordinal() + 100) +
