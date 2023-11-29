@@ -1,4 +1,5 @@
 package com.nexusvision.messages.menu;
+import java.util.ArrayList;
 
 import lombok.Data;
 
@@ -7,30 +8,32 @@ public class ConnectToServer extends AbstractMenuMessage {
     private String name;
     private boolean isObserver;
 
-    public String getResponse() {
+    public String getResponse(ArrayList<Integer> Ids) {
         /*
-        return
-        {
-        " type " : TypeMenue . connectToServer ,
-        " name " : String ,
-        " isObserver " : boolean
-        }
+	  {
+	  " type " : TypeMenue . connectedToServer ,
+	  " clientId " : int
+	  }
 	
         or
 	
         error
          */
-	
-        String response = null;
+        String response = "connect to server fail (null)";
 
-
-	//TODO 
-
-	if(response == null) {
-	    response = "{\"type\": " + (TypeMenue.error.ordinal() + 100) +
+	if(name == null ) { //isObserver
+	    return "{\"type\": " + (TypeMenue.error.ordinal() + 100) +
 		", \"dataID\": " + TypeMenue.connectToServer.ordinal() + // + 100???
-		", \"message\": \"could not connect to server\"}";
+		", \"message\": \"could not connect to server because no name and observer bool given\"}";
 	}
-        return response;
+	
+	//TODO add clientId to the "server" somehow
+	int id = Ids.size();
+	Ids.add(id);
+	
+	return "{\"type\": " + (TypeMenue.connectedToServer.ordinal() + 100) +
+	    ", \"clientId\": " + id + "}";
+	    
+        // return response;
     }
 }

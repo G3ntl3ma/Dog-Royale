@@ -17,6 +17,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import java.util.ArrayList;
+
 /**
  * ClientHandler, der sich dem übergebenem ClientSocket widmet
  * und mit diesem kommuniziert
@@ -27,8 +29,11 @@ public class ClientHandler implements Runnable {
     private static final Logger logger = LogManager.getLogger(ClientHandler.class);
     private final Socket clientSocket;
 
-    public ClientHandler(Socket clientSocket) {
+    public ArrayList<Integer> Ids;
+
+    public ClientHandler(Socket clientSocket, ArrayList<Integer> Ids) {
         this.clientSocket = clientSocket;
+	this.Ids = Ids;
     }
 
     @Override
@@ -81,7 +86,7 @@ public class ClientHandler implements Runnable {
                     // break;
                 case connectToServer:
                     ConnectToServer connectToServer = gson.fromJson(clientMessage, ConnectToServer.class);
-                    returnMessage = connectToServer.getResponse();
+                    returnMessage = connectToServer.getResponse(Ids);
                     break;
                 case error:
                     //Error error = gson.fromJson(clientMessage, Error.class); //Error class multiple choices

@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import java.util.ArrayList;
+
 /**
  * Die Server-Applikation, die den Server startet
  *
@@ -18,6 +20,8 @@ public class ServerApp {
     private static final Logger logger = LogManager.getLogger(ServerApp.class);
     private static final int PORT = 8080;
     private static final ExecutorService executorService = Executors.newFixedThreadPool(100);
+
+    public ArrayList<Integer> Ids = new ArrayList<>();
 
     public static void main(String[] args) {
         new ServerApp().startServer(PORT);
@@ -38,7 +42,7 @@ public class ServerApp {
                 Socket clientSocket = serverSocket.accept();
                 logger.info("Neue Verbindung akzeptiert von " + clientSocket.getInetAddress());
 
-                executorService.submit(new ClientHandler(clientSocket));
+                executorService.submit(new ClientHandler(clientSocket, this.Ids));
             }
         } catch (IOException e) {
             logger.error(e.getStackTrace());
