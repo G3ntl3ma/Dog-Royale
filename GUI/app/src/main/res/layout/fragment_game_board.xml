@@ -34,7 +34,14 @@
             android:id="@+id/move_figure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Move" />
+            android:text="Play" />
+
+        <ImageView
+            android:id="@+id/lastCardView"
+            android:layout_width="129dp"
+            android:layout_height="137dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/card8" />
 
     </RelativeLayout>
 
