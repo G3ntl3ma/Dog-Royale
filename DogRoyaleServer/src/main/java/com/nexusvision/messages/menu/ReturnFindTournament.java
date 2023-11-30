@@ -37,6 +37,13 @@ public class ReturnFindTournament extends AbstractMenuMessage {
     @Data
     public static class TournamentFinish{
         private int tournamentId;
+        private List<Winnerorder> winnerOrder;
+
+        @Data
+        public static class Winnerorder{
+            private int playerId;
+            private String name;
+        }
         //TODO Variable fertigstellen
     }
 }

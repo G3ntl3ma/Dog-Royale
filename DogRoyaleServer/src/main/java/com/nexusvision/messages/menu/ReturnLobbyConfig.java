@@ -2,6 +2,8 @@ package com.nexusvision.messages.menu;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Konfiguration des Spiels
  *
@@ -29,7 +31,59 @@ public class ReturnLobbyConfig extends AbstractMenuMessage{
     }
 
     private int playerCount;
+    private int fieldsize;
     private int figuresPerPlayer;
+    private List<Color> colors;
+    private List<DrawCardFields> drawCardFields;
+    private List<StartFields> startFields;
+    private int initialCardsPerPlayer;
+    private List<PlayerOrder> playerOrder;
+    private List<Observer> observer;
+    private int thinkTimePerMove;
+    private int visualizationTimePerMove;
+    private int consequencesForInvalidMove;
+    private int maximumGameDuration;
+    private int maximumTotalMoves;
 
-    //TODO Varablien fertig inizialisieren
+
+    @Data
+    public static class Color{
+        private int clientId;
+        private int color;
+
+    }
+
+    @Data
+    public static class DrawCardFields{
+        private int count;
+        private List<Integer> positions;
+    }
+
+    @Data
+    public static class StartFields{
+        private int count;
+        private List<Integer> positions;
+    }
+
+    @Data
+    public static class PlayerOrder{
+        private OrderType type;
+        private List<Order> order;
+
+        @Data
+        public static class Order{
+            private int clientId;
+            private String name;
+        }
+
+    }
+
+    @Data
+    public static class Observer{
+        private int clientId;
+        private String name;
+    }
+
+
+
 }
