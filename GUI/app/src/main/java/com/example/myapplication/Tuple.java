@@ -48,6 +48,24 @@ public class Tuple {
         return y;
     }
 
+    /**
+     * Sets the value of the x component
+     *
+     * @param x Value of the x component
+     */
+    public void setX(double x) {this.x = x;}
+    /**
+     * Sets the value of the y component
+     *
+     * @param y Value of the y component
+     */
+    public void setY(double y) {this.y = y;}
+
+    /**
+     * Gets the length of the Vector represented by a Tuple
+     *
+     * @return Length of the Vector
+     */
     public double vek_length()
     {
         return (Math.sqrt(Math.pow(this.getX(),2 ) + Math.pow(this.getY(), 2)));
