@@ -57,7 +57,7 @@ public class Game_board extends Fragment {
     private int[] start_colors = {R.color.p1_color, R.color.p2_color, R.color.p3_color, R.color.p4_color, R.color.p5_color, R.color.p6_color};
 
     private int[] draw_fields = new int[5];
-
+    private LastCard last_card;
     //testwise
     private int position = 0;
     public Game_board() {
@@ -150,9 +150,6 @@ public class Game_board extends Fragment {
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) imageView.getLayoutParams(); //LayoutParams of the startfield
             homefields[x-1] = new Tuple(lp.leftMargin + lp.width/2, lp.topMargin + lp.width/2); //saving startfield positions for homefield creation with position in middle of the field
 
-
-
-
         }
 
         //Erstellung der Hausfelder
@@ -170,7 +167,8 @@ public class Game_board extends Fragment {
 
         Timer timer = new Timer (600_000, binding);
         timer.startTimer();
-
+        last_card = new LastCard(binding);
+        last_card.lastCardAvailable(true);
 
 
         //NUR ZUM TESTEN
@@ -382,5 +380,6 @@ public class Game_board extends Fragment {
                 figure.setLayoutParams(layoutParams);
             }
         }
+
     }
 }
