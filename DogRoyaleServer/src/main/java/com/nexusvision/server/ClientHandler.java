@@ -33,7 +33,7 @@ public class ClientHandler implements Runnable {
 
     public ClientHandler(Socket clientSocket, ArrayList<Integer> Ids) {
         this.clientSocket = clientSocket;
-	this.Ids = Ids;
+        this.Ids = Ids;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ClientHandler implements Runnable {
                 logger.info("Von Client wurde folgendes empfangen: " + clientMessage);
 
                 writer.println("Nachricht erhalten");
-		writer.flush();
+                writer.flush();
             }
 
         } catch (IOException e) {
@@ -67,7 +67,7 @@ public class ClientHandler implements Runnable {
     }
     private String processMessage(String clientMessage) {
         // Implement message processing logic here
-	String returnMessage = null;
+        String returnMessage = null;
         try {
             logger.info("try");
             Gson gson = new Gson();
@@ -142,7 +142,7 @@ public class ClientHandler implements Runnable {
 
 
         // Return a response message
-	    if (returnMessage == null) returnMessage = "response not found, received: " + clientMessage;
+        if (returnMessage == null) returnMessage = "response not found, received: " + clientMessage;
         return returnMessage;
     }
 
