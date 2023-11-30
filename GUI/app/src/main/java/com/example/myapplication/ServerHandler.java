@@ -12,8 +12,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+// import org.apache.logging.log4j.LogManager;
+// import org.apache.logging.log4j.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -32,7 +32,7 @@ import java.net.Socket;
 
 
 public class ServerHandler {
-    private static final Logger logger = LogManager.getLogger(ServerHandler.class);
+    // private static final Logger logger = LogManager.getLogger(ServerHandler.class);
     private final Socket serverSocket;
 
     public ServerHandler(Socket serverSocket) {
@@ -42,14 +42,14 @@ public class ServerHandler {
     private String processMessage(String serverMessage) {
         String returnMessage = null;
         try {
-            logger.info("try");
+            // logger.info("try");
             Gson gson = new Gson();
             JsonElement jsonElement = JsonParser.parseString(serverMessage);
             JsonObject jsonObject = jsonElement.getAsJsonObject();
 
             int typeInx = jsonObject.get("type").getAsInt() - 100;
             AbstractMenuMessage.TypeMenue typeM = AbstractMenuMessage.TypeMenue.values()[typeInx];
-            logger.info("typeM: " + typeM);
+            // logger.info("typeM: " + typeM);
             switch (typeM) {
                 case connectedToServer:
                     ConnectedToServer connectedToServer = gson.fromJson(serverMessage, ConnectedToServer.class);
@@ -78,7 +78,7 @@ public class ServerHandler {
                     ReturnTechData returnTechData = gson.fromJson(serverMessage, ReturnTechData.class);
                     // returnMessage = ReturnTechData.getResponse();
                 default:
-                    logger.info("type unknown");
+                    // logger.info("type unknown");
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
