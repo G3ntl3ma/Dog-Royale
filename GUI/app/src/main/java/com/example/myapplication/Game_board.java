@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 
 import android.util.DisplayMetrics;
@@ -49,13 +50,16 @@ public class Game_board extends Fragment {
     //Anzahl Spieler
     private int player_count = 6;
     //die wievielten Spielfelder Startfelder sind.
-    private int figure_count = 100;
+    private int figure_count = 12;
     private int[] Start_positions = new int[player_count];
 
     //Farben der Start/hausfelder
     private int[] start_colors = {R.color.p1_color, R.color.p2_color, R.color.p3_color, R.color.p4_color, R.color.p5_color, R.color.p6_color};
 
     private int[] draw_fields = new int[5];
+
+    //testwise
+    private int position = 0;
     public Game_board() {
         // Required empty public constructor
     }
@@ -102,6 +106,8 @@ public class Game_board extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
+
+
         //getting Display size
         DisplayMetrics displayMetrics  = getContext().getResources().getDisplayMetrics();
         /* if needed in dp
@@ -122,7 +128,7 @@ public class Game_board extends Fragment {
         RelativeLayout GameBoard = binding.gameBoardLayout;
         GameBoard.setLayoutParams(params);
 
-        field_size = 100;
+        field_size = 17;
         //Erstellung der Spielfelder
         createFields(GameBoard, pxWidth, field_size, player_count);
 
@@ -132,18 +138,18 @@ public class Game_board extends Fragment {
 
         //testweise
         Start_positions = new int[]{0, 2, 4, 6 ,8, 10};
-        Tuple[] homefields = new Tuple[6];
+        Tuple[] homefields = new Tuple[player_count];
 
         //Farbenzuweisung der Startfelder
         for(int x = 1 ; x<=Start_positions.length; x++)
         {
             ImageView imageView = GameBoard.findViewWithTag("normal" + Start_positions[x-1]);
-            imageView.setColorFilter(ContextCompat.getColor(getContext(), start_colors[pcolor]), PorterDuff.Mode.MULTIPLY);
+            imageView.setColorFilter(ContextCompat.getColor(getContext(), start_colors[pcolor]), PorterDuff.Mode.MULTIPLY); // sets the Color and TintMode to multiply
             //imageView.setImageTintMode(PorterDuff.Mode.MULTIPLY);
             pcolor +=1;
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) imageView.getLayoutParams();
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) imageView.getLayoutParams(); //LayoutParams of the startfield
+            homefields[x-1] = new Tuple(lp.leftMargin + lp.width/2, lp.topMargin + lp.width/2); //saving startfield positions for homefield creation with position in middle of the field
 
-            homefields[x-1] = new Tuple(lp.leftMargin + lp.width/2, lp.topMargin + lp.width/2);
 
 
 
@@ -154,10 +160,36 @@ public class Game_board extends Fragment {
         draw_fields = new int[]{3, 5, 7, 13, 15};
         createDrawFields(GameBoard, draw_fields);
 
+        //instanziert die Figuren in das Layout
+        for (int i = 1; i<= player_count; i++)
+        {
+            for (int j = 1; j<= figure_count; j++) {
+                createFigure(GameBoard, i, j);
+            }
+        }
+
         Timer timer = new Timer (600_000, binding);
         timer.startTimer();
 
-    }
+
+
+        //NUR ZUM TESTEN
+
+        binding.moveFigure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (((RelativeLayout.LayoutParams) GameBoard.findViewWithTag("figure1_1").getLayoutParams()).leftMargin == pxWidth)
+                {
+                    moveFigure(GameBoard, "figure1_1", 1, position, false, null );
+                }
+                else {
+                    position += 2;
+                    moveFigure(GameBoard, "figure1_1", 1, position, false, null);
+                }
+            }
+
+        });}
 
     /**
      *erstellt die Spiefleder für das Spielbrett
@@ -190,45 +222,7 @@ public class Game_board extends Fragment {
             }
         }
     }
-    /*public int fx(int x, int turn, int width, int n)
-    {
-        int w_f  = width/n;
 
-
-        switch(turn) {
-            case 1:
-                return( x* w_f + w_f);
-
-            case 2:
-                return(width - 2* w_f);
-
-            case 3:
-                return( width - 2*w_f -  x* w_f );
-
-            case 4:
-                return(w_f);
-        }
-        return(0);
-    }
-    public int fy(int x, int turn, int width, int n)
-    {
-        int w_f  = width/n;
-        switch(turn) {
-            case 1:
-                return(w_f);
-
-            case 2:
-                return( x* w_f + w_f);
-
-            case 3:
-                return( width - 2 * w_f);
-
-            case 4:
-                return( width - 2* w_f -  x* w_f );
-
-        }
-        return (0);
-    } */
 
     /**
      *Use this  to create a single gamefield on your board
@@ -348,5 +342,45 @@ public class Game_board extends Fragment {
             imageView.setImageResource(R.drawable.ziehfeld);
         }
     }
-}
+    public void createFigure(RelativeLayout layout, int playernumber, int numbernumber)
+    {
+        ImageView imageView = new ImageView(getContext()); //instanciate empty imageview
+        imageView.setImageResource(R.drawable.figure); //set Image
+        imageView.setColorFilter(ContextCompat.getColor((getContext()), start_colors[playernumber -1 ]), PorterDuff.Mode.MULTIPLY);
+        ImageView zfield = layout.findViewWithTag("normal"+ 0); //get field 0
+        int w = zfield.getLayoutParams().width;
+        RelativeLayout.LayoutParams layoutparams = new RelativeLayout.LayoutParams( w, w);
+        layoutparams.setMargins(pxWidth, pxWidth, 0, 0);// set fields to bottom right corner of layout (-> created but not visible) (watch out for bugs :) )
+        imageView.setTag("figure" + playernumber + "_" + numbernumber); // set Tag of figure (figure_pnumber_fignumber
+        imageView.setLayoutParams(layoutparams); //apply layoutparams to imageview
 
+        layout.addView(imageView); //instanciate imageView in layout
+    }
+    public void moveFigure(RelativeLayout layout, String pieceId, int playernumber, Integer position, boolean isOnBench, Integer inHousePosition)
+    {
+        ImageView figure = layout.findViewWithTag(pieceId);
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) figure.getLayoutParams();
+        if (isOnBench)
+        {
+
+        }
+        else
+        {
+            if (position == null)
+            {
+                ImageView newpos_view = layout.findViewWithTag("homefield" + playernumber +"_" + (figure_count - inHousePosition));
+                RelativeLayout.LayoutParams newpos = (RelativeLayout.LayoutParams) newpos_view.getLayoutParams();
+                layoutParams.setMargins(newpos.leftMargin + newpos.width - layoutParams.width, newpos.topMargin + newpos.width - layoutParams.width, 0, 0);
+                figure.setLayoutParams(layoutParams);
+            }
+            else
+            {
+                ImageView newpos_view = layout.findViewWithTag("normal" + position);
+                RelativeLayout.LayoutParams newpos = (RelativeLayout.LayoutParams) newpos_view.getLayoutParams();
+                System.out.println(newpos.leftMargin + "und" + newpos.width);
+                layoutParams.setMargins(newpos.leftMargin + newpos.width - layoutParams.width, newpos.topMargin + newpos.width - layoutParams.width, 0 ,0 );
+                figure.setLayoutParams(layoutParams);
+            }
+        }
+    }
+}
