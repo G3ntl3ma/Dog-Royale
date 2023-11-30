@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class ConnectToServer extends AbstractMenuMessage {
-    String name;
-    boolean isObserver;
+    private String name;
+    private boolean isObserver;
 }
