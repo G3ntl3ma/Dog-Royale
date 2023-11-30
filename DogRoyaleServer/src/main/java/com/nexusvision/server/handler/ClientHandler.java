@@ -1,4 +1,4 @@
-package com.nexusvision.server;
+package com.nexusvision.server.handler;
 
 import com.google.gson.Gson;
 import com.nexusvision.messages.menu.*;
@@ -8,6 +8,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 
+import com.nexusvision.server.controller.ServerController;
+import com.nexusvision.server.handler.message.ConnectToServerHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,8 +18,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
-import java.util.ArrayList;
 
 /**
  * ClientHandler, der sich dem übergebenem ClientSocket widmet
@@ -29,11 +29,11 @@ public class ClientHandler implements Runnable {
     private static final Logger logger = LogManager.getLogger(ClientHandler.class);
     private final Socket clientSocket;
 
-    public ArrayList<Integer> Ids;
+    private final int clientID;
 
-    public ClientHandler(Socket clientSocket, ArrayList<Integer> Ids) {
+    public ClientHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
-        this.Ids = Ids;
+        this.clientID = ServerController.generateClientID();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ClientHandler implements Runnable {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             //if in key
             int typeInx = jsonObject.get("type").getAsInt() - 100; //minus 100
-            AbstractMenuMessage.TypeMenue typeM = AbstractMenuMessage.TypeMenue.values()[typeInx];
+            TypeMenue typeM = TypeMenue.values()[typeInx];
             logger.info("typeM " + typeM);
             switch (typeM) {
                 //case connectedToGame:
@@ -86,7 +86,7 @@ public class ClientHandler implements Runnable {
                     // break;
                 case connectToServer:
                     ConnectToServer connectToServer = gson.fromJson(clientMessage, ConnectToServer.class);
-                    returnMessage = connectToServer.getResponse(Ids);
+                    returnMessage = new ConnectToServerHandler().handle(connectToServer, clientID);
                     break;
                 case error:
                     //Error error = gson.fromJson(clientMessage, Error.class); //Error class multiple choices
@@ -138,8 +138,6 @@ public class ClientHandler implements Runnable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
 
         // Return a response message
         if (returnMessage == null) returnMessage = "response not found, received: " + clientMessage;

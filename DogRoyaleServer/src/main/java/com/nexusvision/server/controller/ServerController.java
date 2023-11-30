@@ -1,5 +1,6 @@
-package com.nexusvision.server;
+package com.nexusvision.server.controller;
 
+import com.nexusvision.server.handler.ClientHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,15 +17,16 @@ import java.util.ArrayList;
  *
  * @author felixwr
  */
-public class ServerApp {
-    private static final Logger logger = LogManager.getLogger(ServerApp.class);
+public class ServerController {
+    private static final Logger logger = LogManager.getLogger(ServerController.class);
     private static final int PORT = 8080;
     private static final ExecutorService executorService = Executors.newFixedThreadPool(100);
 
-    public ArrayList<Integer> Ids = new ArrayList<>();
+    private static ArrayList<Integer> clientIDList = new ArrayList<>();
+    // private static ArrayList<SpiellogikInstanz> lobbyList = new ArrayList<>();
 
     public static void main(String[] args) {
-        new ServerApp().startServer(PORT);
+        startServer(PORT);
     }
 
     /**
@@ -33,7 +35,7 @@ public class ServerApp {
      *
      * @param port Der Port mit dem der ServerSocket gestartet wird
      */
-    public void startServer(int port) {
+    public static void startServer(int port) {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             logger.info("ServerSocket erfolgreich gestartet unter Port " + port);
             logger.info("Warte auf Verbindungen...");
@@ -42,10 +44,22 @@ public class ServerApp {
                 Socket clientSocket = serverSocket.accept();
                 logger.info("Neue Verbindung akzeptiert von " + clientSocket.getInetAddress());
 
-                executorService.submit(new ClientHandler(clientSocket, this.Ids));
+                executorService.submit(new ClientHandler(clientSocket));
             }
         } catch (IOException e) {
             logger.error(e.getStackTrace());
         }
     }
+
+    public static int generateClientID() {
+        // TODO: Create a client ID that is not in clientIDList
+        //       put it into the list and return it
+        return 0;
+    }
+
+    /*
+    public static SpiellogikInstanz getLobby(int lobbyID) {
+        // Gebe Spiellogik zurück
+    }
+     */
 }

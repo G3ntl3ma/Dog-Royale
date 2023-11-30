@@ -1,6 +1,6 @@
 package com.nexusvision;
 
-import com.nexusvision.server.ServerApp;
+import com.nexusvision.server.controller.ServerController;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author felixwr
  */
-public class ServerAppTest {
+public class ServerControllerTest {
 
     private static final String SERVER_ADDRESS = "localhost";
     private static final int PORT = 8088;
@@ -28,7 +28,7 @@ public class ServerAppTest {
 
     @BeforeAll
     public static void setup() {
-        ServerApp server = new ServerApp();
+        ServerController server = new ServerController();
         serverThread = new Thread(() ->
                 server.startServer(PORT)
         );

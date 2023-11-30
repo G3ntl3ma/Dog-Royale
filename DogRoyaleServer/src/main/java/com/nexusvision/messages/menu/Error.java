@@ -6,10 +6,10 @@ import lombok.Data;
 /**
  * Error Message
  *
- * @author kellerb
+ * @author kellerb, felixwr
  */
 @Data
 public class Error extends AbstractMenuMessage {
-    private TypeMenue dataId;
+    private int dataId;
     private String message;
 }

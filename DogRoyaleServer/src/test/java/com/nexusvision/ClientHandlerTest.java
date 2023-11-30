@@ -1,7 +1,6 @@
 package com.nexusvision;
 
-import com.nexusvision.server.ClientHandler;
-import org.junit.jupiter.api.BeforeEach;
+import com.nexusvision.server.handler.ClientHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
