@@ -10,23 +10,21 @@ public class RequestGameListHandler implements MessageHandler<RequestGameList> {
     @Override
     public String handle(RequestGameList message, int clientID){
 
-                /*
-                if () {
+
+                if (false) {
                     Error error = new Error();
                     error.setType(TypeMenue.error);
                     error.setDataId(TypeMenue.requestGameList.ordinal() + 100);
-                    error.setMessage("Game List fail (no Games)");
+                    error.setMessage("Request failed (no Games)");
                     return gson.toJson(error);
                 }
-
-                 */
 
 
         ReturnGameList returnGameList = new ReturnGameList();
         returnGameList.setType(TypeMenue.returnGameList);
-        returnGameList.setStartingGames(); //1.Liste ??
-        returnGameList.setFinishedGames(); //2.Liste ??
-        returnGameList.setRunningGames(); //3.Liste
+        returnGameList.getStartingGames(); //1.Liste ??
+        returnGameList.getFinishedGames(); //2.Liste ??
+        returnGameList.getRunningGames(); //3.Liste ??
         return gson.toJson(returnGameList);
 
     }

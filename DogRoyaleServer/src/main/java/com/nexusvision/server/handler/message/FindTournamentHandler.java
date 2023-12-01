@@ -27,9 +27,9 @@ public class FindTournamentHandler implements MessageHandler<FindTournament>{
         ReturnFindTournament returnFindTournament = new ReturnFindTournament();
         returnFindTournament.setType(TypeMenue.returnFindTournament);
         returnFindTournament.setClientId(clientID);
-        returnFindTournament.setTournamentFinished(); //1.Liste ??
-        returnFindTournament.setTournamentStarting(); //2. Liste ??
-        returnFindTournament.setTournamentInProgress(); //3.Liste ??
+        returnFindTournament.getTournamentFinished(); //1.Liste ??
+        returnFindTournament.getTournamentStarting(); //2. Liste ??
+        returnFindTournament.getTournamentInProgress(); //3.Liste ??
         return gson.toJson(returnFindTournament);
         }
     }
