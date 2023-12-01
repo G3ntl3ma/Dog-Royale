@@ -25,12 +25,14 @@ import java.net.Socket;
 public class ClientHandler implements Runnable {
     private static final Logger logger = LogManager.getLogger(ClientHandler.class);
     private final Socket clientSocket;
+    private ServerController serverController;
 
     private final int clientID;
 
     public ClientHandler(Socket clientSocket) {
+        serverController = ServerController.getInstance();
         this.clientSocket = clientSocket;
-        this.clientID = ServerController.generateClientID();
+        this.clientID = serverController.generateClientID();
     }
 
     public void logUsername() {
@@ -38,7 +40,7 @@ public class ClientHandler implements Runnable {
     }
 
     public void logObserver() {
-	logger.info(ServerController.getObserver(this.clientID));
+	logger.info(serverController.getObserver(this.clientID));
     }
 
     @Override

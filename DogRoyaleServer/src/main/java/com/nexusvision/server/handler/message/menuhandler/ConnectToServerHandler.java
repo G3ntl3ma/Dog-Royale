@@ -34,8 +34,9 @@ public class ConnectToServerHandler implements MenuMessageHandler<ConnectToServe
             return gson.toJson(error);
         }
 
-        ServerController.setUsername(clientID, message.getName());
-        ServerController.setObserver(clientID, message.getIsObserver());
+        ServerController serverController = ServerController.getInstance();
+        serverController.setUsername(clientID, message.getName());
+        serverController.setObserver(clientID, message.getIsObserver());
         ConnectedToServer connectedToServer = new ConnectedToServer();
         connectedToServer.setType(TypeMenue.connectedToServer);
         connectedToServer.setClientId(clientID);
