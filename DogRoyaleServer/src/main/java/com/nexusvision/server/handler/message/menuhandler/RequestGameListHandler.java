@@ -1,11 +1,11 @@
-package com.nexusvision.server.handler.message;
+package com.nexusvision.server.handler.message.menuhandler;
 
 import com.nexusvision.messages.menu.*;
 import com.nexusvision.messages.menu.Error;
 import lombok.Data;
 
 @Data
-public class RequestGameListHandler implements MessageHandler<RequestGameList> {
+public class RequestGameListHandler implements MenuMessageHandler<RequestGameList> {
 
     @Override
     public String handle(RequestGameList message, int clientID){

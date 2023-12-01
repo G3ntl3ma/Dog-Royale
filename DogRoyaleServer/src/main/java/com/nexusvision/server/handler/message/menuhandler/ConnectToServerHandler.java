@@ -1,4 +1,4 @@
-package com.nexusvision.server.handler.message;
+package com.nexusvision.server.handler.message.menuhandler;
 
 import com.nexusvision.messages.menu.ConnectToServer;
 import com.nexusvision.messages.menu.ConnectedToServer;
@@ -11,7 +11,7 @@ import lombok.Data;
  * @author feliwr
  */
 @Data
-public class ConnectToServerHandler implements MessageHandler<ConnectToServer> {
+public class ConnectToServerHandler implements MenuMessageHandler<ConnectToServer> {
 
     @Override
     public String handle(ConnectToServer message, int clientID) {

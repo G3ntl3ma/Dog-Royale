@@ -1,4 +1,4 @@
-package com.nexusvision.server.handler.message;
+package com.nexusvision.server.handler.message.menuhandler;
 
 import com.nexusvision.messages.menu.RequestTechData;
 import com.nexusvision.messages.menu.ReturnTechData;
@@ -7,7 +7,7 @@ import com.nexusvision.messages.menu.TypeMenue;
 import lombok.Data;
 
 @Data
-public class RequestTechDataHandler implements MessageHandler<RequestTechData>{
+public class RequestTechDataHandler implements MenuMessageHandler<RequestTechData> {
 
     @Override
     public java.lang.String handle(RequestTechData message, int clientID) {

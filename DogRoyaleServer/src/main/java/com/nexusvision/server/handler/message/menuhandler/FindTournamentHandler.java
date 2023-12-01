@@ -1,4 +1,4 @@
-package com.nexusvision.server.handler.message;
+package com.nexusvision.server.handler.message.menuhandler;
 
 import com.nexusvision.messages.menu.FindTournament;
 import com.nexusvision.messages.menu.ReturnFindTournament;
@@ -6,10 +6,8 @@ import com.nexusvision.messages.menu.Error;
 import com.nexusvision.messages.menu.TypeMenue;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class FindTournamentHandler implements MessageHandler<FindTournament>{
+public class FindTournamentHandler implements MenuMessageHandler<FindTournament> {
 
 
     @Override       //neuer Handler ???

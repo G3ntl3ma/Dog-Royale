@@ -1,13 +1,11 @@
-package com.nexusvision.server.handler.message;
+package com.nexusvision.server.handler.message.menuhandler;
 
 import com.nexusvision.messages.menu.JoinGameAsParticipant;
 import com.nexusvision.messages.menu.ConnectedToGame;
-import com.nexusvision.messages.menu.Error;
 import com.nexusvision.messages.menu.TypeMenue;
-import com.nexusvision.server.controller.ServerController;
 import lombok.Data;
 @Data
-public class JoinGameAsParticipantHandler implements MessageHandler<JoinGameAsParticipant>{
+public class JoinGameAsParticipantHandler implements MenuMessageHandler<JoinGameAsParticipant> {
     @Override
     public String handle(JoinGameAsParticipant message, int clientID) {
 

@@ -1,14 +1,13 @@
-package com.nexusvision.server.handler.message;
+package com.nexusvision.server.handler.message.menuhandler;
 
 import com.nexusvision.messages.menu.Error;
 import com.nexusvision.messages.menu.RequestTournamentInfo;
 import com.nexusvision.messages.menu.ReturnTournamentInfo;
 import com.nexusvision.messages.menu.TypeMenue;
-import com.nexusvision.server.controller.ServerController;
 import lombok.Data;
 
 @Data
-public class RequestTournamentInfoHandler implements MessageHandler<RequestTournamentInfo> {
+public class RequestTournamentInfoHandler implements MenuMessageHandler<RequestTournamentInfo> {
 
     @Override
     public String handle(RequestTournamentInfo message, int clientID) {

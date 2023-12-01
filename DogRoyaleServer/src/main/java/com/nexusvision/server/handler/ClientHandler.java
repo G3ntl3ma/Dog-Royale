@@ -9,7 +9,7 @@ import com.google.gson.JsonParser;
 
 
 import com.nexusvision.server.controller.ServerController;
-import com.nexusvision.server.handler.message.*;
+import com.nexusvision.server.handler.message.menuhandler.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
