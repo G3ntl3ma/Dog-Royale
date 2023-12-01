@@ -7,8 +7,8 @@ public class ReturnLobbyConfigHandler implements MenuMessageHandler<ReturnLobbyC
     @Override
     public String handle(ReturnLobbyConfig message, int clientID) {
 
-	ReturnLobbyConfig.PlayerOrder playerOrder = message.getPlayerOrder();
+        ReturnLobbyConfig.PlayerOrder playerOrder = message.getPlayerOrder();
 
-    return "sea";
+        return "sea";
     }
 }

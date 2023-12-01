@@ -13,35 +13,39 @@ import java.util.concurrent.Executors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+
 /**
- * Die Server-Applikation, die den Server startet
+ * Die Server-Controller that can start up the server
  *
  * @author felixwr
  */
 public class ServerController {
-    private static final Logger logger = LogManager.getLogger(ServerController.class);
-    private static final int PORT = 8080;
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(100);
+    private static final ServerController instance = new ServerController();
 
-    private static HashMap<Integer, String> clientIDMapName = new HashMap<>();
-    private static HashMap<Integer, Boolean> clientIDMapObserver = new HashMap<>();
-    private static ArrayList<GameLobby> lobbyList = new ArrayList<>();
+    private final Logger logger = LogManager.getLogger(ServerController.class);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(100);
+
+    private HashMap<Integer, String> clientIDMapName = new HashMap<>();
+    private HashMap<Integer, Boolean> clientIDMapObserver = new HashMap<>();
+    private ArrayList<GameLobby> lobbyList = new ArrayList<>();
 
     //TODO starting games (list of gameid + currentplayercount + maxpalyercount)
     //TODO running games (list of gameid + currentplayercount + maxplayercount)
     //TODO completed games (list of gameid + winnerplayerid)
 
-    public static void main(String[] args) {
-        startServer(PORT);
+    private ServerController() {}
+
+    public static ServerController getInstance() {
+        return instance;
     }
 
     /**
-     * Setzt ServerSocket auf und erstellt für eingehende Verbindungen
-     * einen Thread und fügt diese zum Threadpool hinzu
+     * Setup <code>ServerSocket</code>, create threads for incoming connections
+     * and add those to the thread pool
      *
-     * @param port Der Port mit dem der ServerSocket gestartet wird
+     * @param port The port being used to start the <code>ServerSocket</code>
      */
-    public static void startServer(int port) {
+    public void startServer(int port) {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             logger.info("ServerSocket erfolgreich gestartet unter Port " + port);
             logger.info("Warte auf Verbindungen...");
@@ -57,16 +61,16 @@ public class ServerController {
         }
     }
 
-    public static int generateGameID() {
+    public int generateGameID() {
         Random ran = new Random();
         int newGameID = 0;
 
         boolean found = true;
-        while(found) {
+        while (found) {
             found = false;
             newGameID = ran.nextInt();
             for (int i = 0; i < lobbyList.size(); i++) {
-		int key = lobbyList.get(i).gameID;
+                int key = lobbyList.get(i).gameID;
                 if (key == newGameID) {
                     found = true;
                     break;
@@ -76,12 +80,12 @@ public class ServerController {
         return newGameID;
     }
 
-    public static int generateClientID() {
+    public int generateClientID() {
         Random ran = new Random();
         int newClientID = 0;
 
         boolean found = true;
-        while(found) {
+        while (found) {
             found = false;
             newClientID = ran.nextInt();
             for (Integer key : clientIDMapName.keySet()) {
@@ -91,32 +95,32 @@ public class ServerController {
                 }
             }
         }
-	clientIDMapName.put(newClientID, null);
+        clientIDMapName.put(newClientID, null);
         return newClientID;
     }
 
-    public static void createNewLobby(ArrayList<Integer> playerIDs, ArrayList<Integer> observerIDs) {
-	lobbyList.add(new GameLobby(generateClientID(), playerIDs, observerIDs));
+    public void createNewLobby(ArrayList<Integer> playerIDs, ArrayList<Integer> observerIDs) {
+        lobbyList.add(new GameLobby(generateClientID(), playerIDs, observerIDs));
     }
 
-    public static void setUsername(int clientID, String userName) {
-	clientIDMapName.put(clientID, userName);
+    public void setUsername(int clientID, String userName) {
+        clientIDMapName.put(clientID, userName);
     }
 
-    public static void setObserver(int clientID, boolean isObserver) {
-	clientIDMapObserver.put(clientID, isObserver);
+    public void setObserver(int clientID, boolean isObserver) {
+        clientIDMapObserver.put(clientID, isObserver);
     }
 
-    public static String getUsername(int clientID) {
-	return clientIDMapName.get(clientID);
+    public String getUsername(int clientID) {
+        return clientIDMapName.get(clientID);
     }
 
-    public static boolean getObserver(int clientID) {
-	return clientIDMapObserver.get(clientID);
+    public boolean getObserver(int clientID) {
+        return clientIDMapObserver.get(clientID);
     }
 
     /*
-    public static SpiellogikInstanz getLobby(int lobbyID) {
+    public SpiellogikInstanz getLobby(int lobbyID) {
         // Gebe Spiellogik zurück
     }
      */
