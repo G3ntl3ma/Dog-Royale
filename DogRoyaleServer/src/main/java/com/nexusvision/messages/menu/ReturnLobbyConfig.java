@@ -37,7 +37,8 @@ public class ReturnLobbyConfig extends AbstractMenuMessage{
     private List<DrawCardFields> drawCardFields;
     private List<StartFields> startFields;
     private int initialCardsPerPlayer;
-    private List<PlayerOrder> playerOrder;
+    //private List<PlayerOrder> playerOrder;
+    private PlayerOrder playerOrder;
     private List<Observer> observer;
     private int thinkTimePerMove;
     private int visualizationTimePerMove;
@@ -66,12 +67,12 @@ public class ReturnLobbyConfig extends AbstractMenuMessage{
     }
 
     @Data
-    public static class PlayerOrder{
+    public class PlayerOrder{
         private OrderType type;
         private List<Order> order;
 
         @Data
-        public static class Order{
+        public class Order{
             private int clientId;
             private String name;
         }
