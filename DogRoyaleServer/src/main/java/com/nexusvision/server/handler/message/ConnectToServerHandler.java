@@ -4,6 +4,7 @@ import com.nexusvision.messages.menu.ConnectToServer;
 import com.nexusvision.messages.menu.ConnectedToServer;
 import com.nexusvision.messages.menu.Error;
 import com.nexusvision.messages.menu.TypeMenue;
+import com.nexusvision.server.controller.ServerController;
 import lombok.Data;
 
 /**
@@ -23,6 +24,8 @@ public class ConnectToServerHandler implements MessageHandler<ConnectToServer> {
             return gson.toJson(error);
         }
 
+
+	ServerController.setUsername(clientID, message.getName());
         ConnectedToServer connectedToServer = new ConnectedToServer();
         connectedToServer.setType(TypeMenue.connectedToServer);
         connectedToServer.setClientId(clientID);
