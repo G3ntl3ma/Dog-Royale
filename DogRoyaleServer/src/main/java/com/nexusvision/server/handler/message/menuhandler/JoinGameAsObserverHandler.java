@@ -22,7 +22,7 @@ public class JoinGameAsObserverHandler implements MenuMessageHandler<JoinGameAsO
 
         ConnectedToGame connectedToGame = new ConnectedToGame();
         connectedToGame.setType(TypeMenue.joinGameAsObserver);
-        connectedToGame.setSuccess();
+        connectedToGame.setSuccess(true); //TODO replace true
         return gson.toJson(connectedToGame);
     }
 }

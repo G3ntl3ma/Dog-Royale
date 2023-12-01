@@ -16,6 +16,6 @@ public interface MenuMessageHandler<T> {
      * @param message The deserialized json string that's getting processed
      * @return The response as a json string
      */
-    String handle(T message, int clientID, );
+    String handle(T message, int clientID);
 
 }

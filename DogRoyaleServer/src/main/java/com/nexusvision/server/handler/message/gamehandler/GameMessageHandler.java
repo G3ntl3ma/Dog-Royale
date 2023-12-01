@@ -1,4 +1,4 @@
-package com.nexusvision.server.handler.message.menuhandler;
+package com.nexusvision.server.handler.message.gamehandler;
 
 import com.google.gson.Gson;
 

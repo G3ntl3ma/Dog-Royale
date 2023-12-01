@@ -34,7 +34,7 @@ public class ClientHandler implements Runnable {
     }
 
     public void logUsername() {
-	logger.info(ServerController.getUsername(this.clientID));
+	//logger.info(ServerController.getUsername(this.clientID));
     }
 
     public void logObserver() {
