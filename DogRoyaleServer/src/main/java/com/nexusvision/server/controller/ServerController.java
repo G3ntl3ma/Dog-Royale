@@ -13,7 +13,6 @@ import java.util.concurrent.Executors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-
 /**
  * Die Server-Controller that can start up the server
  *
@@ -101,7 +100,7 @@ public class ServerController {
 
     public void createNewLobby(ArrayList<Integer> playerIDs, ArrayList<Integer> observerIDs) {
         lobbyList.add(new GameLobby(generateClientID(), playerIDs, observerIDs));
-    }
+
 
     public void setUsername(int clientID, String userName) {
         clientIDMapName.put(clientID, userName);
@@ -115,9 +114,23 @@ public class ServerController {
         return clientIDMapName.get(clientID);
     }
 
-    public boolean getObserver(int clientID) {
-        return clientIDMapObserver.get(clientID);
+    public int getGameCount() {
+	return lobbyList.size();
     }
+
+    public boolean getObserver(int clientID) {
+	    return clientIDMapObserver.get(clientID);
+    }
+
+    public boolean clientIdRegistered(int clientId) {
+	for (Integer key : clientIDMapName.keySet()) {
+	    if (key == clientId) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 
     /*
     public SpiellogikInstanz getLobby(int lobbyID) {

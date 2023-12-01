@@ -8,5 +8,6 @@ import lombok.Data;
 @Data
 public abstract class AbstractMenuMessage {
 
-    protected TypeMenue type;
+    //protected TypeMenue type;
+    protected Integer type;
 }

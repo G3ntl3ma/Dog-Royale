@@ -14,7 +14,7 @@ public class RequestTournamentInfoHandler implements MenuMessageHandler<RequestT
 
         if (false) {
             Error error = new Error();
-            error.setType(TypeMenue.error);
+            error.setType(TypeMenue.error.ordinal() + 100);
             error.setDataId(TypeMenue.requestTournamentInfo.ordinal() + 100);
             error.setMessage("TournamentInfo Request failed");
 
@@ -22,7 +22,7 @@ public class RequestTournamentInfoHandler implements MenuMessageHandler<RequestT
         }
 
         ReturnTournamentInfo returnTournamentInfo = new ReturnTournamentInfo();
-        returnTournamentInfo.setType(TypeMenue.requestTournamentInfo);
+        returnTournamentInfo.setType(TypeMenue.requestTournamentInfo.ordinal()+100);
         returnTournamentInfo.getTournamentInfo();
 
         return gson.toJson(returnTournamentInfo);

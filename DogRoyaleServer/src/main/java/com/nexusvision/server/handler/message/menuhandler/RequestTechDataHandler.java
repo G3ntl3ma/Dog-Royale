@@ -14,7 +14,7 @@ public class RequestTechDataHandler implements MenuMessageHandler<RequestTechDat
 
         if (false) {
             Error error = new Error();
-            error.setType(TypeMenue.error);
+            error.setType(TypeMenue.error.ordinal() + 100);
             error.setDataId(TypeMenue.requestGameList.ordinal() + 100);
             error.setMessage("Request failed (no TechData available)");
 
@@ -22,7 +22,7 @@ public class RequestTechDataHandler implements MenuMessageHandler<RequestTechDat
         }
 
         ReturnTechData returnTechData = new ReturnTechData();
-        returnTechData.setType(TypeMenue.returnTechData);
+        returnTechData.setType(TypeMenue.returnTechData.ordinal() + 100);
         returnTechData.getServerVersion();
         returnTechData.getSupportedProtocol();
         returnTechData.getEmbeddedExtensions();

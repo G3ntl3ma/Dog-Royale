@@ -18,7 +18,7 @@ public class ConnectToServerHandler implements MenuMessageHandler<ConnectToServe
 
         if (message.getName() == null) {
             Error error = new Error();
-            error.setType(TypeMenue.error);
+            error.setType(TypeMenue.error.ordinal() + 100);
             error.setDataId(TypeMenue.connectToServer.ordinal() + 100);
             error.setMessage("connect to server fail, name is null");
 
@@ -27,7 +27,7 @@ public class ConnectToServerHandler implements MenuMessageHandler<ConnectToServe
 
         if (message.getIsObserver() == null) {
             Error error = new Error();
-            error.setType(TypeMenue.error);
+            error.setType(TypeMenue.error.ordinal() + 100);
             error.setDataId(TypeMenue.connectToServer.ordinal() + 100);
             error.setMessage("connect to server fail, isObserver boolean null");
 
@@ -38,7 +38,7 @@ public class ConnectToServerHandler implements MenuMessageHandler<ConnectToServe
         serverController.setUsername(clientID, message.getName());
         serverController.setObserver(clientID, message.getIsObserver());
         ConnectedToServer connectedToServer = new ConnectedToServer();
-        connectedToServer.setType(TypeMenue.connectedToServer);
+        connectedToServer.setType(TypeMenue.connectedToServer.ordinal() + 100);
         connectedToServer.setClientId(clientID);
 
         return gson.toJson(connectedToServer);

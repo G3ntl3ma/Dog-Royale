@@ -14,14 +14,14 @@ public class FindTournamentHandler implements MenuMessageHandler<FindTournament>
 
         if (message.getTournamentStarting() == 0 && message.getTournamentFinished() == 0 && message.getTournamentInProgress() == 0) {
             Error error = new Error();
-            error.setType(TypeMenue.error);
+            error.setType(TypeMenue.error.ordinal() + 100);
             error.setDataId(TypeMenue.findTournament.ordinal() + 100);
             error.setMessage("tournament fail (no tournaments)");
 
             return gson.toJson(error);
         }
         ReturnFindTournament returnFindTournament = new ReturnFindTournament();
-        returnFindTournament.setType(TypeMenue.returnFindTournament);
+        returnFindTournament.setType(TypeMenue.returnFindTournament.ordinal() + 100);
         returnFindTournament.setClientId(clientID);
         returnFindTournament.getTournamentFinished(); //1.Liste ??
         returnFindTournament.getTournamentStarting(); //2. Liste ??

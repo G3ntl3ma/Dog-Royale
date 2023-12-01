@@ -30,58 +30,57 @@ public class ReturnLobbyConfig extends AbstractMenuMessage{
         random
     }
 
-    private int playerCount;
-    private int fieldsize;
-    private int figuresPerPlayer;
+    private Integer playerCount;
+    private Integer fieldsize;
+    private Integer figuresPerPlayer;
     private List<Color> colors;
     private List<DrawCardFields> drawCardFields;
     private List<StartFields> startFields;
-    private int initialCardsPerPlayer;
-    //private List<PlayerOrder> playerOrder;
+    private Integer initialCardsPerPlayer;
     private PlayerOrder playerOrder;
     private List<Observer> observer;
-    private int thinkTimePerMove;
-    private int visualizationTimePerMove;
-    private int consequencesForInvalidMove;
-    private int maximumGameDuration;
-    private int maximumTotalMoves;
+    private Integer thinkTimePerMove;
+    private Integer visualizationTimePerMove;
+    private Integer consequencesForInvalidMove;
+    private Integer maximumGameDuration;
+    private Integer maximumTotalMoves;
 
 
     @Data
     public static class Color{
-        private int clientId;
-        private int color;
+        private Integer clientId;
+        private Integer color;
 
     }
 
     @Data
     public static class DrawCardFields{
-        private int count;
+        private Integer count;
         private List<Integer> positions;
     }
 
     @Data
     public static class StartFields{
-        private int count;
+        private Integer count;
         private List<Integer> positions;
     }
 
     @Data
     public class PlayerOrder{
-        private OrderType type;
-        private List<Order> order;
+        public OrderType type;
+        public List<Order> order;
 
         @Data
         public class Order{
-            private int clientId;
-            private String name;
+            public Integer clientId;
+            public String name;
         }
 
     }
 
     @Data
     public static class Observer{
-        private int clientId;
+        private Integer clientId;
         private String name;
     }
 

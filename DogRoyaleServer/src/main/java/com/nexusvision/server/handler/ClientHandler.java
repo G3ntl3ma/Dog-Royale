@@ -34,15 +34,7 @@ public class ClientHandler implements Runnable {
         this.clientSocket = clientSocket;
         this.clientID = serverController.generateClientID();
     }
-
-    public void logUsername() {
-	//logger.info(ServerController.getUsername(this.clientID));
-    }
-
-    public void logObserver() {
-	logger.info(serverController.getObserver(this.clientID));
-    }
-
+    
     @Override
     public void run() {
         try {
@@ -96,9 +88,9 @@ public class ClientHandler implements Runnable {
                     ConnectToServer connectToServer = gson.fromJson(clientMessage, ConnectToServer.class);
                     returnMessage = new ConnectToServerHandler().handle(connectToServer, clientID);
 		    logger.info("username set to ");
-		    this.logUsername();
+		    logger.info(ServerController.getUsername(this.clientID));
 		    logger.info("isObserver bool ");
-		    this.logObserver();
+		    logger.info(ServerController.getObserver(this.clientID));
                     break;
                 case error:
                     //Error error = gson.fromJson(clientMessage, Error.class); //Error class multiple choices
@@ -139,9 +131,12 @@ public class ClientHandler implements Runnable {
                     // ReturnGameList returnGameList = gson.fromJson(clientMessage, ReturnGameList.class);
                     // returnMessage = new RequestGameListHandler().handle(requestGameList, clientID);
                     // break;
-                // case returnLobbyConfig:
-                    // ReturnLobbyConfig returnLobbyConfig = gson.fromJson(clientMessage, ReturnLobbyConfig.class);
-                    // break;
+                case returnLobbyConfig:
+		    logger.info("game count before lobby config message " + ServerController.getGameCount());
+                    ReturnLobbyConfig returnLobbyConfig = gson.fromJson(clientMessage, ReturnLobbyConfig.class);
+		    returnMessage = new ReturnLobbyConfigHandler().handle(returnLobbyConfig, clientID);
+		    logger.info("game count after lobby config message " + ServerController.getGameCount());
+                    break;
                 // case returnTechData:
                     // ReturnTechData returnTechData = gson.fromJson(clientMessage, ReturnTechData.class);
                     // break;
