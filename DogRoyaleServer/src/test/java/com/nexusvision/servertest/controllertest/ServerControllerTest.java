@@ -1,4 +1,4 @@
-package com.nexusvision;
+package com.nexusvision.servertest.controllertest;
 
 import com.nexusvision.server.controller.ServerController;
 import org.junit.jupiter.api.AfterAll;

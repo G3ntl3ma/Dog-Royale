@@ -1,8 +1,9 @@
 package com.nexusvision.server.handler.message;
 
 import com.nexusvision.messages.menu.ReturnLobbyConfig;
+import com.nexusvision.server.handler.message.menuhandler.MenuMessageHandler;
 
-public class ReturnLobbyConfigHandler implements MessageHandler<ReturnLobbyConfig> {
+public class ReturnLobbyConfigHandler implements MenuMessageHandler<ReturnLobbyConfig> {
     @Override
     public String handle(ReturnLobbyConfig message, int clientID) {
 

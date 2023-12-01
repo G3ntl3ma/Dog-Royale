@@ -12,7 +12,7 @@ public class JoinGameAsParticipantHandler implements MenuMessageHandler<JoinGame
         ConnectedToGame connectedToGame = new ConnectedToGame();
         connectedToGame.setType(TypeMenue.joinGameAsParticipant);
         connectedToGame.setSuccess(true); //TODO replace true
-        return gson.toJson(connectedToGame);
 
+        return gson.toJson(connectedToGame);
     }
 }

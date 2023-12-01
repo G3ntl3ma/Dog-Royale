@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 public class JoinGameAsObserverHandler implements MenuMessageHandler<JoinGameAsObserver> {
 
-
     @Override
     public String handle(JoinGameAsObserver message, int clientID) {
 
@@ -17,12 +16,14 @@ public class JoinGameAsObserverHandler implements MenuMessageHandler<JoinGameAsO
             error.setType(TypeMenue.error);
             error.setDataId(TypeMenue.joinGameAsObserver.ordinal() + 100);
             error.setMessage("Failed to Join the game");
+
             return gson.toJson(error);
         }
 
         ConnectedToGame connectedToGame = new ConnectedToGame();
         connectedToGame.setType(TypeMenue.joinGameAsObserver);
         connectedToGame.setSuccess(true); //TODO replace true
+
         return gson.toJson(connectedToGame);
     }
 }

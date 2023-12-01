@@ -1,4 +1,4 @@
-package com.nexusvision;
+package com.nexusvision.servertest.handlertest;
 
 import com.nexusvision.server.handler.ClientHandler;
 import org.junit.jupiter.api.Test;
