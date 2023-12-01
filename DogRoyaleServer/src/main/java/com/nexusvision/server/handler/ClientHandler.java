@@ -120,6 +120,7 @@ public class ClientHandler implements Runnable {
                     break;
                 case requestTournamentInfo:
                     RequestTournamentInfo requestTournamentInfo = gson.fromJson(clientMessage, RequestTournamentInfo.class);
+                    returnMessage = new RequestTournamentInfoHandler().handle(requestTournamentInfo, clientID);
                     break;
                 case returnFindTournament:
                     ReturnFindTournament returnFindTournament = gson.fromJson(clientMessage, ReturnFindTournament.class);
