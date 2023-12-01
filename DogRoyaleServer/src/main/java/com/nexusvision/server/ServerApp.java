@@ -1,3 +1,5 @@
+package com.nexusvision.server;
+
 import com.nexusvision.server.controller.ServerController;
 
 public class ServerApp {
