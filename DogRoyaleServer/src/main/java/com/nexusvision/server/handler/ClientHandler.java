@@ -37,6 +37,10 @@ public class ClientHandler implements Runnable {
 	logger.info(ServerController.getUsername(this.clientID));
     }
 
+    public void logObserver() {
+	logger.info(ServerController.getObserver(this.clientID));
+    }
+
     @Override
     public void run() {
         try {
@@ -89,8 +93,10 @@ public class ClientHandler implements Runnable {
                 case connectToServer:
                     ConnectToServer connectToServer = gson.fromJson(clientMessage, ConnectToServer.class);
                     returnMessage = new ConnectToServerHandler().handle(connectToServer, clientID);
-		    logger.info("username set to");
+		    logger.info("username set to ");
 		    this.logUsername();
+		    logger.info("isObserver bool ");
+		    this.logObserver();
                     break;
                 case error:
                     //Error error = gson.fromJson(clientMessage, Error.class); //Error class multiple choices
