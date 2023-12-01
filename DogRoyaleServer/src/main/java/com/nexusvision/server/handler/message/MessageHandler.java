@@ -1,6 +1,9 @@
 package com.nexusvision.server.handler.message;
 
 import com.google.gson.Gson;
+import com.nexusvision.messages.menu.ReturnFindTournament;
+
+import java.util.List;
 
 /**
  * General interface that's providing a <code>handle</code> method
@@ -16,5 +19,6 @@ public interface MessageHandler<T> {
      * @param message The deserialized json string that's getting processed
      * @return The response as a json string
      */
-    String handle(T message, int clientID);
+    String handle(T message, int clientID, );
+
 }

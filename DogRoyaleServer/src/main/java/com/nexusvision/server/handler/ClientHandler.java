@@ -9,7 +9,7 @@ import com.google.gson.JsonParser;
 
 
 import com.nexusvision.server.controller.ServerController;
-import com.nexusvision.server.handler.message.ConnectToServerHandler;
+import com.nexusvision.server.handler.message.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -103,12 +103,15 @@ public class ClientHandler implements Runnable {
                     break;
                 case findTournament:
                     FindTournament findTournament = gson.fromJson(clientMessage, FindTournament.class);
+                    returnMessage = new FindTournamentHandler().handle(findTournament, clientID);
                     break;
                 case joinGameAsObserver:
                     JoinGameAsObserver joinGameAsObserver = gson.fromJson(clientMessage, JoinGameAsObserver.class);
+                    returnMessage = new JoinGameAsObserverHandler().handle(joinGameAsObserver, clientID);
                     break;
                 case joinGameAsParticipant:
                     JoinGameAsParticipant joinGameAsParticipant = gson.fromJson(clientMessage, JoinGameAsParticipant.class);
+                    returnMessage = new JoinGameAsParticipantHandler().handle(joinGameAsParticipant, clientID);
                     break;
                 // case registeredForTournament:
                     // RegisteredForTournament registeredForTournament = gson.fromJson(clientMessage, RegisteredForTournament.class);
@@ -121,15 +124,18 @@ public class ClientHandler implements Runnable {
                     break;
                 case requestTechData:
                     RequestTechData requestTechData = gson.fromJson(clientMessage, RequestTechData.class);
+                    returnMessage = new RequestTechDataHandler().handle(requestTechData, clientID);
                     break;
                 case requestTournamentInfo:
                     RequestTournamentInfo requestTournamentInfo = gson.fromJson(clientMessage, RequestTournamentInfo.class);
+                    returnMessage = new RequestTournamentInfoHandler().handle(requestTournamentInfo, clientID);
                     break;
                 case returnFindTournament:
                     ReturnFindTournament returnFindTournament = gson.fromJson(clientMessage, ReturnFindTournament.class);
                     break;
                 // case returnGameList:
                     // ReturnGameList returnGameList = gson.fromJson(clientMessage, ReturnGameList.class);
+                    // returnMessage = new RequestGameListHandler().handle(requestGameList, clientID);
                     // break;
                 // case returnLobbyConfig:
                     // ReturnLobbyConfig returnLobbyConfig = gson.fromJson(clientMessage, ReturnLobbyConfig.class);

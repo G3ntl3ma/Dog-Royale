@@ -1,7 +1,6 @@
 package com.nexusvision.messages.menu;
 
 
-import com.nexusvision.messages.game.BoardState;
 import lombok.Data;
 
 import java.util.List;
