@@ -10,6 +10,7 @@ import com.google.gson.JsonParser;
 
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.message.ConnectToServerHandler;
+import com.nexusvision.server.handler.message.FindTournamentHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -91,6 +92,7 @@ public class ClientHandler implements Runnable {
                     break;
                 case findTournament:
                     FindTournament findTournament = gson.fromJson(clientMessage, FindTournament.class);
+                    returnMessage = new FindTournamentHandler().handle(findTournament, clientID);
                     break;
                 case joinGameAsObserver:
                     JoinGameAsObserver joinGameAsObserver = gson.fromJson(clientMessage, JoinGameAsObserver.class);
@@ -118,6 +120,7 @@ public class ClientHandler implements Runnable {
                     break;
                 // case returnGameList:
                     // ReturnGameList returnGameList = gson.fromJson(clientMessage, ReturnGameList.class);
+                    // returnMessage = new RequestGameListHandler().handle(requestGameList, clientID);
                     // break;
                 // case returnLobbyConfig:
                     // ReturnLobbyConfig returnLobbyConfig = gson.fromJson(clientMessage, ReturnLobbyConfig.class);

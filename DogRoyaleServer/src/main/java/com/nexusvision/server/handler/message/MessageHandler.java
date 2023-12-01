@@ -1,6 +1,9 @@
 package com.nexusvision.server.handler.message;
 
 import com.google.gson.Gson;
+import com.nexusvision.messages.menu.ReturnFindTournament;
+
+import java.util.List;
 
 /**
  * General interface that's providing a <code>handle</code> method

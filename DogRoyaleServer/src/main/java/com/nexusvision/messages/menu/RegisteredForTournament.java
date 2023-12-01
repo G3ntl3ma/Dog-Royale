@@ -20,6 +20,7 @@ public class RegisteredForTournament extends AbstractMenuMessage {
     private int maxPlayer;
     private int rounds;
 
+
     @Data
     public static class Player{
         private int clientId;

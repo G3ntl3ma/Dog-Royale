@@ -14,5 +14,4 @@ public class FindTournament extends AbstractMenuMessage {
     private int tournamentStarting;
     private int tournamentInProgress;
     private int tournamentFinished;
-
 }
