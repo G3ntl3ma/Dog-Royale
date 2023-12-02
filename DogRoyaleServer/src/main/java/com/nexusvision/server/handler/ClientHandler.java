@@ -17,8 +17,8 @@ import java.io.*;
 import java.net.Socket;
 
 /**
- * ClientHandler, der sich dem übergebenem ClientSocket widmet
- * und mit diesem kommuniziert
+ * ClientHandler, which deals with the given ClientSocket
+ * and communicates with it.
  *
  * @author felixwr
  */
