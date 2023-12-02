@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class FindTournamentHandler implements MenuMessageHandler<FindTournament> {
 
-    @Override       //neuer Handler ???
+    @Override
     public String handle(FindTournament message, int clientID) {
 
         if (message.getTournamentStarting() == 0 && message.getTournamentFinished() == 0 && message.getTournamentInProgress() == 0) {
@@ -23,9 +23,9 @@ public class FindTournamentHandler implements MenuMessageHandler<FindTournament>
         ReturnFindTournament returnFindTournament = new ReturnFindTournament();
         returnFindTournament.setType(TypeMenue.returnFindTournament.ordinal() + 100);
         returnFindTournament.setClientId(clientID);
-        returnFindTournament.getTournamentFinished(); //1.Liste ??
-        returnFindTournament.getTournamentStarting(); //2. Liste ??
-        returnFindTournament.getTournamentInProgress(); //3.Liste ??
+        returnFindTournament.getTournamentFinished();
+        returnFindTournament.getTournamentStarting();
+        returnFindTournament.getTournamentInProgress();
 
         return gson.toJson(returnFindTournament);
     }
