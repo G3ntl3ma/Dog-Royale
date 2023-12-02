@@ -28,17 +28,14 @@ public class ReturnLobbyConfigHandler implements MenuMessageHandler<ReturnLobbyC
         //if consequences for invalid move ok
         //if maximumgameduration ok
         //if maximumtotalmoves ok
-        //parse colors
-        //parse drawcardfields
-        //parse startfields
-        //parse observer
+        //if colorlist and orderlist are permutations of each other
 
         Error error = new Error();
         error.setType(TypeMenue.error.ordinal() + 100);
         error.setDataId(TypeMenue.returnLobbyConfig.ordinal() + 100);
 
-
-        ArrayList<Integer> playerIDs = new ArrayList<>();
+        ArrayList<Integer> playerOrderList = new ArrayList<>();
+        ArrayList<Integer> playerColorList = new ArrayList<>();
         ArrayList<Integer> observerIDs = new ArrayList<>();
 
         boolean errorFound = false;
@@ -98,45 +95,106 @@ public class ReturnLobbyConfigHandler implements MenuMessageHandler<ReturnLobbyC
             errorFound = true;
         }
 
+
+        ReturnLobbyConfig.PlayerOrder playerOrder = message.getPlayerOrder();
+        List<ReturnLobbyConfig.PlayerOrder.Order> order = playerOrder.order;
+        if (playerOrder == null) {
+            errors.add("playerOrder");
+            errorFound = true;
+        }
+        else {
+            for (int i = 0; i < order.size(); i++) {
+                int clID = order.get(i).clientId;
+                //TODO check if null
+                //if specified clientIDs dont exist
+                if (!serverController.clientIdRegistered(clID)) {
+                    error.setMessage("configuring game failed: clientId not registered");
+                    return gson.toJson(error);
+                }
+                if (serverController.getObserver(clID)) {
+                    error.setMessage("configuring game failed: specified an observer as player");
+                    return gson.toJson(error);
+                } else {
+                    playerOrderList.add(clID);
+                }
+            }
+        }
+
+        List<ReturnLobbyConfig.Observer> observers = message.getObserver();
+        if (observers == null) {
+            errors.add("observers");
+            errorFound = true;
+        }
+        else {
+            for (int i = 0; i < observers.size(); i++) {
+                int clID = observers.get(i).getClientId();
+                if (!serverController.clientIdRegistered(clID)) {
+                    error.setMessage("configuring game failed: clientId not registered");
+                    return gson.toJson(error);
+                }
+                if (serverController.getObserver(clID)) {
+                    observerIDs.add(clID);
+                } else {
+                    error.setMessage("configuring game failed: specified a non observer as observer");
+                    return gson.toJson(error);
+                }
+            }
+        }
+
+        List<ReturnLobbyConfig.Color> colors = message.getColors();
+        if (colors == null) {
+            errors.add("colors");
+            errorFound = true;
+        }
+        else {
+            for (int i = 0; i < colors.size(); i++) {
+                int clID = colors.get(i).getClientId();
+                if (!serverController.clientIdRegistered(clID)) {
+                    error.setMessage("configuring game failed: clientId not registered");
+                    return gson.toJson(error);
+                }
+                if (serverController.getObserver(clID)) {
+                    observerIDs.add(clID);
+                } else {
+                    error.setMessage("configuring game failed: specified a non observer as observer");
+                    return gson.toJson(error);
+                }
+            }
+        }
+
+        ReturnLobbyConfig.DrawCardFields drawCardFields = message.getDrawCardFields();
+        if(drawCardFields == null) {
+            errors.add("drawCardFields");
+            errorFound = true;
+        }
+        else {
+            if(drawCardFields.getPositions() == null) {
+                errors.add("drawCardFields positions");
+                errorFound = true;
+            }
+        }
+
+        ReturnLobbyConfig.StartFields startFields = message.getStartFields();
+        if(startFields == null) {
+            errors.add("startFields");
+            errorFound = true;
+        }
+        else {
+            if(startFields.getPositions() == null) {
+                errors.add("startFields positions");
+                errorFound = true;
+            }
+        }
+
         if (errorFound) {
             error.setMessage("configuring game failed: " + String.join(", ", errors) + " not specified");
             return gson.toJson(error);
         }
 
-
-        ReturnLobbyConfig.PlayerOrder playerOrder = message.getPlayerOrder();
-        List<ReturnLobbyConfig.PlayerOrder.Order> order = playerOrder.order;
-        for (int i = 0; i < order.size(); i++) {
-            int clID = order.get(i).clientId;
-            //if specified clientIDs dont exist
-            if (!serverController.clientIdRegistered(clID)) {
-                error.setMessage("configuring game failed: clientId not registered");
-                return gson.toJson(error);
-            }
-            if (serverController.getObserver(clID)) {
-                error.setMessage("configuring game failed: specified an observer as player");
-                return gson.toJson(error);
-            } else {
-                playerIDs.add(clID);
-            }
-        }
-        List<ReturnLobbyConfig.Observer> observers = message.getObserver();
-        for (int i = 0; i < observers.size(); i++) {
-            int clID = observers.get(i).getClientId();
-            if (!serverController.clientIdRegistered(clID)) {
-                error.setMessage("configuring game failed: clientId not registered");
-                return gson.toJson(error);
-            }
-            if (serverController.getObserver(clID)) {
-                observerIDs.add(clID);
-            } else {
-                error.setMessage("configuring game failed: specified a non observer as observer");
-                return gson.toJson(error);
-            }
-        }
-
-
-        serverController.createNewLobby(playerIDs, observerIDs);
+        int gameID = serverController.createNewLobby(playerOrderList, observerIDs, playerColorList);
+        serverController.setConfiguration(gameID, playerCount, fieldSize, figuresPerPlayer,  drawCardFields.getPositions(),
+                startFields.getPositions(), initialCardsPerPlayer, thinkTimePerMove,
+        consequencesForInvalidMove, maximumGameDuration, maximumTotalMoves);
 
         return "sea";
     }

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -26,6 +27,7 @@ public class ServerController {
 
     private final HashMap<Integer, String> clientIDMapName = new HashMap<>();
     private final HashMap<Integer, Boolean> clientIDMapObserver = new HashMap<>();
+
     private final ArrayList<GameLobby> lobbyList = new ArrayList<>();
 
     //TODO starting games (list of gameid + currentplayercount + maxpalyercount)
@@ -100,8 +102,23 @@ public class ServerController {
         return newClientID;
     }
 
-    public void createNewLobby(ArrayList<Integer> playerIDs, ArrayList<Integer> observerIDs) {
-        lobbyList.add(new GameLobby(generateClientID(), playerIDs, observerIDs));
+    public int createNewLobby(ArrayList<Integer> playerOrderList, ArrayList<Integer> observerIDs, ArrayList<Integer> playerColorList) {
+        int gameID = generateGameID();
+        lobbyList.add( new GameLobby(gameID, playerOrderList, observerIDs, playerColorList));
+        return gameID;
+    }
+
+    public void setConfiguration( int gameID, int playerCount, int fieldSize, int figuresPerPlayer, List<Integer> drawFieldpositions,
+                                  List<Integer>  startFields, int initialCardsPerPlayer, int thinkingTimePerMove,
+                                  int consequencesForInvalidMove, int maxGameDuration, int maxTotalMoves) {
+        for(int i = 0; i < lobbyList.size(); i++) {
+            if(lobbyList.get(i).gameID == gameID) {
+                lobbyList.get(i).setConfiguration( playerCount,  fieldSize,  figuresPerPlayer,  drawFieldpositions,
+                         startFields,  initialCardsPerPlayer,  thinkingTimePerMove,
+                 consequencesForInvalidMove,  maxGameDuration,  maxTotalMoves);
+            }
+        }
+
     }
 
     public void setUsername(int clientID, String userName) {

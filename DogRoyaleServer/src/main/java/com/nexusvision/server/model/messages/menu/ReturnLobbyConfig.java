@@ -34,8 +34,8 @@ public class ReturnLobbyConfig extends AbstractMenuMessage{
     private Integer fieldsize;
     private Integer figuresPerPlayer;
     private List<Color> colors;
-    private List<DrawCardFields> drawCardFields;
-    private List<StartFields> startFields;
+    private DrawCardFields drawCardFields;
+    private StartFields startFields;
     private Integer initialCardsPerPlayer;
     private PlayerOrder playerOrder;
     private List<Observer> observer;
