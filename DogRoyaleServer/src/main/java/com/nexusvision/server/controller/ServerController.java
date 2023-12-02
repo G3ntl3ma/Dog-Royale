@@ -46,12 +46,12 @@ public class ServerController {
      */
     public void startServer(int port) {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            logger.info("ServerSocket erfolgreich gestartet unter Port " + port);
-            logger.info("Warte auf Verbindungen...");
+            logger.info("ServerSocket started successfully on port " + port);
+            logger.info("Waiting for connections...");
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                logger.info("Neue Verbindung akzeptiert von " + clientSocket.getInetAddress());
+                logger.info("New connection request from " + clientSocket.getInetAddress());
 
                 executorService.submit(new ClientHandler(clientSocket));
             }
@@ -61,6 +61,7 @@ public class ServerController {
     }
 
     public int generateGameID() {
+        // TODO: Sollte besser positiv sein
         Random ran = new Random();
         int newGameID = 0;
 
@@ -80,6 +81,7 @@ public class ServerController {
     }
 
     public int generateClientID() {
+        // TODO: Sollte besser positiv sein
         Random ran = new Random();
         int newClientID = 0;
 
