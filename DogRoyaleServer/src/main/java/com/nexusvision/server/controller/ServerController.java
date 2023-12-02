@@ -24,9 +24,9 @@ public class ServerController {
     private final Logger logger = LogManager.getLogger(ServerController.class);
     private final ExecutorService executorService = Executors.newFixedThreadPool(100);
 
-    private HashMap<Integer, String> clientIDMapName = new HashMap<>();
-    private HashMap<Integer, Boolean> clientIDMapObserver = new HashMap<>();
-    private ArrayList<GameLobby> lobbyList = new ArrayList<>();
+    private final HashMap<Integer, String> clientIDMapName = new HashMap<>();
+    private final HashMap<Integer, Boolean> clientIDMapObserver = new HashMap<>();
+    private final ArrayList<GameLobby> lobbyList = new ArrayList<>();
 
     //TODO starting games (list of gameid + currentplayercount + maxpalyercount)
     //TODO running games (list of gameid + currentplayercount + maxplayercount)
@@ -100,7 +100,7 @@ public class ServerController {
 
     public void createNewLobby(ArrayList<Integer> playerIDs, ArrayList<Integer> observerIDs) {
         lobbyList.add(new GameLobby(generateClientID(), playerIDs, observerIDs));
-
+    }
 
     public void setUsername(int clientID, String userName) {
         clientIDMapName.put(clientID, userName);
