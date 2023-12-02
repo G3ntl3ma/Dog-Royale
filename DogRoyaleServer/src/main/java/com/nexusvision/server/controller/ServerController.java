@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 /**
- * Die Server-Controller that can start up the server
+ * The Server-Controller that can start up the server
  *
  * @author felixwr
  */
@@ -64,6 +64,7 @@ public class ServerController {
 
     public int generateGameID() {
         // TODO: Sollte besser positiv sein
+        //@author Farah-ey wenn Du "ran.nextInt(Zahl);" verwendest werden die Zahlen von 0 bis Zahl ausgewählt und somit positiv)
         Random ran = new Random();
         int newGameID = 0;
 
@@ -84,6 +85,9 @@ public class ServerController {
 
     public int generateClientID() {
         // TODO: Sollte besser positiv sein
+        //@author Farah-ey wenn Du "ran.nextInt(Zahl);" verwendest werden die Zufallszahlen von 0 bis Zahl ausgewählt und somit positiv)
+
+
         Random ran = new Random();
         int newClientID = 0;
 
