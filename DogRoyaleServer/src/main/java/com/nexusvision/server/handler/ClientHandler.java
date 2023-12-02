@@ -1,15 +1,13 @@
 package com.nexusvision.server.handler;
 
-import com.google.gson.Gson;
-import com.nexusvision.messages.menu.*;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 
 
 import com.nexusvision.server.controller.ServerController;
-import com.nexusvision.server.handler.message.menuhandler.*;
+import com.nexusvision.server.handler.message.menu.*;
+import com.nexusvision.server.model.messages.menu.*;
+import com.nexusvision.server.model.messages.menu.Error;
+import com.nexusvision.utils.NewLineAppendingSerializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,17 +22,21 @@ import java.net.Socket;
  */
 public class ClientHandler implements Runnable {
     private static final Logger logger = LogManager.getLogger(ClientHandler.class);
-    private final Socket clientSocket;
-    private ServerController serverController;
 
+    private final Socket clientSocket;
+    private final ServerController serverController;
     private final int clientID;
+
+    Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
+            .create();
 
     public ClientHandler(Socket clientSocket) {
         serverController = ServerController.getInstance();
         this.clientSocket = clientSocket;
         this.clientID = serverController.generateClientID();
     }
-    
+
     @Override
     public void run() {
         try {
@@ -43,118 +45,156 @@ public class ClientHandler implements Runnable {
             PrintWriter writer = new PrintWriter(
                     clientSocket.getOutputStream(), false);
 
-            String clientMessage;
-            while ((clientMessage = reader.readLine()) != null) {
-                //  MessageHandling
-                String messageResponse = processMessage(clientMessage);
-                writer.println(messageResponse);
-                logger.info("Von Client wurde folgendes empfangen: " + clientMessage);
-
-                writer.println("Nachricht erhalten");
-                writer.flush();
-            }
+            handleMenu(reader, writer);
+//            String clientMessage;
+//            while ((clientMessage = reader.readLine()) != null) {
+//                //  MessageHandling
+//                String messageResponse = processMessage(clientMessage);
+//                writer.println(messageResponse);
+//                logger.info("The following was received from the client " + clientMessage);
+//
+//                writer.println("Message received");
+//                writer.flush();
+//            }
 
         } catch (IOException e) {
-            logger.error(e.getStackTrace());
+            logger.error("Error while trying to read the client message: " + e.getStackTrace());
         } finally {
             try {
                 clientSocket.close();
             } catch (IOException e) {
-                logger.error(e.getStackTrace());
+                logger.error("Error while trying to close the connection: " + e.getStackTrace());
             }
         }
     }
 
-    private String processMessage(String clientMessage) {
-        // Implement message processing logic here
-        String returnMessage = null;
-        try {
-            logger.info("try");
-            Gson gson = new Gson();
-            JsonElement jsonElement = JsonParser.parseString(clientMessage);
-            JsonObject jsonObject = jsonElement.getAsJsonObject();
-            //if in key
-            int typeInx = jsonObject.get("type").getAsInt() - 100; //minus 100
-            TypeMenue typeM = TypeMenue.values()[typeInx];
-            logger.info("typeM " + typeM);
-            switch (typeM) {
-                //case connectedToGame:
-                 //   ConnectedToGame connectedToGame = gson.fromJson(clientMessage, ConnectedToGame.class);
-                //    break;
-                // case connectedToServer:
-                    // ConnectedToServer connectedToServer = gson.fromJson(clientMessage, ConnectedToServer.class);
-                    // break;
-                case connectToServer:
-                    ConnectToServer connectToServer = gson.fromJson(clientMessage, ConnectToServer.class);
-                    returnMessage = new ConnectToServerHandler().handle(connectToServer, clientID);
-		    logger.info("username set to ");
-		    logger.info(ServerController.getUsername(this.clientID));
-		    logger.info("isObserver bool ");
-		    logger.info(ServerController.getObserver(this.clientID));
-                    break;
-                case error:
-                    //Error error = gson.fromJson(clientMessage, Error.class); //Error class multiple choices
-                    break;
-                case findTournament:
-                    FindTournament findTournament = gson.fromJson(clientMessage, FindTournament.class);
-                    returnMessage = new FindTournamentHandler().handle(findTournament, clientID);
-                    break;
-                case joinGameAsObserver:
-                    JoinGameAsObserver joinGameAsObserver = gson.fromJson(clientMessage, JoinGameAsObserver.class);
-                    returnMessage = new JoinGameAsObserverHandler().handle(joinGameAsObserver, clientID);
-                    break;
-                case joinGameAsParticipant:
-                    JoinGameAsParticipant joinGameAsParticipant = gson.fromJson(clientMessage, JoinGameAsParticipant.class);
-                    returnMessage = new JoinGameAsParticipantHandler().handle(joinGameAsParticipant, clientID);
-                    break;
-                // case registeredForTournament:
-                    // RegisteredForTournament registeredForTournament = gson.fromJson(clientMessage, RegisteredForTournament.class);
-                    // break;
-                case registerForTournament:
-                    RegisterForTournament registerForTournament = gson.fromJson(clientMessage, RegisterForTournament.class);
-                    break;
-                case requestGameList:
-                    RequestGameList requestGameList = gson.fromJson(clientMessage, RequestGameList.class);
-                    break;
-                case requestTechData:
-                    RequestTechData requestTechData = gson.fromJson(clientMessage, RequestTechData.class);
-                    returnMessage = new RequestTechDataHandler().handle(requestTechData, clientID);
-                    break;
-                case requestTournamentInfo:
-                    RequestTournamentInfo requestTournamentInfo = gson.fromJson(clientMessage, RequestTournamentInfo.class);
-                    returnMessage = new RequestTournamentInfoHandler().handle(requestTournamentInfo, clientID);
-                    break;
-                case returnFindTournament:
-                    ReturnFindTournament returnFindTournament = gson.fromJson(clientMessage, ReturnFindTournament.class);
-                    break;
-                // case returnGameList:
-                    // ReturnGameList returnGameList = gson.fromJson(clientMessage, ReturnGameList.class);
-                    // returnMessage = new RequestGameListHandler().handle(requestGameList, clientID);
-                    // break;
-                case returnLobbyConfig:
-		    logger.info("game count before lobby config message " + ServerController.getGameCount());
-                    ReturnLobbyConfig returnLobbyConfig = gson.fromJson(clientMessage, ReturnLobbyConfig.class);
-		    returnMessage = new ReturnLobbyConfigHandler().handle(returnLobbyConfig, clientID);
-		    logger.info("game count after lobby config message " + ServerController.getGameCount());
-                    break;
-                // case returnTechData:
-                    // ReturnTechData returnTechData = gson.fromJson(clientMessage, ReturnTechData.class);
-                    // break;
-                // case returnTournamentInfo:
-                    // ReturnTournamentInfo returnTournamentInfo = gson.fromJson(clientMessage, ReturnTournamentInfo.class);
-                    // break;
-                default:
-                    logger.info("type unknown");
-                    break;
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        // Return a response message
-        if (returnMessage == null) returnMessage = "response not found, received: " + clientMessage;
-        return returnMessage;
+    private void handleMenu(BufferedReader reader, PrintWriter writer) throws IOException {
+        handleConnectToServer(reader, writer);
+        // TODO: Client fragt Spielerliste an, Client fragt Turnier-Info an
     }
+
+    private void handleConnectToServer(BufferedReader reader, PrintWriter writer) throws IOException {
+        String request;
+        String response;
+        boolean isFinished = false;
+        logger.info("Trying to connect client " + clientID);
+        while (!isFinished) {
+            if ((request = reader.readLine()) != null) {
+                JsonObject jsonRequest = JsonParser.parseString(request).getAsJsonObject();
+                if (jsonRequest.has("type")) {
+                    try {
+                        ConnectToServer connectToServer = gson.fromJson(request, ConnectToServer.class);
+                        response = new ConnectToServerHandler().handle(connectToServer, clientID);
+                        isFinished = true;
+                    } catch (JsonSyntaxException e) {
+                        logger.error("Wrong message format from type connectToServer" + e.getMessage());
+                        Error error = new Error();
+                        error.setType(TypeMenue.error.getOrdinal());
+                        error.setDataId(TypeMenue.connectToServer.getOrdinal());
+                        error.setMessage("Wrong message format");
+                        response = gson.toJson(error, Error.class);
+                    }
+                } else {
+                    Error error = new Error();
+                    error.setType(TypeMenue.error.getOrdinal());
+                    error.setDataId(TypeMenue.connectToServer.getOrdinal());
+                    error.setMessage("Wrong type");
+                    response = gson.toJson(error, Error.class);
+                }
+                writer.println(response);
+                writer.flush();
+            }
+        }
+        logger.info("Client " + clientID + " connected successfully");
+    }
+
+//    private String processMessage(String clientMessage) {
+//        // Implement message processing logic here
+//        String returnMessage = null;
+//        try {
+//            logger.info("try");
+//            Gson gson = new Gson();
+//            JsonElement jsonElement = JsonParser.parseString(clientMessage);
+//            JsonObject jsonObject = jsonElement.getAsJsonObject();
+//            //if in key
+//            int typeInx = jsonObject.get("type").getAsInt() - 100; //minus 100
+//            TypeMenue typeM = TypeMenue.values()[typeInx];
+//            logger.info("typeM " + typeM);
+//            switch (typeM) {
+//                //case connectedToGame:
+//                //   ConnectedToGame connectedToGame = gson.fromJson(clientMessage, ConnectedToGame.class);
+//                //    break;
+//                // case connectedToServer:
+//                // ConnectedToServer connectedToServer = gson.fromJson(clientMessage, ConnectedToServer.class);
+//                // break;
+//                case connectToServer:
+//                    ConnectToServer connectToServer = gson.fromJson(clientMessage, ConnectToServer.class);
+//                    returnMessage = new ConnectToServerHandler().handle(connectToServer, clientID);
+//                    logger.info("username set to ");
+//                    this.logUsername();
+//                    logger.info("isObserver bool ");
+//                    this.logObserver();
+//                    break;
+//                case error:
+//                    //Error error = gson.fromJson(clientMessage, Error.class); //Error class multiple choices
+//                    break;
+//                case findTournament:
+//                    FindTournament findTournament = gson.fromJson(clientMessage, FindTournament.class);
+//                    returnMessage = new FindTournamentHandler().handle(findTournament, clientID);
+//                    break;
+//                case joinGameAsObserver:
+//                    JoinGameAsObserver joinGameAsObserver = gson.fromJson(clientMessage, JoinGameAsObserver.class);
+//                    returnMessage = new JoinGameAsObserverHandler().handle(joinGameAsObserver, clientID);
+//                    break;
+//                case joinGameAsParticipant:
+//                    JoinGameAsParticipant joinGameAsParticipant = gson.fromJson(clientMessage, JoinGameAsParticipant.class);
+//                    returnMessage = new JoinGameAsParticipantHandler().handle(joinGameAsParticipant, clientID);
+//                    break;
+//                // case registeredForTournament:
+//                // RegisteredForTournament registeredForTournament = gson.fromJson(clientMessage, RegisteredForTournament.class);
+//                // break;
+//                case registerForTournament:
+//                    RegisterForTournament registerForTournament = gson.fromJson(clientMessage, RegisterForTournament.class);
+//                    break;
+//                case requestGameList:
+//                    RequestGameList requestGameList = gson.fromJson(clientMessage, RequestGameList.class);
+//                    break;
+//                case requestTechData:
+//                    RequestTechData requestTechData = gson.fromJson(clientMessage, RequestTechData.class);
+//                    returnMessage = new RequestTechDataHandler().handle(requestTechData, clientID);
+//                    break;
+//                case requestTournamentInfo:
+//                    RequestTournamentInfo requestTournamentInfo = gson.fromJson(clientMessage, RequestTournamentInfo.class);
+//                    returnMessage = new RequestTournamentInfoHandler().handle(requestTournamentInfo, clientID);
+//                    break;
+//                case returnFindTournament:
+//                    ReturnFindTournament returnFindTournament = gson.fromJson(clientMessage, ReturnFindTournament.class);
+//                    break;
+//                // case returnGameList:
+//                // ReturnGameList returnGameList = gson.fromJson(clientMessage, ReturnGameList.class);
+//                // returnMessage = new RequestGameListHandler().handle(requestGameList, clientID);
+//                // break;
+//                // case returnLobbyConfig:
+//                // ReturnLobbyConfig returnLobbyConfig = gson.fromJson(clientMessage, ReturnLobbyConfig.class);
+//                // break;
+//                // case returnTechData:
+//                // ReturnTechData returnTechData = gson.fromJson(clientMessage, ReturnTechData.class);
+//                // break;
+//                // case returnTournamentInfo:
+//                // ReturnTournamentInfo returnTournamentInfo = gson.fromJson(clientMessage, ReturnTournamentInfo.class);
+//                // break;
+//                default:
+//                    logger.info("type unknown");
+//                    break;
+//            }
+//
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        // Return a response message
+//        if (returnMessage == null) returnMessage = "response not found, received: " + clientMessage;
+//        return returnMessage;
+//    }
 
 }
