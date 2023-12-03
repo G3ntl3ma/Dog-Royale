@@ -7,13 +7,13 @@ import lombok.Data;
  */
 @Data
 public abstract class AbstractGameMessage {
-    protected enum TypeGame {
+    public enum TypeGame {
         liveTimer,
         turnTimer,
         joinObs,
         leaveObs,
         leavePlayer,
-        oardState,
+        boardState,
         move,
         moveValid,
         response,

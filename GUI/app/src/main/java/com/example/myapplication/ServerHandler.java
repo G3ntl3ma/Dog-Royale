@@ -1,4 +1,12 @@
 package com.example.myapplication;
+import com.example.myapplication.messages.game.AbstractGameMessage;
+import com.example.myapplication.messages.game.BoardState;
+import com.example.myapplication.messages.game.DrawCards;
+import com.example.myapplication.messages.game.Freeze;
+import com.example.myapplication.messages.game.Kick;
+import com.example.myapplication.messages.game.Move;
+import com.example.myapplication.messages.game.MoveValid;
+import com.example.myapplication.messages.game.Unfreeze;
 import com.example.myapplication.messages.menu.AbstractMenuMessage;
 import com.example.myapplication.messages.menu.ConnectedToGame;
 import com.example.myapplication.messages.menu.ConnectedToServer;
@@ -7,6 +15,10 @@ import com.example.myapplication.messages.menu.RegisteredForTournament;
 import com.example.myapplication.messages.menu.ReturnGameList;
 import com.example.myapplication.messages.menu.ReturnTechData;
 import com.example.myapplication.messages.menu.ReturnTournamentInfo;
+import com.example.myapplication.messages.sync.JoinObs;
+import com.example.myapplication.messages.sync.LiveTimer;
+import com.example.myapplication.messages.sync.TurnTimer;
+import com.example.myapplication.messages.sync.AbstractSyncMessage;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -29,6 +41,8 @@ import java.net.Socket;
  * processMessage erkennt den Typen der Nachricht und ruft dann die Methode .getResponse() auf
  * der jeweiligen Klasse auf. Diese Methoden sollen die Verarbeitungslogik enthalten und müssen
  * noch geschrieben werden
+ *
+ * @author Mattes
  */
 
 
@@ -81,6 +95,27 @@ public class ServerHandler {
                 case returnTechData:
                     ReturnTechData returnTechData = gson.fromJson(serverMessage, ReturnTechData.class);
                     // returnMessage = ReturnTechData.getResponse();
+                case boardState:
+                    BoardState boardState = gson.fromJson(serverMessage, BoardState.class);
+                case drawCards:
+                    DrawCards drawCards= gson.fromJson(serverMessage, DrawCards.class);
+                case moveValid:
+                    MoveValid moveValid = gson.fromJson(serverMessage, Move.class);
+                case freeze:
+                    Freeze freeze = gson.fromJson(serverMessage, Freeze.class);
+                case unfreeze:
+                    Unfreeze unfreeze = gson.fromJson(serverMessage, Unfreeze.class);
+                case cancel:
+                    Cancel cancel = gson.fromJson(serverMessage, Cancel.class);
+                case kick:
+                    Kick kick = gson.fromJson(serverMessage, Kick.class);
+                case joinObs:
+                    JoinObs joinObs = gson.fromJson(serverMessage, JoinObs.class);
+                case liveTimer:
+                    LiveTimer liveTimer = gson.fromJson(serverMessage, LiveTimer.class);
+                case turnTimer:
+                    TurnTimer turnTimer = gson.fromJson(serverMessage, liveTimer.class);
+
                 default:
                     // logger.info("type unknown");
             }
