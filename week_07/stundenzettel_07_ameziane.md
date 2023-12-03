@@ -36,7 +36,7 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
   - 2023-12-02 1,00h
 
 ## Implementierung
-- Zuweisung der Spieler zu einem Spiel (Problem der Zuweisung von Spielern schon gelöst, aber muss noch angepasst werden)
+- Zuweisung der Spieler zu einem Spiel
   - 2023-12-01 3,00h
   - 2023-12-02 6,00h
   - 2023-12-03 8,00h
