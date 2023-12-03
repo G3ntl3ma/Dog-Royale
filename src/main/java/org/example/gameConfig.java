@@ -1,6 +1,4 @@
-package src.main.java.org.example;
-
-import org.example.Game;
+package main.java.org.example;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

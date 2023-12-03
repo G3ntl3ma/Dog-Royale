@@ -1,4 +1,4 @@
-package src.main.java.org.example;
+package main.java.org.example;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +11,8 @@ public class GameBuilder {
     private int initialCardsPerPlayer;
     private int maximumTotalMoves;
     private int thinkTimePerMove;
-    private org.example.Game.Penalty penalty;
-    private org.example.Game.OrderType orderType;
+    private Game.Penalty penalty;
+    private Game.OrderType orderType;
     private int maximumGameDuration;
     private int visualizationTimePerMove;
 
@@ -50,12 +50,12 @@ public class GameBuilder {
         return this;
     }
 
-    public GameBuilder setPenalty(org.example.Game.Penalty penalty) {
+    public GameBuilder setPenalty(Game.Penalty penalty) {
         this.penalty = penalty;
         return this;
     }
 
-    public GameBuilder setOrderType(org.example.Game.OrderType orderType) {
+    public GameBuilder setOrderType(Game.OrderType orderType) {
         this.orderType = orderType;
         return this;
     }
@@ -75,8 +75,8 @@ public class GameBuilder {
         return this;
     }
 
-    public org.example.Game build() {
-        org.example.Game game = new org.example.Game(id, mainFieldCount, figuresPerPlayer,drawCardFieldCount, initialCardsPerPlayer, maximumTotalMoves,
+    public Game build() {
+        Game game = new Game(id, mainFieldCount, figuresPerPlayer,drawCardFieldCount, initialCardsPerPlayer, maximumTotalMoves,
                 playerCount,thinkTimePerMove, penalty, orderType, maximumGameDuration, visualizationTimePerMove);
 
         return game;

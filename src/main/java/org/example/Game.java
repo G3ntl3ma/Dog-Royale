@@ -1,11 +1,11 @@
-package org.example;
+package main.java.org.example;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public final class Game {
 	int id;
-    public ArrayList<org.example.Player> players; //TODO should not be arraylist,maybe hashmap?
+    public ArrayList<Player> players; //TODO should not be arraylist,maybe hashmap?
     private Field[] board;
     ArrayList<Card> deck;
     ArrayList<Card> pile;
@@ -32,7 +32,7 @@ public final class Game {
 	int drawCardFieldCount;
     private int[] startIndexs; //indeces of startFields, unused
     boolean[] occupied; //unused
-    
+
     public Game(int id, int mainFieldCount, int figuresPerPlayer,int drawCardFieldCount, int initialCardsPerPlayer, int maximumTotalMoves, int playerCount,
 				int thinkTimePerMove,Penalty penalty, OrderType orderType, int maximumGameDuration, int visualizationTimePerMove) {
 	this.id = id;
@@ -67,7 +67,7 @@ public final class Game {
 		return mainFieldCount;
 	}
 
-	public ArrayList<org.example.Player> getPlayers() {
+	public ArrayList<Player> getPlayers() {
 		return players;
 	}
 
