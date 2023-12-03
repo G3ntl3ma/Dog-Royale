@@ -1,6 +1,7 @@
 package com.nexusvision.server.controller;
 
 import com.nexusvision.server.handler.ClientHandler;
+import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,6 +21,7 @@ import java.util.Random;
  * @author felixwr
  */
 public class ServerController {
+    @Getter
     private static final ServerController instance = new ServerController();
 
     private final Logger logger = LogManager.getLogger(ServerController.class);
@@ -37,10 +39,6 @@ public class ServerController {
 
     
     private ServerController() {}
-
-    public static ServerController getInstance() {
-        return instance;
-    }
 
     /**
      * Setup <code>ServerSocket</code>, create threads for incoming connections
