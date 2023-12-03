@@ -3,7 +3,7 @@ name: Abdelkarim Meziane
 imt: ameziane
 gruppe: 01
 woche: 07
-gesamtarbeitszeit: 21,00h
+gesamtarbeitszeit: 24,00h
 ---
 
 <!--
@@ -32,11 +32,12 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 
 ## Werkzeuge
 - Suche nach einer Lösung für ein Problem bei Intellij
-  - 2023-12-02 3,00h  
-
+  - 2023-12-01 2,00h  
+  - 2023-12-02 1,00h
 
 ## Implementierung
-- Zuweisung der Spieler zu einem Spiel (muss noch angepasst werden)
+- Zuweisung der Spieler zu einem Spiel (Problem der Zuweisung von Spielern schon gelöst, aber muss noch angepasst werden)
+  - 2023-12-01 3,00h
   - 2023-12-02 6,00h
   - 2023-12-03 8,00h
 
