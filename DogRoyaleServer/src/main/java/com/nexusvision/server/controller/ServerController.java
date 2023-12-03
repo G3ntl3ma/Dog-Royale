@@ -34,6 +34,8 @@ public class ServerController {
     //TODO running games (list of gameid + currentplayercount + maxplayercount)
     //TODO completed games (list of gameid + winnerplayerid)
 
+
+    
     private ServerController() {}
 
     public static ServerController getInstance() {
@@ -62,6 +64,80 @@ public class ServerController {
         }
     }
 
+    public ArrayList<GameLobby> getStartingGames(int gameCount) {
+	int foundCount = 0;
+	ArrayList<GameLobby> gameLobbys = new ArrayList<>();
+	for (int i = 0; i < lobbyList.size(); i++) {
+	    GameLobby g = lobbyList.get(i);
+	    if(g.gameRunning == false) {
+		gameLobbys.add(g);
+		foundCount++;
+	    }
+	    if(foundCount == gameCount) break;
+	}
+	return gameLobbys;
+    }
+
+    public ArrayList<GameLobby> getRunningGames(int gameCount) {
+	int foundCount = 0;
+	ArrayList<GameLobby> gameLobbys = new ArrayList<>();
+	for (int i = 0; i < lobbyList.size(); i++) {
+	    GameLobby g = lobbyList.get(i);
+	    if(g.gameRunning == true) {
+		gameLobbys.add(g);
+		foundCount++;
+	    }
+	    if(foundCount == gameCount) break;
+	}
+	return gameLobbys;
+    }
+    
+    public boolean addPlayer(int gameId, int clientId) {
+	for (int i = 0; i < lobbyList.size(); i++) {
+	    if(lobbyList.get(i).getGameID() == gameId) {
+		lobbyList.get(i).addPlayer(clientId);
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public boolean addObserver(int gameId, int clientId) {
+	for (int i = 0; i < lobbyList.size(); i++) {
+	    if(lobbyList.get(i).getGameID() == gameId) {
+		lobbyList.get(i).addObserver(clientId);
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public ArrayList<GameLobby> getFinishedGames(int gameCount) {
+	int foundCount = 0;
+	ArrayList<GameLobby> gameLobbys = new ArrayList<>();
+	for (int i = 0; i < lobbyList.size(); i++) {
+	    GameLobby g = lobbyList.get(i);
+	    if(g.gameCompleted == true) {
+		gameLobbys.add(g);
+		foundCount++;
+	    }
+	    if(foundCount == gameCount) break;
+	}
+	return gameLobbys;
+    }
+
+    public int getGameId(GameLobby g) {
+	return g.getGameID();
+    }
+
+    public int getCurrentPlayerCount(GameLobby g) {
+	return g.getCurrentPlayerCount();
+    }
+    
+    public int getMaxPlayerCount(GameLobby g) {
+	return g.playerCount;
+    }
+
     public int generateGameID() {
         // TODO: Sollte besser positiv sein
         //@author Farah-ey wenn Du "ran.nextInt(Zahl);" verwendest werden die Zahlen von 0 bis Zahl ausgewählt und somit positiv)
@@ -71,9 +147,9 @@ public class ServerController {
         boolean found = true;
         while (found) {
             found = false;
-            newGameID = ran.nextInt();
+            newGameID = ran.nextInt(Integer.MAX_VALUE);
             for (int i = 0; i < lobbyList.size(); i++) {
-                int key = lobbyList.get(i).gameID;
+                int key = lobbyList.get(i).getGameID();
                 if (key == newGameID) {
                     found = true;
                     break;
@@ -84,17 +160,13 @@ public class ServerController {
     }
 
     public int generateClientID() {
-        // TODO: Sollte besser positiv sein
-        //@author Farah-ey wenn Du "ran.nextInt(Zahl);" verwendest werden die Zufallszahlen von 0 bis Zahl ausgewählt und somit positiv)
-
-
         Random ran = new Random();
         int newClientID = 0;
 
         boolean found = true;
         while (found) {
             found = false;
-            newClientID = ran.nextInt();
+            newClientID = ran.nextInt(Integer.MAX_VALUE);
             for (Integer key : clientIDMapName.keySet()) {
                 if (key == newClientID) {
                     found = true;
@@ -116,7 +188,7 @@ public class ServerController {
                                   List<Integer>  startFields, int initialCardsPerPlayer, int thinkingTimePerMove,
                                   int consequencesForInvalidMove, int maxGameDuration, int maxTotalMoves) {
         for(int i = 0; i < lobbyList.size(); i++) {
-            if(lobbyList.get(i).gameID == gameID) {
+            if(lobbyList.get(i).getGameID() == gameID) {
                 lobbyList.get(i).setConfiguration( playerCount,  fieldSize,  figuresPerPlayer,  drawFieldpositions,
                          startFields,  initialCardsPerPlayer,  thinkingTimePerMove,
                  consequencesForInvalidMove,  maxGameDuration,  maxTotalMoves);
