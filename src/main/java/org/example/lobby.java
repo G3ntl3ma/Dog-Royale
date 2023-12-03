@@ -1,15 +1,14 @@
-package src.main.java.org.example;
+package main.java.org.example;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
-import static src.main.java.org.example.Ausrichter.assignPlayerToGame;
-import static src.main.java.org.example.Ausrichter.playersConnected;
+
 
 public class lobby {
     private JTable table1;
@@ -22,13 +21,15 @@ public class lobby {
     private JButton assignPlayerToGameButton;
 
     public lobby() {
+        updateTable2();
         addGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openGameConfigWindow();
+
             }
         });
-
+        HashMap<Integer, ArrayList<Integer>> playerCountPerGame = new HashMap<>();
         assignPlayerToGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {// not working TODO
@@ -44,10 +45,46 @@ public class lobby {
 
                 // Perform the desired action with the caught IDs
                 if (id1 != -1 && id2 != -1) {
-                    assignPlayerToGame(id2,id1, Ausrichter.Colors.color1);
 
+
+                    // Check if the game ID exists in the playerCountPerGame map
+                    if (!playerCountPerGame.containsKey(id1)) {
+                        // If the game ID doesn't exist:
+                        // Create a new list to store player IDs and add the current player ID (id2) to it
+                        ArrayList<Integer> newlist = new ArrayList<>();
+                        newlist.add(id2);
+                        // Add the new list to the playerCountPerGame map under the game ID key
+                        playerCountPerGame.put(id1, new ArrayList<>());
+                    } else {
+                        // If the game ID exists:
+                        // Retrieve the list of player IDs associated with the game ID
+                        ArrayList<Integer> players = playerCountPerGame.get(id1);
+                        // Add the current player ID (id2) to the existing list of player IDs
+                        players.add(id2);
+                        // Update the playerCountPerGame map with the modified list of player IDs
+                        playerCountPerGame.put(id1, players);
+                    }
+
+
+                    // Assign a player to a specific game
+                    Ausrichter.assignPlayerToGame(id2,id1, Ausrichter.Colors.color1);
+
+                    // Retrieve the game and player based on their IDs
+                    Game game = Ausrichter.games.get(id1);
+                    Player player = Ausrichter.playersConnected.get(id2);
+
+                    // Check if both the game and player exist, and if the player is assigned to the game
+                    if (game != null && player != null && game.players.contains(player)) {
+                        // If the conditions are met, remove the row from table2
+                        DefaultTableModel model = (DefaultTableModel) table2.getModel();
+                        model.removeRow(selectedRow2);
+                    } else {
+                        // If the conditions are not met, print an empty statement
+                        System.out.print("");
+                    }
 
                 } else {
+                    // If items are not selected from both tables, prompt the user
                     System.out.println("Please select items from both tables.");
                 }
 
@@ -58,6 +95,8 @@ public class lobby {
     /**
      * method for opening gameConfig window that lets you config and initiate a new game
      */
+
+
     private void openGameConfigWindow() {
         // Create and show the gameConfig window
         JFrame gameConfigFrame = new JFrame("Game Configuration");
@@ -71,7 +110,7 @@ public class lobby {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                 updateTable1();
-                updateTable2();
+
             }
         });
     }
@@ -84,7 +123,7 @@ public class lobby {
         frame.setVisible(true);
     }
     private void updateTable1() {
-        Map<Integer, org.example.Game> gamesMap = Ausrichter.games;
+        Map<Integer, Game> gamesMap = Ausrichter.games;
 
         Object[][] rowData = gamesMap.values().stream()
                 .map(game -> new Object[]{
@@ -109,21 +148,30 @@ public class lobby {
         table1.repaint();
     }
     private void updateTable2() {
-        ArrayList<org.example.Player> connectedPlayers = playersConnected;
-        //test Array of IDs
-        ArrayList<Integer> ids = new ArrayList<Integer>();
-        ids.add(1);
-        ids.add(2);
+        // Retrieve the list of connected players from Ausrichter
+        ArrayList<Player> connectedPlayers = Ausrichter.playersConnected;
 
-        Object[][] rowData = new Object[ids.size()][1];
-        for (int i = 0; i < ids.size(); i++) {
-            rowData[i][0] = ids.get(i);
+        // (just for test) Generate sample Player objects and add them to connectedPlayers (IDs from 0 to 14)
+        for (int i=1; i< 15; i++){
+            Player p = new Player(i, 1, 1);
+            connectedPlayers.add(p);
+        }
+
+        // Initialize rowData to hold player IDs for display in table2
+        Object[][] rowData = new Object[connectedPlayers.size()][1];
+
+        // Populate rowData with player IDs from connectedPlayers
+        for (int i = 0; i < connectedPlayers.size(); i++) {
+            rowData[i][0] = connectedPlayers.get(i).id; // Retrieve the ID of each player and add it to rowData
         }
 
         // Column names
         String[] columnNames = {"ID"};
 
+        // Create a new DefaultTableModel with rowData and columnNames
         DefaultTableModel model = new DefaultTableModel(rowData, columnNames);
+
+        // Set the created model to table2 for displaying player IDs
         table2.setModel(model);
 
 

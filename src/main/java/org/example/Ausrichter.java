@@ -1,12 +1,9 @@
-package src.main.java.org.example;
-import org.example.Game;
+package main.java.org.example;
 
-import java.awt.*;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.ArrayList;
 
 public class Ausrichter {
     // how to start server?
@@ -19,9 +16,9 @@ public class Ausrichter {
 //    public enum Penalty{
 //        excludeFromRound, kickFromGame
 //    }
-    static Map<Integer, org.example.Game> games = new HashMap<>();
-    private static AtomicInteger gameIdCounter = new AtomicInteger(1);
-    static ArrayList<org.example.Player> playersConnected = new ArrayList<>();
+    static Map<Integer, Game> games = new HashMap<>();
+    private static final AtomicInteger gameIdCounter = new AtomicInteger(1);
+    static ArrayList<Player> playersConnected = new ArrayList<>();
     public Ausrichter()
     {
         //games = new HashMap<>();
@@ -31,10 +28,10 @@ public class Ausrichter {
     /**starts the server, TODO
      *
      */
-    public void startServer(){
+    //public void startServer(){
         //MiniServer server = MiniServer(Socket socket,  HashMap<String, ArrayList<String>> messageLog);
         //server.run();
-    }
+   // }
     /**this Method Initiates Games with the configuration the Ausrichter wants
      *
      * @param playerCount how many player can play in this game
@@ -70,12 +67,12 @@ public class Ausrichter {
                 .setOrderType(ordertype)
                 .build();
         games.put(gameId, myGame);
-        //adding players just as a test
-        org.example.Player player = new org.example.Player(1,1,3);
-        playersConnected.add(player);
         System.out.println(myGame);
         System.out.println(games);
     }
+
+
+
     /**
      * Assign a player to a specific game.
      *
@@ -83,17 +80,36 @@ public class Ausrichter {
      * @param gameId     ID of the game to which the player should be assigned
      * @param color      Color that should be given to the player
      */
-    public static void assignPlayerToGame(int playerId, int gameId, Colors color) {
 
-        org.example.Game game = games.get(gameId);
-        org.example.Player player = playersConnected.get(playerId);
-        if (game != null) {
-            game.players.add(player);
-            player.color = color.ordinal();
+    public static void assignPlayerToGame(int playerId, int gameId, Colors color) {
+        Game game = games.get(gameId);
+
+        // Check if the player list contains enough players
+        if (playerId != -1  && game != null) {
+            Player player = playersConnected.get(playerId);
+            int nbPlayersInGame =game.players.size();
+
+            int maxPlayerCount = game.getPlayerCount();
+
+            // Check if the game has room for the player and if the player is already in the game
+            if (nbPlayersInGame < maxPlayerCount && !game.players.contains(playerId)) {
+                game.players.add(player);
+                player.color = color.ordinal();
+                System.out.println("Player " + playerId + " added to the game " + gameId + ".");
+            } else {
+                System.out.println("The maximum number of players has already been reached.");
+            }
         } else {
-            System.out.println("Game ID not found: " + gameId);
+            System.out.println("Game or player not found.");
         }
     }
+
+}
+
+
+
+
+
 //    public void startGame(int gameId){
 //        //somehow start game with game.gameId = gameId, with the player playing in startPlayerOrder order, somewhat implemented in org.example.main
 //        //put in mind that startPlayerOrder is either chosen by the src.main.java.org.example.Ausrichter or he can say just make it random
@@ -144,7 +160,7 @@ public class Ausrichter {
         //break a game where game.gameId = gameId, state is not needed
         // "Bei Abbruch des Spiels entscheidet der src.main.java.org.example.Ausrichter über die Wertung des Spiels"? what does that mean?
 
-    }
+        //}
 //    public void tournament(){
 //        //multiple games initiated and added to this tournament
 //        // this method should be able to assign the winners to the next round Ex. from semi-final to final ...etc
