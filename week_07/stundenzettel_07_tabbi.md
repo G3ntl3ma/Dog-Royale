@@ -28,7 +28,8 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 - Meeting
     - 2023-11-27 1,30h
     - 2023-11-27 0,40h
-    - 2023-11-30 2,30h
+    - 2023-11-30 2,30h 
+    - 2023-12-03 0,45h
 - Fehlerbehebung
   - 2023-11-02 1,00h
 ## Implementierung
