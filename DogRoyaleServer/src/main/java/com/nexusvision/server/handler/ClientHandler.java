@@ -27,6 +27,19 @@ public class ClientHandler implements Runnable {
     private final ServerController serverController;
     private final int clientID;
 
+    private enum State {
+        CONNECT_TO_SERVER,
+        REQUEST_GAME_LIST_AND_TOURNAMENT_INFO,
+        REQUEST_GAME_LIST,
+        REQUEST_TOURNAMENT_INFO,
+        REQUEST_JOIN,
+        REQUEST_FIND_TOURNAMENT,
+        REQUEST_TECH_DATA;
+        // TODO: Add requests for game
+    };
+
+    private State expectedState = State.CONNECT_TO_SERVER;
+
     Gson gson = new GsonBuilder()
             .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
             .create();
@@ -45,67 +58,245 @@ public class ClientHandler implements Runnable {
             PrintWriter writer = new PrintWriter(
                     clientSocket.getOutputStream(), false);
 
-            handleMenu(reader, writer);
-//            String clientMessage;
-//            while ((clientMessage = reader.readLine()) != null) {
-//                //  MessageHandling
-//                String messageResponse = processMessage(clientMessage);
-//                writer.println(messageResponse);
-//                logger.info("The following was received from the client " + clientMessage);
-//
-//                writer.println("Message received");
-//                writer.flush();
-//            }
-
+            String request, response;
+            while (true) {
+                if ((request = reader.readLine()) != null) {
+                    response = handle(request);
+                    writer.println(response);
+                    writer.flush();
+                }
+            }
         } catch (IOException e) {
-            logger.error("Error while trying to read the client message: " + e.getStackTrace());
+            logger.error("Error while trying to read the client message: " + e.getMessage());
         } finally {
             try {
                 clientSocket.close();
             } catch (IOException e) {
-                logger.error("Error while trying to close the connection: " + e.getStackTrace());
+                logger.error("Error while trying to close the connection: " + e.getMessage()));
             }
         }
     }
 
-    private void handleMenu(BufferedReader reader, PrintWriter writer) throws IOException {
-        handleConnectToServer(reader, writer);
-        // TODO: Client fragt Spielerliste an, Client fragt Turnier-Info an
+    private String handle(String request) {
+        try {
+            JsonObject jsonRequest = JsonParser.parseString(request).getAsJsonObject();
+            if (!isTypeInt(jsonRequest)) {
+                return handleError("Received no valid type");
+            }
+            int type = jsonRequest.get("type").getAsInt();
+            if (type == TypeMenue.connectToServer.getOrdinal()) {
+                return handleConnectToServer(request);
+            } else if (type == TypeMenue.requestGameList.getOrdinal()
+                    || type == TypeMenue.requestTournamentInfo.getOrdinal()) {
+                return handleRequestGameListAndTournamentInfo(request, type);
+            } // TODO: ALl other cases
+            else {
+                return handleError("The request has no valid type");
+            }
+        } catch (JsonSyntaxException e) {
+            return handleError("The request is not in json format", e);
+        }
     }
 
-    private void handleConnectToServer(BufferedReader reader, PrintWriter writer) throws IOException {
-        String request;
-        String response;
-        boolean isFinished = false;
+    private String handleConnectToServer(String request) {
         logger.info("Trying to connect client " + clientID);
-        while (!isFinished) {
-            if ((request = reader.readLine()) != null) {
-                JsonObject jsonRequest = JsonParser.parseString(request).getAsJsonObject();
-                if (jsonRequest.has("type")) {
-                    try {
-                        ConnectToServer connectToServer = gson.fromJson(request, ConnectToServer.class);
-                        response = new ConnectToServerHandler().handle(connectToServer, clientID);
-                        isFinished = true;
-                    } catch (JsonSyntaxException e) {
-                        logger.error("Wrong message format from type connectToServer" + e.getMessage());
-                        Error error = new Error();
-                        error.setType(TypeMenue.error.getOrdinal());
-                        error.setDataId(TypeMenue.connectToServer.getOrdinal());
-                        error.setMessage("Wrong message format");
-                        response = gson.toJson(error, Error.class);
-                    }
-                } else {
-                    Error error = new Error();
-                    error.setType(TypeMenue.error.getOrdinal());
-                    error.setDataId(TypeMenue.connectToServer.getOrdinal());
-                    error.setMessage("Wrong type");
-                    response = gson.toJson(error, Error.class);
-                }
-                writer.println(response);
-                writer.flush();
-            }
+        if (expectedState != State.CONNECT_TO_SERVER) {
+            return handleError("Received wrong type, expected connectToServer");
         }
-        logger.info("Client " + clientID + " connected successfully");
+        try {
+            ConnectToServer connectToServer = gson.fromJson(request, ConnectToServer.class);
+            String response = new ConnectToServerHandler().handle(connectToServer, clientID);
+            expectedState = State.REQUEST_GAME_LIST_AND_TOURNAMENT_INFO;
+            logger.info("Client " + clientID + " connected successfully");
+            return response;
+        } catch (JsonSyntaxException e) {
+            return handleError("Wrong message format from type connectToServer",
+                    TypeMenue.connectToServer, e);
+        }
+    }
+
+    private String handleRequestGameListAndTournamentInfo(String request, int type) {
+        switch (expectedState) {
+            case REQUEST_GAME_LIST_AND_TOURNAMENT_INFO:
+                if (type == TypeMenue.requestGameList.getOrdinal()) {
+                    return handleRequestGameList(request, State.REQUEST_TOURNAMENT_INFO);
+                }
+                return handleRequestTournamentInfo(request, State.REQUEST_GAME_LIST);
+            case REQUEST_GAME_LIST:
+                if (type != TypeMenue.requestGameList.getOrdinal()) {
+                    return handleError("Received requestTournamentInfo but expected requestGameList",
+                            TypeMenue.returnTournamentInfo);
+                }
+                return handleRequestGameList(request, State.REQUEST_JOIN);
+            case REQUEST_TOURNAMENT_INFO:
+                if (type != TypeMenue.requestTournamentInfo.getOrdinal()) {
+                    return handleError("Received requestGameList but expected requestTournamentInfo",
+                            TypeMenue.requestGameList);
+                }
+                return handleRequestTournamentInfo(request, State.REQUEST_JOIN);
+            default:
+                return handleError("Received wrong type, expected requestGameList or requestTournamentInfo");
+        }
+    }
+
+    private String handleRequestGameList(String request, State nextState) {
+        try {
+            RequestGameList requestGameList = gson.fromJson(request, RequestGameList.class);
+            String response = new RequestGameListHandler().handle(requestGameList, clientID);
+            expectedState = nextState;
+            logger.info("Game list request was successful");
+            return response;
+        } catch (JsonSyntaxException e) {
+            return handleError("Wrong message format from type requestGameList",
+                    TypeMenue.requestGameList, e);
+        }
+    }
+
+    private String handleRequestTournamentInfo(String request, State nextState) {
+        try {
+            RequestTournamentInfo requestTournamentInfo = gson.fromJson(request, RequestTournamentInfo.class);
+            String response = new RequestTournamentInfoHandler().handle(requestTournamentInfo, clientID);
+            expectedState = nextState;
+            logger.info("Tournament info request was successful");
+            return response;
+        } catch (JsonSyntaxException e) {
+            return handleError("Wrong message format from type requestTournamentInfo",
+                    TypeMenue.requestTournamentInfo, e);
+        }
+    }
+
+    private String handleError(String errorMessage) {
+        logger.error(errorMessage);
+        Error error = new Error();
+        error.setType(TypeMenue.error.getOrdinal());
+        error.setMessage(errorMessage);
+        return gson.toJson(error, Error.class);
+    }
+
+    private String handleError(String errorMessage, TypeMenue type) {
+        logger.error(errorMessage);
+        Error error = new Error();
+        error.setType(TypeMenue.error.getOrdinal());
+        error.setType(type.getOrdinal());
+        error.setMessage(errorMessage);
+        return gson.toJson(error, Error.class);
+    }
+
+    private String handleError(String errorMessage, Exception e) {
+        logger.error(errorMessage + ": " + e.getMessage());
+        Error error = new Error();
+        error.setType(TypeMenue.error.getOrdinal());
+        error.setMessage(errorMessage);
+        return gson.toJson(error, Error.class);
+    }
+
+    private String handleError(String errorMessage, TypeMenue type, Exception e) {
+        logger.error(errorMessage + ": " + e.getMessage());
+        Error error = new Error();
+        error.setType(TypeMenue.error.getOrdinal());
+        error.setType(type.getOrdinal());
+        error.setMessage(errorMessage);
+        return gson.toJson(error, Error.class);
+    }
+
+//    private void handleMenu(BufferedReader reader, PrintWriter writer) throws IOException {
+//        handleConnectToServer(reader, writer);
+//        handleRequestGameListAndTournamentInfo(reader, writer);
+//    }
+
+//    private void handleConnectToServer(BufferedReader reader, PrintWriter writer) throws IOException {
+//        String request, response;
+//        boolean isFinished = false;
+//        logger.info("Trying to connect client " + clientID);
+//        while (!isFinished) {
+//            if ((request = reader.readLine()) != null) {
+//                JsonObject jsonRequest = JsonParser.parseString(request).getAsJsonObject();
+//                if (isFromType(jsonRequest, TypeMenue.connectToServer.getOrdinal())) {
+//                    try {
+//                        ConnectToServer connectToServer = gson.fromJson(request, ConnectToServer.class);
+//                        response = new ConnectToServerHandler().handle(connectToServer, clientID);
+//                        isFinished = true;
+//                    } catch (JsonSyntaxException e) {
+//                        logger.error("Wrong message format from type connectToServer" + e.getMessage());
+//                        Error error = new Error();
+//                        error.setType(TypeMenue.error.getOrdinal());
+//                        error.setDataId(TypeMenue.connectToServer.getOrdinal());
+//                        error.setMessage("Wrong message format");
+//                        response = gson.toJson(error, Error.class);
+//                    }
+//                } else {
+//                    logger.error("Received wrong or no type");
+//                    Error error = new Error();
+//                    error.setType(TypeMenue.error.getOrdinal());
+//                    error.setDataId(TypeMenue.connectToServer.getOrdinal());
+//                    error.setMessage("Wrong type");
+//                    response = gson.toJson(error, Error.class);
+//                }
+//                writer.println(response);
+//                writer.flush();
+//            }
+//        }
+//        logger.info("Client " + clientID + " connected successfully");
+//    }
+//
+//    private void handleRequestGameListAndTournamentInfo(BufferedReader reader, PrintWriter writer) throws IOException {
+//        String request, response;
+//        boolean isGameListFinished = false, isTournamentInfoFinished = false;
+//        logger.info("Trying to provide game list and tournament info...");
+//        while (!isGameListFinished || !isTournamentInfoFinished) {
+//            if ((request = reader.readLine()) != null) {
+//                JsonObject jsonRequest = JsonParser.parseString(request).getAsJsonObject();
+//                if (!isGameListFinished && isFromType(jsonRequest, TypeMenue.requestGameList.getOrdinal())) {
+//                    try {
+//                        RequestGameList requestGameList = gson.fromJson(request, RequestGameList.class);
+//                        response = new RequestGameListHandler().handle(requestGameList, clientID);
+//                        isGameListFinished = true;
+//                    } catch (JsonSyntaxException e) {
+//                        logger.error("Wrong message format from type requestGameList" + e.getMessage());
+//                        Error error = new Error();
+//                        error.setType(TypeMenue.error.getOrdinal());
+//                        error.setDataId(TypeMenue.requestGameList.getOrdinal());
+//                        error.setMessage("Wrong message format");
+//                        response = gson.toJson(error, Error.class);
+//                    }
+//                } else if (!isTournamentInfoFinished &&
+//                        isFromType(jsonRequest, TypeMenue.requestTournamentInfo.getOrdinal())) {
+//                    try {
+//                        RequestTournamentInfo requestTournamentInfo = gson.fromJson(request, RequestTournamentInfo.class);
+//                        response = new RequestTournamentInfoHandler().handle(requestTournamentInfo, clientID);
+//                        isTournamentInfoFinished = true;
+//                    } catch (JsonSyntaxException e) {
+//                        logger.error("Wrong message format from type requestTournamentInfo" + e.getMessage());
+//                        Error error = new Error();
+//                        error.setType(TypeMenue.error.getOrdinal());
+//                        error.setDataId(TypeMenue.requestTournamentInfo.getOrdinal());
+//                        error.setMessage("Wrong message format");
+//                        response = gson.toJson(error, Error.class);
+//                    }
+//                } else {
+//                    logger.error("Received wrong or no type");
+//                    Error error = new Error();
+//                    error.setType(TypeMenue.error.getOrdinal());
+//                    error.setMessage("Wrong type, expected either requestGameList or requestTournamentInfo");
+//                    response = gson.toJson(error, Error.class);
+//                }
+//                writer.println(response);
+//                writer.flush();
+//            }
+//        }
+//        logger.info("Successfully provided game list and tournament info");
+//    }
+
+//    private void handleJoin(BufferedReader reader, PrintWriter writer) throws IOException {
+//
+//    }
+
+    private boolean isTypeInt(JsonObject jsonRequest) {
+        return jsonRequest.has("type")
+                && jsonRequest.get("type").isJsonPrimitive()
+                && jsonRequest.get("type").getAsJsonPrimitive().isNumber()
+                && jsonRequest.get("type").getAsNumber().doubleValue()
+                == (int) jsonRequest.get("type").getAsNumber().doubleValue();
     }
 
 //    private String processMessage(String clientMessage) {
