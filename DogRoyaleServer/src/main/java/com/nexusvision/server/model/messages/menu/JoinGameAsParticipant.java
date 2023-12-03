@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 public class JoinGameAsParticipant extends AbstractMenuMessage {
-    private int gameId;
-    private int clientId;
+    private Integer gameId;
+    private Integer clientId;
     private String playerName;
 }
