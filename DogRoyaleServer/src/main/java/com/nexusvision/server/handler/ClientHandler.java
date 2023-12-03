@@ -72,7 +72,7 @@ public class ClientHandler implements Runnable {
             try {
                 clientSocket.close();
             } catch (IOException e) {
-                logger.error("Error while trying to close the connection: " + e.getMessage()));
+                logger.error("Error while trying to close the connection: " + e.getMessage());
             }
         }
     }
