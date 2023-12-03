@@ -183,7 +183,13 @@ public class Game_board extends Fragment {
                 }
                 else {
                     position += 2;
-                    moveFigure(GameBoard, "figure1_1", 1, position, false, null);
+                    if(position>=field_size) {
+                        moveFigure(GameBoard, "figure1_1", 1, null, false, position-field_size - 1);
+                    }
+                    else {
+                        moveFigure(GameBoard, "figure1_1", 1, position, false, null);
+                    }
+
                 }
             }
 
@@ -366,9 +372,9 @@ public class Game_board extends Fragment {
         {
             if (position == null)
             {
-                ImageView newpos_view = layout.findViewWithTag("homefield" + playernumber +"_" + (figure_count - inHousePosition));
+                ImageView newpos_view = layout.findViewWithTag("homefield" + playernumber +"_" + (inHousePosition));
                 RelativeLayout.LayoutParams newpos = (RelativeLayout.LayoutParams) newpos_view.getLayoutParams();
-                layoutParams.setMargins(newpos.leftMargin + newpos.width - layoutParams.width, newpos.topMargin + newpos.width - layoutParams.width, 0, 0);
+                layoutParams.setMargins(newpos.leftMargin + newpos.width/2 - layoutParams.width/2, newpos.topMargin + newpos.width/2 - layoutParams.width/2, 0, 0);
                 figure.setLayoutParams(layoutParams);
             }
             else
