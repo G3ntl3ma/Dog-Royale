@@ -1,6 +1,5 @@
 package com.nexusvision.server.model.messages.menu;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.List;
  * @author kellerb
  */
 @Data
-@Builder
 public class ReturnLobbyConfig extends AbstractMenuMessage{
     private enum Penalty {
         excludeFromRound,
@@ -47,8 +45,8 @@ public class ReturnLobbyConfig extends AbstractMenuMessage{
     private Integer maximumGameDuration;
     private Integer maximumTotalMoves;
 
+
     @Data
-    @Builder
     public static class Color{
         private Integer clientId;
         private Integer color;
@@ -56,27 +54,23 @@ public class ReturnLobbyConfig extends AbstractMenuMessage{
     }
 
     @Data
-    @Builder
     public static class DrawCardFields{
         private Integer count;
         private List<Integer> positions;
     }
 
     @Data
-    @Builder
     public static class StartFields{
         private Integer count;
         private List<Integer> positions;
     }
 
     @Data
-    @Builder
     public class PlayerOrder{
         public OrderType type;
         public List<Order> order;
 
         @Data
-        @Builder
         public class Order{
             public Integer clientId;
             public String name;
@@ -85,9 +79,11 @@ public class ReturnLobbyConfig extends AbstractMenuMessage{
     }
 
     @Data
-    @Builder
     public static class Observer{
         private Integer clientId;
         private String name;
     }
+
+
+
 }

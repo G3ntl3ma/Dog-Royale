@@ -1,6 +1,5 @@
 package com.nexusvision.server.model.messages.menu;
 
-import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -9,7 +8,6 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-@Builder
 public class FindTournament extends AbstractMenuMessage {
     private int clientId;
     private int tournamentStarting;

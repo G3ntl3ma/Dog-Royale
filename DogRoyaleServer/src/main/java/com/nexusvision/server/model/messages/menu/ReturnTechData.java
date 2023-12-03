@@ -1,6 +1,5 @@
 package com.nexusvision.server.model.messages.menu;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.List;
  * @author kellerb
  */
 @Data
-@Builder
 public class ReturnTechData extends AbstractMenuMessage{
     private String serverVersion;
     private String supportedProtocol;
