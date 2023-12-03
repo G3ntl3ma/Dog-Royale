@@ -3,7 +3,7 @@ name: Abderrahmane Tabbi
 imt: tabbi
 gruppe: 01
 woche: 07
-gesamtarbeitszeit: 14,40h
+gesamtarbeitszeit: 15,25h
 ---
 
 <!--
