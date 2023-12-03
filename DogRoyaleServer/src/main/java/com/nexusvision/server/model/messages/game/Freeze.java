@@ -1,5 +1,6 @@
 package com.nexusvision.server.model.messages.game;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -8,6 +9,5 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class Freeze extends AbstractGameMessage{
-
-}
+@Builder
+public class Freeze extends AbstractGameMessage{}

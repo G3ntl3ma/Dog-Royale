@@ -1,5 +1,6 @@
 package com.nexusvision.server.model.messages.menu;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -8,6 +9,5 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class RequestTechData extends AbstractMenuMessage{
-
-}
+@Builder
+public class RequestTechData extends AbstractMenuMessage{}

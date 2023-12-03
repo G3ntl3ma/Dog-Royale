@@ -1,5 +1,6 @@
 package com.nexusvision.server.model.messages.menu;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -10,11 +11,13 @@ import java.util.List;
  * @author kellerb
  */
 @Data
+@Builder
 public class ReturnTournamentInfo extends AbstractMenuMessage {
     //TODO implement variables
     private List<TournamentInfo> tournamentInfo;
 
     @Data
+    @Builder
     public static class TournamentInfo{
         private int tournamentId;
         private List<CurrentGame> currentGame;
@@ -23,6 +26,7 @@ public class ReturnTournamentInfo extends AbstractMenuMessage {
         private List<CurrentRankings> currentRankings;
 
         @Data
+        @Builder
         public static class CurrentGame{
             private int gameId;
             private int playerCount;
@@ -31,6 +35,7 @@ public class ReturnTournamentInfo extends AbstractMenuMessage {
             private List<Player> players;
 
             @Data
+            @Builder
             public static class Player{
                 private int clientId;
                 private String name;
@@ -39,12 +44,14 @@ public class ReturnTournamentInfo extends AbstractMenuMessage {
         }
 
         @Data
+        @Builder
         public static class UpcomingGames{
             private int gameId;
             private int startInGames;
             private List<Player> players;
 
             @Data
+            @Builder
             public static class Player{
                 private int clientId;
                 private String name;
@@ -53,12 +60,14 @@ public class ReturnTournamentInfo extends AbstractMenuMessage {
         }
 
         @Data
+        @Builder
         public static class CompletedGames{
             private int gameId;
             private int winnerPlayerId;
         }
 
         @Data
+        @Builder
         public static class CurrentRankings{
             private int clientId;
             private String name;

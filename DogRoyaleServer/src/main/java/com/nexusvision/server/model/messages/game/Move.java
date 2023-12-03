@@ -1,5 +1,6 @@
 package com.nexusvision.server.model.messages.game;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -8,6 +9,7 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
+@Builder
 public class Move extends AbstractGameMessage{
     private boolean skip;
     private Card card;
