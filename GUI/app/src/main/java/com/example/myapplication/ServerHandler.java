@@ -12,6 +12,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+
 // import org.apache.logging.log4j.LogManager;
 // import org.apache.logging.log4j.Logger;
 import java.io.BufferedReader;
@@ -33,7 +34,10 @@ import java.net.Socket;
 
 public class ServerHandler {
     // private static final Logger logger = LogManager.getLogger(ServerHandler.class);
-    private final Socket serverSocket;
+    private final Socket serverSocket; //Abdou: maybe should be static? because the Beobachter will only be connected to one server.
+
+    //i think client id should be here, since it is only needed to send messages to the server
+    private static int ClientId = -1;
 
     public ServerHandler(Socket serverSocket) {
         this.serverSocket = serverSocket;
@@ -88,5 +92,9 @@ public class ServerHandler {
         if (returnMessage == null) returnMessage = "response not found, received: " + serverMessage;
         return returnMessage;
 
+    }
+
+    public static void setClientId(int clientId) {
+        ClientId = clientId;
     }
 }
