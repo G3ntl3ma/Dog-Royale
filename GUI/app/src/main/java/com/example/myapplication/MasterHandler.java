@@ -5,7 +5,6 @@ import com.example.myapplication.messages.game.Cancel;
 import com.example.myapplication.messages.game.DrawCards;
 import com.example.myapplication.messages.game.Freeze;
 import com.example.myapplication.messages.game.Kick;
-import com.example.myapplication.messages.game.Move;
 import com.example.myapplication.messages.game.MoveValid;
 import com.example.myapplication.messages.game.Unfreeze;
 import com.example.myapplication.messages.menu.AbstractMenuMessage;
@@ -19,7 +18,6 @@ import com.example.myapplication.messages.menu.ReturnTournamentInfo;
 import com.example.myapplication.messages.sync.JoinObs;
 import com.example.myapplication.messages.sync.LiveTimer;
 import com.example.myapplication.messages.sync.TurnTimer;
-import com.example.myapplication.messages.sync.AbstractSyncMessage;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -71,10 +69,11 @@ public class MasterHandler {
         typeInx = typeInx - 100;
         AbstractMenuMessage.TypeMenue typeM = AbstractMenuMessage.TypeMenue.values()[typeInx];
         Gson gson = new Gson();
+        String returnMessage = null;
         switch (typeM) {
             case connectedToServer:
                 ConnectedToServer connectedToServer = gson.fromJson(serverMessage, ConnectedToServer.class);
-                // returnMessage = connectedToServerHandler.getResponse();
+                // returnMessage = connectedToServerHandler.handle(connectedToServer);
                 break;
             case returnGameList:
                 ReturnGameList returnGameList = gson.fromJson(serverMessage, ReturnGameList.class);
@@ -107,34 +106,35 @@ public class MasterHandler {
         typeInx = typeInx - 200;
         AbstractGameMessage.TypeGame typeG = AbstractGameMessage.TypeGame.values()[typeInx];
         Gson gson = new Gson();
+        String returnMessage = null;
         switch (typeG) {
             case boardState:
                 BoardState boardState = gson.fromJson(serverMessage, BoardState.class);
-                returnMessage = ReturnBoardStateHandler.getResponse();
+                returnMessage = ReturnBoardStateHandler.handle(boardState);
             case drawCards:
                 DrawCards drawCards = gson.fromJson(serverMessage, DrawCards.class);
-                returnMessage = DrawCardsHandler.getResponse();
+                returnMessage = DrawCardsHandler.handle(drawCards);
             case moveValid:
                 MoveValid moveValid = gson.fromJson(serverMessage, MoveValid.class);
-                returnMessage = MoveValidHandler.getResponse();
+                returnMessage = MoveValidHandler.handle(moveValid);
             case freeze:
                 Freeze freeze = gson.fromJson(serverMessage, Freeze.class);
-                returnMessage = Freeze.Handler.getResponse();
+                returnMessage = Freeze.Handler.handle(freeze);
             case unfreeze:
                 Unfreeze unfreeze = gson.fromJson(serverMessage, Unfreeze.class);
-                returnMessage = UnfreezeHandler.getResponse();
+                returnMessage = UnfreezeHandler.handle(unfreeze);
             case cancel:
                 Cancel cancel = gson.fromJson(serverMessage, Cancel.class);
-                returnMessage = CancelHandler.getResponse();
+                returnMessage = CancelHandler.handle(cancel);
             case kick:
                 Kick kick = gson.fromJson(serverMessage, Kick.class);
-                returnMessage = KickHandler.getResponse();
+                returnMessage = KickHandler.handle(kick);
             case joinObs:
                 JoinObs joinObs = gson.fromJson(serverMessage, JoinObs.class);
-                returnMessage = JoinObsHandler.getResponse();
+                returnMessage = JoinObsHandler.handle(joinObs);
             case liveTimer:
                 LiveTimer liveTimer = gson.fromJson(serverMessage, LiveTimer.class);
-                returnMessage = LiveTimerHandler.getResponse();
+                returnMessage = LiveTimerHandler.handle(liveTimer);
             case turnTimer:
                 TurnTimer turnTimer = gson.fromJson(serverMessage, TurnTimer.class); // Sync Klassen auch hier aufrufen?
 
