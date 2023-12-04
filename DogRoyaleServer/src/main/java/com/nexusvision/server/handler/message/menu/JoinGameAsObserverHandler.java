@@ -24,7 +24,7 @@ public class JoinGameAsObserverHandler extends Handler implements MenuMessageHan
 
         ConnectedToGame connectedToGame = new ConnectedToGame();
         connectedToGame.setType(TypeMenue.joinGameAsParticipant.getOrdinal());
-        connectedToGame.setSuccess(success); 
+        connectedToGame.setSuccess(success);
 
         return gson.toJson(connectedToGame);
     }
