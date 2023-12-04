@@ -3,7 +3,7 @@ name: Felix Werner
 imt: felixwr
 gruppe: 01
 woche: 07
-gesamtarbeitszeit: 19,5h
+gesamtarbeitszeit: 31h
 ---
 
 
@@ -20,3 +20,5 @@ gesamtarbeitszeit: 19,5h
     - 2023-11-28 4h
     - 2023-11-30 4,5h
     - 2023-12-01 7h
+    - 2023-12-02 3,5h
+    - 2023-12-03 8h
