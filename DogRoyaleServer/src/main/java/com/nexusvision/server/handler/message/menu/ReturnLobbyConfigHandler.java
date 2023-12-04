@@ -1,5 +1,6 @@
 package com.nexusvision.server.handler.message.menu;
 
+import com.nexusvision.server.handler.Handler;
 import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
 import com.nexusvision.server.controller.ServerController;
@@ -8,7 +9,7 @@ import com.nexusvision.server.model.messages.menu.Error;
 import java.util.List;
 import java.util.ArrayList;
 
-public class ReturnLobbyConfigHandler implements MenuMessageHandler<ReturnLobbyConfig> {
+public class ReturnLobbyConfigHandler extends Handler implements MenuMessageHandler<ReturnLobbyConfig> {
 
     @Override
     public String handle(ReturnLobbyConfig message, int clientID) {
@@ -30,6 +31,7 @@ public class ReturnLobbyConfigHandler implements MenuMessageHandler<ReturnLobbyC
         //if maximumtotalmoves ok
         //if colorlist and orderlist are permutations of each other
 
+        // TODO: Use errorHandling
         Error error = new Error();
         error.setType(TypeMenue.error.ordinal() + 100);
         error.setDataId(TypeMenue.returnLobbyConfig.ordinal() + 100);

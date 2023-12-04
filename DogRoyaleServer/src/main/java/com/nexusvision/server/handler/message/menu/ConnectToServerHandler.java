@@ -1,5 +1,6 @@
 package com.nexusvision.server.handler.message.menu;
 
+import com.nexusvision.server.handler.Handler;
 import com.nexusvision.server.model.messages.menu.ConnectToServer;
 import com.nexusvision.server.model.messages.menu.ConnectedToServer;
 import com.nexusvision.server.model.messages.menu.Error;
@@ -11,27 +12,19 @@ import lombok.Data;
  * @author felixwr
  */
 @Data
-public class ConnectToServerHandler implements MenuMessageHandler<ConnectToServer> {
+public class ConnectToServerHandler extends Handler implements MenuMessageHandler<ConnectToServer> {
 
     @Override
     public String handle(ConnectToServer message, int clientID) {
 
         if (message.getName() == null) {
-            Error error = new Error();
-            error.setType(TypeMenue.error.getOrdinal());
-            error.setDataId(TypeMenue.connectToServer.getOrdinal());
-            error.setMessage("connect to server failed, name is null");
-
-            return gson.toJson(error);
+            return handleError("Connect to server failed, name is null",
+                    TypeMenue.connectToServer.getOrdinal());
         }
 
         if (message.getIsObserver() == null) {
-            Error error = new Error();
-            error.setType(TypeMenue.error.getOrdinal());
-            error.setDataId(TypeMenue.connectToServer.getOrdinal());
-            error.setMessage("connect to server fail, isObserver boolean null");
-
-            return gson.toJson(error);
+            return handleError("Connect to server fail, isObserver boolean null",
+                    TypeMenue.connectToServer.getOrdinal());
         }
 
         ServerController serverController = ServerController.getInstance();

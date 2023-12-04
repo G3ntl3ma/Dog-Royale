@@ -20,7 +20,7 @@ import java.net.Socket;
  *
  * @author felixwr
  */
-public class ClientHandler implements Runnable {
+public class ClientHandler extends Handler implements Runnable {
     private static final Logger logger = LogManager.getLogger(ClientHandler.class);
 
     private final Socket clientSocket;
@@ -95,6 +95,8 @@ public class ClientHandler implements Runnable {
             }
         } catch (JsonSyntaxException e) {
             return handleError("The request is not in json format", e);
+        } catch (HandlingException e) {
+            return handleError("Failed to handle the request", e.getType(), e);
         }
     }
 
@@ -111,11 +113,11 @@ public class ClientHandler implements Runnable {
             return response;
         } catch (JsonSyntaxException e) {
             return handleError("Wrong message format from type connectToServer",
-                    TypeMenue.connectToServer, e);
+                    TypeMenue.connectToServer.getOrdinal(), e);
         }
     }
 
-    private String handleRequestGameListAndTournamentInfo(String request, int type) {
+    private String handleRequestGameListAndTournamentInfo(String request, int type) throws HandlingException {
         switch (expectedState) {
             case REQUEST_GAME_LIST_AND_TOURNAMENT_INFO:
                 if (type == TypeMenue.requestGameList.getOrdinal()) {
@@ -125,13 +127,13 @@ public class ClientHandler implements Runnable {
             case REQUEST_GAME_LIST:
                 if (type != TypeMenue.requestGameList.getOrdinal()) {
                     return handleError("Received requestTournamentInfo but expected requestGameList",
-                            TypeMenue.returnTournamentInfo);
+                            TypeMenue.returnTournamentInfo.getOrdinal());
                 }
                 return handleRequestGameList(request, State.REQUEST_JOIN);
             case REQUEST_TOURNAMENT_INFO:
                 if (type != TypeMenue.requestTournamentInfo.getOrdinal()) {
                     return handleError("Received requestGameList but expected requestTournamentInfo",
-                            TypeMenue.requestGameList);
+                            TypeMenue.requestGameList.getOrdinal());
                 }
                 return handleRequestTournamentInfo(request, State.REQUEST_JOIN);
             default:
@@ -139,7 +141,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private String handleRequestGameList(String request, State nextState) {
+    private String handleRequestGameList(String request, State nextState) throws HandlingException {
         try {
             RequestGameList requestGameList = gson.fromJson(request, RequestGameList.class);
             String response = new RequestGameListHandler().handle(requestGameList, clientID);
@@ -148,7 +150,7 @@ public class ClientHandler implements Runnable {
             return response;
         } catch (JsonSyntaxException e) {
             return handleError("Wrong message format from type requestGameList",
-                    TypeMenue.requestGameList, e);
+                    TypeMenue.requestGameList.getOrdinal(), e);
         }
     }
 
@@ -161,42 +163,8 @@ public class ClientHandler implements Runnable {
             return response;
         } catch (JsonSyntaxException e) {
             return handleError("Wrong message format from type requestTournamentInfo",
-                    TypeMenue.requestTournamentInfo, e);
+                    TypeMenue.requestTournamentInfo.getOrdinal(), e);
         }
-    }
-
-    private String handleError(String errorMessage) {
-        logger.error(errorMessage);
-        Error error = new Error();
-        error.setType(TypeMenue.error.getOrdinal());
-        error.setMessage(errorMessage);
-        return gson.toJson(error, Error.class);
-    }
-
-    private String handleError(String errorMessage, TypeMenue type) {
-        logger.error(errorMessage);
-        Error error = new Error();
-        error.setType(TypeMenue.error.getOrdinal());
-        error.setType(type.getOrdinal());
-        error.setMessage(errorMessage);
-        return gson.toJson(error, Error.class);
-    }
-
-    private String handleError(String errorMessage, Exception e) {
-        logger.error(errorMessage + ": " + e.getMessage());
-        Error error = new Error();
-        error.setType(TypeMenue.error.getOrdinal());
-        error.setMessage(errorMessage);
-        return gson.toJson(error, Error.class);
-    }
-
-    private String handleError(String errorMessage, TypeMenue type, Exception e) {
-        logger.error(errorMessage + ": " + e.getMessage());
-        Error error = new Error();
-        error.setType(TypeMenue.error.getOrdinal());
-        error.setType(type.getOrdinal());
-        error.setMessage(errorMessage);
-        return gson.toJson(error, Error.class);
     }
 
 //    private void handleMenu(BufferedReader reader, PrintWriter writer) throws IOException {

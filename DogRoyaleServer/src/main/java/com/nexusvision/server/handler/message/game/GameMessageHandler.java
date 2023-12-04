@@ -2,6 +2,7 @@ package com.nexusvision.server.handler.message.game;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nexusvision.server.handler.HandlingException;
 import com.nexusvision.utils.NewLineAppendingSerializer;
 
 /**
@@ -21,6 +22,6 @@ public interface GameMessageHandler<T> {
      * @param message The deserialized json string that's getting processed
      * @return The response as a json string
      */
-    String handle(T message);
+    String handle(T message) throws HandlingException;
 
 }
