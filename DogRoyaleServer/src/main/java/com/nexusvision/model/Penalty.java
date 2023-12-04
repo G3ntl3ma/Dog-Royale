@@ -1,0 +1,5 @@
+enum Penalty
+{
+    excludeFromRound ,
+    kickFromGame
+}
