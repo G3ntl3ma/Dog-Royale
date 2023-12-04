@@ -2,6 +2,7 @@ package com.nexusvision.server.handler.message.menu;
 
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.Handler;
+import com.nexusvision.server.model.enums.Colors;
 import com.nexusvision.server.model.messages.menu.Error;
 import com.nexusvision.server.model.messages.menu.JoinGameAsParticipant;
 import com.nexusvision.server.model.messages.menu.ConnectedToGame;
@@ -20,12 +21,12 @@ public class JoinGameAsParticipantHandler extends Handler implements MenuMessage
                     TypeMenue.connectToServer.getOrdinal());
         }
 
-        boolean success = serverController.addPlayer(message.getGameId(), message.getClientId());
+        serverController.getLobbyById(message.getGameId()).addPlayer(message.getClientId(), Colors.farbe1); // TODO: felix check!!!
 
         //TODO handle playerName
         ConnectedToGame connectedToGame = new ConnectedToGame();
         connectedToGame.setType(TypeMenue.joinGameAsParticipant.getOrdinal());
-        connectedToGame.setSuccess(success);
+        connectedToGame.setSuccess(true); // TODO
 
         return gson.toJson(connectedToGame);
     }

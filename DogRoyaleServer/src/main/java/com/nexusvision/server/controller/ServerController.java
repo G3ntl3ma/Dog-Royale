@@ -1,6 +1,9 @@
 package com.nexusvision.server.controller;
 
 import com.nexusvision.server.handler.ClientHandler;
+import com.nexusvision.server.model.entities.Client;
+import com.nexusvision.server.model.enums.Colors;
+import com.nexusvision.server.model.enums.GameState;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +18,7 @@ import java.util.concurrent.Executors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+
 /**
  * The Server-Controller that can start up the server
  *
@@ -27,17 +31,13 @@ public class ServerController {
     private final Logger logger = LogManager.getLogger(ServerController.class);
     private final ExecutorService executorService = Executors.newFixedThreadPool(100);
 
-    private final HashMap<Integer, String> clientIDMapName = new HashMap<>();
-    private final HashMap<Integer, Boolean> clientIDMapObserver = new HashMap<>();
+    private final HashMap<Integer, Client> clientMap = new HashMap<>();
+    private final HashMap<Integer, GameLobby> lobbyMap = new HashMap<>();
 
-    private final ArrayList<GameLobby> lobbyList = new ArrayList<>();
-
-    //TODO starting games (list of gameid + currentplayercount + maxpalyercount)
+    //TODO starting games (list of gameid + currentplayercount + maxplayercount)
     //TODO running games (list of gameid + currentplayercount + maxplayercount)
     //TODO completed games (list of gameid + winnerplayerid)
 
-
-    
     private ServerController() {}
 
     /**
@@ -62,166 +62,210 @@ public class ServerController {
         }
     }
 
-    public ArrayList<GameLobby> getStartingGames(int gameCount) {
-	int foundCount = 0;
-	ArrayList<GameLobby> gameLobbys = new ArrayList<>();
-	for (int i = 0; i < lobbyList.size(); i++) {
-	    GameLobby g = lobbyList.get(i);
-	    if(g.gameRunning == false) {
-		gameLobbys.add(g);
-		foundCount++;
-	    }
-	    if(foundCount == gameCount) break;
-	}
-	return gameLobbys;
-    }
-
-    public ArrayList<GameLobby> getRunningGames(int gameCount) {
-	int foundCount = 0;
-	ArrayList<GameLobby> gameLobbys = new ArrayList<>();
-	for (int i = 0; i < lobbyList.size(); i++) {
-	    GameLobby g = lobbyList.get(i);
-	    if(g.gameRunning == true) {
-		gameLobbys.add(g);
-		foundCount++;
-	    }
-	    if(foundCount == gameCount) break;
-	}
-	return gameLobbys;
-    }
-    
-    public boolean addPlayer(int gameId, int clientId) {
-	for (int i = 0; i < lobbyList.size(); i++) {
-	    if(lobbyList.get(i).getGameID() == gameId) {
-		lobbyList.get(i).addPlayer(clientId);
-		return true;
-	    }
-	}
-	return false;
-    }
-
-    public boolean addObserver(int gameId, int clientId) {
-	for (int i = 0; i < lobbyList.size(); i++) {
-	    if(lobbyList.get(i).getGameID() == gameId) {
-		lobbyList.get(i).addObserver(clientId);
-		return true;
-	    }
-	}
-	return false;
-    }
-
-    public ArrayList<GameLobby> getFinishedGames(int gameCount) {
-	int foundCount = 0;
-	ArrayList<GameLobby> gameLobbys = new ArrayList<>();
-	for (int i = 0; i < lobbyList.size(); i++) {
-	    GameLobby g = lobbyList.get(i);
-	    if(g.gameCompleted == true) {
-		gameLobbys.add(g);
-		foundCount++;
-	    }
-	    if(foundCount == gameCount) break;
-	}
-	return gameLobbys;
-    }
-
-    public int getGameId(GameLobby g) {
-	return g.getGameID();
-    }
-
-    public int getCurrentPlayerCount(GameLobby g) {
-	return g.getCurrentPlayerCount();
-    }
-    
-    public int getMaxPlayerCount(GameLobby g) {
-	return g.playerCount;
-    }
-
-    public int generateGameID() {
-        // TODO: Sollte besser positiv sein
-        //@author Farah-ey wenn Du "ran.nextInt(Zahl);" verwendest werden die Zahlen von 0 bis Zahl ausgewählt und somit positiv)
-        Random ran = new Random();
-        int newGameID = 0;
-
-        boolean found = true;
-        while (found) {
-            found = false;
-            newGameID = ran.nextInt(Integer.MAX_VALUE);
-            for (int i = 0; i < lobbyList.size(); i++) {
-                int key = lobbyList.get(i).getGameID();
-                if (key == newGameID) {
-                    found = true;
-                    break;
-                }
+    public ArrayList<GameLobby> getStateGames(int gameCount, GameState state) {
+        int foundCount = 0;
+        ArrayList<GameLobby> gameLobbys = new ArrayList<>();
+        for (int key : lobbyMap.keySet()) {
+            GameLobby g = lobbyMap.get(key);
+            if (g.getGameState() == state) {
+                gameLobbys.add(g);
+                foundCount++;
             }
+            if (foundCount == gameCount) break;
         }
-        return newGameID;
+        return gameLobbys;
     }
 
-    public int generateClientID() {
-        Random ran = new Random();
-        int newClientID = 0;
+    // ALLE NICHT NÖTIG DA EINE GAME LOBBY DAS GANZE ANBIETET
+//    public ArrayList<GameLobby> getStartingGames(int gameCount) {
+//        int foundCount = 0;
+//        ArrayList<GameLobby> gameLobbys = new ArrayList<>();
+//        for (int key : lobbyMap.keySet()) {
+//            GameLobby g = lobbyMap.get(key);
+//            if (g.getGameState() == GameState.STARTING) {
+//                gameLobbys.add(g);
+//                foundCount++;
+//            }
+//            if (foundCount == gameCount) break;
+//        }
+//        return gameLobbys;
+//    }
+//
+//    public ArrayList<GameLobby> getRunningGames(int gameCount) {
+//        int foundCount = 0;
+//        ArrayList<GameLobby> gameLobbys = new ArrayList<>();
+//        for (int key : lobbyMap.keySet()) {
+//            GameLobby g = lobbyMap.get(key);
+//            if (g.getGameState() == GameState.IN_PROGRESS) {
+//                gameLobbys.add(g);
+//                foundCount++;
+//            }
+//            if (foundCount == gameCount) break;
+//        }
+//        return gameLobbys;
+//    }
+//
+//    public boolean addPlayer(int gameId, int clientId) {
+//        for (int i = 0; i < lobbyList.size(); i++) {
+//            if (lobbyList.get(i).getGameID() == gameId) {
+//                lobbyList.get(i).addPlayer(clientId);
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//    public boolean addObserver(int gameId, int clientId) {
+//        for (int i = 0; i < lobbyList.size(); i++) {
+//            if (lobbyList.get(i).getGameID() == gameId) {
+//                lobbyList.get(i).addObserver(clientId);
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
-        boolean found = true;
-        while (found) {
-            found = false;
-            newClientID = ran.nextInt(Integer.MAX_VALUE);
-            for (Integer key : clientIDMapName.keySet()) {
-                if (key == newClientID) {
-                    found = true;
-                    break;
-                }
-            }
-        }
-        clientIDMapName.put(newClientID, null);
+//    public ArrayList<GameLobby> getFinishedGames(int gameCount) {
+//        int foundCount = 0;
+//        ArrayList<GameLobby> gameLobbys = new ArrayList<>();
+//        for (int i = 0; i < lobbyList.size(); i++) {
+//            GameLobby g = lobbyList.get(i);
+//            if (g.gameCompleted == true) {
+//                gameLobbys.add(g);
+//                foundCount++;
+//            }
+//            if (foundCount == gameCount) break;
+//        }
+//        return gameLobbys;
+//    }
+
+//    public int getGameId(GameLobby g) {
+//        return g.getGameID();
+//    }
+
+//    public int getCurrentPlayerCount(GameLobby g) {
+//        return g.getCurrentPlayerCount();
+//    }
+//
+//    public int getMaxPlayerCount(GameLobby g) {
+//        return g.playerCount;
+//    }
+
+//    public int generateGameID() {
+//        // TODO: Sollte besser positiv sein
+//        //@author Farah-ey wenn Du "ran.nextInt(Zahl);" verwendest werden die Zahlen von 0 bis Zahl ausgewählt und somit positiv)
+//        Random ran = new Random();
+//        int newGameID = 0;
+//
+//        boolean found = true;
+//        while (found) {
+//            found = false;
+//            newGameID = ran.nextInt(Integer.MAX_VALUE);
+//            for (int i = 0; i < lobbyList.size(); i++) {
+//                int key = lobbyList.get(i).getGameID();
+//                if (key == newGameID) {
+//                    found = true;
+//                    break;
+//                }
+//            }
+//        }
+//        return newGameID;
+//    }
+
+    /**
+     * Generates a client id that doesn't exist yet and saves a new client object
+     * linked to that id
+     *
+     * @return The generated client id
+     */
+    public int createNewClient() {
+        Random random = new Random();
+        int newClientID;
+
+        do {
+            newClientID = random.nextInt(Integer.MAX_VALUE);
+        } while (clientMap.containsKey(newClientID));
+
+        clientMap.put(newClientID, new Client());
         return newClientID;
     }
 
-    public int createNewLobby(ArrayList<Integer> playerOrderList, ArrayList<Integer> observerIDs, ArrayList<Integer> playerColorList) {
-        int gameID = generateGameID();
-        lobbyList.add( new GameLobby(gameID, playerOrderList, observerIDs, playerColorList));
-        return gameID;
+    /**
+     * Gets the client object linked to clientID
+     *
+     * @param clientID The search parameter to find the client object
+     * @return The client object
+     */
+    public Client getClientById(int clientID) {
+        return clientMap.get(clientID);
     }
 
-    public void setConfiguration( int gameID, int playerCount, int fieldSize, int figuresPerPlayer, List<Integer> drawFieldpositions,
-                                  List<Integer>  startFields, int initialCardsPerPlayer, int thinkingTimePerMove,
-                                  int consequencesForInvalidMove, int maxGameDuration, int maxTotalMoves) {
-        for(int i = 0; i < lobbyList.size(); i++) {
-            if(lobbyList.get(i).getGameID() == gameID) {
-                lobbyList.get(i).setConfiguration( playerCount,  fieldSize,  figuresPerPlayer,  drawFieldpositions,
-                         startFields,  initialCardsPerPlayer,  thinkingTimePerMove,
-                 consequencesForInvalidMove,  maxGameDuration,  maxTotalMoves);
+    /**
+     * Generates a lobby id that doesn't exist yet and saves a new lobby object
+     * linked to that id
+     *
+     * @param playerOrderList The player order list
+     * @param playerColorMap The player color map
+     * @param observerList The observer id list
+     * @return The lobby id
+     */
+    public int createNewLobby(ArrayList<Integer> playerOrderList, HashMap<Integer, Colors> playerColorMap,
+                              ArrayList<Integer> observerList) {
+        Random random = new Random();
+        int newLobbyID;
+
+        do {
+            newLobbyID = random.nextInt(Integer.MAX_VALUE);
+        } while (lobbyMap.containsKey(newLobbyID));
+
+        lobbyMap.put(newLobbyID, new GameLobby(playerOrderList, playerColorMap, observerList));
+        return newLobbyID;
+    }
+
+    /**
+     * Gets the lobby object linked to lobbyID
+     *
+     * @param lobbyID The search parameter to find the lobby object
+     * @return The lobby object
+     */
+    public GameLobby getLobbyById(int lobbyID) {
+        return lobbyMap.get(lobbyID);
+    }
+
+    public void setConfiguration(int gameID, int playerCount, int fieldSize, int figuresPerPlayer, List<Integer> drawFieldpositions,
+                                 List<Integer> startFields, int initialCardsPerPlayer, int thinkingTimePerMove,
+                                 int consequencesForInvalidMove, int maxGameDuration, int maxTotalMoves) {
+        for (int key : lobbyMap.keySet()) {
+            if (key == gameID) {
+                lobbyMap.get(key).setConfiguration(playerCount, fieldSize, figuresPerPlayer, drawFieldpositions,
+                        startFields, initialCardsPerPlayer, thinkingTimePerMove,
+                        consequencesForInvalidMove, maxGameDuration, maxTotalMoves);
             }
         }
-
     }
 
-    public void setUsername(int clientID, String userName) {
-        clientIDMapName.put(clientID, userName);
-    }
-
-    public void setObserver(int clientID, boolean isObserver) {
-        clientIDMapObserver.put(clientID, isObserver);
-    }
-
-    public String getUsername(int clientID) {
-        return clientIDMapName.get(clientID);
-    }
+//    public void setUsername(int clientID, String userName) {
+//        clientIDMapName.put(clientID, userName);
+//    }
+//
+//    public void setObserver(int clientID, boolean isObserver) {
+//        clientIDMapObserver.put(clientID, isObserver);
+//    }
+//
+//    public String getUsername(int clientID) {
+//        return clientIDMapName.get(clientID);
+//    }
 
     public int getGameCount() {
-	return lobbyList.size();
+        return lobbyMap.size();
     }
 
-    public boolean getObserver(int clientID) {
-	    return clientIDMapObserver.get(clientID);
-    }
-
+//    public boolean getObserver(int clientID) {
+//        return clientIDMapObserver.get(clientID);
+//    }
+//
     public boolean clientIdRegistered(int clientId) {
-	for (Integer key : clientIDMapName.keySet()) {
-	    if (key == clientId) {
-		return true;
-	    }
-	}
-	return false;
+        return clientMap.containsKey(clientId);
     }
 
 

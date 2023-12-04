@@ -6,7 +6,6 @@ import com.google.gson.*;
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.message.menu.*;
 import com.nexusvision.server.model.messages.menu.*;
-import com.nexusvision.server.model.messages.menu.Error;
 import com.nexusvision.utils.NewLineAppendingSerializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,7 +49,7 @@ public class ClientHandler extends Handler implements Runnable {
     public ClientHandler(Socket clientSocket) {
         serverController = ServerController.getInstance();
         this.clientSocket = clientSocket;
-        this.clientID = serverController.generateClientID();
+        this.clientID = serverController.createNewClient();
     }
 
     @Override

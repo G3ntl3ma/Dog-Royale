@@ -20,11 +20,11 @@ public class JoinGameAsObserverHandler extends Handler implements MenuMessageHan
                     TypeMenue.connectToServer.getOrdinal());
         }
 
-        boolean success =  serverController.addObserver(message.getGameId(), message.getClientId());
+        serverController.getLobbyById(message.getGameId()).addObserver(message.getClientId());
 
         ConnectedToGame connectedToGame = new ConnectedToGame();
         connectedToGame.setType(TypeMenue.joinGameAsParticipant.getOrdinal());
-        connectedToGame.setSuccess(success); 
+        connectedToGame.setSuccess(true); // TODO: felix check this again later
 
         return gson.toJson(connectedToGame);
     }

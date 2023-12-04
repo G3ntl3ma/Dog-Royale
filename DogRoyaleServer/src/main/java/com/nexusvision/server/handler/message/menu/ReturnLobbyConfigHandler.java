@@ -99,26 +99,27 @@ public class ReturnLobbyConfigHandler extends Handler implements MenuMessageHand
 
 
         ReturnLobbyConfig.PlayerOrder playerOrder = message.getPlayerOrder();
-        List<ReturnLobbyConfig.PlayerOrder.Order> order = playerOrder.order;
+        List<ReturnLobbyConfig.PlayerOrder.Order> order = playerOrder.getOrder();
         if (playerOrder == null) {
             errors.add("playerOrder");
             errorFound = true;
         }
         else {
             for (int i = 0; i < order.size(); i++) {
-                int clID = order.get(i).clientId;
+                int clientId = order.get(i).getClientId();
                 //TODO check if null
                 //if specified clientIDs dont exist
-                if (!serverController.clientIdRegistered(clID)) {
+                if (!serverController.clientIdRegistered(clientId)) {
                     error.setMessage("configuring game failed: clientId not registered");
                     return gson.toJson(error);
                 }
-                if (serverController.getObserver(clID)) {
-                    error.setMessage("configuring game failed: specified an observer as player");
-                    return gson.toJson(error);
-                } else {
-                    playerOrderList.add(clID);
-                }
+                // TODO: REWRITE
+//                if (serverController.getObserver(clientId)) {
+//                    error.setMessage("configuring game failed: specified an observer as player");
+//                    return gson.toJson(error);
+//                } else {
+//                    playerOrderList.add(clientId);
+//                }
             }
         }
 
@@ -129,17 +130,18 @@ public class ReturnLobbyConfigHandler extends Handler implements MenuMessageHand
         }
         else {
             for (int i = 0; i < observers.size(); i++) {
-                int clID = observers.get(i).getClientId();
-                if (!serverController.clientIdRegistered(clID)) {
+                int clientId = observers.get(i).getClientId();
+                if (!serverController.clientIdRegistered(clientId)) {
                     error.setMessage("configuring game failed: clientId not registered");
                     return gson.toJson(error);
                 }
-                if (serverController.getObserver(clID)) {
-                    observerIDs.add(clID);
-                } else {
-                    error.setMessage("configuring game failed: specified a non observer as observer");
-                    return gson.toJson(error);
-                }
+                // TODO: REWRITE
+//                if (serverController.getObserver(clientId)) {
+//                    observerIDs.add(clientId);
+//                } else {
+//                    error.setMessage("configuring game failed: specified a non observer as observer");
+//                    return gson.toJson(error);
+//                }
             }
         }
 
@@ -155,12 +157,13 @@ public class ReturnLobbyConfigHandler extends Handler implements MenuMessageHand
                     error.setMessage("configuring game failed: clientId not registered");
                     return gson.toJson(error);
                 }
-                if (serverController.getObserver(clID)) {
-                    observerIDs.add(clID);
-                } else {
-                    error.setMessage("configuring game failed: specified a non observer as observer");
-                    return gson.toJson(error);
-                }
+                // TODO: REWRITE
+//                if (serverController.getObserver(clID)) {
+//                    observerIDs.add(clID);
+//                } else {
+//                    error.setMessage("configuring game failed: specified a non observer as observer");
+//                    return gson.toJson(error);
+//                }
             }
         }
 
@@ -193,10 +196,11 @@ public class ReturnLobbyConfigHandler extends Handler implements MenuMessageHand
             return gson.toJson(error);
         }
 
-        int gameID = serverController.createNewLobby(playerOrderList, observerIDs, playerColorList);
-        serverController.setConfiguration(gameID, playerCount, fieldSize, figuresPerPlayer,  drawCardFields.getPositions(),
-                startFields.getPositions(), initialCardsPerPlayer, thinkTimePerMove,
-        consequencesForInvalidMove, maximumGameDuration, maximumTotalMoves);
+        // TODO: REWRITE
+//        int gameID = serverController.createNewLobby(playerOrderList, observerIDs, playerColorList);
+//        serverController.setConfiguration(gameID, playerCount, fieldSize, figuresPerPlayer,  drawCardFields.getPositions(),
+//                startFields.getPositions(), initialCardsPerPlayer, thinkTimePerMove,
+//        consequencesForInvalidMove, maximumGameDuration, maximumTotalMoves);
 
         return "sea";
     }

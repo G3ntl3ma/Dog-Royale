@@ -67,13 +67,13 @@ public class ReturnLobbyConfig extends AbstractMenuMessage{
 
     @Data
     public class PlayerOrder{
-        public OrderType type;
-        public List<Order> order;
+        private OrderType type;
+        private List<Order> order;
 
         @Data
         public class Order{
-            public Integer clientId;
-            public String name;
+            private Integer clientId;
+            private String name;
         }
 
     }
