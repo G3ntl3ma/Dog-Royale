@@ -6,11 +6,13 @@ import java.util.List;
 
 import com.nexusvision.server.model.enums.GameState;
 import com.nexusvision.server.model.enums.Colors;
+import com.nexusvision.server.model.gamelogic.Game;
 import lombok.Data;
 
 @Data
 public class GameLobby {
 
+    private Game game;
     private GameState gameState;
     private boolean isPaused;
     private int maxPlayerCount;
@@ -111,7 +113,7 @@ public class GameLobby {
     public boolean setConfiguration(int playerCount, int fieldSize, int figuresPerPlayer, List<Integer> drawFieldpositions,
                                     List<Integer> startFields, int initialCardsPerPlayer, int thinkingTimePerMove,
                                     int consequencesForInvalidMove, int maxGameDuration, int maxTotalMoves) {
-
+        //constructing a string that can be parsed by the game
         this.maxPlayerCount = playerCount;
         StringBuilder fieldStringBuild = new StringBuilder();
         for (int i = 0; i < fieldSize; i++) {
@@ -134,7 +136,7 @@ public class GameLobby {
         }
 
         // TODO create game
-
+        this.game = new Game(fieldStringBuild.toString(), figuresPerPlayer, initialCardsPerPlayer, maxTotalMoves, consequencesForInvalidMove);
 
         return true;
     }

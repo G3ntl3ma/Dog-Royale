@@ -1,4 +1,6 @@
-// package org.example;
+package com.nexusvision.server.model.gamelogic;
+
+import com.nexusvision.server.model.enums.Penalty;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,7 +54,7 @@ public class Main {
         Scanner reader = new Scanner(System.in);
 
         for (int _i = 0; _i < gamesToPlay; _i++) {
-            Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame);
+            Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
             game.initDeck();
 
             Player winner = null;

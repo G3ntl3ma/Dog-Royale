@@ -1,4 +1,7 @@
-// package org.example;
+package com.nexusvision.server.model.gamelogic;
+
+import com.nexusvision.server.model.enums.CardType;
+import com.nexusvision.server.model.enums.FieldType;
 
 import java.util.ArrayList;
 
@@ -69,18 +72,23 @@ public class Card {
 	Figure oppfigure = player.figures.get(opponentPieceId);
 	ArrayList<Move> moves = new ArrayList<>();
 	switch (this.type) {
-	case CardType.swapCard:
+	case swapCard:
 	    moves.add(new Move(player, figure.field, oppfigure.field, true, this));
 	    break;
-	case CardType.startCard1: 
-	case CardType.startCard2:
+	case startCard1:
+	    /*fallthrough*/
+	case startCard2:
 	    if(isStarter) {
 		moves.add(new Move(player, this));
 		break;
 	    }
-	case CardType.copyCard: 
-	case CardType.magnetCard: 
-	case CardType.oneToSeven:
+	    //else fallthrough 
+	case copyCard:
+	    /*fallthrough*/
+	case magnetCard:
+	    /*fallthrough*/
+	case oneToSeven:
+	    /*fallthrough*/
 	default: //normal
 	    addStepMove(moves, selectedValue,  figure, game, player, /*range*/ false);
 	    break;
@@ -92,7 +100,7 @@ public class Card {
     public void getMoves(Game game, Figure figure, ArrayList<Move> moves, Player player) { //target figure
 	Field to;
 	switch (this.type) {
-	case CardType.swapCard: 
+	case swapCard:
 	    if (figure.isInBank || figure.isInHouse) break;
 	    for(int i = 0; i < game.players.size(); i++) {
 		if(i == figure.color) continue;
@@ -105,7 +113,7 @@ public class Card {
 		}
 	    }
 	    break;
-	case CardType.magnetCard: 
+	case magnetCard:
 		if (figure.isInBank || figure.isInHouse) break;
 		to = figure.field;
 		Field next = to.next;
@@ -117,16 +125,16 @@ public class Card {
 		    moves.add(new Move(player, figure.field, to, false, this));
 		}
 		break;
-	case CardType.oneToSeven:
+	case oneToSeven:
 		if (figure.isInBank) break;
 		addStepMove(moves, 7,  figure, game, player, /*range*/ true);		
 		break;
-	case CardType.plusMinus4:
+	case plusMinus4:
 		if (figure.isInBank) break;
 		addStepMove(moves, 4, figure, game, player, false);
 		addStepMove(moves, -4, figure, game, player, false);		
 		break;
-	case CardType.startCard1: 
+	case startCard1:
 	    if (figure.isInBank && (player.startField.isEmpty() ||  player.startField.figure.color != figure.color)) {
 		moves.add(new Move(player, this));
 	    }
@@ -134,7 +142,7 @@ public class Card {
 		addStepMove(moves, 13,  figure, game, player, false);
 	    }
 	    break;
-	case CardType.startCard2:  
+	case startCard2:
 	    if (figure.isInBank && (player.startField.isEmpty() ||  player.startField.figure.color != figure.color)) {
 		moves.add(new Move(player, this));
 	    }
@@ -143,7 +151,7 @@ public class Card {
 		addStepMove(moves, 11,  figure, game, player, false);
 	    }
 	    break;
-	case CardType.copyCard: 
+	case copyCard:
 	    int inx = game.pile.size() -1 ;
 	    for (int i = inx; i > 0; i--) {
 		Card lastcard = game.pile.get(game.pile.size() - 1);

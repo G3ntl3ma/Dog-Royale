@@ -1,4 +1,6 @@
-// package org.example;
+package com.nexusvision.server.model.gamelogic;
+
+import com.nexusvision.server.model.enums.CardType;
 
 import java.util.ArrayList;
 

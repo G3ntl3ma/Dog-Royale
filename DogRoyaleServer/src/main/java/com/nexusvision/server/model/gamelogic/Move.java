@@ -1,4 +1,6 @@
-// package org.example;
+package com.nexusvision.server.model.gamelogic;
+
+import com.nexusvision.server.model.enums.FieldType;
 
 public final class Move  {
 
@@ -162,6 +164,6 @@ public final class Move  {
 
 
     public FieldType getFieldTypeTo() {
-	return this.to.type;
+		return this.to.type;
     }
 }

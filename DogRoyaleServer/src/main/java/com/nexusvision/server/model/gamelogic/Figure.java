@@ -1,5 +1,4 @@
-// package org.example;
-
+package com.nexusvision.server.model.gamelogic;
 public class Figure  {
     Field field;
     boolean isInBank; //ignore field if isInBank

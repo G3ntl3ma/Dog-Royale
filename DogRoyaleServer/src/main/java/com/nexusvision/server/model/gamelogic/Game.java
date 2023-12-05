@@ -1,4 +1,9 @@
-// package org.example;
+package com.nexusvision.server.model.gamelogic;
+
+//import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
+import com.nexusvision.server.model.enums.CardType;
+import com.nexusvision.server.model.enums.FieldType;
+import com.nexusvision.server.model.enums.Penalty;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +31,7 @@ public final class Game {
     private int[] startIndexs; //indeces of startFields, unused
     boolean[] occupied; //unused
     
-    public Game(String conf, int figureCount, int initialHandCardCount, int maximumTotalMoves ,Penalty consequences) {
+    public Game(String conf, int figureCount, int initialHandCardCount, int maximumTotalMoves ,int consequences) {
 	this.players = new ArrayList<>();
 	this.deck = new ArrayList<>();
 	this.pile = new ArrayList<>();
@@ -37,7 +42,7 @@ public final class Game {
 	this.figureCount = figureCount;
 	this.initialHandCardCount = initialHandCardCount;
 	this.round = 0;
-	this.consequences = consequences;
+	this.consequences = Penalty.values()[consequences];
 	init(conf);
     }
     
@@ -328,7 +333,7 @@ public final class Game {
     //TODO rename to make move
     //if move not legal do nothing and execute handle illegal move
     public Move getMove(boolean skip, CardType card, int selectedValue,
-				 int pieceId, boolean isStarter, Integer opponentPieceId) {
+						int pieceId, boolean isStarter, Integer opponentPieceId) {
 	Player player = this.getCurrentPlayer();
 	if(card == null || skip) return null;
 	//check if cardtype in cards

@@ -15,8 +15,8 @@
 //     START_13,
 //     SWAP,
 // }
-    
-enum CardType
+package com.nexusvision.server.model.enums;
+public enum CardType
 {
     card2,
     card3,
