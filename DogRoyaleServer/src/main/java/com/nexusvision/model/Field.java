@@ -9,7 +9,11 @@ enum FieldType {
     START,
     HOUSE,
 }
-
+/**
+ * Creates a Field object
+ *
+ * @author dgehse
+ */
 public final class Field  {
 
     final int val; //TODO better name
@@ -21,12 +25,24 @@ public final class Field  {
     Field house;
     Field prev;  //these should be final
 
+    /**
+     * Constructor that initializes a Field object
+     *
+     * @param val //TODO better name
+     * @param type An Enum representing the type of the Field
+     */
     public Field(int val, FieldType type) {
         this.val = val;
         this.figure = null;
         this.type = type;
     }
 
+    /**
+     * Constructor that initializes a Field object
+     *
+     * @param val //TODO better name
+     * @param typeChar A Char representing the type of the Field
+     */
     public Field(int val, char typeChar) {
         this.val = val;
         this.figure = null;
@@ -51,13 +67,27 @@ public final class Field  {
         }
     }
 
+    /**
+     * Checks if Field is empty
+     *
+     * @return A Boolean representing if the Field is empty
+     */
     public boolean isEmpty() {
         return this.figure == null;
     }
 
+    /**
+     * Prints the value of val //TODO Better Name
+     *
+     */
+
     public void printval() {
         System.out.println(this.val);
     }
+    /**
+     * Prints the val of this, previous and next Field //TODO Better Name
+     *
+     */
 
     public void printvals() {
         System.out.println("this val");
@@ -67,6 +97,11 @@ public final class Field  {
         System.out.println("prev val");
         this.prev.printval();
     }
+
+    /**
+     * Prints the type of the Field
+     *
+     */
 
     public void printtype() {
 
@@ -89,6 +124,10 @@ public final class Field  {
         }
 
     }
+    /**
+     * Prints the type of this, previous and next Field
+     *
+     */
 
     public void printtypes() {
         System.out.println("this type");
@@ -98,23 +137,49 @@ public final class Field  {
         System.out.println("prev type");
         this.prev.printtype();
     }
+    /**
+     * Setter for next Field
+     *
+     * @param field An object representing a Field on the Board
+     */
 
     public void setNext(Field field) {
         this.next = field;
     }
 
+    /**
+     * Setter for a house field
+     *
+     * @param field An object representing a Field on the Board
+     */
+
+
     public void setHouse(Field field) {
         this.house = field;
     }
+    /**
+     * Setter for previous Field
+     *
+     * @param field An object representing a Field on the Board
+     */
 
     public void setPrev(Field field) { //TODO rename to set
         this.prev = field;
     }
+    /**
+     * Setter for previous field
+     *
+     * @param figure An object representing a figure, which will be assigned to a field
+     */
 
     public void setfigure(Figure figure) {
         this.figure = figure;
         figure.field = this;
     }
+    /**
+     * Make a field empty
+     *
+     */
 
     public void setEmpty() {
         this.figure = null;
