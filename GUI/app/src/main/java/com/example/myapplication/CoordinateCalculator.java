@@ -5,13 +5,16 @@ package com.example.myapplication;
  */
 import java.lang.Math;
 
+/** @author Mattes
+ * This class calculates coordinates for game board.
+ */
 public class CoordinateCalculator {
     // Instance variables
     private int fieldsize;
     private int playerCount;
     private int radius;
 
-    /**
+    /**@author: Mattes
      * Constructor for the CoordinateCalculator class.
      *
      * @param fieldsize        The size of the game field. (number of fields)
