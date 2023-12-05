@@ -288,7 +288,7 @@ public final class Game {
 	/**
 	 * Determine and set the next player
 	 *
-	 * @return true aslong as there are remaining players
+	 * @return true as long as there are remaining players
 	 */
     public boolean nextPlayer() {
 	int count = 0;
@@ -306,7 +306,7 @@ public final class Game {
     }
 
 	/**
-	 * Print information about
+	 * Print information about Cards in total and in players hands
 	 *
 	 */
     public void printTotalCards() {
@@ -321,6 +321,14 @@ public final class Game {
 	}
     }
 
+	/**
+	 * Compares 2 players based on criteria figures in house and
+	 * last move count when a figure was moved into the house
+	 *
+	 * @param p1 An object representing a player
+	 * @param p2 An object representing another player
+	 * @return An Integer representing which player is ahead in terms of figures in the house
+	 */
     public int compare(Player p1, Player p2) {
 	if(p1.figuresInHouse > p2.figuresInHouse) return 1;
 	if(p1.figuresInHouse < p2.figuresInHouse) return -1;
@@ -330,6 +338,12 @@ public final class Game {
 	return 0;
     }
 
+	/**
+	 * Determines all the winners ordered from highest to lowest
+	 *
+	 *
+	 * @return An ArrayList with all the winners
+	 */
     public ArrayList<Player> getWinners() {
 	ArrayList<Player> ret = new ArrayList<>();
 	boolean gameOver = false;
@@ -369,22 +383,52 @@ public final class Game {
 	return ret;
     }
 
+	/**
+	 * Increments round by 1
+	 *
+	 */
     public void incrementRound() {
 	this.round++;
     }
 
+	/**
+	 * Gets last card of the pile
+	 *
+	 */
     public Card getLastCard() {
 	return pile.get(pile.size() - 1);
     }
 
+	/**
+	 * Determines if the round is over
+	 *
+	 * @return A Boolean, when true the round is over
+	 */
     public boolean roundOver() {
 	return this.playersRemaining == 0;
     }
 
+	/**
+	 * Get a specific field object in the board array
+	 *
+	 * @return An object representing the field at index 'inx'
+	 */
     public Field getField(int inx) {
 	return this.board[inx];
     }
 
+	/**
+	 * Checks for legal moves and retrieves moves if legal
+	 *
+	 * @param skip A Boolean indicating whether to skip the move
+	 * @param card An Enum representing the type of the card
+	 * @param selectedValue An Integer representing a selected value for the move
+	 * @param pieceId An Integer representing the id of the piece
+	 * @param isStarter A Boolean indicating whether the move is the starting move
+	 * @param opponentPieceId An optional Integer representing the identifier of the opponent's piece
+	 *
+	 * @return An object representing the Move to be executed, null if no cards left or illegal move
+	 */
     //TODO CardType is com.nexusvision.server.model.gamelogic.Card in interface doc
     
     //TODO rename to make move
@@ -414,6 +458,18 @@ public final class Game {
 	return null;
     }
 
+	/**
+	 * Attempts to execute a move
+	 *
+	 * @param skip A Boolean indicating whether to skip the move
+	 * @param card An Enum representing the type of the card
+	 * @param selectedValue An Integer representing a selected value for the move
+	 * @param pieceId An Integer representing the id of the piece
+	 * @param isStarter A Boolean indicating whether the move is the starting move
+	 * @param opponentPieceId An optional Integer representing the identifier of the opponent's piece
+	 *
+	 * @return A Boolean indicating if move was legal or not
+	 */
     public boolean tryMove(boolean skip, CardType card, int selectedValue,
 				 int pieceId, boolean isStarter, Integer opponentPieceId) {
 	Move move = getMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
@@ -427,6 +483,11 @@ public final class Game {
 	}
     }
 
+	/**
+	 * Excludes a specific player from the round
+	 *
+	 * @param player An object representing the player to exclude from the round
+	 */
     //exclude from round
     public void excludeFromRound(Player player) {
 	this.discardHandCards(); //of current player
@@ -434,6 +495,11 @@ public final class Game {
 	this.nextPlayer();
     }
 
+	/**
+	 * Excludes a specific player from the game
+	 *
+	 * @param player An object representing the player to exclude from the game
+	 */
     //kick player
     public void excludeFromGame(Player player) {
 	player.setExclude();
@@ -441,6 +507,10 @@ public final class Game {
 	this.nextPlayer();
     }
 
+	/**
+	 * Handles illegal move and applies penalties
+	 *
+	 */
     //handle invalid move
     public void handleIllegalMove() {
 	//TODO if consequences for illegal move
