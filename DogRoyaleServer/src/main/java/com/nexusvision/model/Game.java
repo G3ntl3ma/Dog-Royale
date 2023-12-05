@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+/**
+ * This class represents the game and manages Player, Cards, Moves and more
+ *
+ * @author dgehse
+ */
 public final class Game {
 
     ArrayList<Player> players; //TODO should not be arraylist
@@ -26,7 +31,16 @@ public final class Game {
 
     private int[] startIndexs; //indeces of startFields, unused
     boolean[] occupied; //unused
-    
+
+	/**
+	 * The Constructor initializes Games
+	 *
+	 * @param conf A String holding information about the board and players
+	 * @param figureCount An Integer representing the number of figures in the game
+	 * @param initialHandCardCount An Integer representing the initial number of cards each player should have in their hand
+	 * @param maxMoves An integer representing the maximum number of moves allowed this game
+	 * @param consequences An object representing the consequences for illegal moves
+	 */
     public Game(String conf, int figureCount, int initialHandCardCount, int maxMoves, Penalty consequences) {
 	this.players = new ArrayList<>();
 	this.deck = new ArrayList<>();
@@ -41,11 +55,18 @@ public final class Game {
 	this.consequences = consequences;
 	init(conf);
     }
-    
+	/**
+	 * Increases the value of movesMade by 1
+	 *
+	 */
     public void increaseMovesCounter() {
 	this.movesMade++;
     }
 
+	/**
+	 * Add all cards from the pile and players hand to the deck and reshuffle
+	 *
+	 */
     public void reshuffle() {
 	// System.out.println("reshuffle start deck size " + this.deck.size() + " pile size " + this.pile.size());
 	this.deck.addAll(this.pile);
@@ -59,6 +80,10 @@ public final class Game {
 	// System.out.println("reshuffle done deck size " + this.deck.size() + " pile size " + this.pile.size());	
     }
 
+	/**
+	 * Proper initialization for the next round considering excluded players and the starting player
+	 *
+	 */
     public void reinit() { //for next round
 	//assert not everyone is excluded
 	this.playersRemaining = 0;
@@ -84,6 +109,10 @@ public final class Game {
 	// System.out.println(this.round);
     }
 
+	/**
+	 * Discarding a player's hand considering the state of the pile
+	 *
+	 */
     public void discardHandCards() {
 	Player player = this.getCurrentPlayer();
 	if (player.cards.size() > 0) {
@@ -102,6 +131,10 @@ public final class Game {
 	}
     }
 
+	/**
+	 * Distribute Cards to the players
+	 *
+	 */
     public void distributeCards() {
 	for (int i = 0; i < this.initialHandCardCount; i++) {
 	    for (int j = 0; j < this.players.size(); j++) {
@@ -110,6 +143,10 @@ public final class Game {
 	}
     }
 
+	/**
+	 * Print the current state of the game
+	 *
+	 */
     public void printBoard() {
 	System.out.println("BOARD=================");
 	System.out.println("player to move " + this.playerToMoveColor);
@@ -138,6 +175,10 @@ public final class Game {
 	System.out.println("===================");
     }
 
+	/**
+	 * Set up the initial deck, defining types and quantities of the cards
+	 *
+	 */
     public void initDeck() {
 	for (int i = 0; i < 7; i++) {
 	    this.deck.add(new Card(CardType.NORMAL_2));
@@ -166,6 +207,13 @@ public final class Game {
 	Collections.shuffle(this.deck); //undeterministic
     }
 
+	/**
+	 * Set up the initial game state, Count the numbers of players,
+	 * initialize board, Create fields and players,
+	 * connect fields and set up player starting positions and set house fields
+	 *
+	 * @param conf A String holding information about the board and players
+	 */
     private void init(String conf) { //set board and players
 	int players = 0;
 	for (int i = 0; i < conf.length(); i++) {
@@ -229,10 +277,20 @@ public final class Game {
 	
     }
 
+	/**
+	 * Retrieve the current player
+	 *
+	 * @return The current player
+	 */
     public Player getCurrentPlayer() {
 	return this.players.get(this.playerToMoveColor);
     }
 
+	/**
+	 * Determine and set the next player
+	 *
+	 * @return true aslong as there are remaining players
+	 */
     public boolean nextPlayer() {
 	int count = 0;
 	if(this.playersRemaining == 0) return false;
@@ -248,6 +306,10 @@ public final class Game {
 	return true;
     }
 
+	/**
+	 * Print information about
+	 *
+	 */
     public void printTotalCards() {
 	int handsum = 0;
 	for (int i = 0; i < this.players.size(); i++) {
