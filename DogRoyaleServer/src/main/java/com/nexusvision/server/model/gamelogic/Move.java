@@ -1,5 +1,9 @@
-// package org.example;
-
+package com.nexusvision.server.model.gamelogic;// package org.example;
+/**
+ *
+ *
+ * @author dgehse
+ */
 public final class Move  {
 
     private final Field from;

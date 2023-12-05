@@ -156,7 +156,7 @@ public class ClientHandler extends Handler implements Runnable {
             RequestGameList requestGameList = gson.fromJson(request, RequestGameList.class);
             String response = new RequestGameListHandler().handle(requestGameList, clientID);
             expectedState = nextState;
-            logger.info("Game list request was successful");
+            logger.info("com.nexusvision.server.model.gamelogic.Game list request was successful");
             return response;
         } catch (JsonSyntaxException e) {
             return handleError("Wrong message format from type requestGameList",
