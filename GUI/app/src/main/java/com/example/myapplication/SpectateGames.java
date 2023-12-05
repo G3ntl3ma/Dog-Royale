@@ -102,6 +102,7 @@ public class SpectateGames extends Fragment {
             }
             adapter.notifyDataSetChanged();
         });
+        viewModelTest viewModelTest = new viewModelTest();
         binding.currentBackToMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,7 +115,7 @@ public class SpectateGames extends Fragment {
         binding.spectateGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addGame(new Game("Hello", 15, 10 , 11));
+                addGame(new Game("Hello", 15, 4 , 6, 100, 20));
             }
 
         });

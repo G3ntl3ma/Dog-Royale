@@ -5,16 +5,20 @@
 package com.example.myapplication;
 
 public class Game {
-    String gameID;
-    int timeSeconds;
-    int currentPlayers;
-    int maxPlayers;
+    private String gameID;
+    private int timeSeconds;
+    private int currentPlayers;
+    private int maxPlayers;
+    private int fieldSize;
+    private int figureCount;
 
-    public Game(String gameID, int timeSeconds, int currentPlayers, int maxPlayers) {
+    public Game(String gameID, int timeSeconds, int currentPlayers, int maxPlayers, int fieldSize, int figureCount) {
         this.gameID = gameID;
         this.timeSeconds = timeSeconds;
         this.currentPlayers = currentPlayers;
         this.maxPlayers = maxPlayers;
+        this.fieldSize = fieldSize;
+        this.figureCount = figureCount;
     }
 
     public String getGameID() {
@@ -47,5 +51,21 @@ public class Game {
 
     public void setMaxPlayers(int maxPlayers) {
         this.maxPlayers = maxPlayers;
+    }
+
+    public int getFieldSize() {
+        return fieldSize;
+    }
+
+    public void setFieldSize(int fieldSize) {
+        this.fieldSize = fieldSize;
+    }
+
+    public int getFigureCount() {
+        return figureCount;
+    }
+
+    public void setFigureCount(int figureCount) {
+        this.figureCount = figureCount;
     }
 }

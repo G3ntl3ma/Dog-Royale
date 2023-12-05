@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,7 +51,10 @@ public class SpectateGamesAdapter extends RecyclerView.Adapter<SpectateGamesView
         holder.spectate_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                    GameboardViewModel viewModel = MainActivity.getGameboardViewModel();
+                    viewModel.setField_size(current_game.getFieldSize());
+                    viewModel.setPlayer_count(current_game.getCurrentPlayers());
+                    viewModel.setFigure_count(current_game.getFigureCount());
                 NavHostFragment.findNavController(spectateGames)
                         .navigate(R.id.action_SpectateGames_to_game_board_layout);
             }

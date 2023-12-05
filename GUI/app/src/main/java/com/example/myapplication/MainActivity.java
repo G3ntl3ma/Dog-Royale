@@ -18,6 +18,7 @@ import android.view.Display;
 import android.view.View;
 
 import androidx.core.view.WindowCompat;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -38,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
-    static ServerViewModel viewModel;
+    static ServerViewModel serverViewModel;
+    static GameboardViewModel gameboardViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        viewModel = new ViewModelProvider(this).get(ServerViewModel.class);
+        serverViewModel = new ViewModelProvider(this).get(ServerViewModel.class);
+        gameboardViewModel = new ViewModelProvider(this).get(GameboardViewModel.class);
     }
 
     @Override
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static ServerViewModel getServerViewModel(){
-        return viewModel;
+        return serverViewModel;
     }
+    public static GameboardViewModel getGameboardViewModel(){return gameboardViewModel;}
 }

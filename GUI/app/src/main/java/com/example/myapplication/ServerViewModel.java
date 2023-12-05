@@ -13,7 +13,10 @@ public class ServerViewModel extends ViewModel {
     MutableLiveData<List<Game>> games = new MutableLiveData<>();
     boolean setup = false;
 
-
+    /** Füge ein Spiel zu der SpectateGamesListe hinzu
+     *
+     * @param game
+     */
     public void addGame(Game game){
         gamesList.add(game);
         games.setValue(gamesList);
@@ -23,11 +26,19 @@ public class ServerViewModel extends ViewModel {
         return games;
     }
 
+    /** Entferne ein Spiel aus der SpectateGames Liste
+     * @param pos
+     */
     public void removeGame(int pos){
         gamesList.remove(pos);
         games.setValue(gamesList);
     }
 
+    /**
+     * Setze die Anzahl der Spieler in einem Spiel neu
+     * @param pos Das Spiel, das verändert wird
+     * @param players Die neue Anzahl von Spielern
+     */
     public void changeCurrentPlayers(int pos, int players){
         gamesList.get(pos).setCurrentPlayers(players);
         games.setValue(gamesList);

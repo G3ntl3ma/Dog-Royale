@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 
@@ -45,9 +46,9 @@ public class Game_board extends Fragment {
     //Anzahl Spielfelder
     private int field_size = 1;
     //Anzahl Spieler
-    private int player_count = 6;
+    private int player_count;
     //die wievielten Spielfelder Startfelder sind.
-    private int figure_count = 12;
+    private int figure_count;
     private int[] start_positions = new int[player_count];
 
     //Farben der Start/hausfelder
@@ -56,6 +57,7 @@ public class Game_board extends Fragment {
     private int[] draw_fields = new int[5];
 
     private LastCard last_card;
+    private GameboardViewModel viewModel;
     //testwise
     private int position = 0;
 
@@ -135,12 +137,22 @@ public class Game_board extends Fragment {
         RelativeLayout GameBoard = binding.gameBoardLayout;
         GameBoard.setLayoutParams(params);
 
+        viewModel = new ViewModelProvider(requireActivity()).get(GameboardViewModel.class);
+        System.out.println(viewModel.getField_size().getValue());
         //set number of fields
-        field_size = 11;
+        field_size = viewModel.getField_size().getValue();
+        //set Player_count
+        player_count = viewModel.getPlayer_count().getValue();
+        //Set figure Count
+        viewModel.getFigure_count().observe(getViewLifecycleOwner(), figures ->{
+            figure_count = figures;
+        });
+        figure_count = viewModel.getFigure_count().getValue();
+
         //positionen der draw card felder
         draw_fields = new int[]{3, 5, 7, 8, 9};
         //position der startfelder
-        start_positions = new int[]{0, 2, 4, 6, 8, 10};
+        start_positions = new int[]{0, 2, 4};
         //creates fields in the layout
         Game_board_creator creator = new Game_board_creator(GameBoard, pxWidth, player_count, field_size, figure_count, start_colors, start_positions, draw_fields);
         creator.createFields();
