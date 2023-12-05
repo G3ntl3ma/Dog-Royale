@@ -1,6 +1,7 @@
-package com.nexusvision.server.model.gamelogic;// package org.example;
+// package org.example;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 //TODO tests to write
@@ -20,19 +21,7 @@ import java.util.Scanner;
 //TODO if deck.size() < players.size() * handcardnum -> combine pile with deck and reshuffle
 //TODO test if move generator is bugfree
 
-/**
- * This class represents the Main, setups the game, iterates through a specified number of games,
- * optional player interaction, prints the game results
- *
- * @author dgehse
- */
 public class Main {
-    /**
-     * Entry point for the program. Setups the game, iterates through a specified number of games,
-     * optional player interaction, prints the game results
-     *
-     * @param args Command-line arguments (Optional).
-     */
     public static void main(String[] args) {
 	System.out.println("start");
 	

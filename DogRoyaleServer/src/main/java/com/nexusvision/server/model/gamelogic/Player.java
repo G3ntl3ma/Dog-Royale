@@ -1,11 +1,7 @@
-package com.nexusvision.server.model.gamelogic;// package org.example;
+// package org.example;
 
 import java.util.ArrayList;
-/**
- * This class represents a player and manages moves a player can make.
- *
- * @author dgehse
- */
+
 public final class Player  {
 
     ArrayList<Figure> figures = new ArrayList<>();
@@ -20,13 +16,7 @@ public final class Player  {
     public boolean outThisRound = false;
     
     int houseOccupationIndex; //index of housefield that with last figure TODO unused
-
-	/**
-	 * Constructor for the Player
-	 *
-	 * @param color An Integer representing the color of the player
-	 * @param figurecount An Integer representing the amount of figures a player has
-	 */
+    
     public Player(int color, int figurecount) {
 	this.figuresInBank = figurecount;
 	this.color = color;
@@ -36,11 +26,6 @@ public final class Player  {
 	}
     }
 
-	/**
-	 * Gets the first figure in the bank and returns it
-	 *
-	 * @return an object representing the figure
-	 */
     public Figure getFirstFigureInBank() {
 	for (int i = 0; i < figures.size(); i++) {
 	    if (this.figures.get(i).isInBank) {
@@ -53,10 +38,6 @@ public final class Player  {
 	return this.figures.get(0);
     }
 
-	/**
-	 * Prints information player, figures in bank, figures in house and the cards
-	 *
-	 */
     public void printInfo() {
 	System.out.print("player " + this.color + " figbank " + this.figuresInBank + " figs in house " + this.figuresInHouse);
 	System.out.print(" cards ");
@@ -64,10 +45,6 @@ public final class Player  {
 	System.out.println("");
     }
 
-	/**
-	 * Prints information about all the figures in every house
-	 *
-	 */
     public void printHouse() {
 	Field house = this.startField.house;
 	System.out.print("house: ");
@@ -79,11 +56,6 @@ public final class Player  {
 	System.out.println("");
     }
 
-	/**
-	 * Draw a card from the deck, shuffle if empty
-	 *
-	 * @param game an object representing the game
-	 */
     public void draw(Game game) {
 	if(game.deck.size() == 0) {
 	    game.reshuffle();
@@ -92,38 +64,20 @@ public final class Player  {
 	this.cards.add(pop);
     }
 
-	/**
-	 * Prints all cards from the player
-	 *
-	 */
     public void printCards() {
 	for (int i = 0; i < this.cards.size(); i++) {
 	    System.out.print(this.cards.get(i).type + " ");
 	}
     }
 
-	/**
-	 * Marks the player as excluded from the game
-	 *
-	 */
     public void setExclude() {
 	this.excluded = true;
     }
 
-	/**
-	 * Marks the player as excluded from the round
-	 *
-	 */
     public void setOutThisRound() {
 	this.outThisRound = true;
     }
 
-	/**
-	 * Generate and collect possible moves
-	 *
-	 * @param game An object representing the game
-	 * @param moves an ArrayList storing the represented moves
-	 */
     public void generateMoves(Game game, ArrayList<Move> moves) {
 	boolean[] seenCardTypes = new boolean[CardType.values().length];
 	boolean seenBankFigure = false;
@@ -138,7 +92,7 @@ public final class Player  {
 	    for (int j = 0; j < this.figures.size(); j++) {
 		// System.out.println("figure " + j);
 		if(seenBankFigure && this.figures.get(j).isInBank == true) continue;
-		if (this.figures.get(j).isInBank == true && (this.cards.get(i).type == CardType.START_1_11 || this.cards.get(i).type == CardType.START_13)) {
+		if (this.figures.get(j).isInBank == true && (this.cards.get(i).type == CardType.startCard1 || this.cards.get(i).type == CardType.startCard2)) {
 		    seenBankFigure = true;
 		}
 		this.cards.get(i).getMoves(game, this.figures.get(j), moves, this); 

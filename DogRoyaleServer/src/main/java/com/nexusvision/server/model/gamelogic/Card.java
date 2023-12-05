@@ -1,29 +1,14 @@
-package com.nexusvision.server.model.gamelogic;// package org.example;
+// package org.example;
 
 import java.util.ArrayList;
 
-/**
- * This class represents a card and manages moves associated with the card.
- *
- * @author dgehse
- */
 public class Card {
     CardType type;
-
+    
     public Card(CardType type) {
 	this.type = type;
     }
 
-	/**
-	 * The method adds possible moves for a given Figure to an ArrayList of Move objects.
-	 *
-	 * @param moves An ArrayList where the method adds possible moves
-	 * @param argsteps An integer representing the number of steps the figure can move
-	 * @param figure An object representing the game piece to be moved
-	 * @param game An object representing the gamestate
-	 * @param player An object representing the player to whom the figure belongs
-	 * @param range A boolean flag indicating whether the move should be within the movement range or not
-	 */
     //TODO improve efficiency and readability
     //TODO need to add moves where the player can move over startField without moving into house
     private void addStepMove(ArrayList<Move> moves, int argsteps, Figure figure, Game game, Player player, boolean range) {
@@ -78,36 +63,24 @@ public class Card {
 	}
     }
 
-	/**
-	 * The method generates and returns a Move based on a given Game, card type and other parameters.
-	 *
-	 * @param game An object representing the current state of the game
-	 * @param selectedValue An integer representing the selected Value
-	 * @param pieceId An integer representing the identifier of the player's figure
-	 * @param isStarter A boolean indicating whether the move is initiated by a starter card
-	 * @param opponentPieceId An optional parameter representing the identifier of an opponent's figure (can be null)
-	 * @param player An object representing the player making the move
-	 *
-	 * @return the first move of the ArrayList moves
-	 */
     public Move getMove(Game game, int selectedValue,
 			int pieceId, boolean isStarter, Integer opponentPieceId, Player player) {
 	Figure figure = player.figures.get(pieceId);
 	Figure oppfigure = player.figures.get(opponentPieceId);
 	ArrayList<Move> moves = new ArrayList<>();
 	switch (this.type) {
-	case SWAP:
+	case CardType.swapCard:
 	    moves.add(new Move(player, figure.field, oppfigure.field, true, this));
 	    break;
-	case START_13:
-	case START_1_11:
+	case CardType.startCard1: 
+	case CardType.startCard2:
 	    if(isStarter) {
 		moves.add(new Move(player, this));
 		break;
 	    }
-	case COPY:
-	case MAGNET:
-	case RANGE_7:
+	case CardType.copyCard: 
+	case CardType.magnetCard: 
+	case CardType.oneToSeven:
 	default: //normal
 	    addStepMove(moves, selectedValue,  figure, game, player, /*range*/ false);
 	    break;
@@ -115,20 +88,12 @@ public class Card {
 	return moves.get(0);
     }
 
-	/**
-	 * The method that generates and adds possible moves for a given Figure
-	 *
-	 * @param game An object representing the current state of the game
-	 * @param figure An object representing the game piece to be moved
-	 * @param moves An ArrayList where the method adds possible moves
-	 * @param player An object representing the player to whom the figure belongs
-	 */
     //move generator for card
     public void getMoves(Game game, Figure figure, ArrayList<Move> moves, Player player) { //target figure
 	Field to;
 	switch (this.type) {
-	case SWAP:
-	    if (figure.isInBank || figure.isInHouse /*allowed?*/) break;
+	case CardType.swapCard: 
+	    if (figure.isInBank || figure.isInHouse) break;
 	    for(int i = 0; i < game.players.size(); i++) {
 		if(i == figure.color) continue;
 		Player opponent = game.players.get(i);
@@ -140,7 +105,7 @@ public class Card {
 		}
 	    }
 	    break;
-	case MAGNET:
+	case CardType.magnetCard: 
 		if (figure.isInBank || figure.isInHouse) break;
 		to = figure.field;
 		Field next = to.next;
@@ -152,16 +117,16 @@ public class Card {
 		    moves.add(new Move(player, figure.field, to, false, this));
 		}
 		break;
-	case RANGE_7:
+	case CardType.oneToSeven:
 		if (figure.isInBank) break;
 		addStepMove(moves, 7,  figure, game, player, /*range*/ true);		
 		break;
-	case PLUS_MINUS_4:
+	case CardType.plusMinus4:
 		if (figure.isInBank) break;
 		addStepMove(moves, 4, figure, game, player, false);
 		addStepMove(moves, -4, figure, game, player, false);		
 		break;
-	case START_13:
+	case CardType.startCard1: 
 	    if (figure.isInBank && (player.startField.isEmpty() ||  player.startField.figure.color != figure.color)) {
 		moves.add(new Move(player, this));
 	    }
@@ -169,7 +134,7 @@ public class Card {
 		addStepMove(moves, 13,  figure, game, player, false);
 	    }
 	    break;
-	case START_1_11:
+	case CardType.startCard2:  
 	    if (figure.isInBank && (player.startField.isEmpty() ||  player.startField.figure.color != figure.color)) {
 		moves.add(new Move(player, this));
 	    }
@@ -178,36 +143,57 @@ public class Card {
 		addStepMove(moves, 11,  figure, game, player, false);
 	    }
 	    break;
-	case COPY:
+	case CardType.copyCard: 
 	    int inx = game.pile.size() -1 ;
 	    for (int i = inx; i > 0; i--) {
 		Card lastcard = game.pile.get(game.pile.size() - 1);
-		if (lastcard.type != CardType.COPY) { 
+		if (lastcard.type != CardType.copyCard) { 
 		    // lastcard.getMoves(game, figure, moves);//bug, sets wrong usedcard
 		    this.type = lastcard.type;
 		    this.getMoves(game, figure, moves, player);
-		    this.type = CardType.COPY; //hacky
+		    this.type = CardType.copyCard; //hacky
 		    break; 
 		}
 	    }
 	    break;
 	default: //normal
 	    if (figure.isInBank) break;
-	    addStepMove(moves, this.type.ordinal(),  figure, game, player, false);
+	    addStepMove(moves, this.getOrdinal(),  figure, game, player, false);
 	    break;
 	}
     }
 
-	/**
-	 * Prints the type of the card
-	 *
-	 */
     public void printtyp() {
 	System.out.println(this.type);
     }
 
+    //XD
+    public int getOrdinal() {
+	switch(this.type) {
+	case card2:
+	    return 2;
+	case card3:
+	    return 3;
+	case card5:
+	    return 5;
+	case card6:
+	    return 6;
+	case card8:
+	    return 8;
+	case card9:
+	    return 9;
+	case card10:
+	    return 10;
+	case card12:
+	    return 12;
+	default: //unreachable
+	    return 0;
+	}
+	
+    }
+
     //slower and buggy
-    // private void addStepMovenew(ArrayList<com.nexusvision.server.model.gamelogic.Move> moves, int argsteps, com.nexusvision.server.model.gamelogic.Figure figure, com.nexusvision.server.model.gamelogic.Game game, com.nexusvision.server.model.gamelogic.Player player, boolean range) {
+    // private void addStepMovenew(ArrayList<Move> moves, int argsteps, Figure figure, Game game, Player player, boolean range) {
 	// if(range) {
 	    // for (int i = 1; i <= argsteps; i++) {
 		// if(!addStepMovehelp(moves, i, figure, game, player)) return;
@@ -219,7 +205,7 @@ public class Card {
     // }
 				// 
     //for all start fields between from and to check if occupied
-    // private boolean addStepMovehelp(ArrayList<com.nexusvision.server.model.gamelogic.Move> moves, int argsteps, com.nexusvision.server.model.gamelogic.Figure figure, com.nexusvision.server.model.gamelogic.Game game, com.nexusvision.server.model.gamelogic.Player player) {
+    // private boolean addStepMovehelp(ArrayList<Move> moves, int argsteps, Figure figure, Game game, Player player) {
 	// int toinx = (argsteps + figure.field.val) % game.mainFieldCount;
 	// int origtoinx = toinx;
 	// int frominx = figure.field.val;
@@ -252,7 +238,7 @@ public class Card {
 	    // if(toinx >= player.houseoccinx) return false;
 	// }
 	    
-	// moves.add(new com.nexusvision.server.model.gamelogic.Move(player ,game.board[frominx] , game.board[toinx], false, this));
+	// moves.add(new Move(player ,game.board[frominx] , game.board[toinx], false, this));
 	// return true;
     // }
     
