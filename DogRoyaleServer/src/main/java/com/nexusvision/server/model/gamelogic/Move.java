@@ -1,6 +1,6 @@
 package com.nexusvision.server.model.gamelogic;// package org.example;
 /**
- *
+ * This class generates Moves
  *
  * @author dgehse
  */
@@ -12,7 +12,16 @@ public final class Move  {
     private final boolean isStartMove; //ignore from field just put a fig on isStartMove
     private final Player player;
     private final Card cardUsed;
-    
+
+	/**
+	 * Constructor for the Move
+	 *
+	 * @param player An object representing the player
+	 * @param from An object representing the field the move starts
+	 * @param to An object representing the field the move ends
+	 * @param isSwapMove A Boolean indicating if it is a swap move or not
+	 * @param cardUsed An object representing the card used for the move
+	 */
     public Move(Player player, Field from, Field to, boolean isSwapMove, Card cardUsed) {
 	this.player = player;
 	this.from = from;
@@ -22,6 +31,12 @@ public final class Move  {
 	this.cardUsed = cardUsed;
     }
 
+	/**
+	 * Constructor for the Move
+	 *
+	 * @param player An object representing the player
+	 * @param cardUsed An object representing the card used for the move
+	 */
     public Move(Player player, Card cardUsed) { //isStartMove move
 	this.player = player;
 	this.isStartMove = true;
@@ -31,6 +46,11 @@ public final class Move  {
 	this.isSwapMove = false;
     }
 
+	/**
+	 * Checks if the move equals another move
+	 *
+	 * @return A Boolean, which is true when the moves are equal
+	 */
     public boolean equal(Move move) {
 	//TODO readability
 	if(this.from == move.from && this.to == move.to && this.isSwapMove == move.isSwapMove && this.isStartMove == move.isStartMove &&
@@ -49,8 +69,14 @@ public final class Move  {
 	    this.isSwapMove == move.isSwapMove && this.isStartMove == move.isStartMove
 	    && this.player.color == move.player.color && this.cardUsed.type == move.cardUsed.type;
     }
-    
 
+	/**
+	 * Executes a move, removing and adding cards, if it is a swap move execute it,
+	 * if it is a start move execute it
+	 * otherwise execute a normal move(updateing figures, handling house, draw cards ect.)
+	 *
+	 * @param game  An object representing the game
+	 */
     public void execute(Game game) {
 	// System.out.println("cards num before " + this.player.cards.size());
 	if(this.cardUsed != null) {
@@ -152,6 +178,10 @@ public final class Move  {
 	// System.out.println("cards num after 2 " + this.player.cards.size());
     }
 
+	/**
+	 * Prints information of the move
+	 *
+	 */
     public void printmove() { 
 	System.out.print("card type " + this.cardUsed.type + " ");
 	if(this.from != null) {
@@ -164,7 +194,11 @@ public final class Move  {
     }
 
 
-
+	/**
+	 * Gets the Field type
+	 *
+	 * @return Enum field type
+	 */
     public FieldType getFieldTypeTo() {
 	return this.to.type;
     }
