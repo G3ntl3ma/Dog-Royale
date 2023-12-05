@@ -1,4 +1,4 @@
-/**Author: Luca Eisen
+/**@author: leisen
  * Diese Klasse enthält Informationen zu den einzelnen Spielen.
  * Momentan enthält sie nur Infos wichtig für die Anzeige in Spectate Running Games
  */
