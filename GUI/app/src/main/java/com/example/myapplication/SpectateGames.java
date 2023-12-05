@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -34,6 +35,8 @@ public class SpectateGames extends Fragment {
     //games enthält alle Spiele und für jedes Element in games wird der Adapter einen Eintrag in Spectate Games erstellen
     List<Game> games = new ArrayList<>();
     SpectateGamesAdapter adapter;
+
+    private ServerViewModel viewModel;
     private String mParam1;
     private String mParam2;
 
@@ -64,16 +67,6 @@ public class SpectateGames extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-        games.add(new Game("John wick",15, 10, 15));
-        games.add(new Game("Robert j",30, 5, 6));
-        games.add(new Game("James Gunn",60, 3, 8));
-        games.add(new Game("Ricky tales",30, 15, 20));
-        games.add(new Game("Micky mose",12, 3, 15));
-        games.add(new Game("Pick War",1, 3, 4));
-        games.add(new Game("Leg piece",2, 6, 7));
-        games.add(new Game("Apple Mac",8, 9, 10));
-
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -92,6 +85,23 @@ public class SpectateGames extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        adapter = new SpectateGamesAdapter(getContext(), games, SpectateGames.this);
+        binding.SpectateGamesRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.SpectateGamesRecycleView.setAdapter(adapter);
+        viewModel = new ViewModelProvider(requireActivity()).get(ServerViewModel.class);
+
+        viewModel.getGames().observe(getViewLifecycleOwner(), list -> {
+            if(games.size()> 0){
+                for(int i = games.size()-1; i>=0; i--){
+                    games.remove(i);
+                }
+            }
+            for(int i = 0; i < list.size(); i++) {
+                games.add(list.get(i));
+            }
+            adapter.notifyDataSetChanged();
+        });
         binding.currentBackToMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,17 +111,17 @@ public class SpectateGames extends Fragment {
             }
 
         });
-        adapter = new SpectateGamesAdapter(getContext(), games, SpectateGames.this);
-        binding.SpectateGamesRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.SpectateGamesRecycleView.setAdapter(adapter);
         binding.spectateGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                games.add(new Game("Hello", 15, 10 , 11));
-                adapter.notifyItemInserted(games.size()-1);
+                addGame(new Game("Hello", 15, 10 , 11));
             }
 
         });
+    }
+
+
+    public void addGame(Game game){
+        viewModel.addGame(game);
     }
 }
