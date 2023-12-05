@@ -1,3 +1,5 @@
+package com.nexusvision.server.model.gamelogic;
+
 enum CardType {
     MAGNET, //0
     COPY, //1

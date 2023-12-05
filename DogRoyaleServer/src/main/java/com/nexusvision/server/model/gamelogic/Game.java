@@ -1,11 +1,10 @@
-// package org.example;
+package com.nexusvision.server.model.gamelogic;// package org.example;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 /**
- * This class represents the game and manages Player, Cards, Moves and more
+ * This class represents the game and manages com.nexusvision.server.model.gamelogic.Player, Cards, Moves and more
  *
  * @author dgehse
  */
@@ -160,7 +159,7 @@ public final class Game {
 	}
 	System.out.println("");
 	for (int i = 0; i < this.mainFieldCount; i++) {
-	    // Field f = this.board.get(i);
+	    // com.nexusvision.server.model.gamelogic.Field f = this.board.get(i);
 	    Field f = this.board[i];
 	    System.out.print(f.type + "-");
 	}
@@ -237,7 +236,7 @@ public final class Game {
 	    this.board[i] = new Field(i, conf.charAt(i));
 	}
 
-	//add players Player
+	//add players com.nexusvision.server.model.gamelogic.Player
 	for (int plyrcol = 0; plyrcol < players; plyrcol++) { 
 	    this.players.add(new Player(plyrcol, figureCount));
 	}
@@ -259,7 +258,7 @@ public final class Game {
 		int off = fieldcount;
 		this.players.get(seenstarts).houseFirstIndex = fieldcount;
 		for (int j = off; j < figureCount + off; j++) {
-		    // this.board.add(new Field(fieldcount++, 'h'));
+		    // this.board.add(new com.nexusvision.server.model.gamelogic.Field(fieldcount++, 'h'));
 		    this.board[fieldcount] = new Field(fieldcount, FieldType.HOUSE);
 
 		    fieldcount++;
@@ -386,7 +385,7 @@ public final class Game {
 	return this.board[inx];
     }
 
-    //TODO CardType is Card in interface doc
+    //TODO CardType is com.nexusvision.server.model.gamelogic.Card in interface doc
     
     //TODO rename to make move
     //if move not legal do nothing and execute handle illegal move

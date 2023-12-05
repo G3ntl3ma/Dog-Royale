@@ -31,7 +31,7 @@ public class RequestGameListHandlerTest {
         Error expectedError = new Error();
         expectedError.setType(TypeMenue.error);
         expectedError.setDataId(TypeMenue.requestGameList.ordinal() + 100);
-        expectedError.setMessage("Game List failed (no games available)");
+        expectedError.setMessage("com.nexusvision.server.model.gamelogic.Game List failed (no games available)");
         String expectedJson = gson.toJson(expectedError);
         assertEquals(expectedJson, result);
     }

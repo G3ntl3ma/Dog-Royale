@@ -1,7 +1,4 @@
-// package org.example;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+package com.nexusvision.server.model.gamelogic;// package org.example;
 
 enum FieldType {
     NORMAL,
@@ -71,19 +68,19 @@ public final class Field  {
     public void printtype() {
 
         switch (type) {
-            case FieldType.NORMAL:
+            case NORMAL:
                 System.out.println("normal");
                 break;
 
-            case FieldType.DRAW:
+            case DRAW:
                 System.out.println("draw card");
                 break;
 
-            case FieldType.START:
+            case START:
                 System.out.println("start");
                 break;
 
-            case FieldType.HOUSE:
+            case HOUSE:
                 System.out.println("house");
                 break;
         }

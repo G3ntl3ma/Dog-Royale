@@ -1,4 +1,4 @@
-// package org.example;
+package com.nexusvision.server.model.gamelogic;// package org.example;
 
 import java.util.ArrayList;
 
@@ -69,18 +69,18 @@ public class Card {
 	Figure oppfigure = player.figures.get(opponentPieceId);
 	ArrayList<Move> moves = new ArrayList<>();
 	switch (this.type) {
-	case CardType.SWAP:
+	case SWAP:
 	    moves.add(new Move(player, figure.field, oppfigure.field, true, this));
 	    break;
-	case CardType.START_13: 
-	case CardType.START_1_11:
+	case START_13:
+	case START_1_11:
 	    if(isStarter) {
 		moves.add(new Move(player, this));
 		break;
 	    }
-	case CardType.COPY: 
-	case CardType.MAGNET: 
-	case CardType.RANGE_7:
+	case COPY:
+	case MAGNET:
+	case RANGE_7:
 	default: //normal
 	    addStepMove(moves, selectedValue,  figure, game, player, /*range*/ false);
 	    break;
@@ -92,7 +92,7 @@ public class Card {
     public void getMoves(Game game, Figure figure, ArrayList<Move> moves, Player player) { //target figure
 	Field to;
 	switch (this.type) {
-	case CardType.SWAP: 
+	case SWAP:
 	    if (figure.isInBank || figure.isInHouse /*allowed?*/) break;
 	    for(int i = 0; i < game.players.size(); i++) {
 		if(i == figure.color) continue;
@@ -105,7 +105,7 @@ public class Card {
 		}
 	    }
 	    break;
-	case CardType.MAGNET: 
+	case MAGNET:
 		if (figure.isInBank || figure.isInHouse) break;
 		to = figure.field;
 		Field next = to.next;
@@ -117,16 +117,16 @@ public class Card {
 		    moves.add(new Move(player, figure.field, to, false, this));
 		}
 		break;
-	case CardType.RANGE_7:
+	case RANGE_7:
 		if (figure.isInBank) break;
 		addStepMove(moves, 7,  figure, game, player, /*range*/ true);		
 		break;
-	case CardType.PLUS_MINUS_4:
+	case PLUS_MINUS_4:
 		if (figure.isInBank) break;
 		addStepMove(moves, 4, figure, game, player, false);
 		addStepMove(moves, -4, figure, game, player, false);		
 		break;
-	case CardType.START_13: 
+	case START_13:
 	    if (figure.isInBank && (player.startField.isEmpty() ||  player.startField.figure.color != figure.color)) {
 		moves.add(new Move(player, this));
 	    }
@@ -134,7 +134,7 @@ public class Card {
 		addStepMove(moves, 13,  figure, game, player, false);
 	    }
 	    break;
-	case CardType.START_1_11:  
+	case START_1_11:
 	    if (figure.isInBank && (player.startField.isEmpty() ||  player.startField.figure.color != figure.color)) {
 		moves.add(new Move(player, this));
 	    }
@@ -143,7 +143,7 @@ public class Card {
 		addStepMove(moves, 11,  figure, game, player, false);
 	    }
 	    break;
-	case CardType.COPY: 
+	case COPY:
 	    int inx = game.pile.size() -1 ;
 	    for (int i = inx; i > 0; i--) {
 		Card lastcard = game.pile.get(game.pile.size() - 1);
@@ -168,7 +168,7 @@ public class Card {
     }
 
     //slower and buggy
-    // private void addStepMovenew(ArrayList<Move> moves, int argsteps, Figure figure, Game game, Player player, boolean range) {
+    // private void addStepMovenew(ArrayList<com.nexusvision.server.model.gamelogic.Move> moves, int argsteps, com.nexusvision.server.model.gamelogic.Figure figure, com.nexusvision.server.model.gamelogic.Game game, com.nexusvision.server.model.gamelogic.Player player, boolean range) {
 	// if(range) {
 	    // for (int i = 1; i <= argsteps; i++) {
 		// if(!addStepMovehelp(moves, i, figure, game, player)) return;
@@ -180,7 +180,7 @@ public class Card {
     // }
 				// 
     //for all start fields between from and to check if occupied
-    // private boolean addStepMovehelp(ArrayList<Move> moves, int argsteps, Figure figure, Game game, Player player) {
+    // private boolean addStepMovehelp(ArrayList<com.nexusvision.server.model.gamelogic.Move> moves, int argsteps, com.nexusvision.server.model.gamelogic.Figure figure, com.nexusvision.server.model.gamelogic.Game game, com.nexusvision.server.model.gamelogic.Player player) {
 	// int toinx = (argsteps + figure.field.val) % game.mainFieldCount;
 	// int origtoinx = toinx;
 	// int frominx = figure.field.val;
@@ -213,7 +213,7 @@ public class Card {
 	    // if(toinx >= player.houseoccinx) return false;
 	// }
 	    
-	// moves.add(new Move(player ,game.board[frominx] , game.board[toinx], false, this));
+	// moves.add(new com.nexusvision.server.model.gamelogic.Move(player ,game.board[frominx] , game.board[toinx], false, this));
 	// return true;
     // }
     

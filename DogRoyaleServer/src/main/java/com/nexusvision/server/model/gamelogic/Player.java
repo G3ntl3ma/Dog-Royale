@@ -1,4 +1,4 @@
-// package org.example;
+package com.nexusvision.server.model.gamelogic;// package org.example;
 
 import java.util.ArrayList;
 
