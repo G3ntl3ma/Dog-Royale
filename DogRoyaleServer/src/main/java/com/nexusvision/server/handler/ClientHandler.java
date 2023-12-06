@@ -25,6 +25,8 @@ public class ClientHandler extends Handler implements Runnable {
     private final Socket clientSocket;
     private final ServerController serverController;
     private final int clientID;
+    
+    private PrintWriter broadcaster;
 
     private enum State {
         CONNECT_TO_SERVER,
@@ -36,10 +38,8 @@ public class ClientHandler extends Handler implements Runnable {
         REQUEST_TECH_DATA,
         START_GAME;
         // TODO: Add requests for game
-    }
-
-    ;
-
+    };
+    
     private State expectedState = State.CONNECT_TO_SERVER;
 
     Gson gson = new GsonBuilder()
@@ -50,6 +50,13 @@ public class ClientHandler extends Handler implements Runnable {
         serverController = ServerController.getInstance();
         this.clientSocket = clientSocket;
         this.clientID = clientID;
+	//this might block because iirc you need a buffered reader first, not sure
+        try {
+            this.broadcaster = new PrintWriter(clientSocket.getOutputStream(), false);
+        }
+        catch(Exception e) {
+            this.broadcaster = null;
+        }
     }
 
     @Override
@@ -77,6 +84,11 @@ public class ClientHandler extends Handler implements Runnable {
                 logger.error("Error while trying to close the connection: " + e.getMessage());
             }
         }
+    }
+
+    public void broadcast(String message) {
+	this.broadcaster.write(message);
+	this.broadcaster.flush();
     }
 
     private String handle(String request) {

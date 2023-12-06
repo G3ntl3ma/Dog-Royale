@@ -38,7 +38,7 @@ public class ServerController {
     private final HashMap<Integer, GameLobby> lobbyMap = new HashMap<>();
 
     // ArrayList<Socket> clientSockets = new ArrayList<>();
-    private final HashMap<Integer, Socket> clientSocketMap = new HashMap<>();
+    private final HashMap<Integer, ClientHandler> handlerMap = new HashMap<>();
 
     private ServerController() {}
 
@@ -57,8 +57,9 @@ public class ServerController {
                 Socket clientSocket = serverSocket.accept();
                 logger.info("New connection request from " + clientSocket.getInetAddress());
 		int newClientID = this.createNewClient();
-		clientSocketMap.put(newClientID,clientSocket);
-                executorService.submit(new ClientHandler(clientSocket, newClientID));
+		ClientHandler clientHandler = new ClientHandler(clientSocket, newClientID);
+		handlerMap.put(newClientID, clientHandler);
+                executorService.submit(clientHandler);
             }
         } catch (IOException e) {
             logger.error(e.getStackTrace());
@@ -70,9 +71,9 @@ public class ServerController {
             GameLobby g = lobbyMap.get(key);
 	    //see if player in players of game
 	    for (int i = 0; i < g.getPlayerOrderList().size(); i++) {
-		if(g.getPlayerOrderList().get(i) == clientID) {
-		    return g;
-		}
+            if(g.getPlayerOrderList().get(i) == clientID) {
+		        return g;
+		    }
 	    }
 
         }
@@ -93,21 +94,15 @@ public class ServerController {
         return gameLobbys;
     }
 
-    //TODO figure out if this actually works in practice
-    //TODO this should take a lobbyid and send only to those
     public void sendToAllLobbyMembers(GameLobby g,String message) {
-	for(int clientId : g.getPlayerOrderList()){
-	    Socket socket = clientSocketMap.get(clientId);
-	    try {
-		BufferedReader reader = new BufferedReader(
-							   new InputStreamReader(socket.getInputStream()));
-		PrintWriter writer = new PrintWriter(
-						     socket.getOutputStream(), false);
-		writer.write(message);
-		writer.flush();
-	    }
-	    catch(Exception e){};
-	}
+        for(int clientId : g.getPlayerOrderList()){
+	    //get the client
+            ClientHandler handler = handlerMap.get(clientId);
+            try {
+		handler.broadcast(message);
+            }
+            catch(Exception e){};
+        }
     }
 
     // ALLE NICHT NÖTIG DA EINE GAME LOBBY DAS GANZE ANBIETET
