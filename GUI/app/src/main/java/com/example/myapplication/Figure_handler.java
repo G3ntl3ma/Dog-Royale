@@ -83,17 +83,14 @@ public class Figure_handler {
 
     public void create_figures()
     {
-        System.out.println(figure_size);
         for (int j = 0; j < player_count; j++)
         {
             for (int i = 0; i < figure_count; i++)
             {
                 Figure figure = new Figure(i, j, screen_width,screen_width ,figure_size);
                 figure.createFigure(layout, colors[j]);
-                System.out.println(colors[j]);
             }
         }
-        System.out.println("OwOwO: " + layout.getWidth());
 
     }
 

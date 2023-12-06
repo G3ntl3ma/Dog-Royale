@@ -7,6 +7,8 @@ public class GameboardViewModel extends ViewModel {
     MutableLiveData<Integer> field_size= new MutableLiveData<>();
     MutableLiveData<Integer> player_count= new MutableLiveData<>();
     MutableLiveData<Integer> figure_count= new MutableLiveData<>();
+    //MutableLiveData<Game_board_creator> game_board_creator= new MutableLiveData<>();
+    MutableLiveData<Figure_handler> figure_handler= new MutableLiveData<>();
 
     public MutableLiveData<Integer> getField_size() {
         return field_size;
@@ -31,4 +33,13 @@ public class GameboardViewModel extends ViewModel {
     public void setFigure_count(int figure_count) {
         this.figure_count.setValue(figure_count);
     }
+
+    //public MutableLiveData<Game_board_creator> getGame_board_creator() {return game_board_creator;}
+
+    //public void setGame_board_creator(Game_board_creator game_board_creator) {this.game_board_creator.setValue(game_board_creator);}
+
+    public MutableLiveData<Figure_handler> getFigure_handler() {return figure_handler;}
+
+    public void setFigure_handler(Figure_handler figure_handler) {this.figure_handler.setValue(figure_handler);}
+
 }

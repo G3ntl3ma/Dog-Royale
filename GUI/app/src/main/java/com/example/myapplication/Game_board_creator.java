@@ -192,7 +192,6 @@ public class Game_board_creator{
                 field.create_field(); //actually creates the field
                 player++;
                 start_fields_position[player - 1] = new Tuple(result.getX() + width/2, result.getY() + width/2);
-                System.out.println("lalala" + result);
             }
             else { //sonst
                 Game_field field = new Game_field(this.layout, this.field_width * 2, (int) Math.round(result.getX() + this.width / 2 - ( this.field_width)), (int) Math.round(result.getY() + this.width / 2 - (this.field_width)), "normal" , 0, i); //Create field (adjusting x and y coordinates)
@@ -216,7 +215,6 @@ public class Game_board_creator{
         for (int j = 0; j <start_fields.length; j++)
         {
             Tuple vek = new Tuple((mid.getX() - start_fields_position[j].getX()) , (mid.getY() - start_fields_position[j].getY()) ); //calculates the vector from the start field to the middle of the board
-            System.out.println(field_size + "das erste");
             if(field_size>20) {
                 vek.setX(vek.getX() - 1/(vek.vek_length()/(2*this.width/field_size)) * vek.getX());
                 vek.setY(vek.getY() - 1/(vek.vek_length()/(2*this.width/field_size)) * vek.getY());
@@ -225,12 +223,9 @@ public class Game_board_creator{
                 vek.setX(vek.getX() - 1/(vek.vek_length()/(2*this.width/20)) * vek.getX());
                 vek.setY(vek.getY() - 1/(vek.vek_length()/(2*this.width/20)) * vek.getY());
             }
-            System.out.println("Hausfeld" + start_fields_position[j]);
-            System.out.println("Länge: " + vek.vek_length());
-            System.out.println("Vektor: " + vek);
+            //System.out.println("Länge: " + vek.vek_length());
 
             int field_width = (int) Math.round(vek.vek_length()/(figure_count + 1));
-            System.out.println(field_size + "das zweite");
             for (int k = 0; k<figure_count;k++) {
                 Tuple pos = fh(vek, start_fields_position[j] , k , figure_count + 2 ); //calculates the position on the vector
                 Game_field field = new Game_field(layout, field_width , (int) Math.round(pos.getX() - field_width/2), (int) Math.round(pos.getY() -  field_width/2), "homefield", j, k, colors[j]); // erstellt das Feld
@@ -267,11 +262,8 @@ public class Game_board_creator{
     public void createCardDrawfields()
     {
         for (int i = 0; i< card_draw_fields.length; i++) {
-            System.out.println("hi");
             ImageView imageView = layout.findViewWithTag("normal"+card_draw_fields[i]);
-            System.out.println("testest");
             imageView.setImageResource(R.drawable.ziehfeld);
-            System.out.println("hier fehler");
         }
     }
 }

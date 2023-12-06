@@ -71,7 +71,6 @@ public class Figure {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(this.width, this.width);
         params.setMargins(this.x, this.y, 0, 0);
         figure.setColorFilter(ContextCompat.getColor(layout.getContext(),color), PorterDuff.Mode.MULTIPLY);
-        System.out.println("color: " + color);
         figure.setTag("figure" + playernumber + "_" +  id);
         figure.setLayoutParams(params);
         layout.addView(figure);

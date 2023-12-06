@@ -41,14 +41,14 @@ public class Game_board extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private int pxWidth;
     private FragmentGameBoardBinding binding;
-    //save positions
-    private ArrayList<Tuple> positions = new ArrayList<Tuple>();
+
     //Anzahl Spielfelder
     private int field_size = 1;
     //Anzahl Spieler
     private int player_count;
-    //die wievielten Spielfelder Startfelder sind.
+    //Anzahl Figuren pro Spieler
     private int figure_count;
+    //die wievielten Spielfelder Startfelder sind.
     private int[] start_positions = new int[player_count];
 
     //Farben der Start/hausfelder
@@ -127,7 +127,7 @@ public class Game_board extends Fragment {
         //getting display width in px
         pxWidth = displayMetrics.widthPixels;
 
-        //set board in middle of screen
+        //set board into middle of screen
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 Math.round(displayMetrics.widthPixels)
@@ -138,7 +138,7 @@ public class Game_board extends Fragment {
         GameBoard.setLayoutParams(params);
 
         viewModel = new ViewModelProvider(requireActivity()).get(GameboardViewModel.class);
-        System.out.println(viewModel.getField_size().getValue());
+        System.out.println("normale Felder: " + viewModel.getField_size().getValue());
         //set number of fields
         field_size = viewModel.getField_size().getValue();
         //set Player_count
@@ -156,10 +156,12 @@ public class Game_board extends Fragment {
         //creates fields in the layout
         Game_board_creator creator = new Game_board_creator(GameBoard, pxWidth, player_count, field_size, figure_count, start_colors, start_positions, draw_fields);
         creator.createFields();
+        //viewModel.setGame_board_creator(creator);
 
         //instanziert die Figuren in das Layout
         Figure_handler figure_handler = new Figure_handler(GameBoard, figure_count, player_count, start_colors, creator.getField_width(), creator.getHomefield_size(), pxWidth);
         figure_handler.create_figures();
+        viewModel.setFigure_handler(figure_handler);
 
         Timer timer = new Timer(600_000, binding);
         timer.startTimer();
@@ -175,11 +177,10 @@ public class Game_board extends Fragment {
 
                 if (((RelativeLayout.LayoutParams) GameBoard.findViewWithTag("figure0_1").getLayoutParams()).leftMargin == pxWidth) {
                     figure_handler.moveFigure(1, "figure0_1", position, false, null);
-                    System.out.println("OwO");
                 } else {
                     position += 2;
                     if (position >= field_size) {
-                        figure_handler.moveFigure(1, "figure0_1", null, false, position - field_size - 1);
+                        figure_handler.moveFigure(1, "figure0_1", null, false, position - field_size );
                     } else {
                         figure_handler.moveFigure(1, "figure0_1", position, false, null);
                     }
