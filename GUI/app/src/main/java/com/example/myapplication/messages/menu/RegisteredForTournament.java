@@ -25,6 +25,4 @@ public class RegisteredForTournament extends AbstractMenuMessage {
         private int clientId;
         private String name;
     }
-
-    // TODO: getResponse()-Methode schreiben
 }

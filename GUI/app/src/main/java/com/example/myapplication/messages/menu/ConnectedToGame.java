@@ -11,6 +11,4 @@ import lombok.Data;
 @Data
 public class ConnectedToGame extends AbstractMenuMessage {
     private boolean success;
-
-    // TODO: getResponse()-Methode schreiben
 }

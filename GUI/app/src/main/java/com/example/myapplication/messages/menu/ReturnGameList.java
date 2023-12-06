@@ -36,5 +36,4 @@ public class ReturnGameList extends AbstractMenuMessage {
         private int gameId;
         private int winnerPlayerId;
     }
-    // TODO: getResponse()-Methode schreiben
 }

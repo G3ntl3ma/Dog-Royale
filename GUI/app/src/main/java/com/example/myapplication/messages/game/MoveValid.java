@@ -1,5 +1,7 @@
 package com.example.myapplication.messages.game;
 
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -11,9 +13,15 @@ import lombok.Data;
 public class MoveValid extends AbstractGameMessage{
     private boolean skip;
     private Card card;
-//TODO implemntieren Selected Value
+    private List<SelectedValue> selectedValue;
+
     private int pieceId;
     private boolean isStarter;
     private int opponentPieceId;
     private boolean validMove;
+
+    public class SelectedValue {
+        boolean test;
+        int selectedCardValue;
+   }
 }

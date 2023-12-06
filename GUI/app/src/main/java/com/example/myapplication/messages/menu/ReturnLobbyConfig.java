@@ -31,7 +31,7 @@ public class ReturnLobbyConfig extends AbstractMenuMessage{
     private int playerCount;
     private int figuresPerPlayer;
 
-    //TODO Varablien fertig initialisieren
+    private Colors color;
 
-    // TODO: getResponse()-Methode schreiben
+    private Penalty penalty;
 }
