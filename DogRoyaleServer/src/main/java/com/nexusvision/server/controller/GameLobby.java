@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.nexusvision.server.model.enums.CardType;
 import com.nexusvision.server.model.enums.GameState;
 import com.nexusvision.server.model.enums.Colors;
 import com.nexusvision.server.model.gamelogic.Game;
@@ -110,6 +111,12 @@ public class GameLobby {
     }
 
     //success boolean
+    public boolean tryMove(boolean skip, int card, int selectedValue,
+                           int pieceId, boolean isStarter, Integer opponentPieceId) {
+	return this.game.tryMove(skip, card,  selectedValue, pieceId, isStarter, opponentPieceId);
+    }
+
+    //success boolean
     public boolean setConfiguration(int playerCount, int fieldSize, int figuresPerPlayer, List<Integer> drawFieldpositions,
                                     List<Integer> startFields, int initialCardsPerPlayer, int thinkingTimePerMove,
                                     int consequencesForInvalidMove, int maxGameDuration, int maxTotalMoves) {
@@ -135,7 +142,6 @@ public class GameLobby {
             isPaused = true;
         }
 
-        // TODO create game
         this.game = new Game(fieldStringBuild.toString(), figuresPerPlayer, initialCardsPerPlayer, maxTotalMoves, consequencesForInvalidMove);
 
         return true;

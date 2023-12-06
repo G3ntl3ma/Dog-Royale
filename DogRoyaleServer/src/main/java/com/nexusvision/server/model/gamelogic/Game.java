@@ -357,8 +357,9 @@ public final class Game {
 	return null;
     }
 
-    public boolean tryMove(boolean skip, CardType card, int selectedValue,
+    public boolean tryMove(boolean skip, int cardOrdinal, int selectedValue,
 				 int pieceId, boolean isStarter, Integer opponentPieceId) {
+	CardType card = CardType.values()[cardOrdinal];
 	Move move = getMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
 	if(move==null) {
 	    handleIllegalMove();

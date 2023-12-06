@@ -39,34 +39,35 @@ public class RequestGameListHandler extends Handler implements MenuMessageHandle
             ArrayList<ReturnGameList.RunningGame> runningGameList = new ArrayList<>();
             ArrayList<ReturnGameList.FinishingGame> finishingGameList = new ArrayList<>();
 
-            for (int i = 0; i < startingGames.size(); i++) {
-                GameLobby game = startingGames.get(i);
-                ReturnGameList.StartingGame startingGame = new ReturnGameList.StartingGame();
-                // TODO: shoudn't be commented
-//                startingGame.setGameId(serverController.getGameId(game));
-//                startingGame.setCurrentPlayerCount(serverController.getCurrentPlayerCount(game));
-//                startingGame.setMaxPlayerCount(serverController.getMaxPlayerCount(game));
-                startingGameList.add(startingGame);
-            }
 
-            for (int i = 0; i < runningGames.size(); i++) {
-                GameLobby game = runningGames.get(i);
-                ReturnGameList.RunningGame runningGame = new ReturnGameList.RunningGame();
-                // TODO: shoudn't be commented
-//                runningGame.setGameId(serverController.getGameId(game));
-//                runningGame.setCurrentPlayerCount(serverController.getCurrentPlayerCount(game));
-//                runningGame.setMaxPlayerCount(serverController.getMaxPlayerCount(game));
-                runningGameList.add(runningGame);
-            }
+//             for (int i = 0; i < startingGames.size(); i++) {
+//                 GameLobby game = startingGames.get(i);
+//                 ReturnGameList.StartingGame startingGame = new ReturnGameList.StartingGame();
+//                 // TODO: shoudn't be commented
+// //                startingGame.setGameId(serverController.getGameId(game));
+// //                startingGame.setCurrentPlayerCount(serverController.getCurrentPlayerCount(game));
+// //                startingGame.setMaxPlayerCount(serverController.getMaxPlayerCount(game));
+//                 startingGameList.add(startingGame);
+//             }
 
-            for (int i = 0; i < finishedGames.size(); i++) {
-                GameLobby game = finishedGames.get(i);
-                ReturnGameList.FinishingGame finishGame = new ReturnGameList.FinishingGame();
-                // TODO: shoudn't be commented
-//                finishGame.setGameId(serverController.getGameId(game));
-                finishGame.setWinnerPlayerId(10 /*TODO getwinnerplayer*/);
-                finishingGameList.add(finishGame);
-            }
+//             for (int i = 0; i < runningGames.size(); i++) {
+//                 GameLobby game = runningGames.get(i);
+//                 ReturnGameList.RunningGame runningGame = new ReturnGameList.RunningGame();
+//                 // TODO: shoudn't be commented
+// //                runningGame.setGameId(serverController.getGameId(game));
+// //                runningGame.setCurrentPlayerCount(serverController.getCurrentPlayerCount(game));
+// //                runningGame.setMaxPlayerCount(serverController.getMaxPlayerCount(game));
+//                 runningGameList.add(runningGame);
+//             }
+
+//             for (int i = 0; i < finishedGames.size(); i++) {
+//                 GameLobby game = finishedGames.get(i);
+//                 ReturnGameList.FinishingGame finishGame = new ReturnGameList.FinishingGame();
+//                 // TODO: shoudn't be commented
+// //                finishGame.setGameId(serverController.getGameId(game));
+//                 finishGame.setWinnerPlayerId(10 /*TODO getwinnerplayer*/);
+//                 finishingGameList.add(finishGame);
+//             }
 
             _returnGameList.setStartingGames(startingGameList);
             _returnGameList.setRunningGames(runningGameList);

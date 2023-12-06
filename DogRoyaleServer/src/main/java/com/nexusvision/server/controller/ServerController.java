@@ -8,7 +8,10 @@ import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
@@ -34,9 +37,7 @@ public class ServerController {
     private final HashMap<Integer, Client> clientMap = new HashMap<>();
     private final HashMap<Integer, GameLobby> lobbyMap = new HashMap<>();
 
-    //TODO starting games (list of gameid + currentplayercount + maxplayercount)
-    //TODO running games (list of gameid + currentplayercount + maxplayercount)
-    //TODO completed games (list of gameid + winnerplayerid)
+    ArrayList<Socket> clientSockets = new ArrayList<>();
 
     private ServerController() {}
 
@@ -54,12 +55,27 @@ public class ServerController {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 logger.info("New connection request from " + clientSocket.getInetAddress());
+		clientSockets.add(clientSocket);
 
                 executorService.submit(new ClientHandler(clientSocket));
             }
         } catch (IOException e) {
             logger.error(e.getStackTrace());
         }
+    }
+
+    public GameLobby getGameOfPlayer(int clientID) {
+        for (int key : lobbyMap.keySet()) {
+            GameLobby g = lobbyMap.get(key);
+	    //see if player in players of game
+	    for (int i = 0; i < g.getPlayerOrderList().size(); i++) {
+		if(g.getPlayerOrderList().get(i) == clientID) {
+		    return g;
+		}
+	    }
+
+        }
+	return null;
     }
 
     public ArrayList<GameLobby> getStateGames(int gameCount, GameState state) {
@@ -74,6 +90,21 @@ public class ServerController {
             if (foundCount == gameCount) break;
         }
         return gameLobbys;
+    }
+
+    //TODO figure out if this actually works in practice
+    public void sendToAllClients(String message) {
+	for(Socket socket : clientSockets) {
+        try {
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(socket.getInputStream()));
+            PrintWriter writer = new PrintWriter(
+                    socket.getOutputStream(), false);
+            writer.write(message);
+            writer.flush();
+        }
+        catch(Exception e){};
+	}
     }
 
     // ALLE NICHT NÖTIG DA EINE GAME LOBBY DAS GANZE ANBIETET

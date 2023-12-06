@@ -22,6 +22,6 @@ public interface GameMessageHandler<T> {
      * @param message The deserialized json string that's getting processed
      * @return The response as a json string
      */
-    String handle(T message) throws HandlingException;
+    String handle(T message, int clientID) throws HandlingException;
 
 }
