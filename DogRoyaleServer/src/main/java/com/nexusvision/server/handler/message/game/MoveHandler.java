@@ -29,7 +29,7 @@ public class MoveHandler extends Handler implements GameMessageHandler<Move> {
 	    moveVal.setOpponentPieceId(message.getOpponentPieceId());
 	    //send to all clients
 		//TODO only send to all clients in a lobby
-	    serverController.sendToAllClients(gson.toJson(moveVal)); //idk if this method works
+	    serverController.sendToAllLobbyMembers(game, gson.toJson(moveVal)); //idk if this method works
 	}
         return null;
     }

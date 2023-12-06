@@ -46,10 +46,10 @@ public class ClientHandler extends Handler implements Runnable {
             .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
             .create();
 
-    public ClientHandler(Socket clientSocket) {
+    public ClientHandler(Socket clientSocket, int clientID) {
         serverController = ServerController.getInstance();
         this.clientSocket = clientSocket;
-        this.clientID = serverController.createNewClient();
+        this.clientID = clientID;
     }
 
     @Override

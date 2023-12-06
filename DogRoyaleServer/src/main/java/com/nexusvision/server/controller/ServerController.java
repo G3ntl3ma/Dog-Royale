@@ -37,7 +37,8 @@ public class ServerController {
     private final HashMap<Integer, Client> clientMap = new HashMap<>();
     private final HashMap<Integer, GameLobby> lobbyMap = new HashMap<>();
 
-    ArrayList<Socket> clientSockets = new ArrayList<>();
+    // ArrayList<Socket> clientSockets = new ArrayList<>();
+    private final HashMap<Integer, Socket> clientSocketMap = new HashMap<>();
 
     private ServerController() {}
 
@@ -55,9 +56,9 @@ public class ServerController {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 logger.info("New connection request from " + clientSocket.getInetAddress());
-		clientSockets.add(clientSocket);
-
-                executorService.submit(new ClientHandler(clientSocket));
+		int newClientID = this.createNewClient();
+		clientSocketMap.put(newClientID,clientSocket);
+                executorService.submit(new ClientHandler(clientSocket, newClientID));
             }
         } catch (IOException e) {
             logger.error(e.getStackTrace());
@@ -93,18 +94,19 @@ public class ServerController {
     }
 
     //TODO figure out if this actually works in practice
-    //TODO this should take a list of clientIds and send only to those
-    public void sendToAllClients(String message) {
-	for(Socket socket : clientSockets) {
-        try {
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));
-            PrintWriter writer = new PrintWriter(
-                    socket.getOutputStream(), false);
-            writer.write(message);
-            writer.flush();
-        }
-        catch(Exception e){};
+    //TODO this should take a lobbyid and send only to those
+    public void sendToAllLobbyMembers(GameLobby g,String message) {
+	for(int clientId : g.getPlayerOrderList()){
+	    Socket socket = clientSocketMap.get(clientId);
+	    try {
+		BufferedReader reader = new BufferedReader(
+							   new InputStreamReader(socket.getInputStream()));
+		PrintWriter writer = new PrintWriter(
+						     socket.getOutputStream(), false);
+		writer.write(message);
+		writer.flush();
+	    }
+	    catch(Exception e){};
 	}
     }
 
