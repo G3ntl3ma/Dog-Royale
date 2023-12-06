@@ -273,8 +273,30 @@ public final class Game {
 	return 0;
     }
 
+    public ArrayList<Player> getOrder(ArrayList<Player> playerWinOrder) {
+	//iterate through players in random order to make ties random order
+	ArrayList<Player> randomOrderPlayers = new ArrayList<>(this.players);
+	Collections.shuffle(randomOrderPlayers);
+	for (int i = 0; i < randomOrderPlayers.size(); i++) {
+	    //find first 1, insert before
+	    boolean foundInx = false;
+	    for (int j = 0; j < playerWinOrder.size(); j++) {
+		if(compare(playerWinOrder.get(j), randomOrderPlayers.get(i)) == 1) {
+		    playerWinOrder.add(j, randomOrderPlayers.get(i));
+		    foundInx = true;
+		    break;
+		}
+	    }
+	    //if no 1 then append
+	    if(!foundInx) {
+		playerWinOrder.add(randomOrderPlayers.get(i));
+	    }
+	}
+	return playerWinOrder;	
+    }
+
     public ArrayList<Player> getWinners() {
-	ArrayList<Player> ret = new ArrayList<>();
+	ArrayList<Player> playerWinOrder = new ArrayList<>();
 	boolean gameOver = false;
 	
 	for (int i = 0; i < this.players.size(); i++) {
@@ -288,28 +310,11 @@ public final class Game {
 	if (!this.nextPlayer()) gameOver = true;
 
 	if(gameOver) {
-	    //iterate through players in random order to make ties random order
-	    ArrayList<Player> randomOrderPlayers = new ArrayList<>(this.players);
-	    Collections.shuffle(randomOrderPlayers);
-	    for (int i = 0; i < randomOrderPlayers.size(); i++) {
-		//find first 1, insert before
-		boolean foundInx = false;
-		for (int j = 0; j < ret.size(); j++) {
-		    if(compare(ret.get(j), randomOrderPlayers.get(i)) == 1) {
-			ret.add(j, randomOrderPlayers.get(i));
-			foundInx = true;
-			break;
-		    }
-		}
-		//if no 1 then append
-		if(!foundInx) {
-		    ret.add(randomOrderPlayers.get(i));
-		}
-	    }
-	    return ret;
+	    getOrder(playerWinOrder);
+	    return playerWinOrder;
 	}
-	ret.add(null);
-	return ret;
+	playerWinOrder.add(null);
+	return playerWinOrder;
     }
 
     public void incrementRound() {
@@ -330,7 +335,6 @@ public final class Game {
 
     //TODO CardType is Card in interface doc
     
-    //TODO rename to make move
     //if move not legal do nothing and execute handle illegal move
     public Move getMove(boolean skip, CardType card, int selectedValue,
 						int pieceId, boolean isStarter, Integer opponentPieceId) {
@@ -398,5 +402,10 @@ public final class Game {
 	}
     }
 
+    public Integer getHousePosition(int playerId, int pieceId) {
+	Figure f = this.players.get(playerId).figures.get(pieceId);
+	if(!f.isInHouse) return null;
+	return this.players.size() - (f.field.val - this.players.get(playerId).houseFirstIndex) + 1;
+    }
 }
 

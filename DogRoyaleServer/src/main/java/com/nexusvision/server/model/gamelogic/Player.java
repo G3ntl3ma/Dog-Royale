@@ -80,6 +80,7 @@ public final class Player  {
 	this.outThisRound = true;
     }
 
+
     public void generateMoves(Game game, ArrayList<Move> moves) {
 	boolean[] seenCardTypes = new boolean[CardType.values().length];
 	boolean seenBankFigure = false;

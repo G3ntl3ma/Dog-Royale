@@ -93,6 +93,7 @@ public class ServerController {
     }
 
     //TODO figure out if this actually works in practice
+    //TODO this should take a list of clientIds and send only to those
     public void sendToAllClients(String message) {
 	for(Socket socket : clientSockets) {
         try {

@@ -11,7 +11,7 @@ public enum TypeGame {
     joinObs,
     leaveObs,
     leavePlayer,
-    oardState,
+    boardState,
     move,
     moveValid,
     response,
