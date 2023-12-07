@@ -1,4 +1,8 @@
 package com.nexusvision.server.model.gamelogic;
+
+import lombok.Data;
+
+@Data
 public class Figure  {
     Field field;
     boolean isInBank; //ignore field if isInBank

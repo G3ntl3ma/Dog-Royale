@@ -4,13 +4,14 @@ import com.nexusvision.server.model.enums.FieldType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import lombok.Data;
 
 /**
  * Creates a Field object
  *
  * @author dgehse
  */
+@Data
 public final class Field  {
 
     final int val; //TODO better name

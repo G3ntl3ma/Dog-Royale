@@ -12,7 +12,6 @@ import lombok.Data;
 
 @Data
 public class GameLobby {
-
     private Game game;
     private GameState gameState;
     private boolean isPaused;

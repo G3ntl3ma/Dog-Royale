@@ -5,11 +5,14 @@ import com.nexusvision.server.model.enums.FieldType;
 
 import java.util.ArrayList;
 
+import lombok.Data;
+
 /**
  * This class represents a card and manages moves associated with the card.
  *
  * @author dgehse
  */
+@Data
 public class Card {
     CardType type;
     

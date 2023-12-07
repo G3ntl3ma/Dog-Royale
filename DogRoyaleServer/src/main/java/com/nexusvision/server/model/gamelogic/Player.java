@@ -4,11 +4,14 @@ import com.nexusvision.server.model.enums.CardType;
 
 import java.util.ArrayList;
 
+import lombok.Data;
+
 /**
  * This class represents a player and manages moves a player can make.
  *
  * @author dgehse
  */
+@Data
 public final class Player  {
 
     ArrayList<Figure> figures = new ArrayList<>();

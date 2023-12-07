@@ -9,13 +9,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import lombok.Data;
+
 /**
  * This class represents the game and manages com.nexusvision.server.model.gamelogic.Player, Cards, Moves and more
  *
  * @author dgehse
  */
-public final class Game {
 
+@Data
+public final class Game {
     ArrayList<Player> players; //TODO should not be arraylist
     private Field[] board;
     ArrayList<Card> deck;
@@ -372,21 +375,23 @@ public final class Game {
 	return playerWinOrder;	
     }
 
-    public ArrayList<Player> getWinners() {
-	ArrayList<Player> playerWinOrder = new ArrayList<>();
-	boolean gameOver = false;
-	
+
+    public boolean checkOver() {
 	for (int i = 0; i < this.players.size(); i++) {
 	    if(this.players.get(i).figuresInHouse == this.figureCount) {
-		gameOver = true;
-		break;
+		return true;
 	    }
 	}
+	
+	if (this.movesMade >= this.maximumTotalMoves) return true;
+	if (!this.nextPlayer()) return true;
+	return false;
+    }
 
-	if (this.movesMade >= this.maximumTotalMoves) gameOver = true;
-	if (!this.nextPlayer()) gameOver = true;
-
-	if(gameOver) {
+    public ArrayList<Player> getWinners() {
+	ArrayList<Player> playerWinOrder = new ArrayList<>();
+	 
+	if(this.checkOver()) {
 	    getOrder(playerWinOrder);
 	    return playerWinOrder;
 	}
