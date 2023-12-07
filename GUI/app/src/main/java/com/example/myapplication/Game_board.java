@@ -3,33 +3,30 @@ package com.example.myapplication;
 import android.app.ActionBar;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 
-import android.text.Layout;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 //databinding
 import com.example.myapplication.databinding.FragmentGameBoardBinding;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,28 +35,37 @@ import java.util.Arrays;
  */
 public class Game_board extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
     private int pxWidth;
     private FragmentGameBoardBinding binding;
-    //save positions
-    private ArrayList<Tuple> positions = new ArrayList<Tuple>();
+
+    GameInformation gameInformation;
+
     //Anzahl Spielfelder
+
+    //ersetzen durch:field_size = viewModel.get
     private int field_size = 1;
     //Anzahl Spieler
-    private int player_count = 2;
+    private int player_count;
+    //Anzahl Figuren pro Spieler
+    private int figure_count;
     //die wievielten Spielfelder Startfelder sind.
-    private int[] Start_positions = new int[6];
+    private int[] start_positions = new int[player_count];
+
+    //Farben der Start/hausfelder
+    private int[] start_colors = {R.color.p1_color, R.color.p2_color, R.color.p3_color, R.color.p4_color, R.color.p5_color, R.color.p6_color};
+
+    private int[] draw_fields = new int[5];
+
+    private LastCard last_card;
+    private GameboardViewModel viewModel;
+    //testwise
+    private int position = 0;
 
     public Game_board() {
         // Required empty public constructor
     }
-
 
 
     /**
@@ -74,22 +80,29 @@ public class Game_board extends Fragment {
     public static Game_board newInstance(String param1, String param2) {
         Game_board fragment = new Game_board();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
 
+    /**
+     * @param savedInstanceState If the fragment is being re-created from
+     *                           a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
+
+    /**
+     * @param inflater           The LayoutInflater object that can be used to inflate
+     *                           any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's
+     *                           UI should be attached to.  The fragment should not add the view itself,
+     *                           but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state as given here.
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,22 +111,23 @@ public class Game_board extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
+
+    /**
+     * @param view               The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     *                           from a previous saved state as given here.
+     */
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
 
-        //getting Display size
-        DisplayMetrics displayMetrics  = getContext().getResources().getDisplayMetrics();
-        /*
-        if needed in dp
-        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
-        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        */
+        //getting Display information
+        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
 
+        //getting display width in px
         pxWidth = displayMetrics.widthPixels;
-        int pxHeight = displayMetrics.heightPixels;
 
-        //set board in middle
+        //set board into middle of screen
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 Math.round(displayMetrics.widthPixels)
@@ -123,108 +137,66 @@ public class Game_board extends Fragment {
         RelativeLayout GameBoard = binding.gameBoardLayout;
         GameBoard.setLayoutParams(params);
 
-        //System.out.println(displayMetrics.heightPixels);
-        //System.out.println(displayMetrics.widthPixels);
+        viewModel = new ViewModelProvider(requireActivity()).get(GameboardViewModel.class);
+        System.out.println("normale Felder: " + viewModel.getField_size().getValue());
 
-        createFields(GameBoard, pxWidth, 5);
-        int[] start_colors = {R.color.p1_color, R.color.p2_color, R.color.p3_color, R.color.p4_color, R.color.p5_color, R.color.p6_color};
-        int pcolor = 0;
-        //testweise
-        Start_positions = new int[]{0, 2, 4, 0 ,0, 0};
+        gameInformation = viewModel.getGameInformation().getValue();
+        //set number of fields
+        //replace with field_size = gameInformation.getField_size();
+        field_size = viewModel.getField_size().getValue();
+        //set Player_count
+        //replace with player_count = gameInformation.getPlayer_count();
+        player_count = viewModel.getPlayer_count().getValue();
+        //Set figure Count
+        //replace with figure_count = gameInformation.getFigure_count();
+        viewModel.getFigure_count().observe(getViewLifecycleOwner(), figures ->{
+            figure_count = figures;
+        });
 
-        for(int x = 1 ; x<=Start_positions.length; x++)
-        {
-            ImageView imageView = GameBoard.findViewWithTag(Start_positions[x-1]);
-            imageView.setColorFilter(ContextCompat.getColor(getContext(), start_colors[pcolor]), PorterDuff.Mode.MULTIPLY);
-            //imageView.setImageTintMode(PorterDuff.Mode.MULTIPLY);
+        figure_count = viewModel.getFigure_count().getValue();
 
-            pcolor +=1;
-        }
+        //positionen der draw card felder
+        //replace with draw_fields = gameInformation.getDraw_fields();
+        draw_fields = new int[]{3, 5, 7, 8, 9};
+        //position der startfelder
+        //replace with start_positions = gameInformation.getStart_positions();
+        start_positions = new int[]{0, 2, 4};
+        //creates fields in the layout
+        //start_colors = gameInformation.getStart_colors();
+        Game_board_creator creator = new Game_board_creator(GameBoard, pxWidth, player_count, field_size, figure_count, start_colors, start_positions, draw_fields);
+        creator.createFields();
+        //viewModel.setGame_board_creator(creator);
 
-    }
-    public void createFields(RelativeLayout layout, int width, int n){
-        CoordinateCalculator playingField = new CoordinateCalculator(n, 4, 740);
-        /*if (n<= 20) {
-            playingField = new CoordinateCalculator(n, 4, width / 2 - 3 * width / 20);
-        }
-        else {
-            playingField = new CoordinateCalculator(n, 4, width / 2 - 3 * width / n);
-        }*/
-        playingField = new CoordinateCalculator(n, 4, width / 2 - 3 * width / n);
+        //instanziert die Figuren in das Layout
+        Figure_handler figure_handler = new Figure_handler(GameBoard, figure_count, player_count, start_colors, creator.getField_width(), creator.getHomefield_size(), pxWidth);
+        figure_handler.create_figures();
+        viewModel.setFigure_handler(figure_handler);
 
-        Tuple result = new Tuple(0,0);
-            for (int i = 0; i < n; i++) {
-                result = playingField.calculateFloatCoordinates(i);
-                if (n<= 20) {
-                    createField(layout, width/10, (int) Math.round(result.getX() + width/2 - (  width/20 ))  , (int) Math.round(result.getY()  + width/2 - (width/20)), i);
-                }
-                else {
-                    createField(layout, width/n * 2, (int) Math.round(result.getX() + width / 2 - ( width / n)), (int) Math.round(result.getY() + width / 2 - (width / n)), i);
+        Timer timer = new Timer(600_000, binding);
+        timer.startTimer();
+        last_card = new LastCard(binding);
+        last_card.lastCardAvailable(true);
+
+
+        //NUR ZUM TESTEN für figuren movement
+
+        binding.moveFigure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (((RelativeLayout.LayoutParams) GameBoard.findViewWithTag("figure0_1").getLayoutParams()).leftMargin == pxWidth) {
+                    figure_handler.moveFigure(1, "figure0_1", position, false, null);
+                } else {
+                    position += 2;
+                    if (position >= field_size) {
+                        figure_handler.moveFigure(1, "figure0_1", null, false, position - field_size );
+                    } else {
+                        figure_handler.moveFigure(1, "figure0_1", position, false, null);
+                    }
+
                 }
             }
 
-    }
-    /*public int fx(int x, int turn, int width, int n)
-    {
-        int w_f  = width/n;
-
-
-        switch(turn) {
-            case 1:
-                return( x* w_f + w_f);
-
-            case 2:
-                return(width - 2* w_f);
-
-            case 3:
-                return( width - 2*w_f -  x* w_f );
-
-            case 4:
-                return(w_f);
-        }
-        return(0);
-    }
-    public int fy(int x, int turn, int width, int n)
-    {
-        int w_f  = width/n;
-        switch(turn) {
-            case 1:
-                return(w_f);
-
-            case 2:
-                return( x* w_f + w_f);
-
-            case 3:
-                return( width - 2 * w_f);
-
-            case 4:
-                return( width - 2* w_f -  x* w_f );
-
-        }
-        return (0);
-    } */
-
-    /*
-    *Use this  to create a single gamefield on your board
-    *
-    *
-    * @layout is the layout the View is added to. (only RelativeLayout works rn)
-    * @width is the width and height of the image
-    * @x is the x position
-    * @y is the y position
-    * @id is the id you want to give the image.
-     */
-    public void createField(RelativeLayout layout, int width, int x, int y, int id){
-        ImageView imageView = new ImageView(getContext());
-        imageView.setImageResource(R.drawable.spielfeld);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(1, 1);
-        params = new RelativeLayout.LayoutParams(width, width);
-        params.setMargins(x, y, 0, 0);
-        positions.add(new Tuple(x, y));
-        //if (Arrays.stream(Start_positions).anyMatch(z -> z==id))
-
-        imageView.setTag(id);
-        imageView.setLayoutParams(params);
-        layout.addView(imageView);
+        });
     }
 }

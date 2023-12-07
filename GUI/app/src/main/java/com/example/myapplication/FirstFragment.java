@@ -29,6 +29,7 @@ public class FirstFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         //gehe von "laufende Spiele"-Button zum Select screen.
         binding.currentGamesButton.setOnClickListener(new View.OnClickListener() {
             @Override
