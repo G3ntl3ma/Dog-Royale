@@ -1,6 +1,5 @@
 package com.example.myapplication.messages.menu;
 
-import com.example.myapplication.messages.game.AbstractGameMessage;
 import lombok.Data;
 
 /**
@@ -9,7 +8,7 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class FindTournament extends AbstractMenuMessage {
+public class FindTournament extends com.example.myapplication.messages.menu.AbstractMenuMessage {
     private int clientId;
     private int tournamentStarting;
     private int tournamentInProgress;

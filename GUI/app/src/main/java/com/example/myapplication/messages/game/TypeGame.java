@@ -1,0 +1,38 @@
+package GUI.app.src.main.java.com.example.myapplication.messages.game;
+
+public enum TypeGame {
+    liveTimer,
+    turnTimer,
+    joinObs,
+    leaveObs,
+    leavePlayer,
+    boardState,
+    move,
+    moveValid,
+    response,
+    cancel,
+    freeze,
+    unfreeze,
+    drawCards,
+    updateDrawCards,
+    kick;
+
+    /**
+     * Maps the correct ordinal value by taking care of the shift
+     *
+     * @return The correct ordinal value
+     */
+    public int getOrdinal() {
+        return ordinal() + 200;
+    }
+
+    /**
+     * Maps the correct type by taking care of the shift
+     *
+     * @param ordinal The ordinal that will be mapped to it's type
+     * @return The correct type
+     */
+    public static TypeGame getType(int ordinal) {
+        return values()[ordinal - 200];
+    }
+}

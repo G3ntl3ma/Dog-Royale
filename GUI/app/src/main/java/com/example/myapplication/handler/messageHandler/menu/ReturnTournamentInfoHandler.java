@@ -1,6 +1,6 @@
-package GUI.app.src.main.java.com.example.myapplication.messageHandler.menu;
+package GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.menu;
 
-public class returnTournametInfoHandler {
+public class ReturnTournamentInfoHandler {
     public void handle(com.example.myapplication.messages.menu.ReturnTournamentInfo message) {
         //TODO show the data from message to GUI
     };
