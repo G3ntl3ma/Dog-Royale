@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class GameboardViewModel extends ViewModel {
+
+    MutableLiveData<GameInformation> gameInformation = new MutableLiveData<>();
     MutableLiveData<Integer> field_size= new MutableLiveData<>();
     MutableLiveData<Integer> player_count= new MutableLiveData<>();
     MutableLiveData<Integer> figure_count= new MutableLiveData<>();
@@ -42,4 +44,11 @@ public class GameboardViewModel extends ViewModel {
 
     public void setFigure_handler(Figure_handler figure_handler) {this.figure_handler.setValue(figure_handler);}
 
+    public MutableLiveData<GameInformation> getGameInformation() {
+        return gameInformation;
+    }
+
+    public void setGameInformation(GameInformation gameInformation) {
+        this.gameInformation.setValue(gameInformation);
+    }
 }

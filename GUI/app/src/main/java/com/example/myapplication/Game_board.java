@@ -35,14 +35,16 @@ import java.util.ArrayList;
  */
 public class Game_board extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     private int pxWidth;
     private FragmentGameBoardBinding binding;
 
+    GameInformation gameInformation;
+
     //Anzahl Spielfelder
+
+    //ersetzen durch:field_size = viewModel.get
     private int field_size = 1;
     //Anzahl Spieler
     private int player_count;
@@ -78,8 +80,6 @@ public class Game_board extends Fragment {
     public static Game_board newInstance(String param1, String param2) {
         Game_board fragment = new Game_board();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -139,21 +139,30 @@ public class Game_board extends Fragment {
 
         viewModel = new ViewModelProvider(requireActivity()).get(GameboardViewModel.class);
         System.out.println("normale Felder: " + viewModel.getField_size().getValue());
+
+        gameInformation = viewModel.getGameInformation().getValue();
         //set number of fields
+        //replace with field_size = gameInformation.getField_size();
         field_size = viewModel.getField_size().getValue();
         //set Player_count
+        //replace with player_count = gameInformation.getPlayer_count();
         player_count = viewModel.getPlayer_count().getValue();
         //Set figure Count
+        //replace with figure_count = gameInformation.getFigure_count();
         viewModel.getFigure_count().observe(getViewLifecycleOwner(), figures ->{
             figure_count = figures;
         });
+
         figure_count = viewModel.getFigure_count().getValue();
 
         //positionen der draw card felder
+        //replace with draw_fields = gameInformation.getDraw_fields();
         draw_fields = new int[]{3, 5, 7, 8, 9};
         //position der startfelder
+        //replace with start_positions = gameInformation.getStart_positions();
         start_positions = new int[]{0, 2, 4};
         //creates fields in the layout
+        //start_colors = gameInformation.getStart_colors();
         Game_board_creator creator = new Game_board_creator(GameBoard, pxWidth, player_count, field_size, figure_count, start_colors, start_positions, draw_fields);
         creator.createFields();
         //viewModel.setGame_board_creator(creator);
