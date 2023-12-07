@@ -46,6 +46,12 @@ public class ClientHandler extends Handler implements Runnable {
             .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
             .create();
 
+    /**
+     * Constructor for the clienthandler
+     *
+     * @param clientSocket An instance representing the socket connection to a client
+     * @param clientID An integer representing the Id for the client associated with this ClientHandler
+     */
     public ClientHandler(Socket clientSocket, int clientID) {
         serverController = ServerController.getInstance();
         this.clientSocket = clientSocket;
@@ -59,6 +65,10 @@ public class ClientHandler extends Handler implements Runnable {
         }
     }
 
+    /**
+     * Represents the logic for handling incoming messages from a client
+     *
+     */
     @Override
     public void run() {
         try {
@@ -86,6 +96,10 @@ public class ClientHandler extends Handler implements Runnable {
         }
     }
 
+    /**
+     * Writes the specified message to the broadcaster
+     *
+     */
     public void broadcast(String message) {
 	this.broadcaster.write(message);
 	this.broadcaster.flush();
