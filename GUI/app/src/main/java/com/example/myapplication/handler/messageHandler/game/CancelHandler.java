@@ -1,7 +1,16 @@
 package GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.game;
 
-public class CancelHandler {
-    public void handle(com.example.myapplication.messages.game.Abbrechen message) {
-        //stop the game and show the winning order TODO
-    };
+import GUI.app.src.main.java.com.example.myapplication.handler.Handler;
+import GUI.app.src.main.java.com.example.myapplication.handler.HandlingException;
+import GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.menu.MenuMessageHandler;
+import com.example.myapplication.messages.game.Cancel;
+
+public class CancelHandler extends Handler implements MenuMessageHandler<com.example.myapplication.messages.game.Cancel> {
+
+    @Override
+    public String handle(Cancel message) throws HandlingException {
+        //TODO show winners message.winnerOrder
+        //TODO and then request tournament directly
+        return null;
+    }
 }

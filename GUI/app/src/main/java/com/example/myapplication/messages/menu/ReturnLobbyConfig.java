@@ -1,15 +1,8 @@
-package com.example.myapplication.messages.menu;
-
-import com.example.myapplication.GameInformationClasses.Color;
-import com.example.myapplication.GameInformationClasses.DrawCardFields;
-import com.example.myapplication.GameInformationClasses.OrderType;
-import com.example.myapplication.GameInformationClasses.PlayerOrder;
-import com.example.myapplication.GameInformationClasses.StartFields;
-import com.example.myapplication.GameInformationClasses.Observer;
-
-import java.util.List;
+package GUI.app.src.main.java.com.example.myapplication.messages.menu;
 
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * Konfiguration des Spiels
@@ -17,7 +10,7 @@ import lombok.Data;
  * @author Mattes
  */
 @Data
-public class ReturnLobbyConfig extends AbstractMenuMessage{
+public class ReturnLobbyConfig extends AbstractMenuMessage {
     private enum Penalty {
         excludeFromRound,
         kickFromGame
@@ -35,12 +28,12 @@ public class ReturnLobbyConfig extends AbstractMenuMessage{
     private Integer playerCount;
     private Integer fieldsize;
     private Integer figuresPerPlayer;
-    private List<Color> colors;
-    private DrawCardFields drawCardFields;
-    private StartFields startFields;
+    private List<com.example.myapplication.GameInformationClasses.Color> colors;
+    private com.example.myapplication.GameInformationClasses.DrawCardFields drawCardFields;
+    private com.example.myapplication.GameInformationClasses.StartFields startFields;
     private Integer initialCardsPerPlayer;
-    private PlayerOrder playerOrder;
-    private List<Observer> observer;
+    private com.example.myapplication.GameInformationClasses.PlayerOrder playerOrder;
+    private List<com.example.myapplication.GameInformationClasses.Observer> observer;
     private Integer thinkTimePerMove;
     private Integer visualizationTimePerMove;
     private Integer consequencesForInvalidMove;

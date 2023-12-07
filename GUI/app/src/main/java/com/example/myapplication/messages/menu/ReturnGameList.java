@@ -1,6 +1,6 @@
 package com.example.myapplication.messages.menu;
 
-import com.example.myapplication.messages.game.AbstractGameMessage;
+import GUI.app.src.main.java.com.example.myapplication.messages.menu.AbstractMenuMessage;
 import lombok.Data;
 
 import java.util.List;

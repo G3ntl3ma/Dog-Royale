@@ -1,45 +1,29 @@
 package GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.game;
 
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
-
-import com.example.myapplication.Figure_handler;
-import com.example.myapplication.GameboardViewModel;
-import com.example.myapplication.StartScreenViewModel;
-import com.example.myapplication.databinding.FragmentGameBoardBinding;
+import GUI.app.src.main.java.com.example.myapplication.handler.Handler;
+import GUI.app.src.main.java.com.example.myapplication.handler.HandlingException;
+import GUI.app.src.main.java.com.example.myapplication.messages.game.TypeGame;
 import com.example.myapplication.messages.game.BoardState;
 
-import java.util.Dictionary;
-
-public class BoardStateHandler {
-    private GameboardViewModel viewModel;
-
-    private FragmentGameBoardBinding binding;
-
-    private Dictionary<Integer, Integer> playerDict;
+public class BoardStateHandler extends Handler implements GameMessageHandler<com.example.myapplication.messages.game.BoardState> {
 
 
+    @Override
+    public String handle(BoardState message) throws HandlingException {
 
-
-
-    private int playerCount = viewModel.getPlayer_count().getValue();
-
-    public void handle(com.example.myapplication.messages.game.BoardState message) {
-        // TODO implement here
-
-
-        int[] FiguresInBank = new int[playerCount]; //playernumber - 1 is index for player
-
-        Figure_handler figure_handler = viewModel.getFigure_handler().getValue();
-        for (BoardState.Piece piece : message.getPieces()) {
-           //figure_handler.moveFigure(piece.getClientId(), piece.getPosition(), piece.isOnBench(), piece.getInHousePosition());
-            if (piece.isOnBench()) {
-                FiguresInBank[piece.getClientId() - 1]++;
-            }
+            //TODO update the Board accordingly
+        if(message.isGameOver()){
+            //TODO show winners and leave game change State
         }
-        for (int i = 0; i < playerCount; i++) {
+        try {
+            com.example.myapplication.messages.game.Response response = new com.example.myapplication.messages.game.Response();
+            response.setUpdated(true);
+
+            return gson.toJson(response);
+        } catch (Exception e) {
+            throw new HandlingException("Exception while handling BoardState",
+                    e, TypeGame.response.getOrdinal());
         }
- };
+    }
 }

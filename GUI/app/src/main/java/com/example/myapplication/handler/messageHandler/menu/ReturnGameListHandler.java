@@ -2,7 +2,6 @@ package GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.m
 
 import GUI.app.src.main.java.com.example.myapplication.handler.Handler;
 import GUI.app.src.main.java.com.example.myapplication.handler.HandlingException;
-import GUI.app.src.main.java.com.example.myapplication.messages.menu.TypeMenu;
 
 public class ReturnGameListHandler extends Handler implements MenuMessageHandler<com.example.myapplication.messages.menu.ReturnGameList> {
     public String handle(com.example.myapplication.messages.menu.ReturnGameList message) throws HandlingException {
@@ -10,5 +9,6 @@ public class ReturnGameListHandler extends Handler implements MenuMessageHandler
         if (message.getRunningGames() == null){
 
         }
+        return "Games were added successfully to GUI";
     };
 }

@@ -1,11 +1,13 @@
 package GUI.app.src.main.java.com.example.myapplication.handler;
 
-import GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.menu.ConnectedToServerHandler;
-import GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.menu.ReturnFindTournamentHandler;
-import GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.menu.ReturnGameListHandler;
+import GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.game.*;
+import GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.menu.*;
 import GUI.app.src.main.java.com.example.myapplication.messages.game.TypeGame;
+import GUI.app.src.main.java.com.example.myapplication.messages.menu.ReturnLobbyConfig;
 import GUI.app.src.main.java.com.example.myapplication.messages.menu.TypeMenu;
-import com.example.myapplication.messages.menu.*;
+import GUI.app.src.main.java.com.example.myapplication.messages.sync.JoinObs;
+import GUI.app.src.main.java.com.example.myapplication.messages.sync.LiveTimer;
+import GUI.app.src.main.java.com.example.myapplication.messages.sync.TurnTimer;
 import com.google.gson.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,8 +38,8 @@ public class ServerHandler extends Handler implements Runnable {
         REQUEST_FIND_TOURNAMENT,
         REQUEST_GAME_LIST,
         MAIN_MENU,
-        TOURNAMENT_MENU,
-        GAMES_MENU,
+        TOURNAMENT_MENU,//TODO change to this state when the user clicks on Tournaments button
+        GAMES_MENU,//TODO change to this state when the user clicks on Games button
         LOBBY,
         GAME,
     }
@@ -89,6 +91,8 @@ public class ServerHandler extends Handler implements Runnable {
                 return handleReturnTournamentInfo(request);
             } else if (type == TypeMenu.returnGameList.getOrdinal()) {
                 return handleReturnGameList(request);
+            } else if (type == TypeMenu.connectedToGame.getOrdinal()) {
+                return handleConnectedToGame(request);
             } else if (type == TypeMenu.returnLobbyConfig.getOrdinal()) {
                 return handleReturnLobbyConfig(request);
             } else if (type == TypeMenu.error.getOrdinal()) {
@@ -97,12 +101,10 @@ public class ServerHandler extends Handler implements Runnable {
                 handleReturnTechData(request);
             } else if (type == TypeGame.boardState.getOrdinal()) {
                 return handleBoardState(request);
-            } else if (type == TypeGame.drawCards.getOrdinal()) {
-                return handleDrawCards(request);
             } else if (type == TypeGame.updateDrawCards.getOrdinal()) {
                 return handleUpdateDrawCards(request);
             } else if (type == TypeGame.moveValid.getOrdinal()) {
-                return handleUpdateMoveValid(request);
+                return handleMoveValid(request);
             } else if (type == TypeGame.freeze.getOrdinal()) {
                 return handleFreeze(request);
             } else if (type == TypeGame.unfreeze.getOrdinal()) {
@@ -124,7 +126,6 @@ public class ServerHandler extends Handler implements Runnable {
         } catch (HandlingException e) {
             return handleError("Failed to handle the request", e.getType(), e);
         }
-
     }
     private String handleConnectedToServer(String request) throws HandlingException {
         if (expectedState != State.CONNECT_MENU) {
@@ -133,7 +134,7 @@ public class ServerHandler extends Handler implements Runnable {
         logger.info("Trying to handle ConnectedToServer");
         try {
             com.example.myapplication.messages.menu.ConnectedToServer connectedToServer = gson.fromJson(request, com.example.myapplication.messages.menu.ConnectedToServer.class);
-            String response = new ConnectedToServerHandler().handle(connectedToServer);//sets ID for the Client
+            String response = new ConnectedToServerHandler().handle(connectedToServer);
             expectedState = State.REQUEST_FIND_TOURNAMENT;
             logger.info("ConnectedToServer was handled successfully ");
             return response;
@@ -149,9 +150,9 @@ public class ServerHandler extends Handler implements Runnable {
         logger.info("Trying to handle ReturnFindTournament");
         try{
             com.example.myapplication.messages.menu.ReturnFindTournament returnFindTournament = gson.fromJson(request, com.example.myapplication.messages.menu.ReturnFindTournament.class);
-            String response = new ReturnFindTournamentHandler().handle(returnFindTournament);//sends RequestGameList
+            String response = new ReturnFindTournamentHandler().handle(returnFindTournament);
             expectedState = State.REQUEST_GAME_LIST;
-            logger.info("RequestTournamentInfo was handled successfully");
+            logger.info("ReturnTournamentInfo was handled successfully");
             return response;
         }catch (JsonSyntaxException e){
             return handleError("Wrong message format from type ReturnTournamentInfo",
@@ -166,8 +167,191 @@ public class ServerHandler extends Handler implements Runnable {
         try{
             com.example.myapplication.messages.menu.ReturnGameList returnGameList = gson.fromJson(request, com.example.myapplication.messages.menu.ReturnGameList.class);
             String response = new ReturnGameListHandler().handle(returnGameList);
+            expectedState = State.MAIN_MENU;
+            logger.info("ReturnGameList was handled successfully");
+            return response;
+        }catch(JsonSyntaxException e){
+            return handleError("Wrong message format from type ReturnGameList",
+                    TypeMenu.returnGameList.getOrdinal(), e);
         }
     }
+    private String handleConnectedToGame(String request) throws HandlingException{
+        if (expectedState != State.GAMES_MENU){
+            return handleError("Received wrong type, didn't expect ConnectedToGame");
+        }
+        logger.info("Trying to handle ConnectedToGame");
+        try{
+            com.example.myapplication.messages.menu.ConnectedToGame connectedToGame = gson.fromJson(request,com.example.myapplication.messages.menu.ConnectedToGame.class);
+            String response = new ConnectedToGameHandler().handle(connectedToGame);
+            if (connectedToGame.isSuccess()){
+                expectedState = State.LOBBY;
+            }
+            logger.info("ConnectedToGame was handled successfully");
+            return response;
+        }catch(JsonSyntaxException e){
+            return handleError("Wrong message format from type ConnectedToGame",
+                    TypeMenu.connectedToGame.getOrdinal(), e);
+    }}
+    private String handleReturnLobbyConfig(String request) throws HandlingException{
+        if (expectedState != State.LOBBY){
+            return handleError("Received wrong type, didn't expect ReturnLobbyConfig");
+        }
+        logger.info("Trying to handle ReturnLobbyConfig");
+        try{
+            ReturnLobbyConfig returnLobbyConfig = gson.fromJson(request, ReturnLobbyConfig.class);
+            String response = new ReturnLobbyConfigHandler().handle(returnLobbyConfig);
+            logger.info("ReturnGameList was handled successfully");
+            return response;
+        }catch (JsonSyntaxException e){
+            return handleError("Wrong message format from type ReturnLobbyConfig",
+                    TypeMenu.returnLobbyConfig.getOrdinal(), e);
+        }
+    }
+    private String handleBoardState(String request) throws HandlingException{
+        switch (expectedState){
+            case LOBBY:
+                try{
+                    com.example.myapplication.messages.game.BoardState boardState = gson.fromJson(request,com.example.myapplication.messages.game.BoardState.class);
+                    String response = new FirstBoardStateHandler().handle(boardState);
+                    expectedState = State.GAME;
+                    logger.info("FirstBoardState was handled successfully");
+                    return response;//update message
+                }catch (JsonSyntaxException e){
+                    return handleError("Wrong message format from type BoardState",
+                            TypeGame.boardState.getOrdinal(), e);
+                }
+            case GAME:
+                try{
+                    com.example.myapplication.messages.game.BoardState boardState = gson.fromJson(request,com.example.myapplication.messages.game.BoardState.class);
+                    String response = new BoardStateHandler().handle(boardState);//if gameOver it shows the end screen with winners and takes you back to connect menu
+                    if(boardState.isGameOver()){expectedState = State.CONNECT_MENU;}
+                    logger.info("BoardState was handled successfully");
+                    return response;//update message
+                }catch (JsonSyntaxException e){
+                    return handleError("Wrong message format from type BoardState",
+                            TypeGame.boardState.getOrdinal(), e);
+                }
+            default:
+                return handleError("Received wrong type, didn't expect BoardState");
+        }
+    }
+    private String handleUpdateDrawCards(String request) throws HandlingException{
+        if (expectedState != State.GAME){
+            return handleError("Received wrong type, didn't expect UpdateDrawCards");
+        }
+        try{
+            com.example.myapplication.messages.game.UpdateDrawCards updateDrawCards = gson.fromJson(request, com.example.myapplication.messages.game.UpdateDrawCards.class);
+            String response = new UpdateDrawCardsHandler().handle(updateDrawCards);
+            logger.info("UpdateDrawCards was handled successfully");
+            return response;//update message
+        }catch (JsonSyntaxException e){
+            return handleError("Wrong message format from type UpdateDrawCards",
+                    TypeGame.updateDrawCards.getOrdinal(), e);
+        }
+
+    }
+    private String handleMoveValid(String request) throws HandlingException{
+        if (expectedState != State.GAME){
+            return handleError("Received wrong type, didn't expect MoveValid");
+        }
+        try{
+            com.example.myapplication.messages.game.MoveValid moveValid = gson.fromJson(request, com.example.myapplication.messages.game.MoveValid.class);
+            String response = new MoveValidHandler().handle(moveValid);
+            logger.info("UpdateDrawCards was handled successfully");
+            return response;
+        }catch (JsonSyntaxException e){
+            return handleError("Wrong message format from type MoveValid",
+                    TypeGame.moveValid.getOrdinal(), e);
+        }
+
+    }
+    private String handleFreeze(String request) throws HandlingException{
+        if (expectedState != State.GAME){
+            return handleError("Received wrong type, didn't expect Freeze");
+        }
+        new FreezeHandler().handle();// Freezes game, doesn't need argument
+        return "Game frozen";
+    }
+    private String handleUnfreeze(String request) throws HandlingException{
+        if (expectedState != State.GAME){
+            return handleError("Received wrong type, didn't expect Unfreeze");
+        }
+        new UnfreezeHandler().handle();// Freezes game, doesn't need argument
+        return "Game unfrozen";
+    }
+    private String handleCancel(String request) throws HandlingException{
+        if (expectedState != State.GAME){
+            return handleError("Received wrong type, didn't expect Cancel");
+        }
+        logger.info("Trying to handle Cancel");
+        try{
+            com.example.myapplication.messages.game.Cancel cancel = gson.fromJson(request,com.example.myapplication.messages.game.Cancel.class);
+            String response = new CancelHandler().handle(cancel);
+            logger.info("ReturnGameList was handled successfully");
+            expectedState = State.CONNECT_MENU;
+            return response;
+        }catch (JsonSyntaxException e){
+            return handleError("Wrong message format from type Cancel",
+                    TypeGame.cancel.getOrdinal(), e);
+        }
+    }
+    private String handleJoinObs(String request)throws HandlingException{
+        if (expectedState != State.GAME){
+            return handleError("Received wrong type, didn't expect JoinObs");
+        }
+        logger.info("Trying to handle JoinObs");
+        try {
+            JoinObs joinObs = gson.fromJson(request, JoinObs.class);
+            String response = new JoinObsHandler().handle(joinObs);
+            logger.info("JoinObs was handled successfully");
+            return response;
+        }catch (JsonSyntaxException e){
+            return handleError("Wrong message format from type JoinObs",
+                    TypeGame.joinObs.getOrdinal(), e);
+        }
+    }
+    private String handleLiveTimer(String request) throws HandlingException{
+        if (expectedState != State.GAME){
+            return handleError("Received wrong type, didn't expect LiveTimer");
+        }
+        logger.info("Trying to handle LiveTimer");
+        try {
+            LiveTimer liveTimer = gson.fromJson(request, LiveTimer.class);
+            String response = new LiveTimerHandler().handle(liveTimer);
+            logger.info("livaTimer was handled successfully");
+            return response;
+        }catch (JsonSyntaxException e){
+            return handleError("Wrong message format from type LiveTimer",
+                    TypeGame.liveTimer.getOrdinal(), e);
+        }
+    }
+    private String handleTurnTimer(String request) throws HandlingException{
+        if (expectedState != State.GAME){
+            return handleError("Received wrong type, didn't expect TurnTimer");
+        }
+        logger.info("Trying to handle TurnTimer");
+        try {
+            TurnTimer TurnTimer = gson.fromJson(request, TurnTimer.class);
+            String response = new TurnTimerHandler().handle(TurnTimer);
+            logger.info("TurnTimer was handled successfully");
+            return response;
+        }catch (JsonSyntaxException e){
+            return handleError("Wrong message format from type TurnTimer",
+                    TypeGame.turnTimer.getOrdinal(), e);
+        }
+
+    }
+    private void handleReturnTechData(String request) throws HandlingException{
+        return ;
+    }
+    private boolean isTypeInt(JsonObject jsonRequest) {
+        return jsonRequest.has("type")
+                && jsonRequest.get("type").isJsonPrimitive()
+                && jsonRequest.get("type").getAsJsonPrimitive().isNumber()
+                && jsonRequest.get("type").getAsNumber().doubleValue()
+                == (int) jsonRequest.get("type").getAsNumber().doubleValue();
+    }
+
 
 
 

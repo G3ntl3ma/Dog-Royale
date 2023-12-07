@@ -1,4 +1,4 @@
-package com.example.myapplication.messages.menu;
+package GUI.app.src.main.java.com.example.myapplication.messages.menu;
 
 import lombok.Data;
 
