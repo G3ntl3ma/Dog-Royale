@@ -2,51 +2,54 @@ package com.nexusvision.server.handler.message.menu;
 
 import com.google.gson.*;
 import com.nexusvision.server.model.messages.menu.FindTournament;
+import com.nexusvision.server.model.messages.menu.ReturnFindTournament;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
+import net.bytebuddy.jar.asm.Handle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import com.nexusvision.server.model.messages.menu.Error;
+import org.mockito.stubbing.OngoingStubbing;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FindTournamentHandlerTest {
 
-    Gson gson = new Gson();
-
     @Mock
-    private FindTournament mockFindTournament;
+    private FindTournament findTournament;
 
     @InjectMocks
     private FindTournamentHandler findTournamentHandler;
 
     @BeforeEach
-    void setUp() {
+    public void setup() {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    void testHandleNoTournaments() {
-        // if every Tournament is empty
-        when(mockFindTournament.getTournamentStarting()).thenReturn(0);
-        when(mockFindTournament.getTournamentFinished()).thenReturn(0);
-        when(mockFindTournament.getTournamentInProgress()).thenReturn(0);
+    public void testHandle() {
+        // mocking every input for tournaments as 0
+        when(findTournament.getTournamentStarting()).thenReturn(0);
+        when(findTournament.getTournamentFinished()).thenReturn(0);
+        when(findTournament.getTournamentInProgress()).thenReturn(0);
 
-        // mocking of tournament message
-        String result = findTournamentHandler.handle(mockFindTournament, 123);
+        //copy the result of handlerError for zero tournaments
+        String expectedResult = "{\"dataId\":0,\"message\":\"Failed to find tournament (no tournaments)\",\"type\":108}";
 
-        //compare mocked tournament with empty tournament
-        Error expectedError = new Error();
-        expectedError.setType(TypeMenue.error.getOrdinal());
-        expectedError.setDataId(TypeMenue.findTournament.getOrdinal());
-        expectedError.setMessage("tournament fail (no tournaments)");
-        String expectedJson = gson.toJson(expectedError);
-        assertEquals(expectedJson, result);
+        int mockClientID = 123;
+        when(findTournament.getClientId()).thenReturn(mockClientID);
+
+        // Call the method being tested
+        String result = findTournamentHandler.handle(findTournament, mockClientID);
+
+        // Verify the result
+        assertEquals(expectedResult, result);
     }
+}
         /*
         @Test
         void testHandleWithTournaments() {
@@ -70,7 +73,7 @@ public class FindTournamentHandlerTest {
         }
 
          */
-}
+
 /*
     @Test
     void testEquals() {
