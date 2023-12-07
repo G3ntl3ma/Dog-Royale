@@ -25,7 +25,7 @@ public class ResponseHandler extends Handler implements GameMessageHandler<Move>
 	//message.isUpdated() is always true
 
 	//if we have received the last message of the expected messages for this lobby
-	//(some sort of counter int needed for each lobby)
+	//(some sort of list of clientIds needed for each lobby)
 	//and are in the state where we will be responding with boardstate
 	//send the board state
 	GameLobby gameLobby = serverController.getGameOfPlayer(clientID);
