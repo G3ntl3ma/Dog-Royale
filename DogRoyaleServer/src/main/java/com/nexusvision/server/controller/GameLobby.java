@@ -21,6 +21,8 @@ public class GameLobby {
     private HashMap<Integer, Colors> playerColorMap;
     private ArrayList<Integer> observerList;
 
+    private ArrayList<Integer> receivedResponses = new ArrayList<>();
+
     /**
      * Creates a GameLobby with the given parameters
      *
@@ -35,6 +37,30 @@ public class GameLobby {
         this.observerList = observerList;
         gameState = GameState.STARTING;
         isPaused = false;
+    }
+
+    public void receiveResponse(int clientId) {
+	//if id not in list add
+    }
+
+    public void resetResponseList() {
+	this.receivedResponses = new ArrayList<>();
+    }
+
+    public boolean receivedFromEveryone() {
+	//buggy
+	//return this.receivedReponses.size() >= this.playerOrderList.size() + this.observerList.size();
+
+	for (int i = 0; i < this.playerOrderList.size(); i++) {
+	    //check if this id is in the list of reponses
+	    this.playerOrderList.get(i);
+	}
+	for (int i = 0; i < this.observerList.size(); i++) {
+	    //check if this id is in the list of reponses
+	    this.observerList.get(i);
+
+	}
+	return true;
     }
 
     /**

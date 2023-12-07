@@ -20,19 +20,32 @@ import java.util.ArrayList;
 
 public class ResponseHandler extends Handler implements GameMessageHandler<Move> {
     @Override
-    public String handle(Move message, int clientID) { //maybe add a boolean send boardstate
-        ServerController serverController = ServerController.getInstance();
-        //message.isUpdated() is always true
+    public String handle(Move message, int clientID) {
+	ServerController serverController = ServerController.getInstance();
+	//message.isUpdated() is always true
 
-        //if we have received the last message of the expected messages for this lobby
-        //(some sort of counter int needed for each lobby)
-        //and are in the state where we will be responding with boardstate
-        //send the board state
-        GameLobby gameLobby = serverController.getGameOfPlayer(clientID);
+	//if we have received the last message of the expected messages for this lobby
+	//(some sort of counter int needed for each lobby)
+	//and are in the state where we will be responding with boardstate
+	//send the board state
+	GameLobby gameLobby = serverController.getGameOfPlayer(clientID);
+
+	gameLobby.receiveResponse(clientID);
+
+	//TODO idk what to do if somebody just loses connection
+	if(gameLobby.receivedFromEveryone()) {
+	    getBoardState(gameLobby);
+	    gameLobby.resetResponseList();
+	}
+    
+	return null;
+
+    }
+
+    private BoardState getBoardState(GameLobby gameLobby) {
 	Game game = gameLobby.getGame();
-        ArrayList<Integer> clientIds = gameLobby.getPlayerOrderList();
-        BoardState boardState = new BoardState();
-        boardState.setType(TypeGame.boardState.getOrdinal());
+	BoardState boardState = new BoardState();
+	boardState.setType(TypeGame.boardState.getOrdinal());
 
 	ArrayList<Integer> playerOrderList = gameLobby.getPlayerOrderList();
 	
@@ -79,8 +92,6 @@ public class ResponseHandler extends Handler implements GameMessageHandler<Move>
 	game.getOrder(playerWinOrder);
 	List<Integer> playerWinOrderId = playerWinOrder.stream().map(s -> s.getColor()).collect(Collectors.toList());
 	boardState.setWinnerOrder(playerWinOrderId);
-        BoardState.Piece piece = new BoardState.Piece();
-        return null;
-
+	return boardState;
     }
 }
