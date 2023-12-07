@@ -5,6 +5,11 @@ import com.nexusvision.server.model.enums.FieldType;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a card and manages moves associated with the card.
+ *
+ * @author dgehse
+ */
 public class Card {
     CardType type;
     
@@ -12,6 +17,16 @@ public class Card {
 	this.type = type;
     }
 
+	/**
+	 * The method adds possible moves for a given Figure to an ArrayList of Move objects.
+	 *
+	 * @param moves An ArrayList where the method adds possible moves
+	 * @param argsteps An integer representing the number of steps the figure can move
+	 * @param figure An object representing the game piece to be moved
+	 * @param game An object representing the gamestate
+	 * @param player An object representing the player to whom the figure belongs
+	 * @param range A boolean flag indicating whether the move should be within the movement range or not
+	 */
     //TODO improve efficiency and readability
     //TODO need to add moves where the player can move over startField without moving into house
     private void addStepMove(ArrayList<Move> moves, int argsteps, Figure figure, Game game, Player player, boolean range) {
@@ -66,6 +81,18 @@ public class Card {
 	}
     }
 
+	/**
+	 * The method generates and returns a Move based on a given Game, card type and other parameters.
+	 *
+	 * @param game An object representing the current state of the game
+	 * @param selectedValue An integer representing the selected Value
+	 * @param pieceId An integer representing the identifier of the player's figure
+	 * @param isStarter A boolean indicating whether the move is initiated by a starter card
+	 * @param opponentPieceId An optional parameter representing the identifier of an opponent's figure (can be null)
+	 * @param player An object representing the player making the move
+	 *
+	 * @return the first move of the ArrayList moves
+	 */
     public Move getMove(Game game, int selectedValue,
 			int pieceId, boolean isStarter, Integer opponentPieceId, Player player) {
 	Figure figure = player.figures.get(pieceId);
@@ -96,6 +123,14 @@ public class Card {
 	return moves.get(0);
     }
 
+	/**
+	 * The method that generates and adds possible moves for a given Figure
+	 *
+	 * @param game An object representing the current state of the game
+	 * @param figure An object representing the game piece to be moved
+	 * @param moves An ArrayList where the method adds possible moves
+	 * @param player An object representing the player to whom the figure belongs
+	 */
     //move generator for card
     public void getMoves(Game game, Figure figure, ArrayList<Move> moves, Player player) { //target figure
 	Field to;
@@ -171,11 +206,18 @@ public class Card {
 	}
     }
 
+	/**
+	 * Prints the type of the card
+	 *
+	 */
     public void printtyp() {
 	System.out.println(this.type);
     }
 
-    //XD
+	/**
+	 * Gets the Ordinal of the card
+	 *
+	 */
     public int getOrdinal() {
 	switch(this.type) {
 	case card2:
