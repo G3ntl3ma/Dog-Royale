@@ -12,6 +12,4 @@ import lombok.Data;
 @Data
 public class ConnectedToServer extends AbstractMenuMessage {
     private int clientId;
-
-    // TODO: getResponse()-Methode schreiben
 }

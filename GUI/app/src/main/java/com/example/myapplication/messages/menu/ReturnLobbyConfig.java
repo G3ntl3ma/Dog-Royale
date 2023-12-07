@@ -1,11 +1,20 @@
 package com.example.myapplication.messages.menu;
 
+import com.example.myapplication.GameInformationClasses.Color;
+import com.example.myapplication.GameInformationClasses.DrawCardFields;
+import com.example.myapplication.GameInformationClasses.OrderType;
+import com.example.myapplication.GameInformationClasses.PlayerOrder;
+import com.example.myapplication.GameInformationClasses.StartFields;
+import com.example.myapplication.GameInformationClasses.Observer;
+
+import java.util.List;
+
 import lombok.Data;
 
 /**
  * Konfiguration des Spiels
  *
- * @author kellerb
+ * @author Mattes
  */
 @Data
 public class ReturnLobbyConfig extends AbstractMenuMessage{
@@ -23,15 +32,23 @@ public class ReturnLobbyConfig extends AbstractMenuMessage{
         farbe6
     }
 
-    private enum OrderType{
-        fixed,
-        random
-    }
+    private Integer playerCount;
+    private Integer fieldsize;
+    private Integer figuresPerPlayer;
+    private List<Color> colors;
+    private DrawCardFields drawCardFields;
+    private StartFields startFields;
+    private Integer initialCardsPerPlayer;
+    private PlayerOrder playerOrder;
+    private List<Observer> observer;
+    private Integer thinkTimePerMove;
+    private Integer visualizationTimePerMove;
+    private Integer consequencesForInvalidMove;
+    private Integer maximumGameDuration;
+    private Integer maximumTotalMoves;
 
-    private int playerCount;
-    private int figuresPerPlayer;
 
-    //TODO Varablien fertig initialisieren
 
-    // TODO: getResponse()-Methode schreiben
 }
+
+

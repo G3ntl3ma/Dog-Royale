@@ -12,6 +12,4 @@ import lombok.Data;
 public class Error extends AbstractMenuMessage {
     private TypeMenue dataId;
     private String message;
-
-    // TODO: getResponse()-Methode schreiben
 }

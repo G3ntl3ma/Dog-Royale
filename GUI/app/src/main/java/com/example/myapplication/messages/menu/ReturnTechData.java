@@ -14,6 +14,4 @@ public class ReturnTechData extends AbstractMenuMessage{
     private String serverVersion;
     private String supportedProtocol;
     private List<Integer> embeddedExtensions;
-
-    // TODO: getResponse()-Methode schreiben
 }
