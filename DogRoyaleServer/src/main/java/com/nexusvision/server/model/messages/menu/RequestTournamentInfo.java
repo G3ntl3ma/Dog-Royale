@@ -3,7 +3,7 @@ package com.nexusvision.server.model.messages.menu;
 import lombok.Data;
 
 /**
- * Anfrage nach aktuellen Turnierinformationen
+ * Requesting up-to-date tournament information
  *
  * @author kellerb
  */

@@ -3,7 +3,8 @@ package com.nexusvision.server.model.messages.game;
 import lombok.Data;
 
 /**
- * Abbrechen
+ * Cancels
+ *
  * @author kellerb
  */
 @Data

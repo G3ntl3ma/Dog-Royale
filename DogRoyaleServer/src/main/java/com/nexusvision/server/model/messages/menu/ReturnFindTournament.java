@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Rückgabe von aktuellen Turnieren
+ * Returns up-to-date tournaments
  *
  * @author kellerb
  */

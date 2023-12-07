@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Rückgabe der gestarteten, laufenden und beendeten Spielen
+ * Returning starting, in progress and finished games
  *
  * @author kellerb
  */

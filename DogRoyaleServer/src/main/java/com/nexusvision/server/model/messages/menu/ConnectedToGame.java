@@ -3,7 +3,7 @@ package com.nexusvision.server.model.messages.menu;
 import lombok.Data;
 
 /**
- * Server sendet Bestätigung bei erfolgreicher Verbindung
+ * Server sends confirmation if connection was successful
  *
  * @author kellerb
  */

@@ -3,7 +3,7 @@ package com.nexusvision.server.model.messages.menu;
 import lombok.Data;
 
 /**
- * Registrierung Turnier
+ * registration for the tournament
  *
  * @author kellerb
  */

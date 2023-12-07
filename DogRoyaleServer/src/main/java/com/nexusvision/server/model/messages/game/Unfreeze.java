@@ -3,7 +3,7 @@ package com.nexusvision.server.model.messages.game;
 import lombok.Data;
 
 /**
- * Unfreezen
+ * Unfreeze the game
  *
  * @author kellerb
  */

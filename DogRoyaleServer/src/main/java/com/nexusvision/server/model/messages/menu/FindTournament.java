@@ -3,7 +3,7 @@ package com.nexusvision.server.model.messages.menu;
 import lombok.Data;
 
 /**
- * Anfrage nach Turnieren
+ * Requests tournaments
  *
  * @author kellerb
  */

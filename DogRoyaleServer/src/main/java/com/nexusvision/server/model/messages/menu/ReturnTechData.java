@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Server antwortet mit technischen Daten
+ * Server returns technical data
  *
  * @author kellerb
  */

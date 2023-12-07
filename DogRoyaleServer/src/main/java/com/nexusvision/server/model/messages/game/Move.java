@@ -3,7 +3,7 @@ package com.nexusvision.server.model.messages.game;
 import lombok.Data;
 
 /**
- * Server wartet auf Aktion
+ * Server waiting for an action
  *
  * @author kellerb
  */

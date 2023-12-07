@@ -4,7 +4,7 @@ package com.nexusvision.server.model.messages.menu;
 import lombok.Data;
 
 /**
- * Beitritt des Spiels als Teilnehmer
+ * Joins the game as participant
  *
  * @author kellerb
  */

@@ -1,7 +1,7 @@
 package com.nexusvision.server.model.messages.game;
 
 /**
- * Clients verarbeiten Antwort
+ * Clients process response
  *
  * @author kellerb
  */

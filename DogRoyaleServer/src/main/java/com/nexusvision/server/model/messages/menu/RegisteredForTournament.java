@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- *  Server bestätigt erfolgreiche Turnieranmeldung
+ *  Server confirms successful tournament registration
  *
  * @author kellerb
  */

@@ -4,7 +4,7 @@ package com.nexusvision.server.model.messages.menu;
 import lombok.Data;
 
 /**
- * Server bestätigt erfolgreiche Anmeldung
+ * Server confirms successful registration
  *
  * @author kellerb
  */

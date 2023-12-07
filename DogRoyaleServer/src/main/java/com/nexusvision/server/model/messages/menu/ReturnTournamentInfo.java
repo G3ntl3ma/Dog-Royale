@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Server gibt angefragte Turnierinformationen
+ * Server returns tournament information
  *
  * @author kellerb
  */

@@ -3,9 +3,9 @@ package com.nexusvision.server.model.messages.game;
 import lombok.Data;
 
 /**
- * Pausieren
+ * Freezes the game
  *
- * @author kellerb
+ * @author felixwr
  */
 @Data
 public class Freeze extends AbstractGameMessage{

@@ -2,6 +2,11 @@ package com.nexusvision.server.model.entities;
 
 import lombok.Data;
 
+/**
+ * Client class
+ *
+ * @author felixwr
+ */
 @Data
 public class Client {
     private int gameID;

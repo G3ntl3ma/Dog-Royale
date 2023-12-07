@@ -3,7 +3,7 @@ package com.nexusvision.server.model.messages.menu;
 import lombok.Data;
 
 /**
- * Beitritt des Spiels als Beobachter
+ * Joins game as observer
  *
  * @author kellerb
  */

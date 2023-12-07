@@ -4,7 +4,7 @@ package com.nexusvision.server.model.messages.menu;
 import lombok.Data;
 
 /**
- * Anfrage nach gestarteten, laufenden und beendeten Spielen
+ * Requesting starting, in progress and finished games
  *
  * @author kellerb
  */

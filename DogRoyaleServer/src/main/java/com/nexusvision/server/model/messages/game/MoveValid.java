@@ -3,7 +3,7 @@ package com.nexusvision.server.model.messages.game;
 import lombok.Data;
 
 /**
- * Server wertet Spielzug aus
+ * Server evaluates move
  *
  * @author kellerb
  */

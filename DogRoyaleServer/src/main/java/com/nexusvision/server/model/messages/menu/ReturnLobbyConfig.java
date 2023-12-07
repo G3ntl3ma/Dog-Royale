@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Konfiguration des Spiels
+ * returning the lobby configuration
  *
  * @author kellerb
  */

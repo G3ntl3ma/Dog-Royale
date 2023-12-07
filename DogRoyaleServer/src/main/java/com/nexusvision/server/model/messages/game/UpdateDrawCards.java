@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Kartenziehen synchronisieren
+ * drawcards gets updates
  *
  * @author kellerb
  */
