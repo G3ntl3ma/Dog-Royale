@@ -4,6 +4,8 @@ import android.os.health.SystemHealthManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import java.util.List;
+
 public class Figure_handler {
     private RelativeLayout layout; //Layout the figures are created in
 
@@ -11,7 +13,7 @@ public class Figure_handler {
 
     private int player_count; //number of players
 
-    private int[] colors; //colors for the players
+    private List<Integer> colors; //colors for the players
 
     private int figure_size; //size of the figures
 
@@ -21,7 +23,7 @@ public class Figure_handler {
 
 
 
-    public Figure_handler(RelativeLayout layout, int figure_count, int player_count, int[] colors, int figure_size, int homefield_size, int screen_width)
+    public Figure_handler(RelativeLayout layout, int figure_count, int player_count, List<Integer> colors, int figure_size, int homefield_size, int screen_width)
     {
         this.layout = layout;
         this.figure_count = figure_count;
@@ -61,7 +63,7 @@ public class Figure_handler {
         return player_count;
     }
 
-    public void setColors(int[] colors)
+    public void setColors(List<Integer> colors)
     {
         this.colors = colors;
     }
@@ -88,7 +90,7 @@ public class Figure_handler {
             for (int i = 0; i < figure_count; i++)
             {
                 Figure figure = new Figure(i, j, screen_width,screen_width ,figure_size);
-                figure.createFigure(layout, colors[j]);
+                figure.createFigure(layout, colors.get(j));
             }
         }
 

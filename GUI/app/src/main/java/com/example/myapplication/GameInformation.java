@@ -15,10 +15,7 @@ import lombok.Data;
 
 @Data
 public class GameInformation {
-    private enum Penalty {
-    excludeFromRound,
-    kickFromGame
-    }
+
 
     private enum Colors{
         farbe1,
@@ -66,6 +63,119 @@ public class GameInformation {
         this.consequencesForInvalidMove = consequencesForInvalidMove;
         this.maximumGameDuration = maximumGameDuration;
         this.maximumTotalMoves = maximumTotalMoves;
+    }
+
+    public static void setPlayerCount(Integer playerCount) {
+        GameInformation.playerCount = playerCount;
+    }
+
+    public static void setFieldsize(Integer fieldsize) {
+        GameInformation.fieldsize = fieldsize;
+    }
+
+    public static void setFiguresPerPlayer(Integer figuresPerPlayer) {
+        GameInformation.figuresPerPlayer = figuresPerPlayer;
+    }
+
+    public static void setColors(List<Color> colors) {
+        GameInformation.colors = colors;
+    }
+
+    public static void setDrawCardFields(DrawCardFields drawCardFields) {
+        GameInformation.drawCardFields = drawCardFields;
+    }
+
+    public static void setStartFields(StartFields startFields) {
+        GameInformation.startFields = startFields;
+    }
+
+    public static void setInitialCardsPerPlayer(Integer initialCardsPerPlayer) {
+        GameInformation.initialCardsPerPlayer = initialCardsPerPlayer;
+    }
+
+    public static void setPlayerOrder(PlayerOrder playerOrder) {
+        GameInformation.playerOrder = playerOrder;
+    }
+
+    public static void setObserver(List<Observer> observer) {
+        GameInformation.observer = observer;
+    }
+
+    public static void setThinkTimePerMove(Integer thinkTimePerMove) {
+        GameInformation.thinkTimePerMove = thinkTimePerMove;
+    }
+
+    public static void setVisualizationTimePerMove(Integer visualizationTimePerMove) {
+        GameInformation.visualizationTimePerMove = visualizationTimePerMove;
+    }
+
+    public static void setConsequencesForInvalidMove(Integer consequencesForInvalidMove) {
+        GameInformation.consequencesForInvalidMove = consequencesForInvalidMove;
+    }
+
+    public static void setMaximumGameDuration(Integer maximumGameDuration) {
+        GameInformation.maximumGameDuration = maximumGameDuration;
+    }
+
+    public static void setMaximumTotalMoves(Integer maximumTotalMoves) {
+        GameInformation.maximumTotalMoves = maximumTotalMoves;
+    }
+
+    public static Integer getPlayerCount() {
+        return playerCount;
+    }
+
+    public static Integer getFieldsize() {
+        return fieldsize;
+    }
+
+    public static Integer getFiguresPerPlayer() {
+        return figuresPerPlayer;
+    }
+
+    public static List<Color> getColors() {
+        return colors;
+    }
+
+    public static DrawCardFields getDrawCardFields() {
+        return drawCardFields;
+    }
+
+    public static StartFields getStartFields() {
+        return startFields;
+    }
+
+    public static Integer getInitialCardsPerPlayer() {
+        return initialCardsPerPlayer;
+    }
+
+    public static PlayerOrder getPlayerOrder() {
+        return playerOrder;
+    }
+
+    public static List<Observer> getObserver() {
+        return observer;
+    }
+
+    public static Integer getThinkTimePerMove() {
+        return thinkTimePerMove;
+    }
+
+    public static Integer getVisualizationTimePerMove() {
+        return visualizationTimePerMove;
+    }
+
+
+    public static Integer getConsequencesForInvalidMove() {
+        return consequencesForInvalidMove;
+    }
+
+    public static Integer getMaximumGameDuration() {
+        return maximumGameDuration;
+    }
+
+    public static Integer getMaximumTotalMoves() {
+        return maximumTotalMoves;
     }
 
 }

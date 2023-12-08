@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 import android.app.ActionBar;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.Image;
 import android.os.Bundle;
@@ -24,9 +23,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 //databinding
+import com.example.myapplication.GameInformationClasses.Color;
 import com.example.myapplication.databinding.FragmentGameBoardBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,24 +45,24 @@ public class Game_board extends Fragment {
 
     //Anzahl Spielfelder
 
-    //ersetzen durch:field_size = viewModel.get
+
     private int field_size = 1;
     //Anzahl Spieler
     private int player_count;
     //Anzahl Figuren pro Spieler
     private int figure_count;
     //die wievielten Spielfelder Startfelder sind.
-    private int[] start_positions = new int[player_count];
+    private List<Integer> start_positions;
 
     //Farben der Start/hausfelder
-    private int[] start_colors = {R.color.p1_color, R.color.p2_color, R.color.p3_color, R.color.p4_color, R.color.p5_color, R.color.p6_color};
+    private List<com.example.myapplication.GameInformationClasses.Color> start_colors;
 
-    private int[] draw_fields = new int[5];
+    private List<Integer> draw_fields;
 
     private LastCard last_card;
     private GameboardViewModel viewModel;
     //testwise
-    private int position = 0;
+    private int position = 2 ;
 
     public Game_board() {
         // Required empty public constructor
@@ -142,33 +143,37 @@ public class Game_board extends Fragment {
 
         gameInformation = viewModel.getGameInformation().getValue();
         //set number of fields
-        //replace with field_size = gameInformation.getField_size();
-        field_size = viewModel.getField_size().getValue();
+        field_size = gameInformation.getFieldsize();
+        //field_size = viewModel.getField_size().getValue();
         //set Player_count
-        //replace with player_count = gameInformation.getPlayer_count();
-        player_count = viewModel.getPlayer_count().getValue();
+        player_count = gameInformation.getPlayerCount();
+        //player_count = viewModel.getPlayer_count().getValue();
         //Set figure Count
-        //replace with figure_count = gameInformation.getFigure_count();
-        viewModel.getFigure_count().observe(getViewLifecycleOwner(), figures ->{
-            figure_count = figures;
-        });
+        figure_count = gameInformation.getFiguresPerPlayer();
+        //viewModel.getFigure_count().observe(getViewLifecycleOwner(), figures ->{
+        //    figure_count = figures;
+        //});
 
         figure_count = viewModel.getFigure_count().getValue();
 
         //positionen der draw card felder
-        //replace with draw_fields = gameInformation.getDraw_fields();
-        draw_fields = new int[]{3, 5, 7, 8, 9};
+        draw_fields = gameInformation.getDrawCardFields().getPositions();
+        //draw_fields = new int[]{3, 5, 7, 8, 9};
         //position der startfelder
-        //replace with start_positions = gameInformation.getStart_positions();
-        start_positions = new int[]{0, 2, 4};
+        start_positions = gameInformation.getStartFields().getPositions();
+        //start_positions = new int[]{0, 2, 4};
         //creates fields in the layout
-        //start_colors = gameInformation.getStart_colors();
-        Game_board_creator creator = new Game_board_creator(GameBoard, pxWidth, player_count, field_size, figure_count, start_colors, start_positions, draw_fields);
+        start_colors = gameInformation.getColors();
+        List<Integer> colors = new ArrayList<>();
+        for (Color color : start_colors) {
+            colors.add(color.getColor());
+        }
+        Game_board_creator creator = new Game_board_creator(GameBoard, pxWidth, player_count, field_size, figure_count, colors, start_positions, draw_fields);
         creator.createFields();
         //viewModel.setGame_board_creator(creator);
 
         //instanziert die Figuren in das Layout
-        Figure_handler figure_handler = new Figure_handler(GameBoard, figure_count, player_count, start_colors, creator.getField_width(), creator.getHomefield_size(), pxWidth);
+        Figure_handler figure_handler = new Figure_handler(GameBoard, figure_count, player_count, colors, creator.getField_width(), creator.getHomefield_size(), pxWidth);
         figure_handler.create_figures();
         viewModel.setFigure_handler(figure_handler);
 
@@ -185,13 +190,13 @@ public class Game_board extends Fragment {
             public void onClick(View view) {
 
                 if (((RelativeLayout.LayoutParams) GameBoard.findViewWithTag("figure0_1").getLayoutParams()).leftMargin == pxWidth) {
-                    figure_handler.moveFigure(1, "figure0_1", position, false, null);
+                    figure_handler.moveFigure(0, "figure0_1", position, false, null);
                 } else {
                     position += 2;
                     if (position >= field_size) {
-                        figure_handler.moveFigure(1, "figure0_1", null, false, position - field_size );
+                        figure_handler.moveFigure(0, "figure0_1", null, false, position - field_size );
                     } else {
-                        figure_handler.moveFigure(1, "figure0_1", position, false, null);
+                        figure_handler.moveFigure(0, "figure0_1", position, false, null);
                     }
 
                 }

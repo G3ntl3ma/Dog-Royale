@@ -11,4 +11,12 @@ public class  Color{
         this.clientId = clientId;
         this.color = color;
     }
+
+    public Integer getClientId(){
+        return clientId;
+    }
+
+    public Integer getColor(){
+        return color;
+    }
 }

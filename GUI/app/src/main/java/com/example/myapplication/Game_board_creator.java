@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import android.app.Fragment;
@@ -25,13 +26,13 @@ public class Game_board_creator{
 
     private int figure_count; //Anzahl der Figuren pro Spieler
 
-    private int[] colors; //Array mit den Farben der Spieler
+    private List<Integer> colors; //Array mit den Farben der Spieler
 
-    private int[] start_fields; //Array mit den Startfeldern der Spieler
+    private List<Integer> start_fields; //Array mit den Startfeldern der Spieler
 
     private Tuple[] start_fields_position; //Array mit den Homefeldern der Spieler
 
-    private int[] card_draw_fields;
+    private List<Integer> card_draw_fields;
 
     private int field_width; //width (and height) of the fields
 
@@ -42,7 +43,7 @@ public class Game_board_creator{
 
 
 
-    public Game_board_creator(RelativeLayout Layout, int width, int player_count, int field_size, int figure_count, int[] colors, int[] start_fields, int card_draw_fields[])
+    public Game_board_creator(RelativeLayout Layout, int width, int player_count, int field_size, int figure_count, List<Integer> colors, List<Integer> start_fields, List<Integer> card_draw_fields)
     {
 
         this.layout = Layout;
@@ -106,7 +107,7 @@ public class Game_board_creator{
      *
      * @param colors
      */
-    public void setColors(int[] colors)
+    public void setColors(List<Integer> colors)
     {
         this.colors = colors;
     }
@@ -144,23 +145,23 @@ public class Game_board_creator{
      *
      * @return the colors
      */
-    public int[] getColors() {return this.colors;}
+    public List<Integer> getColors() {return this.colors;}
 
     /** returns the start fields
      *
      * @return
      */
-    public int[] getStart_fields() {return this.start_fields;}
+    public List<Integer> getStart_fields() {return this.start_fields;}
 
-    public int[] getCard_draw_fields() {return this.card_draw_fields;}
+    public List<Integer> getCard_draw_fields() {return this.card_draw_fields;}
 
-    public void setCard_draw_fields(int[] card_draw_fields) {this.card_draw_fields = card_draw_fields;}
+    public void setCard_draw_fields(List<Integer> card_draw_fields) {this.card_draw_fields = card_draw_fields;}
 
     /** sets the start fields
      *
      * @param start_fields
      */
-    public void setStart_fields(int[] start_fields) {this.start_fields = start_fields;}
+    public void setStart_fields(List<Integer> start_fields) {this.start_fields = start_fields;}
 
     public int getField_width() {return this.field_width * 2;}
 
@@ -187,8 +188,8 @@ public class Game_board_creator{
         for (int i = 0; i < this.field_size; i++) {
             result = playingField.calculateFloatCoordinates(i); //calculating x, y coordinates for field (still has to be adjusted because of View height and width and + half of the field width)
             int j =i;
-            if (Arrays.stream(this.start_fields).anyMatch(x -> x == j)) { //falls Feld ein Startfeld ist
-                Game_field field = new Game_field(this.layout, this.field_width * 2, (int) Math.round(result.getX() + this.width / 2 - ( this.field_width)), (int) Math.round(result.getY() + this.width / 2 - (this.field_width)), "startfield" , 0, i, colors[player]); //Create field (adjusting x and y coordinates)
+            if (start_fields.contains(j)) { //falls Feld ein Startfeld ist
+                Game_field field = new Game_field(this.layout, this.field_width * 2, (int) Math.round(result.getX() + this.width / 2 - ( this.field_width)), (int) Math.round(result.getY() + this.width / 2 - (this.field_width)), "startfield" , 0, i, colors.get(player)); //Create field (adjusting x and y coordinates)
                 field.create_field(); //actually creates the field
                 player++;
                 start_fields_position[player - 1] = new Tuple(result.getX() + width/2, result.getY() + width/2);
@@ -212,7 +213,7 @@ public class Game_board_creator{
      **/
     public void createHomeFields(){
         Tuple mid = new Tuple(this.width /2, this.width/2);
-        for (int j = 0; j <start_fields.length; j++)
+        for (int j = 0; j <start_fields.size(); j++)
         {
             Tuple vek = new Tuple((mid.getX() - start_fields_position[j].getX()) , (mid.getY() - start_fields_position[j].getY()) ); //calculates the vector from the start field to the middle of the board
             if(field_size>20) {
@@ -228,7 +229,7 @@ public class Game_board_creator{
             int field_width = (int) Math.round(vek.vek_length()/(figure_count + 1));
             for (int k = 0; k<figure_count;k++) {
                 Tuple pos = fh(vek, start_fields_position[j] , k , figure_count + 2 ); //calculates the position on the vector
-                Game_field field = new Game_field(layout, field_width , (int) Math.round(pos.getX() - field_width/2), (int) Math.round(pos.getY() -  field_width/2), "homefield", j, k, colors[j]); // erstellt das Feld
+                Game_field field = new Game_field(layout, field_width , (int) Math.round(pos.getX() - field_width/2), (int) Math.round(pos.getY() -  field_width/2), "homefield", j, k, colors.get(j)); // erstellt das Feld
                 field.create_field();
             }
         }
@@ -261,8 +262,8 @@ public class Game_board_creator{
 
     public void createCardDrawfields()
     {
-        for (int i = 0; i< card_draw_fields.length; i++) {
-            ImageView imageView = layout.findViewWithTag("normal"+card_draw_fields[i]);
+        for (int i = 0; i< card_draw_fields.size(); i++) {
+            ImageView imageView = layout.findViewWithTag("normal"+card_draw_fields.get(i));
             imageView.setImageResource(R.drawable.ziehfeld);
         }
     }

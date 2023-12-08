@@ -1,13 +1,10 @@
 package com.example.myapplication.GameInformationClasses;
 
-import lombok.Data;
-
-@Data
-public class Observer{
+public class Order {
     private Integer clientId;
     private String name;
 
-    public Observer(Integer clientId, String name){
+    public Order(Integer clientId, String name){
         this.clientId = clientId;
         this.name = name;
     }
