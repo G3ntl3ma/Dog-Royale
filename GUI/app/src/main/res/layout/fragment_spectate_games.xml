@@ -78,21 +78,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:text="@string/playerSubtitel"
+                android:text="Players"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/textView24"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/timeSubtitel"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+
             <TextView
                 android:id="@+id/textView26"
                 android:layout_width="wrap_content"

@@ -46,7 +46,6 @@ public class SpectateGamesAdapter extends RecyclerView.Adapter<SpectateGamesView
         Game current_game = games.get(holder.getAdapterPosition());
         holder.gameID.setText(current_game.getGameID());
         holder.players.setText(Integer.toString(current_game.getCurrentPlayers()) + "/" + Integer.toString(current_game.getMaxPlayers()));
-        holder.time.setText(Integer.toString(current_game.getTimeSeconds()) + "s");
 
         holder.spectate_button.setOnClickListener(new View.OnClickListener() {
             @Override
