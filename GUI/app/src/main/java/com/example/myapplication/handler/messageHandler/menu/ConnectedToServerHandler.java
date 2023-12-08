@@ -1,13 +1,14 @@
-package GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.menu;
+package com.example.myapplication.handler.messageHandler.menu;
 
-import GUI.app.src.main.java.com.example.myapplication.handler.Handler;
-import GUI.app.src.main.java.com.example.myapplication.handler.HandlingException;
-import GUI.app.src.main.java.com.example.myapplication.handler.ServerHandler;
-import GUI.app.src.main.java.com.example.myapplication.messages.menu.TypeMenu;
+import com.example.myapplication.handler.Handler;
+import com.example.myapplication.handler.HandlingException;
+import com.example.myapplication.handler.ServerHandler;
+import com.example.myapplication.messages.menu.ConnectedToServer;
+import com.example.myapplication.messages.menu.TypeMenu;
 import lombok.Data;
 
 @Data
-public class ConnectedToServerHandler extends Handler implements MenuMessageHandler<com.example.myapplication.messages.menu.ConnectedToServer>  {
+public class ConnectedToServerHandler extends Handler implements MenuMessageHandler<ConnectedToServer>  {
     /**
      *
      * @param message: message from server that contains clientId
@@ -15,7 +16,7 @@ public class ConnectedToServerHandler extends Handler implements MenuMessageHand
      */
 
     @Override
-    public String handle(com.example.myapplication.messages.menu.ConnectedToServer message) throws HandlingException {
+    public String handle(ConnectedToServer message) throws HandlingException {
         try{
             ServerHandler.setClientID(message.getClientId());
             com.example.myapplication.messages.menu.FindTournament findTournament = new com.example.myapplication.messages.menu.FindTournament();

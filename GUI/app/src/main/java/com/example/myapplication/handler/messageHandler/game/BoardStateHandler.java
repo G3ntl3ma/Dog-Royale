@@ -1,12 +1,12 @@
-package GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.game;
+package com.example.myapplication.handler.messageHandler.game;
 
 
-import GUI.app.src.main.java.com.example.myapplication.handler.Handler;
-import GUI.app.src.main.java.com.example.myapplication.handler.HandlingException;
-import GUI.app.src.main.java.com.example.myapplication.messages.game.TypeGame;
+import com.example.myapplication.handler.Handler;
+import com.example.myapplication.handler.HandlingException;
+import com.example.myapplication.messages.game.TypeGame;
 import com.example.myapplication.messages.game.BoardState;
 
-public class BoardStateHandler extends Handler implements GameMessageHandler<com.example.myapplication.messages.game.BoardState> {
+public class BoardStateHandler extends Handler implements GameMessageHandler<BoardState> {
 
 
     @Override

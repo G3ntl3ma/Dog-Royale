@@ -1,7 +1,7 @@
-package GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.menu;
+package com.example.myapplication.handler.messageHandler.menu;
 
-import GUI.app.src.main.java.com.example.myapplication.handler.HandlingException;
-import GUI.app.src.main.java.com.example.myapplication.handler.NewLineAppendingSerializer;
+import com.example.myapplication.handler.HandlingException;
+import com.example.myapplication.handler.NewLineAppendingSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

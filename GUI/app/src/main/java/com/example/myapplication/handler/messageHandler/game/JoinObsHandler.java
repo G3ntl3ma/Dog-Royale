@@ -1,8 +1,8 @@
-package GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.game;
+package com.example.myapplication.handler.messageHandler.game;
 
-import GUI.app.src.main.java.com.example.myapplication.handler.Handler;
-import GUI.app.src.main.java.com.example.myapplication.handler.HandlingException;
-import GUI.app.src.main.java.com.example.myapplication.messages.sync.JoinObs;
+import com.example.myapplication.handler.Handler;
+import com.example.myapplication.handler.HandlingException;
+import com.example.myapplication.messages.sync.JoinObs;
 
 public class JoinObsHandler extends Handler implements GameMessageHandler<JoinObs> {
 

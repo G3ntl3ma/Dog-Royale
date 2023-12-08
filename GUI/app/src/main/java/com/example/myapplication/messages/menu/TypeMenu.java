@@ -1,4 +1,4 @@
-package GUI.app.src.main.java.com.example.myapplication.messages.menu;
+package com.example.myapplication.messages.menu;
 
 public enum TypeMenu {
     connectToServer,

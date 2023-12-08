@@ -1,13 +1,10 @@
-package GUI.app.src.main.java.com.example.myapplication.handler;
+package com.example.myapplication.handler;
 
-import GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.game.*;
-import GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.menu.*;
-import GUI.app.src.main.java.com.example.myapplication.messages.game.TypeGame;
-import GUI.app.src.main.java.com.example.myapplication.messages.menu.ReturnLobbyConfig;
-import GUI.app.src.main.java.com.example.myapplication.messages.menu.TypeMenu;
-import GUI.app.src.main.java.com.example.myapplication.messages.sync.JoinObs;
-import GUI.app.src.main.java.com.example.myapplication.messages.sync.LiveTimer;
-import GUI.app.src.main.java.com.example.myapplication.messages.sync.TurnTimer;
+import com.example.myapplication.handler.messageHandler.game.*;
+import com.example.myapplication.handler.messageHandler.menu.*;
+import com.example.myapplication.messages.game.*;
+import com.example.myapplication.messages.menu.*;
+import com.example.myapplication.messages.sync.*;
 import com.google.gson.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -126,6 +123,7 @@ public class ServerHandler extends Handler implements Runnable {
         } catch (HandlingException e) {
             return handleError("Failed to handle the request", e.getType(), e);
         }
+        return request;
     }
     private String handleConnectedToServer(String request) throws HandlingException {
         if (expectedState != State.CONNECT_MENU) {
@@ -133,7 +131,7 @@ public class ServerHandler extends Handler implements Runnable {
         }
         logger.info("Trying to handle ConnectedToServer");
         try {
-            com.example.myapplication.messages.menu.ConnectedToServer connectedToServer = gson.fromJson(request, com.example.myapplication.messages.menu.ConnectedToServer.class);
+            ConnectedToServer connectedToServer = gson.fromJson(request, ConnectedToServer.class);
             String response = new ConnectedToServerHandler().handle(connectedToServer);
             expectedState = State.REQUEST_FIND_TOURNAMENT;
             logger.info("ConnectedToServer was handled successfully ");
@@ -149,7 +147,7 @@ public class ServerHandler extends Handler implements Runnable {
         }
         logger.info("Trying to handle ReturnFindTournament");
         try{
-            com.example.myapplication.messages.menu.ReturnFindTournament returnFindTournament = gson.fromJson(request, com.example.myapplication.messages.menu.ReturnFindTournament.class);
+            ReturnFindTournament returnFindTournament = gson.fromJson(request, ReturnFindTournament.class);
             String response = new ReturnFindTournamentHandler().handle(returnFindTournament);
             expectedState = State.REQUEST_GAME_LIST;
             logger.info("ReturnTournamentInfo was handled successfully");
@@ -165,7 +163,7 @@ public class ServerHandler extends Handler implements Runnable {
         }
         logger.info("Trying to handle ReturnGameList");
         try{
-            com.example.myapplication.messages.menu.ReturnGameList returnGameList = gson.fromJson(request, com.example.myapplication.messages.menu.ReturnGameList.class);
+            ReturnGameList returnGameList = gson.fromJson(request, ReturnGameList.class);
             String response = new ReturnGameListHandler().handle(returnGameList);
             expectedState = State.MAIN_MENU;
             logger.info("ReturnGameList was handled successfully");
@@ -181,7 +179,7 @@ public class ServerHandler extends Handler implements Runnable {
         }
         logger.info("Trying to handle ConnectedToGame");
         try{
-            com.example.myapplication.messages.menu.ConnectedToGame connectedToGame = gson.fromJson(request,com.example.myapplication.messages.menu.ConnectedToGame.class);
+            ConnectedToGame connectedToGame = gson.fromJson(request,ConnectedToGame.class);
             String response = new ConnectedToGameHandler().handle(connectedToGame);
             if (connectedToGame.isSuccess()){
                 expectedState = State.LOBBY;
@@ -211,7 +209,7 @@ public class ServerHandler extends Handler implements Runnable {
         switch (expectedState){
             case LOBBY:
                 try{
-                    com.example.myapplication.messages.game.BoardState boardState = gson.fromJson(request,com.example.myapplication.messages.game.BoardState.class);
+                    BoardState boardState = gson.fromJson(request, BoardState.class);
                     String response = new FirstBoardStateHandler().handle(boardState);
                     expectedState = State.GAME;
                     logger.info("FirstBoardState was handled successfully");
@@ -222,7 +220,7 @@ public class ServerHandler extends Handler implements Runnable {
                 }
             case GAME:
                 try{
-                    com.example.myapplication.messages.game.BoardState boardState = gson.fromJson(request,com.example.myapplication.messages.game.BoardState.class);
+                    BoardState boardState = gson.fromJson(request, BoardState.class);
                     String response = new BoardStateHandler().handle(boardState);//if gameOver it shows the end screen with winners and takes you back to connect menu
                     if(boardState.isGameOver()){expectedState = State.CONNECT_MENU;}
                     logger.info("BoardState was handled successfully");
@@ -240,7 +238,7 @@ public class ServerHandler extends Handler implements Runnable {
             return handleError("Received wrong type, didn't expect UpdateDrawCards");
         }
         try{
-            com.example.myapplication.messages.game.UpdateDrawCards updateDrawCards = gson.fromJson(request, com.example.myapplication.messages.game.UpdateDrawCards.class);
+            UpdateDrawCards updateDrawCards = gson.fromJson(request, UpdateDrawCards.class);
             String response = new UpdateDrawCardsHandler().handle(updateDrawCards);
             logger.info("UpdateDrawCards was handled successfully");
             return response;//update message
@@ -255,7 +253,7 @@ public class ServerHandler extends Handler implements Runnable {
             return handleError("Received wrong type, didn't expect MoveValid");
         }
         try{
-            com.example.myapplication.messages.game.MoveValid moveValid = gson.fromJson(request, com.example.myapplication.messages.game.MoveValid.class);
+            MoveValid moveValid = gson.fromJson(request, MoveValid.class);
             String response = new MoveValidHandler().handle(moveValid);
             logger.info("UpdateDrawCards was handled successfully");
             return response;
@@ -285,7 +283,7 @@ public class ServerHandler extends Handler implements Runnable {
         }
         logger.info("Trying to handle Cancel");
         try{
-            com.example.myapplication.messages.game.Cancel cancel = gson.fromJson(request,com.example.myapplication.messages.game.Cancel.class);
+            Cancel cancel = gson.fromJson(request, Cancel.class);
             String response = new CancelHandler().handle(cancel);
             logger.info("ReturnGameList was handled successfully");
             expectedState = State.CONNECT_MENU;
