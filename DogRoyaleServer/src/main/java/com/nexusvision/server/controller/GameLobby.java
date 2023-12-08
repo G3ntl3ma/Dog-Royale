@@ -11,10 +11,14 @@ import java.util.List;
 
 @Data
 public class GameLobby {
+
+    private final int id;
     private Game game;
     private GameState gameState;
     private boolean isPaused;
+
     private int maxPlayerCount;
+    private int winnerID;
 
     private ArrayList<Integer> playerOrderList;
     private HashMap<Integer, Colors> playerColorMap;
@@ -29,8 +33,9 @@ public class GameLobby {
      * @param observerList    The observer ID list
      * @param playerColorMap  The player color list
      */
-    public GameLobby(ArrayList<Integer> playerOrderList, HashMap<Integer, Colors> playerColorMap,
+    public GameLobby(int id, ArrayList<Integer> playerOrderList, HashMap<Integer, Colors> playerColorMap,
                      ArrayList<Integer> observerList) {
+        this.id = id;
         this.playerOrderList = playerOrderList;
         this.playerColorMap = playerColorMap;
         this.observerList = observerList;
@@ -40,9 +45,9 @@ public class GameLobby {
 
     public void receiveResponse(int clientId) {
         for (int i = 0; i < this.receivedResponses.size(); i++) {
-	    if(clientId == this.receivedResponses.get(i)) return;
-	}
-	this.receivedResponses.add(clientId);
+            if (clientId == this.receivedResponses.get(i)) return;
+        }
+        this.receivedResponses.add(clientId);
     }
 
     public void resetResponseList() {
@@ -50,13 +55,13 @@ public class GameLobby {
     }
 
     public boolean checkPlayerTurn(int clientId) {
-	for (int playerId = 0; playerId < this.playerOrderList.size(); playerId++) {
-	    if(this.playerOrderList.get(playerId) == clientId) {
-		return this.game.getPlayerToMoveColor == playerId;
-	    }
-	}
-	//client not a player
-	return false;
+        for (int playerId = 0; playerId < this.playerOrderList.size(); playerId++) {
+            if (this.playerOrderList.get(playerId) == clientId) {
+                return this.game.getPlayerToMoveColor() == playerId;
+            }
+        }
+        //client not a player
+        return false;
     }
 
     //check if playerorderlist + observerlist is subset of received responses
@@ -64,26 +69,26 @@ public class GameLobby {
         for (int i = 0; i < this.playerOrderList.size(); i++) {
             //check if this id is in the list of reponses
             int idToFind = this.playerOrderList.get(i);
-	    boolean found = false;
-	    for (int j = 0; j < this.receivedResponses.size(); j++) {
-		if (this.receivedResponses.get(j) == idToFind) {
-		    found = true;
-		    break;
-		}
-	    }
-	    if(!found) return false;
+            boolean found = false;
+            for (int j = 0; j < this.receivedResponses.size(); j++) {
+                if (this.receivedResponses.get(j) == idToFind) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) return false;
         }
         for (int i = 0; i < this.observerList.size(); i++) {
             //check if this id is in the list of reponses
             int idToFind = this.observerList.get(i);
-	    boolean found = false;
-	    for (int j = 0; j < this.receivedResponses.size(); j++) {
-		if (this.receivedResponses.get(j) == idToFind) {
-		    found = true;
-		    break;
-		}
-	    }
-	    if(!found) return false;
+            boolean found = false;
+            for (int j = 0; j < this.receivedResponses.size(); j++) {
+                if (this.receivedResponses.get(j) == idToFind) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) return false;
         }
         return true;
     }

@@ -79,10 +79,10 @@ public class ServerController {
     public ArrayList<GameLobby> getStateGames(int gameCount, GameState state) {
         int foundCount = 0;
         ArrayList<GameLobby> gameLobbys = new ArrayList<>();
-        for (int key : lobbyMap.keySet()) {
-            GameLobby g = lobbyMap.get(key);
-            if (g.getGameState() == state) {
-                gameLobbys.add(g);
+        for (int lobbyID : lobbyMap.keySet()) {
+            GameLobby lobby = lobbyMap.get(lobbyID);
+            if (lobby.getGameState() == state) {
+                gameLobbys.add(lobby);
                 foundCount++;
             }
             if (foundCount == gameCount) break;
@@ -243,7 +243,7 @@ public class ServerController {
             newLobbyID = random.nextInt(Integer.MAX_VALUE);
         } while (lobbyMap.containsKey(newLobbyID));
 
-        lobbyMap.put(newLobbyID, new GameLobby(playerOrderList, playerColorMap, observerList));
+        lobbyMap.put(newLobbyID, new GameLobby(newLobbyID, playerOrderList, playerColorMap, observerList));
         return newLobbyID;
     }
 
