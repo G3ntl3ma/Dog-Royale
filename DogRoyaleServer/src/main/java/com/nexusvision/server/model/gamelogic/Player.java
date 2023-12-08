@@ -95,6 +95,7 @@ public final class Player  {
 	    game.reshuffle();
 	}
 	Card pop = game.deck.remove(game.deck.size() - 1);
+	game.setDrawnCard(pop);
 	this.cards.add(pop);
     }
 

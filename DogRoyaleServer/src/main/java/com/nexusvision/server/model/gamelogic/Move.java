@@ -81,6 +81,7 @@ public final class Move  {
 	 * @param game  An object representing the game
 	 */
     public void execute(Game game) {
+	game.setDrawnCard(null);
 	// System.out.println("cards num before " + this.player.cards.size());
 	if(this.cardUsed != null) {
 	    player.cards.remove(this.cardUsed);
@@ -98,13 +99,15 @@ public final class Move  {
 	    to.figure.field = to;
 	    from.figure.field = from;
 
-	    if (to.type== FieldType.DRAW) {
-		// System.out.println("player " + player.color + " draw card!");
-		player.draw(game);
-	    }
+
 	    if (from.type== FieldType.DRAW) {
 		// System.out.println("player " + opponent.col + " draw card!");
 		opponent.draw(game);
+	    }
+	    //important order to ensure that the drawn card of the current player is set
+	    if (to.type== FieldType.DRAW) {
+		// System.out.println("player " + player.color + " draw card!");
+		player.draw(game);
 	    }
 	    
 	}

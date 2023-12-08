@@ -11,14 +11,10 @@ import java.util.List;
 
 @Data
 public class GameLobby {
-
-    private final int id;
     private Game game;
     private GameState gameState;
     private boolean isPaused;
-
     private int maxPlayerCount;
-    private int winnerID;
 
     private ArrayList<Integer> playerOrderList;
     private HashMap<Integer, Colors> playerColorMap;
@@ -168,7 +164,8 @@ public class GameLobby {
     //success boolean
     public boolean tryMove(boolean skip, int card, int selectedValue,
                            int pieceId, boolean isStarter, Integer opponentPieceId) {
-        return this.game.tryMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
+        boolean success = this.game.tryMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
+	return success;
     }
 
     //success boolean

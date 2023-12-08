@@ -29,9 +29,11 @@ public final class Game {
     private int playerToStartColor;
     private int playerToMoveColor;
     final int maximumTotalMoves;
+    private Card drawnCard;
     int movesMade;
     int playersRemaining;
     private int round; //round counter
+    private boolean firstMoveOfRound;
     
     // private final int maximumGameDuration; //in gamelobby class
     private final Penalty consequences;
@@ -39,15 +41,15 @@ public final class Game {
     private int[] startIndexs; //indeces of startFields, unused
     boolean[] occupied; //unused
 
-	/**
-	 * The Constructor initializes Games
-	 *
-	 * @param conf A String holding information about the board and players
-	 * @param figureCount An Integer representing the number of figures in the game
-	 * @param initialHandCardCount An Integer representing the initial number of cards each player should have in their hand
-	 * @param maximumTotalMoves An integer representing the maximum number of moves allowed this game
-	 * @param consequences An object representing the consequences for illegal moves
-	 */
+    /**
+     * The Constructor initializes Games
+     *
+     * @param conf A String holding information about the board and players
+     * @param figureCount An Integer representing the number of figures in the game
+     * @param initialHandCardCount An Integer representing the initial number of cards each player should have in their hand
+     * @param maximumTotalMoves An integer representing the maximum number of moves allowed this game
+     * @param consequences An object representing the consequences for illegal moves
+     */
     public Game(String conf, int figureCount, int initialHandCardCount, int maximumTotalMoves ,int consequences) {
 	this.players = new ArrayList<>();
 	this.deck = new ArrayList<>();
@@ -63,18 +65,18 @@ public final class Game {
 	init(conf);
     }
 
-	/**
-	 * Increases the value of movesMade by 1
-	 *
-	 */
+    /**
+     * Increases the value of movesMade by 1
+     *
+     */
     public void increaseMovesCounter() {
 	this.movesMade++;
     }
 
-	/**
-	 * Add all cards from the pile and players hand to the deck and reshuffle
-	 *
-	 */
+    /**
+     * Add all cards from the pile and players hand to the deck and reshuffle
+     *
+     */
     public void reshuffle() {
 	// System.out.println("reshuffle start deck size " + this.deck.size() + " pile size " + this.pile.size());
 	this.deck.addAll(this.pile);
@@ -88,10 +90,10 @@ public final class Game {
 	// System.out.println("reshuffle done deck size " + this.deck.size() + " pile size " + this.pile.size());	
     }
 
-	/**
-	 * Proper initialization for the next round considering excluded players and the starting player
-	 *
-	 */
+    /**
+     * Proper initialization for the next round considering excluded players and the starting player
+     *
+     */
     public void reinit() { //for next round
 	//assert not everyone is excluded
 	this.playersRemaining = 0;
@@ -117,10 +119,10 @@ public final class Game {
 	// System.out.println(this.round);
     }
 
-	/**
-	 * Discarding a player's hand considering the state of the pile
-	 *
-	 */
+    /**
+     * Discarding a player's hand considering the state of the pile
+     *
+     */
     public void discardHandCards() {
 	Player player = this.getCurrentPlayer();
 	if (player.cards.size() > 0) {
@@ -139,22 +141,23 @@ public final class Game {
 	}
     }
 
-	/**
-	 * Distribute Cards to the players
-	 *
-	 */
+    /**
+     * Distribute Cards to the players
+     *
+     */
     public void distributeCards() {
 	for (int i = 0; i < this.initialHandCardCount; i++) {
 	    for (int j = 0; j < this.players.size(); j++) {
 		this.players.get(j).draw(this);
 	    }
 	}
+	this.firstMoveOfRound = true;
     }
 
-	/**
-	 * Print the current state of the game
-	 *
-	 */
+    /**
+     * Print the current state of the game
+     *
+     */
     public void printBoard() {
 	System.out.println("BOARD=================");
 	System.out.println("player to move " + this.playerToMoveColor);
@@ -183,10 +186,10 @@ public final class Game {
 	System.out.println("===================");
     }
 
-	/**
-	 * Set up the initial deck, defining types and quantities of the cards
-	 *
-	 */
+    /**
+     * Set up the initial deck, defining types and quantities of the cards
+     *
+     */
     public void initDeck() {
 	for (int i = 0; i < 7; i++) {
 	    this.deck.add(new Card(CardType.card2));
@@ -215,14 +218,14 @@ public final class Game {
 	Collections.shuffle(this.deck); //undeterministic
     }
 
-	/**
-	 * Set up the initial game state, Count the numbers of players,
-	 * initialize board, Create fields and players,
-	 * connect fields and set up player starting positions and set house fields
-	 *
-	 * @param conf A String holding information about the board and players
-	 */
-    private void init(String conf) { //set board and players
+    /**
+     * Set up the initial game state, Count the numbers of players,
+     * initialize board, Create fields and players,
+     * connect fields and set up player starting positions and set house fields
+     *
+     * @param conf A String holding information about the board and players
+     */
+    private void init(String conf) { //set board and players, first move
 	int players = 0;
 	for (int i = 0; i < conf.length(); i++) {
 	    if (conf.charAt(i) == 's') players++;
@@ -285,21 +288,22 @@ public final class Game {
 	
     }
 
-	/**
-	 * Retrieve the current player
-	 *
-	 * @return The current player
-	 */
+    /**
+     * Retrieve the current player
+     *
+     * @return The current player
+     */
     public Player getCurrentPlayer() {
 	return this.players.get(this.playerToMoveColor);
     }
 
-	/**
-	 * Determine and set the next player
-	 *
-	 * @return true as long as there are remaining players
-	 */
+    /**
+     * Determine and set the next player
+     *
+     * @return true as long as there are remaining players
+     */
     public boolean nextPlayer() {
+	this.firstMoveOfRound = false;
 	int count = 0;
 	if(this.playersRemaining == 0) return false;
 	//get next player who is not out yet if there is anyone
@@ -314,10 +318,10 @@ public final class Game {
 	return true;
     }
 
-	/**
-	 * Print information about Cards in total and in players hands
-	 *
-	 */
+    /**
+     * Print information about Cards in total and in players hands
+     *
+     */
     public void printTotalCards() {
 	int handsum = 0;
 	for (int i = 0; i < this.players.size(); i++) {
@@ -330,14 +334,14 @@ public final class Game {
 	}
     }
 
-	/**
-	 * Compares 2 players based on criteria figures in house and
-	 * last move count when a figure was moved into the house
-	 *
-	 * @param p1 An object representing a player
-	 * @param p2 An object representing another player
-	 * @return An Integer representing which player is ahead in terms of figures in the house
-	 */
+    /**
+     * Compares 2 players based on criteria figures in house and
+     * last move count when a figure was moved into the house
+     *
+     * @param p1 An object representing a player
+     * @param p2 An object representing another player
+     * @return An Integer representing which player is ahead in terms of figures in the house
+     */
     public int compare(Player p1, Player p2) {
 	if(p1.figuresInHouse > p2.figuresInHouse) return 1;
 	if(p1.figuresInHouse < p2.figuresInHouse) return -1;
@@ -347,12 +351,12 @@ public final class Game {
 	return 0;
     }
 
-	/**
-	 * Determines all the winners ordered from highest to lowest
-	 *
-	 *
-	 * @return An ArrayList with all the winners
-	 */
+    /**
+     * Determines all the winners ordered from highest to lowest
+     *
+     *
+     * @return An ArrayList with all the winners
+     */
     public ArrayList<Player> getOrder(ArrayList<Player> playerWinOrder) {
 	//iterate through players in random order to make ties random order
 	ArrayList<Player> randomOrderPlayers = new ArrayList<>(this.players);
@@ -399,57 +403,57 @@ public final class Game {
 	return playerWinOrder;
     }
 
-	/**
-	 * Increments round by 1
-	 *
-	 */
+    /**
+     * Increments round by 1
+     *
+     */
     public void incrementRound() {
 	this.round++;
     }
 
-	/**
-	 * Gets last card of the pile
-	 *
-	 */
+    /**
+     * Gets last card of the pile
+     *
+     */
     public Card getLastCard() {
 	return pile.get(pile.size() - 1);
     }
 
-	/**
-	 * Determines if the round is over
-	 *
-	 * @return A Boolean, when true the round is over
-	 */
+    /**
+     * Determines if the round is over
+     *
+     * @return A Boolean, when true the round is over
+     */
     public boolean roundOver() {
 	return this.playersRemaining == 0;
     }
 
-	/**
-	 * Get a specific field object in the board array
-	 *
-	 * @return An object representing the field at index 'inx'
-	 */
+    /**
+     * Get a specific field object in the board array
+     *
+     * @return An object representing the field at index 'inx'
+     */
     public Field getField(int inx) {
 	return this.board[inx];
     }
 
-	/**
-	 * Checks for legal moves and retrieves moves if legal
-	 *
-	 * @param skip A Boolean indicating whether to skip the move
-	 * @param card An Enum representing the type of the card
-	 * @param selectedValue An Integer representing a selected value for the move
-	 * @param pieceId An Integer representing the id of the piece
-	 * @param isStarter A Boolean indicating whether the move is the starting move
-	 * @param opponentPieceId An optional Integer representing the identifier of the opponent's piece
-	 *
-	 * @return An object representing the Move to be executed, null if no cards left or illegal move
-	 */
+    /**
+     * Checks for legal moves and retrieves moves if legal
+     *
+     * @param skip A Boolean indicating whether to skip the move
+     * @param card An Enum representing the type of the card
+     * @param selectedValue An Integer representing a selected value for the move
+     * @param pieceId An Integer representing the id of the piece
+     * @param isStarter A Boolean indicating whether the move is the starting move
+     * @param opponentPieceId An optional Integer representing the identifier of the opponent's piece
+     *
+     * @return An object representing the Move to be executed, null if no cards left or illegal move
+     */
     //TODO CardType is Card in interface doc
     
     //if move not legal do nothing and execute handle illegal move
     public Move getMove(boolean skip, CardType card, int selectedValue,
-						int pieceId, boolean isStarter, Integer opponentPieceId) {
+			int pieceId, boolean isStarter, Integer opponentPieceId) {
 	Player player = this.getCurrentPlayer();
 	if(card == null || skip) return null;
 	//check if cardtype in cards
@@ -473,20 +477,20 @@ public final class Game {
 	return null;
     }
 
-	/**
-	 * Attempts to execute a move
-	 *
-	 * @param skip A Boolean indicating whether to skip the move
-	 * @param cardOrdinal An Enum representing the type of the card
-	 * @param selectedValue An Integer representing a selected value for the move
-	 * @param pieceId An Integer representing the id of the piece
-	 * @param isStarter A Boolean indicating whether the move is the starting move
-	 * @param opponentPieceId An optional Integer representing the identifier of the opponent's piece
-	 *
-	 * @return A Boolean indicating if move was legal or not
-	 */
+    /**
+     * Attempts to execute a move
+     *
+     * @param skip A Boolean indicating whether to skip the move
+     * @param cardOrdinal An Enum representing the type of the card
+     * @param selectedValue An Integer representing a selected value for the move
+     * @param pieceId An Integer representing the id of the piece
+     * @param isStarter A Boolean indicating whether the move is the starting move
+     * @param opponentPieceId An optional Integer representing the identifier of the opponent's piece
+     *
+     * @return A Boolean indicating if move was legal or not
+     */
     public boolean tryMove(boolean skip, int cardOrdinal, int selectedValue,
-				 int pieceId, boolean isStarter, Integer opponentPieceId) {
+			   int pieceId, boolean isStarter, Integer opponentPieceId) {
 	CardType card = CardType.values()[cardOrdinal];
 	Move move = getMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
 	if(move==null) {
@@ -499,33 +503,33 @@ public final class Game {
 	}
     }
 
-	/**
-	 * Excludes a specific player from the round
-	 *
-	 * @param player An object representing the player to exclude from the round
-	 */
+    /**
+     * Excludes a specific player from the round
+     *
+     * @param player An object representing the player to exclude from the round
+     */
     //exclude from round
     public void excludeFromRound(Player player) {
-		this.discardHandCards(); //of current player
-		this.playersRemaining--;
-		this.nextPlayer();
+	this.discardHandCards(); //of current player
+	this.playersRemaining--;
+	// this.nextPlayer();
     }
 
-	/**
-	 * Excludes a specific player from the game
-	 *
-	 * @param player An object representing the player to exclude from the game
-	 */
+    /**
+     * Excludes a specific player from the game
+     *
+     * @param player An object representing the player to exclude from the game
+     */
     public void excludeFromGame(Player player) {
-		player.setExclude();
-		this.playersRemaining--;
-		this.nextPlayer();
+	player.setExclude();
+	this.playersRemaining--;
+	// this.nextPlayer();
     }
 
-	/**
-	 * Handles illegal move and applies penalties
-	 *
-	 */
+    /**
+     * Handles illegal move and applies penalties
+     *
+     */
     public void handleIllegalMove() {
 	if(consequences == Penalty.kickFromGame) {
 	    excludeFromGame(this.getCurrentPlayer());
@@ -537,15 +541,15 @@ public final class Game {
 	}
     }
 
-	/**
-	 * Calculates position of a player's figure in the house
-	 *
-	 * @param playerId An Integer representing Id of the player
-	 * @param pieceId An Integer representing Id of a figure
-	 *
-	 * @return An Integer indicating the position of the figure in the house
-	 *
-	 */
+    /**
+     * Calculates position of a player's figure in the house
+     *
+     * @param playerId An Integer representing Id of the player
+     * @param pieceId An Integer representing Id of a figure
+     *
+     * @return An Integer indicating the position of the figure in the house
+     *
+     */
     public Integer getHousePosition(int playerId, int pieceId) {
 	Figure f = this.players.get(playerId).figures.get(pieceId);
 	if(!f.isInHouse) return null;
