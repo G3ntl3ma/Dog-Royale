@@ -3,7 +3,7 @@ package com.nexusvision.server.handler;
 import lombok.Getter;
 
 /**
- * Custom HandlingException that is getting thrown
+ * Custom <code>HandlingException</code> that is getting thrown
  * whenever there occurs a problem in any of the handler classes
  *
  * @author felixwr
@@ -14,7 +14,7 @@ public class HandlingException extends Exception {
     private int type;
 
     /**
-     * Constructor initializing an instance of the HandlingException class
+     * Constructor initializing an instance of the <code>HandlingException</code> class
      *
      */
     public HandlingException() {
@@ -22,7 +22,7 @@ public class HandlingException extends Exception {
     }
 
     /**
-     * Constructor initializing an instance of the HandlingException class
+     * Constructor initializing an instance of the <code>HandlingException</code> class
      *
      * @param message A string representing a custom error message
      */
@@ -31,7 +31,7 @@ public class HandlingException extends Exception {
     }
 
     /**
-     * Constructor initializing an instance of the HandlingException class
+     * Constructor initializing an instance of the <code>HandlingException</code> class
      *
      * @param message A string representing a custom error message
      * @param cause An object representing the cause of the exception
@@ -41,7 +41,7 @@ public class HandlingException extends Exception {
     }
 
     /**
-     * Constructor initializing an instance of the HandlingException class
+     * Constructor initializing an instance of the <code>HandlingException</code> class
      *
      * @param type An Integer associated with an exception
      */
@@ -51,7 +51,7 @@ public class HandlingException extends Exception {
     }
 
     /**
-     * Constructor initializing an instance of the HandlingException class
+     * Constructor initializing an instance of the <code>HandlingException</code> class
      *
      * @param message A string representing a custom error message
      * @param type An Integer associated with an exception
@@ -62,7 +62,7 @@ public class HandlingException extends Exception {
     }
 
     /**
-     * Constructor initializing an instance of the HandlingException class
+     * Constructor initializing an instance of the <code>HandlingException</code> class
      *
      * @param message A string representing a custom error message
      * @param cause An object representing the cause of the exception
