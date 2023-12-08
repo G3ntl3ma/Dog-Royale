@@ -1,5 +1,6 @@
 package com.nexusvision.server.model.messages.game;
 
+import com.nexusvision.server.model.messages.AbstractMessage;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class Cancel extends AbstractGameMessage{
+public class Cancel extends AbstractMessage {
     //private List<WinnerOrder> winnerOrder;
 
     @Data

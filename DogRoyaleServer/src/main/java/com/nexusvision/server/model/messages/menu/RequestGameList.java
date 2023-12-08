@@ -1,6 +1,7 @@
 package com.nexusvision.server.model.messages.menu;
 
 
+import com.nexusvision.server.model.messages.AbstractMessage;
 import lombok.Data;
 
 /**
@@ -9,7 +10,7 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class RequestGameList extends AbstractMenuMessage {
+public class RequestGameList extends AbstractMessage {
     private Integer clientID;
     private Integer gameCountStarting;
     private Integer gameCountInProgress;

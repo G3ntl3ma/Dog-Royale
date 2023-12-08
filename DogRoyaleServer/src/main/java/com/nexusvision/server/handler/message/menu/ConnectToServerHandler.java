@@ -2,6 +2,7 @@ package com.nexusvision.server.handler.message.menu;
 
 import com.nexusvision.server.handler.Handler;
 import com.nexusvision.server.handler.HandlingException;
+import com.nexusvision.server.handler.message.MessageHandler;
 import com.nexusvision.server.model.entities.Client;
 import com.nexusvision.server.model.messages.menu.ConnectToServer;
 import com.nexusvision.server.model.messages.menu.ConnectedToServer;
@@ -15,11 +16,10 @@ import lombok.Data;
  *
  * @author felixwr
  */
-public class ConnectToServerHandler extends Handler implements MenuMessageHandler<ConnectToServer> {
+public class ConnectToServerHandler extends MessageHandler<ConnectToServer> {
 
     @Override
-    public String handle(ConnectToServer message, int clientID) throws HandlingException {
-        try {
+    protected String performHandle(ConnectToServer message, int clientID) throws HandlingException {
             ServerController serverController = ServerController.getInstance();
             Client client = serverController.getClientById(clientID);
             client.setName(message.getName());
@@ -30,9 +30,5 @@ public class ConnectToServerHandler extends Handler implements MenuMessageHandle
             connectedToServer.setClientId(clientID);
 
             return gson.toJson(connectedToServer);
-        } catch (Exception e) {
-            throw new HandlingException("Exception while handling connectToServer",
-                    e, TypeMenue.connectToServer.getOrdinal());
-        }
     }
 }

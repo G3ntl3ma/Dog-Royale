@@ -169,7 +169,7 @@ public class GameLobby {
     public boolean tryMove(boolean skip, int card, int selectedValue,
                            int pieceId, boolean isStarter, Integer opponentPieceId) {
         boolean success = this.game.tryMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
-	return success;
+        return success;
     }
 
     //success boolean

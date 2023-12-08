@@ -1,5 +1,6 @@
 package com.nexusvision.server.model.messages.menu;
 
+import com.nexusvision.server.model.messages.AbstractMessage;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
  * @author felixwr
  */
 @Data
-public class ConnectToServer extends AbstractMenuMessage {
+public class ConnectToServer extends AbstractMessage {
     private String name;
     private Boolean isObserver = null;
 }

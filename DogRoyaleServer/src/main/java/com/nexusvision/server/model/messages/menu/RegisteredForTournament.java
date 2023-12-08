@@ -1,6 +1,7 @@
 package com.nexusvision.server.model.messages.menu;
 
 
+import com.nexusvision.server.model.messages.AbstractMessage;
 import lombok.Data;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * @author kellerb
  */
 @Data
-public class RegisteredForTournament extends AbstractMenuMessage {
+public class RegisteredForTournament extends AbstractMessage {
     private List<Player> players;
     private boolean success;
     private int tournamentId;

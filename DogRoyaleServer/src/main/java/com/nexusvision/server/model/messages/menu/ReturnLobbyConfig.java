@@ -1,5 +1,6 @@
 package com.nexusvision.server.model.messages.menu;
 
+import com.nexusvision.server.model.messages.AbstractMessage;
 import lombok.Data;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author kellerb
  */
 @Data
-public class ReturnLobbyConfig extends AbstractMenuMessage{
+public class ReturnLobbyConfig extends AbstractMessage {
     private enum Penalty {
         excludeFromRound,
         kickFromGame

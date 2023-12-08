@@ -1,6 +1,7 @@
 package com.nexusvision.server.handler.message.menu;
 
 import com.nexusvision.server.handler.Handler;
+import com.nexusvision.server.handler.message.MessageHandler;
 import com.nexusvision.server.model.messages.menu.FindTournament;
 import com.nexusvision.server.model.messages.menu.ReturnFindTournament;
 import com.nexusvision.server.model.messages.menu.Error;
@@ -9,11 +10,10 @@ import lombok.Data;
 
 import java.util.ArrayList;
 
-@Data
-public class FindTournamentHandler extends Handler implements MenuMessageHandler<FindTournament> {
+public class FindTournamentHandler extends MessageHandler<FindTournament> {
 
     @Override
-    public String handle(FindTournament message, int clientID) {
+    protected String performHandle(FindTournament message, int clientID) {
 
         ReturnFindTournament returnFindTournament = new ReturnFindTournament();
         returnFindTournament.setType(TypeMenue.returnFindTournament.getOrdinal());

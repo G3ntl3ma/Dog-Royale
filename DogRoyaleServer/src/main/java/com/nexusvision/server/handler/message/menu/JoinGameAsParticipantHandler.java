@@ -2,6 +2,7 @@ package com.nexusvision.server.handler.message.menu;
 
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.Handler;
+import com.nexusvision.server.handler.message.MessageHandler;
 import com.nexusvision.server.model.enums.Colors;
 import com.nexusvision.server.model.messages.menu.Error;
 import com.nexusvision.server.model.messages.menu.JoinGameAsParticipant;
@@ -9,10 +10,10 @@ import com.nexusvision.server.model.messages.menu.ConnectedToGame;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
 import lombok.Data;
 @Data
-public class JoinGameAsParticipantHandler extends Handler implements MenuMessageHandler<JoinGameAsParticipant> {
+public class JoinGameAsParticipantHandler extends MessageHandler<JoinGameAsParticipant> {
 
     @Override
-    public String handle(JoinGameAsParticipant message, int clientID) {
+    protected String performHandle(JoinGameAsParticipant message, int clientID) {
 
         ServerController serverController = ServerController.getInstance();
 

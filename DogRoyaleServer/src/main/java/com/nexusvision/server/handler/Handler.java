@@ -2,6 +2,7 @@ package com.nexusvision.server.handler;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nexusvision.server.model.messages.AbstractMessage;
 import com.nexusvision.server.model.messages.menu.Error;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
 import com.nexusvision.utils.NewLineAppendingSerializer;

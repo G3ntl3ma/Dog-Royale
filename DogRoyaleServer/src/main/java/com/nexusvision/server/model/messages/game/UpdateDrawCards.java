@@ -1,5 +1,6 @@
 package com.nexusvision.server.model.messages.game;
 
+import com.nexusvision.server.model.messages.AbstractMessage;
 import lombok.Data;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author kellerb
  */
 @Data
-public class UpdateDrawCards extends AbstractGameMessage{
+public class UpdateDrawCards extends AbstractMessage {
     private List<HandCard> handCards;
 
     @Data

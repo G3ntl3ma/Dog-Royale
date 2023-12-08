@@ -1,12 +1,13 @@
 package com.nexusvision.server.model.messages.game;
 
 import com.nexusvision.server.model.enums.CardType;
+import com.nexusvision.server.model.messages.AbstractMessage;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class BoardState extends AbstractGameMessage {
+public class BoardState extends AbstractMessage {
     private List<Piece> pieces;
     private List<DiscardItem> discardPile;
     private CardType lastPlayedCard;

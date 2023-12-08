@@ -1,30 +1,27 @@
 package com.nexusvision.server.handler.message.menu;
 
+import com.nexusvision.server.controller.GameLobby;
 import com.nexusvision.server.controller.ServerController;
-import com.nexusvision.server.handler.Handler;
-import com.nexusvision.server.model.messages.menu.JoinGameAsObserver;
+import com.nexusvision.server.handler.HandlingException;
+import com.nexusvision.server.handler.message.MessageHandler;
 import com.nexusvision.server.model.messages.menu.ConnectedToGame;
-import com.nexusvision.server.model.messages.menu.Error;
+import com.nexusvision.server.model.messages.menu.JoinGameAsObserver;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
-import lombok.Data;
-@Data
-public class JoinGameAsObserverHandler extends Handler implements MenuMessageHandler<JoinGameAsObserver> {
+
+public class JoinGameAsObserverHandler extends MessageHandler<JoinGameAsObserver> {
 
     @Override
-    public String handle(JoinGameAsObserver message, int clientID) {
+    protected String performHandle(JoinGameAsObserver message, int clientID) throws HandlingException {
 
+        verifyClientID(clientID, message.getClientId());
         ServerController serverController = ServerController.getInstance();
 
-        if(message.getClientId() == null ||  message.getGameId() == null ) {
-            return handleError("Joining game failed, request malformed",
-                    TypeMenue.connectToServer.getOrdinal());
-        }
-
-        serverController.getLobbyById(message.getGameId()).addObserver(message.getClientId());
+        GameLobby lobby = serverController.getLobbyById(message.getGameId());
+        lobby.addObserver(message.getClientId());
 
         ConnectedToGame connectedToGame = new ConnectedToGame();
-        connectedToGame.setType(TypeMenue.joinGameAsParticipant.getOrdinal());
-        connectedToGame.setSuccess(true); // TODO: felix check this again later
+        connectedToGame.setType(TypeMenue.joinGameAsObserver.getOrdinal());
+        connectedToGame.setSuccess(true);
 
         return gson.toJson(connectedToGame);
     }

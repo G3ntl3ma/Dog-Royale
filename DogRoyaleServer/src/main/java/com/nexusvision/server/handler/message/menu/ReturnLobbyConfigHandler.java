@@ -1,6 +1,7 @@
 package com.nexusvision.server.handler.message.menu;
 
 import com.nexusvision.server.handler.Handler;
+import com.nexusvision.server.handler.message.MessageHandler;
 import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
 import com.nexusvision.server.controller.ServerController;
@@ -9,10 +10,10 @@ import com.nexusvision.server.model.messages.menu.Error;
 import java.util.List;
 import java.util.ArrayList;
 
-public class ReturnLobbyConfigHandler extends Handler implements MenuMessageHandler<ReturnLobbyConfig> {
+public class ReturnLobbyConfigHandler extends MessageHandler<ReturnLobbyConfig> {
 
     @Override
-    public String handle(ReturnLobbyConfig message, int clientID) {
+    protected String performHandle(ReturnLobbyConfig message, int clientID) {
 
         ServerController serverController = ServerController.getInstance();
 

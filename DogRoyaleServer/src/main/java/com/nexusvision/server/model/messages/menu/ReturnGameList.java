@@ -1,5 +1,6 @@
 package com.nexusvision.server.model.messages.menu;
 
+import com.nexusvision.server.model.messages.AbstractMessage;
 import lombok.Data;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author kellerb, felixwr
  */
 @Data
-public class ReturnGameList extends AbstractMenuMessage {
+public class ReturnGameList extends AbstractMessage {
     private List<Game> startingGames;
     private List<Game> runningGames;
     private List<Game> finishedGames;
