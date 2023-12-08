@@ -9,7 +9,7 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class ReturnTournamentInfo extends AbstractMenuMessage {
+public class ReturnTournamentInfo {
     //TODO implement variables
 
     // TODO: getResponse()-Methode schreiben

@@ -8,7 +8,7 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class FindTournament extends com.example.myapplication.messages.menu.AbstractMenuMessage {
+public class FindTournament  {
     private int clientId;
     private int tournamentStarting;
     private int tournamentInProgress;

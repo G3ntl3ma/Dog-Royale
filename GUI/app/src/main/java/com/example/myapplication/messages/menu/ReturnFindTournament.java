@@ -14,7 +14,7 @@ import java.util.List;
  * @author kellerb
  */
 @Data
-public class ReturnFindTournament extends AbstractMenuMessage {
+public class ReturnFindTournament  {
     private List<TournamentStart> tournamentStarting;
     private List<TournamentInProgress> tournamentInProgress;
     private List<TournamentFinish> tournamentFinished;
