@@ -29,7 +29,7 @@ public class lobby {
 
             }
         });
-        HashMap<Integer, ArrayList<Integer>> playerCountPerGame = new HashMap<>();
+        //HashMap<Integer, ArrayList<Integer>> playerCountPerGame = new HashMap<>();
         assignPlayerToGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {// not working TODO
@@ -47,23 +47,23 @@ public class lobby {
                 if (id1 != -1 && id2 != -1) {
 
 
-                    // Check if the game ID exists in the playerCountPerGame map
-                    if (!playerCountPerGame.containsKey(id1)) {
-                        // If the game ID doesn't exist:
-                        // Create a new list to store player IDs and add the current player ID (id2) to it
-                        ArrayList<Integer> newlist = new ArrayList<>();
-                        newlist.add(id2);
-                        // Add the new list to the playerCountPerGame map under the game ID key
-                        playerCountPerGame.put(id1, new ArrayList<>());
-                    } else {
-                        // If the game ID exists:
-                        // Retrieve the list of player IDs associated with the game ID
-                        ArrayList<Integer> players = playerCountPerGame.get(id1);
-                        // Add the current player ID (id2) to the existing list of player IDs
-                        players.add(id2);
-                        // Update the playerCountPerGame map with the modified list of player IDs
-                        playerCountPerGame.put(id1, players);
-                    }
+//                    // Check if the game ID exists in the playerCountPerGame map
+//                    if (!playerCountPerGame.containsKey(id1)) {
+//                        // If the game ID doesn't exist:
+//                        // Create a new list to store player IDs and add the current player ID (id2) to it
+//                        //ArrayList<Integer> newList = new ArrayList<>();
+//                        //newList.add(id2);
+//                        // Add the new list to the playerCountPerGame map under the game ID key
+//                        playerCountPerGame.put(id1, new ArrayList<>());
+//                    } else {
+//                        // If the game ID exists:
+//                        // Retrieve the list of player IDs associated with the game ID
+//                        ArrayList<Integer> players = playerCountPerGame.get(id1);
+//                        // Add the current player ID (id2) to the existing list of player IDs
+//                        players.add(id2);
+//                        // Update the playerCountPerGame map with the modified list of player IDs
+//                        playerCountPerGame.put(id1, players);
+//                    }
 
 
                     // Assign a player to a specific game
@@ -152,7 +152,7 @@ public class lobby {
         ArrayList<Player> connectedPlayers = Ausrichter.playersConnected;
 
         // (just for test) Generate sample Player objects and add them to connectedPlayers (IDs from 0 to 14)
-        for (int i=1; i< 15; i++){
+        for (int i=0; i< 15; i++){
             Player p = new Player(i, 1, 1);
             connectedPlayers.add(p);
         }
