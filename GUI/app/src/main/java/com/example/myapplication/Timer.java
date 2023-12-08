@@ -18,11 +18,11 @@ public class Timer  extends AppCompatActivity{
     private CountDownTimer countdowntimer;
     private long timeLeftMillis;
     private boolean hasFinished;
-    private FragmentGameBoardBinding binding;
+    private TimerviewModel viewModel;
 
-    public Timer(long startTimeMillis, FragmentGameBoardBinding binding) {
+    public Timer(long startTimeMillis) {
         this.startTimeMillis = startTimeMillis;
-        this.binding = binding;
+        this.viewModel = MainActivity.getTimerViewModel();
         this.timeLeftMillis = startTimeMillis;
     }
 
@@ -62,7 +62,6 @@ public class Timer  extends AppCompatActivity{
     public void resetTimer(){
         pauseTimer();
         timeLeftMillis = startTimeMillis;
-        binding.timerView.setText("");
         updateCountdown();
     }
 
@@ -98,7 +97,7 @@ public class Timer  extends AppCompatActivity{
         int seconds = (int) Math.floor(timeLeftMillis / 1000 % 60);
         String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d",minutes, seconds);
         //System.out.println(timeLeftFormatted);
-        binding.timerView.setText(timeLeftFormatted);
+        viewModel.setTime(timeLeftFormatted);
     }
 }
 

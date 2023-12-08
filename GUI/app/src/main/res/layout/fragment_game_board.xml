@@ -18,12 +18,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/timerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+
     <RelativeLayout
         android:id="@+id/game_board_layout"
         android:layout_width="match_parent"
         android:layout_height="420dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView6">
+
 
         <TextView
             android:id="@+id/textView3"
@@ -45,23 +55,7 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/timerView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="21dp"
-        android:layout_marginTop="21dp"
-        android:layout_marginEnd="332dp"
-        android:layout_marginBottom="15dp"
-        android:text="00:00"
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@id/game_board_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
-        app:layout_constraintVertical_bias="1.0" />
+
 
     <HorizontalScrollView
         android:layout_width="wrap_content"

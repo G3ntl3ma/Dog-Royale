@@ -11,14 +11,18 @@ public class Game {
     private int maxPlayers;
     private int fieldSize;
     private int figureCount;
+    private int[] drawFields;
+    private int[] startFields;
 
-    public Game(String gameID, int timeSeconds, int currentPlayers, int maxPlayers, int fieldSize, int figureCount) {
+    public Game(String gameID, int timeSeconds, int currentPlayers, int maxPlayers, int fieldSize, int figureCount, int[] drawFields, int[] startFields) {
         this.gameID = gameID;
         this.timeSeconds = timeSeconds;
         this.currentPlayers = currentPlayers;
         this.maxPlayers = maxPlayers;
         this.fieldSize = fieldSize;
         this.figureCount = figureCount;
+        this.drawFields = drawFields;
+        this.startFields = startFields;
     }
 
     public String getGameID() {
@@ -67,5 +71,21 @@ public class Game {
 
     public void setFigureCount(int figureCount) {
         this.figureCount = figureCount;
+    }
+
+    public int[] getDrawFields() {
+        return drawFields;
+    }
+
+    public void setDrawFields(int[] drawFields) {
+        this.drawFields = drawFields;
+    }
+
+    public int[] getStartFields() {
+        return startFields;
+    }
+
+    public void setStartFields(int[] startFields) {
+        this.startFields = startFields;
     }
 }

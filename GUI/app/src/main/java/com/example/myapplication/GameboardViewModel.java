@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import java.util.List;
+
 public class GameboardViewModel extends ViewModel {
 
     MutableLiveData<GameInformation> gameInformation = new MutableLiveData<>();
@@ -23,6 +25,8 @@ public class GameboardViewModel extends ViewModel {
     MutableLiveData<Integer> figure_count= new MutableLiveData<>();
     //MutableLiveData<Game_board_creator> game_board_creator= new MutableLiveData<>();
     MutableLiveData<Figure_handler> figure_handler= new MutableLiveData<>();
+    MutableLiveData<int[]> start_fields = new MutableLiveData<>();
+    MutableLiveData<int[]> drawFields = new MutableLiveData<>();
 
     public MutableLiveData<Integer> getField_size() {
         return field_size;

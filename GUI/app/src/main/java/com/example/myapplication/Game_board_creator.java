@@ -280,7 +280,7 @@ public class Game_board_creator{
     public void createCardDrawfields()
     {
         for (int i = 0; i< card_draw_fields.size(); i++) {
-            ImageView imageView = layout.findViewWithTag("normal"+card_draw_fields.get(i)); //gets the field with the tag
+            ImageView imageView = layout.findViewWithTag("normal" + card_draw_fields.get(i)); //gets the field with the tag
             imageView.setImageResource(R.drawable.ziehfeld); //changes the image of the card draw field
         }
     }
