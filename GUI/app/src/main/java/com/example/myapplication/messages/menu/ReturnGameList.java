@@ -1,6 +1,6 @@
 package com.example.myapplication.messages.menu;
 
-import com.example.myapplication.messages.game.AbstractGameMessage;
+import GUI.app.src.main.java.com.example.myapplication.messages.menu.AbstractMenuMessage;
 import lombok.Data;
 
 import java.util.List;
@@ -36,5 +36,4 @@ public class ReturnGameList extends AbstractMenuMessage {
         private int gameId;
         private int winnerPlayerId;
     }
-    // TODO: getResponse()-Methode schreiben
 }

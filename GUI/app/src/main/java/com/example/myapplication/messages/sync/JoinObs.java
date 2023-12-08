@@ -1,4 +1,4 @@
-package com.example.myapplication.messages.sync;
+package GUI.app.src.main.java.com.example.myapplication.messages.sync;
 
 import lombok.Data;
 

@@ -1,5 +1,6 @@
 package com.example.myapplication.messages.menu;
 
+import GUI.app.src.main.java.com.example.myapplication.messages.menu.AbstractMenuMessage;
 import lombok.Data;
 
 /**
@@ -8,6 +9,6 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class RequestTechData extends AbstractMenuMessage{
+public class RequestTechData extends AbstractMenuMessage {
 
 }

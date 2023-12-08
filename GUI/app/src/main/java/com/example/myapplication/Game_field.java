@@ -8,18 +8,7 @@ import androidx.core.content.ContextCompat;
 
 public class Game_field {
 
-    /**
-     *Use this  to create a single gamefield on your board
-     *
-     *
-     * @param layout is the layout the View is added to. (only RelativeLayout works rn)
-     * @param width is the width and height of the image
-     * @param x is the x position
-     * @param y is the y position
-     * @param id is the id you want to give the image.
-     * @param type is the type of the Field (normal/homefield_playernumber)
-     * @param j is the int for the color and player number, normal fields just use 0
-     **/
+
 
     //the layout the View is added to. (only RelativeLayout works rn)
     private RelativeLayout layout;
@@ -45,20 +34,34 @@ public class Game_field {
     //the color of the field
     private int color;
 
+    /**
+     * Constructor for normal fields
+     * @param layout is the layout the field is created in
+     * @param width is the width of the field
+     * @param x is the x position of the field
+     * @param y is the y position of the field
+     * @param id is the id you want to give the image
+     */
 
-
-
-    public Game_field(RelativeLayout layout, int width, int x, int y, String type, int player, int id) {
+    public Game_field(RelativeLayout layout, int width, int x, int y, int id) {
         this.layout = layout;
         this.width = width;
         this.x = x;
         this.y = y;
-        this.type = type;
-        this.player = player;
+        this.type = "normal"; //sets type to normal to create normal fields
         this.id = id;
-        this.color = 0;
     }
-
+    /**
+     * Constructor for home/startfields
+     * @param layout is the layout the field is created in
+     * @param width is the width of the field
+     * @param x is the x position of the field
+     * @param y is the y position of the field
+     * @param type is the type of the field (homefield/startfield)
+     * @param player is the id of the player for creating homefields and the color. normal fields just use 0
+     * @param id is the id you want to give the image
+     * @param color is the color of the field
+     */
     public Game_field(RelativeLayout layout, int width, int x, int y, String type, int player, int id, int color) {
         this.layout = layout;
         this.width = width;
@@ -135,33 +138,36 @@ public class Game_field {
         this.color = color;
     }
 
-
+    /**
+     * creates the field in the layout
+     */
     public void create_field() {
-        ImageView imageView = new ImageView(this.layout.getContext()); //erstelle ImageView
-        imageView.setImageResource(R.drawable.spielfeld); //hinzufügen von Bildressource
+        ImageView imageView = new ImageView(this.layout.getContext()); //create ImageView
+        imageView.setImageResource(R.drawable.spielfeld); //adding the image resource
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(1, 1);
-        params = new RelativeLayout.LayoutParams(this.width, this.width); //Größe des Bildes einstellen
-        params.setMargins(this.x, this.y, 0, 0); //Position in layout einstellen (mithilfe von margins)
+        params = new RelativeLayout.LayoutParams(this.width, this.width); //size of picture
+        params.setMargins(this.x, this.y, 0, 0); //set position in layoutParams (using Margins)
         String tag;
-        imageView.setLayoutParams(params); // Position des Views setzen
+        imageView.setLayoutParams(params); // set position of image
 
-        switch (type) {
-            case "homefield": //wenn es ein homefield ist, gebe dem View den homefieldtag
+        switch (type) { //test on type of field
+            case "homefield": //if homefield
                 imageView.setColorFilter(ContextCompat.getColor(this.layout.getContext(), this.color), PorterDuff.Mode.MULTIPLY);
-                tag = this.type + this.player + "_" + this.id;
-                imageView.setTag(tag); //Füge der View einen Tag zu
+                tag = this.type + this.player + "_" + this.id; //creates tag in format
+                imageView.setTag(tag); //add Tag to View
                 break;
-            case "startfield": //wenn es ein startfield ist, gebe dem View die richtige Farbe
-                tag = "normal" + this.id;
-                imageView.setTag(tag);
+            case "startfield": //if startfield
+                tag = "normal" + this.id; //creates tag in format
+                imageView.setTag(tag);  //Add Tag to View
+                        //setting colofilter to the image with player color
                 imageView.setColorFilter(ContextCompat.getColor(this.layout.getContext(), this.color), PorterDuff.Mode.MULTIPLY);
                 break;
-            default:    //wenn es ein normales Feld ist, gebe dem View den normaltag
-                tag = this.type + this.id;
-                imageView.setTag(tag); //Füge der View einen Tag zu
+            default:    //if normal field add normal tag
+                tag = this.type + this.id; //creates tag in format
+                imageView.setTag(tag); //Add Tag to View
                 break;
         }
 
-        this.layout.addView(imageView); //füge dem Layout das View hinzu
+        this.layout.addView(imageView); //add View to layout
     }
 }

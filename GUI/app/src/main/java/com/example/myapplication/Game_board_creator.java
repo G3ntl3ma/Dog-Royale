@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import android.app.Fragment;
@@ -17,21 +18,21 @@ import com.example.myapplication.databinding.FragmentGameBoardBinding;
 
 public class Game_board_creator{
     private RelativeLayout layout;
-    private int width; //Breite des Spielfeldes
+    private int width; //Width of the board the fields are created in
 
-    private int player_count; //Anzahl der Spieler
+    private int player_count; //number of players
 
-    private int field_size; //Anzahl der Felder auf dem Spielfeld
+    private int field_size; //number of normal fields to be created (including card draw fields)
 
-    private int figure_count; //Anzahl der Figuren pro Spieler
+    private int figure_count; //number of figures per player
 
-    private int[] colors; //Array mit den Farben der Spieler
+    private List<Integer> colors; //List with colors for the players
 
-    private int[] start_fields; //Array mit den Startfeldern der Spieler
+    private List<Integer> start_fields; //List with the start fields
 
-    private Tuple[] start_fields_position; //Array mit den Homefeldern der Spieler
+    private Tuple[] start_fields_position; //Array with the start fields positions
 
-    private int[] card_draw_fields;
+    private List<Integer> card_draw_fields; //List with the card draw fields
 
     private int field_width; //width (and height) of the fields
 
@@ -41,8 +42,18 @@ public class Game_board_creator{
     // private FragmentGameBoardBinding binding;
 
 
-
-    public Game_board_creator(RelativeLayout Layout, int width, int player_count, int field_size, int figure_count, int[] colors, int[] start_fields, int card_draw_fields[])
+    /** Constructor
+     *
+     * @param Layout is the layout the fields are created in
+     * @param width is the width of the board the fields are created in
+     * @param player_count is the number of players
+     * @param field_size is the number of fields on the board
+     * @param figure_count is the number of figures per player
+     * @param colors is the list of colors for the players
+     * @param start_fields is the list of start fields
+     * @param card_draw_fields is the list of card draw fields
+     */
+    public Game_board_creator(RelativeLayout Layout, int width, int player_count, int field_size, int figure_count, List<Integer> colors, List<Integer> start_fields, List<Integer> card_draw_fields)
     {
 
         this.layout = Layout;
@@ -106,7 +117,7 @@ public class Game_board_creator{
      *
      * @param colors
      */
-    public void setColors(int[] colors)
+    public void setColors(List<Integer> colors)
     {
         this.colors = colors;
     }
@@ -144,23 +155,23 @@ public class Game_board_creator{
      *
      * @return the colors
      */
-    public int[] getColors() {return this.colors;}
+    public List<Integer> getColors() {return this.colors;}
 
     /** returns the start fields
      *
      * @return
      */
-    public int[] getStart_fields() {return this.start_fields;}
+    public List<Integer> getStart_fields() {return this.start_fields;}
 
-    public int[] getCard_draw_fields() {return this.card_draw_fields;}
+    public List<Integer> getCard_draw_fields() {return this.card_draw_fields;}
 
-    public void setCard_draw_fields(int[] card_draw_fields) {this.card_draw_fields = card_draw_fields;}
+    public void setCard_draw_fields(List<Integer> card_draw_fields) {this.card_draw_fields = card_draw_fields;}
 
     /** sets the start fields
      *
      * @param start_fields
      */
-    public void setStart_fields(int[] start_fields) {this.start_fields = start_fields;}
+    public void setStart_fields(List<Integer> start_fields) {this.start_fields = start_fields;}
 
     public int getField_width() {return this.field_width * 2;}
 
@@ -172,7 +183,7 @@ public class Game_board_creator{
      **/
     public void createFields(){
 
-    int player = 0; //Zählvariable für Spieler
+    int player = 0; //count variable for the players
         //if less than 20 fields are created set constant field size
         if (this.field_size<= 20)
         {
@@ -182,20 +193,20 @@ public class Game_board_creator{
         {
             this.field_width = this.width / this.field_size;
         }
+        //calculator for the coordinates on a circle
         CoordinateCalculator playingField = new CoordinateCalculator(this.field_size, this.player_count, this.width /2 - this.width / this.field_size); //calculates coordinates on a circle
-        Tuple result = new Tuple(0,0); //Tuple in das die Werte der Koordinaten kommen
-        for (int i = 0; i < this.field_size; i++) {
-            result = playingField.calculateFloatCoordinates(i); //calculating x, y coordinates for field (still has to be adjusted because of View height and width and + half of the field width)
+        Tuple result = new Tuple(0,0); //Tuple to calculate the position in
+        for (int i = 0; i < this.field_size; i++) { //for loop to create the fields
+            result = playingField.calculateFloatCoordinates(i); //calculating x, y coordinates for field
             int j =i;
-            if (Arrays.stream(this.start_fields).anyMatch(x -> x == j)) { //falls Feld ein Startfeld ist
-                Game_field field = new Game_field(this.layout, this.field_width * 2, (int) Math.round(result.getX() + this.width / 2 - ( this.field_width)), (int) Math.round(result.getY() + this.width / 2 - (this.field_width)), "startfield" , 0, i, colors[player]); //Create field (adjusting x and y coordinates)
+            if (start_fields.contains(j)) { //if field is a start field
+                Game_field field = new Game_field(this.layout, this.field_width * 2, (int) Math.round(result.getX() + this.width / 2 - ( this.field_width)), (int) Math.round(result.getY() + this.width / 2 - (this.field_width)), "startfield" , 0, i, colors.get(player)); //Create field (adjusting x and y coordinates)
                 field.create_field(); //actually creates the field
                 player++;
-                start_fields_position[player - 1] = new Tuple(result.getX() + width/2, result.getY() + width/2);
-                System.out.println("lalala" + result);
+                start_fields_position[player - 1] = new Tuple(result.getX() + width/2, result.getY() + width/2); //saves the position of the start field
             }
             else { //sonst
-                Game_field field = new Game_field(this.layout, this.field_width * 2, (int) Math.round(result.getX() + this.width / 2 - ( this.field_width)), (int) Math.round(result.getY() + this.width / 2 - (this.field_width)), "normal" , 0, i); //Create field (adjusting x and y coordinates)
+                Game_field field = new Game_field(this.layout, this.field_width * 2, (int) Math.round(result.getX() + this.width / 2 - ( this.field_width)), (int) Math.round(result.getY() + this.width / 2 - (this.field_width)), i); //Create field (adjusting x and y coordinates)
                 field.create_field(); //actually creates the field
             }
 
@@ -212,28 +223,26 @@ public class Game_board_creator{
      *
      **/
     public void createHomeFields(){
-        Tuple mid = new Tuple(this.width /2, this.width/2);
-        for (int j = 0; j <start_fields.length; j++)
-        {
+        Tuple mid = new Tuple(this.width /2, this.width/2); //getting coordinates for middle of the layout
+        for (int j = 0; j <start_fields.size(); j++) //for each player/start field create home field per figure
+        {       //getting the vector to create the home fields on
             Tuple vek = new Tuple((mid.getX() - start_fields_position[j].getX()) , (mid.getY() - start_fields_position[j].getY()) ); //calculates the vector from the start field to the middle of the board
-            System.out.println(field_size + "das erste");
-            if(field_size>20) {
+            if(field_size>20) {     //if more than 20 fields are created
+                        //adjusting the vektor to the right length so the different vectors dont cross in the middle
                 vek.setX(vek.getX() - 1/(vek.vek_length()/(2*this.width/field_size)) * vek.getX());
                 vek.setY(vek.getY() - 1/(vek.vek_length()/(2*this.width/field_size)) * vek.getY());
             }
-            else{
+            else{                   //else is for considering the size of the normal fields if leq 20 fields are created
                 vek.setX(vek.getX() - 1/(vek.vek_length()/(2*this.width/20)) * vek.getX());
                 vek.setY(vek.getY() - 1/(vek.vek_length()/(2*this.width/20)) * vek.getY());
             }
-            System.out.println("Hausfeld" + start_fields_position[j]);
-            System.out.println("Länge: " + vek.vek_length());
-            System.out.println("Vektor: " + vek);
 
-            int field_width = (int) Math.round(vek.vek_length()/(figure_count + 1));
-            System.out.println(field_size + "das zweite");
-            for (int k = 0; k<figure_count;k++) {
-                Tuple pos = fh(vek, start_fields_position[j] , k , figure_count + 2 ); //calculates the position on the vector
-                Game_field field = new Game_field(layout, field_width , (int) Math.round(pos.getX() - field_width/2), (int) Math.round(pos.getY() -  field_width/2), "homefield", j, k, colors[j]); // erstellt das Feld
+            int field_width = (int) Math.round(vek.vek_length()/(figure_count + 1)); //getting field_width for the home fields
+            for (int k = 0; k<figure_count;k++) { //for each figure create a home field
+                Tuple pos = fh(vek, start_fields_position[j] , k , figure_count + 2 ); //calculates the position fpr the kth size on the vector
+                        //creates the new field considering its own width and height
+                Game_field field = new Game_field(layout, field_width , (int) Math.round(pos.getX() - field_width/2), (int) Math.round(pos.getY() -  field_width/2), "homefield", j, k, colors.get(j)); // erstellt das Feld
+                        //actually instanciates the field in the layout
                 field.create_field();
             }
         }
@@ -255,23 +264,24 @@ public class Game_board_creator{
         double offset;
 
         if (field_size<= 20){
-            offset = vek.vek_length()/(1.5 * this.width/20) ;
+            offset = vek.vek_length()/(1.5 * this.width/20) ; //calculates offset to consider the start field and not create the first home field ontop of it
         }
         else {
-            offset = vek.vek_length() / ( 1.5 * this.width / field_size);
+            offset = vek.vek_length() / ( 1.5 * this.width / field_size); //calculates offset to consider the start field and not create the first home field ontop of it
         }
-        //System.out.println(offset);
+            //returns the position of the i-th point on the vector considering the offset to not create first field ontop of start field
         return (new Tuple(home_x + 1/offset*vek_x + vek_x/n * i,home_y + 1/offset*vek_y + vek_y/n * i));
     }
 
+    /**
+     *creates the card draw fields
+     *
+     **/
     public void createCardDrawfields()
     {
-        for (int i = 0; i< card_draw_fields.length; i++) {
-            System.out.println("hi");
-            ImageView imageView = layout.findViewWithTag("normal"+card_draw_fields[i]);
-            System.out.println("testest");
-            imageView.setImageResource(R.drawable.ziehfeld);
-            System.out.println("hier fehler");
+        for (int i = 0; i< card_draw_fields.size(); i++) {
+            ImageView imageView = layout.findViewWithTag("normal" + card_draw_fields.get(i)); //gets the field with the tag
+            imageView.setImageResource(R.drawable.ziehfeld); //changes the image of the card draw field
         }
     }
 }

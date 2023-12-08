@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 import android.app.ActionBar;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.Image;
 import android.os.Bundle;
@@ -24,9 +23,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 //databinding
+import com.example.myapplication.GameInformationClasses.Color;
 import com.example.myapplication.databinding.FragmentGameBoardBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,31 +36,27 @@ import java.util.ArrayList;
  */
 public class Game_board extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     private int pxWidth;
     private FragmentGameBoardBinding binding;
-    //save positions
-    private ArrayList<Tuple> positions = new ArrayList<Tuple>();
-    //Anzahl Spielfelder
-    private int field_size = 1;
-    //Anzahl Spieler
-    private int player_count;
-    //die wievielten Spielfelder Startfelder sind.
-    private int figure_count;
-    private int[] start_positions = new int[player_count];
 
-    //Farben der Start/hausfelder
-    private int[] start_colors = {R.color.p1_color, R.color.p2_color, R.color.p3_color, R.color.p4_color, R.color.p5_color, R.color.p6_color};
+    GameInformation gameInformation;
+    private int field_size = 1; // number of fields
+    private int player_count; //number of players
+    private int figure_count; //number of figures per player
+    private List<Integer> start_positions; // List of Startpositions as Integer (0 to field_size-1)  (( we use id = 0 is the first field - easily changable))
 
-    private int[] draw_fields = new int[5];
+    private List<com.example.myapplication.GameInformationClasses.Color> start_colors; //Colors of the startfields (still in Color class not only required color value)
 
-    private LastCard last_card;
-    private GameboardViewModel viewModel;
+    private List<Integer> draw_fields; // List with the positions of the draw card fields (0 to field_size-1)
+
+    private LastCard last_card; //the last card played
+    private GameboardViewModel viewModel; // is the GameBoardViewModel in which we store information about the Gameboard globally
+    private TimerviewModel timerviewModel;
+    private LastCardViewModel lastCardViewModel;
     //testwise
-    private int position = 0;
+    private int position = 2 ; // positions for the test figure to move - I know we dont get the change but the new position but that doesnt matter
 
     public Game_board() {
         // Required empty public constructor
@@ -78,8 +75,6 @@ public class Game_board extends Fragment {
     public static Game_board newInstance(String param1, String param2) {
         Game_board fragment = new Game_board();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -124,47 +119,118 @@ public class Game_board extends Fragment {
         //getting Display information
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
 
-        //getting display width in px
-        pxWidth = displayMetrics.widthPixels;
 
-        //set board in middle of screen
-        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                Math.round(displayMetrics.widthPixels)
+        pxWidth = displayMetrics.widthPixels; //Width of the screen in px
+
+        //setting Layout of board into the middle of the screen
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams( //creating new Layout parameters
+                RelativeLayout.LayoutParams.WRAP_CONTENT, //wrapping the content -> just the screen width in this case
+                Math.round(displayMetrics.widthPixels) // the height of the Layout shall be the width of the screen
         );
-        params.topToTop = binding.gaBoConstL.getId();
-        params.bottomToBottom = binding.gaBoConstL.getId();
-        RelativeLayout GameBoard = binding.gameBoardLayout;
-        GameBoard.setLayoutParams(params);
+        params.topToTop = binding.gaBoConstL.getId();  //setting the top constraint of the LayoutParameters to the top of the ConstraintLayout
+        params.bottomToBottom = binding.gaBoConstL.getId();  //setting the bottom constraint of the LayoutParameters to the bottom of the ConstraintLayout
+        RelativeLayout GameBoard = binding.gameBoardLayout; //getting the Layout for the GameBoard
+        GameBoard.setLayoutParams(params); //setting the Layout Parameters to the GameBoard Layout
 
-        viewModel = new ViewModelProvider(requireActivity()).get(GameboardViewModel.class);
-        System.out.println(viewModel.getField_size().getValue());
-        //set number of fields
-        field_size = viewModel.getField_size().getValue();
-        //set Player_count
-        player_count = viewModel.getPlayer_count().getValue();
-        //Set figure Count
-        viewModel.getFigure_count().observe(getViewLifecycleOwner(), figures ->{
-            figure_count = figures;
+        viewModel = new ViewModelProvider(requireActivity()).get(GameboardViewModel.class); //creating the ViewModel
+        timerviewModel = new ViewModelProvider(requireActivity()).get(TimerviewModel.class);
+        lastCardViewModel = new ViewModelProvider(requireActivity()).get(LastCardViewModel.class);
+        System.out.println("normale Felder: " + viewModel.getField_size().getValue());
+
+        gameInformation = viewModel.getGameInformation().getValue(); //getting the GameInformation from the ViewModel (the information about the game is stored in here)
+                                                                        //need to get the Value because we want the actual information not the LiveData Object
+                //set number of fields for gameboard creation
+        field_size = gameInformation.getFieldsize();    //getting the fieldsize from the GameInformation
+
+        //field_size = viewModel.getField_size().getValue();                        //old
+                //set number of players for gameboard creation
+        player_count = gameInformation.getPlayerCount();
+        //player_count = viewModel.getPlayer_count().getValue();                    //old
+
+                //set figure Count for gameboard creation
+        figure_count = gameInformation.getFiguresPerPlayer();
+        //viewModel.getFigure_count().observe(getViewLifecycleOwner(), figures ->{  //old
+        //    figure_count = figures;                                               //old
+        //});                                                                       //old
+        //figure_count = viewModel.getFigure_count().getValue()
+                //set position of the draw card fields for gameboard creation
+        draw_fields = gameInformation.getDrawCardFields().getPositions();
+        //draw_fields = new int[]{3, 5, 7, 8, 9};                                   //old (was for testing)
+
+                //set position of start fields for gameboard creation
+        start_positions = gameInformation.getStartFields().getPositions();
+        //start_positions = new int[]{0, 2, 4};                                     //old testing
+
+                    //set colors of the start fields for gameboard creation
+        start_colors = gameInformation.getColors();
+        List<Integer> colors = new ArrayList<>();
+            //iterating trough colors to get the color value
+        for (Color color : start_colors) {
+            colors.add(color.getColor());           //getting the actual color value from the Color class
+        }
+                    //creating the gameboardcreator that creates the gameboard
+        Game_board_creator creator = new Game_board_creator(GameBoard, pxWidth, player_count, field_size, figure_count, colors, start_positions, draw_fields);
+        creator.createFields(); //creating the fields
+
+
+                    //instanziating  the figure handler
+        Figure_handler figure_handler = new Figure_handler(GameBoard, figure_count, player_count, colors, creator.getField_width(), creator.getHomefield_size(), pxWidth);
+        figure_handler.create_figures(); //creating the figures
+        //
+        //
+        viewModel.setFigure_handler(figure_handler); //setting the figure handler for the viewModel to use it in different classes later on
+        //
+        //
+        //Set the Last Card
+        lastCardViewModel.getLastCard().observe(getViewLifecycleOwner(), type ->{
+            switch (type) {
+                case COPY: binding.lastCardView.setImageResource(R.drawable.card_copy);
+                    break;
+                case SWAP: binding.lastCardView.setImageResource(R.drawable.card_switch);
+                    break;
+                case MAGNET: binding.lastCardView.setImageResource(R.drawable.card_magnet);
+                    break;
+                case RANGE_7: binding.lastCardView.setImageResource(R.drawable.card1to7);
+                    break;
+                case NORMAL_2: binding.lastCardView.setImageResource(R.drawable.card2);
+                    break;
+                case NORMAL_3: binding.lastCardView.setImageResource(R.drawable.card3);
+                    break;
+                case NORMAL_5: binding.lastCardView.setImageResource(R.drawable.card5);
+                    break;
+                case NORMAL_6: binding.lastCardView.setImageResource(R.drawable.card6);
+                    break;
+                case NORMAL_8: binding.lastCardView.setImageResource(R.drawable.card8);
+                    break;
+                case NORMAL_9: binding.lastCardView.setImageResource(R.drawable.card9);
+                    break;
+                case NORMAL_10: binding.lastCardView.setImageResource(R.drawable.card10);
+                    break;
+                case NORMAL_12: binding.lastCardView.setImageResource(R.drawable.card12);
+                    break;
+                case PLUS_MINUS_4: binding.lastCardView.setImageResource(R.drawable.card_plusminus4);
+                    break;
+                case START_13: binding.lastCardView.setImageResource(R.drawable.card_1_or_11);
+                    break;
+                case START_1_11: binding.lastCardView.setImageResource(R.drawable.card_start_13);
+                    break;
+            }
+
         });
-        figure_count = viewModel.getFigure_count().getValue();
 
-        //positionen der draw card felder
-        draw_fields = new int[]{3, 5, 7, 8, 9};
-        //position der startfelder
-        start_positions = new int[]{0, 2, 4};
-        //creates fields in the layout
-        Game_board_creator creator = new Game_board_creator(GameBoard, pxWidth, player_count, field_size, figure_count, start_colors, start_positions, draw_fields);
-        creator.createFields();
+        lastCardViewModel.getShowLastCard().observe(getViewLifecycleOwner(), show ->{
+            if(show){
+                binding.lastCardView.setVisibility(View.VISIBLE);
+            }
+            else {
+                binding.lastCardView.setVisibility(View.INVISIBLE);
+            }
 
-        //instanziert die Figuren in das Layout
-        Figure_handler figure_handler = new Figure_handler(GameBoard, figure_count, player_count, start_colors, creator.getField_width(), creator.getHomefield_size(), pxWidth);
-        figure_handler.create_figures();
-
-        Timer timer = new Timer(600_000, binding);
-        timer.startTimer();
-        last_card = new LastCard(binding);
-        last_card.lastCardAvailable(true);
+        });
+        //Set the Timer
+        timerviewModel.getTime().observe(getViewLifecycleOwner(), time -> {
+            binding.timerView.setText(time);
+        });
 
 
         //NUR ZUM TESTEN für figuren movement
@@ -174,14 +240,13 @@ public class Game_board extends Fragment {
             public void onClick(View view) {
 
                 if (((RelativeLayout.LayoutParams) GameBoard.findViewWithTag("figure0_1").getLayoutParams()).leftMargin == pxWidth) {
-                    figure_handler.moveFigure(1, "figure0_1", position, false, null);
-                    System.out.println("OwO");
+                    figure_handler.moveFigure(0, "figure0_1", position, false, null);
                 } else {
                     position += 2;
                     if (position >= field_size) {
-                        figure_handler.moveFigure(1, "figure0_1", null, false, position - field_size - 1);
+                        figure_handler.moveFigure(0, "figure0_1", null, false, position - field_size );
                     } else {
-                        figure_handler.moveFigure(1, "figure0_1", position, false, null);
+                        figure_handler.moveFigure(0, "figure0_1", position, false, null);
                     }
 
                 }

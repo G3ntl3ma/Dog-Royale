@@ -1,9 +1,11 @@
 package com.example.myapplication.messages.menu;
 
 
+import com.example.myapplication.messages.game.Abbrechen;
 import com.example.myapplication.messages.game.AbstractGameMessage;
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -14,7 +16,7 @@ import java.util.List;
 @Data
 public class ReturnFindTournament extends AbstractMenuMessage {
     private List<TournamentStart> tournamentStarting;
-    private List<TournamentInProgression> tournamentInProgress;
+    private List<TournamentInProgress> tournamentInProgress;
     private List<TournamentFinish> tournamentFinished;
     private int clientId;
 
@@ -27,7 +29,7 @@ public class ReturnFindTournament extends AbstractMenuMessage {
     }
 
     @Data
-    public static class TournamentInProgression{
+    public static class TournamentInProgress{
         private int tournamentId;
         private int maxPlayer;
         private int maxRounds;
@@ -37,7 +39,14 @@ public class ReturnFindTournament extends AbstractMenuMessage {
     @Data
     public static class TournamentFinish{
         private int tournamentId;
-        //TODO Variable fertigstellen
+
+        private List<WinnerOrder> winnerOrder;
+    }
+
+    @Data
+    public static class WinnerOrder{
+        private String playerId;
+        private String name;
     }
 
     // TODO: getResponse()-Methode schreiben
