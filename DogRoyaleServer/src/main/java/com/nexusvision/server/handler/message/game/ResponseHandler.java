@@ -39,7 +39,6 @@ public class ResponseHandler extends Handler implements GameMessageHandler<Move>
 	}
     
 	return null;
-
     }
 
     private BoardState getBoardState(GameLobby gameLobby) {

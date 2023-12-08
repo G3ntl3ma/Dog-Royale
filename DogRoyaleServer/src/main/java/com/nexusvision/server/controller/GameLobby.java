@@ -46,18 +46,31 @@ public class GameLobby {
         this.receivedResponses = new ArrayList<>();
     }
 
+    //check if playerorderlist + observerlist is subset of received responses
     public boolean receivedFromEveryone() {
-        //buggy
-        //return this.receivedReponses.size() >= this.playerOrderList.size() + this.observerList.size();
-
         for (int i = 0; i < this.playerOrderList.size(); i++) {
             //check if this id is in the list of reponses
-            this.playerOrderList.get(i);
+            int idToFind = this.playerOrderList.get(i);
+	    boolean found = false;
+	    for (int j = 0; j < this.receivedResponses.size(); j++) {
+		if (this.receivedResponses.get(j) == idToFind) {
+		    found = true;
+		    break;
+		}
+	    }
+	    if(!found) return false;
         }
         for (int i = 0; i < this.observerList.size(); i++) {
             //check if this id is in the list of reponses
-            this.observerList.get(i);
-
+            int idToFind = this.observerList.get(i);
+	    boolean found = false;
+	    for (int j = 0; j < this.receivedResponses.size(); j++) {
+		if (this.receivedResponses.get(j) == idToFind) {
+		    found = true;
+		    break;
+		}
+	    }
+	    if(!found) return false;
         }
         return true;
     }

@@ -19,7 +19,7 @@ import lombok.Data;
 
 @Data
 public final class Game {
-    ArrayList<Player> players; //TODO should not be arraylist
+    ArrayList<Player> players;
     private Field[] board;
     ArrayList<Card> deck;
     ArrayList<Card> pile;
@@ -506,9 +506,9 @@ public final class Game {
 	 */
     //exclude from round
     public void excludeFromRound(Player player) {
-	this.discardHandCards(); //of current player
-	this.playersRemaining--;
-	this.nextPlayer();
+		this.discardHandCards(); //of current player
+		this.playersRemaining--;
+		this.nextPlayer();
     }
 
 	/**
@@ -516,20 +516,17 @@ public final class Game {
 	 *
 	 * @param player An object representing the player to exclude from the game
 	 */
-    //kick player
     public void excludeFromGame(Player player) {
-	player.setExclude();
-	this.playersRemaining--;
-	this.nextPlayer();
+		player.setExclude();
+		this.playersRemaining--;
+		this.nextPlayer();
     }
 
 	/**
 	 * Handles illegal move and applies penalties
 	 *
 	 */
-    //handle invalid move
     public void handleIllegalMove() {
-	//TODO if consequences for illegal move
 	if(consequences == Penalty.kickFromGame) {
 	    excludeFromGame(this.getCurrentPlayer());
 	}
