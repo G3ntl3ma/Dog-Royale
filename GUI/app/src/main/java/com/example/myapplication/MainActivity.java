@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
     static ServerViewModel serverViewModel;
     static GameboardViewModel gameboardViewModel;
+    static CurrentGameViewModel currentGameViewModel;
+    static TimerviewModel timerviewModel;
+    static LastCardViewModel lastCardViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
         serverViewModel = new ViewModelProvider(this).get(ServerViewModel.class);
         gameboardViewModel = new ViewModelProvider(this).get(GameboardViewModel.class);
+        currentGameViewModel = new ViewModelProvider(this).get(CurrentGameViewModel.class);
+        timerviewModel = new ViewModelProvider(this).get(TimerviewModel.class);
+        lastCardViewModel = new ViewModelProvider(this).get(LastCardViewModel.class);
     }
 
     @Override
@@ -88,4 +94,7 @@ public class MainActivity extends AppCompatActivity {
         return serverViewModel;
     }
     public static GameboardViewModel getGameboardViewModel(){return gameboardViewModel;}
+    public static CurrentGameViewModel getCurrentGameViewModel(){return currentGameViewModel;}
+    public static TimerviewModel getTimerViewModel(){return timerviewModel;}
+    public static LastCardViewModel getLastCardViewModel(){return lastCardViewModel;}
 }

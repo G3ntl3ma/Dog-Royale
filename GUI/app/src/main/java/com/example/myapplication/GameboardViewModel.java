@@ -3,6 +3,20 @@ package com.example.myapplication;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.myapplication.GameInformationClasses.Color;
+import com.example.myapplication.GameInformationClasses.DrawCardFields;
+import com.example.myapplication.GameInformationClasses.Observer;
+import com.example.myapplication.GameInformationClasses.Order;
+import com.example.myapplication.GameInformationClasses.OrderType;
+import com.example.myapplication.GameInformationClasses.PlayerOrder;
+import com.example.myapplication.GameInformationClasses.StartFields;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import java.util.List;
+
 public class GameboardViewModel extends ViewModel {
 
     MutableLiveData<GameInformation> gameInformation = new MutableLiveData<>();
@@ -11,6 +25,8 @@ public class GameboardViewModel extends ViewModel {
     MutableLiveData<Integer> figure_count= new MutableLiveData<>();
     //MutableLiveData<Game_board_creator> game_board_creator= new MutableLiveData<>();
     MutableLiveData<Figure_handler> figure_handler= new MutableLiveData<>();
+    MutableLiveData<int[]> start_fields = new MutableLiveData<>();
+    MutableLiveData<int[]> drawFields = new MutableLiveData<>();
 
     public MutableLiveData<Integer> getField_size() {
         return field_size;
@@ -45,6 +61,8 @@ public class GameboardViewModel extends ViewModel {
     public void setFigure_handler(Figure_handler figure_handler) {this.figure_handler.setValue(figure_handler);}
 
     public MutableLiveData<GameInformation> getGameInformation() {
+        //testweise
+       gameInformation.setValue(new GameInformation(new Integer(6), new Integer(100), new Integer(20) , Arrays.asList(new Color(1, R.color.p1_color), new Color(2, R.color.p2_color), new Color(3, R.color.p3_color), new Color(4, R.color.p4_color), new Color(5, R.color.p5_color), new Color(6, R.color.p6_color)), new DrawCardFields(5, Arrays.asList(1, 4, 7, 10, 13)), new StartFields(6, Arrays.asList(12, 0, 24, 83, 69, 45)), new Integer(5), new PlayerOrder(OrderType.fixed, Arrays.asList(new Order(1, "OwO"), new Order(2, "UwU"), new Order(3, "AwA"), new Order(4, "QwQ"), new Order(5, "XwX"))),  Arrays.asList(new Observer(new Integer(1), "OwO")), new Integer(5), new Integer(5), new Integer(1), new Integer(15), new Integer(5)));
         return gameInformation;
     }
 

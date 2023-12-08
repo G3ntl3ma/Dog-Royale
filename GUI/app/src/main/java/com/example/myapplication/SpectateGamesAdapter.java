@@ -51,10 +51,14 @@ public class SpectateGamesAdapter extends RecyclerView.Adapter<SpectateGamesView
         holder.spectate_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                    CurrentGameViewModel currentGameViewModel = MainActivity.getCurrentGameViewModel();
+                    currentGameViewModel.setCurrent_game_id(current_game.getGameID());
                     GameboardViewModel viewModel = MainActivity.getGameboardViewModel();
                     viewModel.setField_size(current_game.getFieldSize());
                     viewModel.setPlayer_count(current_game.getCurrentPlayers());
                     viewModel.setFigure_count(current_game.getFigureCount());
+                    viewModel.setDrawFields(current_game.getDrawFields());
+                    viewModel.setStart_fields(current_game.getStartFields());
                 NavHostFragment.findNavController(spectateGames)
                         .navigate(R.id.action_SpectateGames_to_game_board_layout);
             }
