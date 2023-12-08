@@ -11,10 +11,14 @@ import java.util.List;
 
 @Data
 public class GameLobby {
+
+    private final int id;
     private Game game;
     private GameState gameState;
     private boolean isPaused;
+
     private int maxPlayerCount;
+    private int winnerID;
 
     private ArrayList<Integer> playerOrderList;
     private HashMap<Integer, Colors> playerColorMap;
