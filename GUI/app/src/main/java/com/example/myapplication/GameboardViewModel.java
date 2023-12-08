@@ -58,7 +58,7 @@ public class GameboardViewModel extends ViewModel {
 
     public MutableLiveData<GameInformation> getGameInformation() {
         //testweise
-       gameInformation.setValue(new GameInformation(new Integer(5), new Integer(22), new Integer(5) , Arrays.asList(new Color(1, R.color.p1_color), new Color(2, R.color.p2_color), new Color(3, R.color.p3_color), new Color(4, R.color.p4_color), new Color(5, R.color.p5_color), new Color(6, R.color.p6_color)), new DrawCardFields(5, Arrays.asList(1, 4, 7, 10, 13)), new StartFields(5, Arrays.asList(2, 5, 7, 10, 14)), new Integer(5), new PlayerOrder(OrderType.fixed, Arrays.asList(new Order(1, "OwO"), new Order(2, "UwU"), new Order(3, "AwA"), new Order(4, "QwQ"), new Order(5, "XwX"))),  Arrays.asList(new Observer(new Integer(1), "OwO")), new Integer(5), new Integer(5), new Integer(1), new Integer(15), new Integer(5)));
+       gameInformation.setValue(new GameInformation(new Integer(6), new Integer(100), new Integer(20) , Arrays.asList(new Color(1, R.color.p1_color), new Color(2, R.color.p2_color), new Color(3, R.color.p3_color), new Color(4, R.color.p4_color), new Color(5, R.color.p5_color), new Color(6, R.color.p6_color)), new DrawCardFields(5, Arrays.asList(1, 4, 7, 10, 13)), new StartFields(6, Arrays.asList(12, 0, 24, 83, 69, 45)), new Integer(5), new PlayerOrder(OrderType.fixed, Arrays.asList(new Order(1, "OwO"), new Order(2, "UwU"), new Order(3, "AwA"), new Order(4, "QwQ"), new Order(5, "XwX"))),  Arrays.asList(new Observer(new Integer(1), "OwO")), new Integer(5), new Integer(5), new Integer(1), new Integer(15), new Integer(5)));
         return gameInformation;
     }
 
