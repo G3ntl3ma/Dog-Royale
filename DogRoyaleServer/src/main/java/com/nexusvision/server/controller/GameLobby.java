@@ -39,11 +39,24 @@ public class GameLobby {
     }
 
     public void receiveResponse(int clientId) {
-        //if id not in list add
+        for (int i = 0; i < this.receivedResponses.size(); i++) {
+	    if(clientId == this.receivedResponses.get(i)) return;
+	}
+	this.receivedResponses.add(clientId);
     }
 
     public void resetResponseList() {
         this.receivedResponses = new ArrayList<>();
+    }
+
+    public boolean checkPlayerTurn(int clientId) {
+	for (int playerId = 0; playerId < this.playerOrderList.size(); playerId++) {
+	    if(this.playerOrderList.get(playerId) == clientId) {
+		return this.game.getPlayerToMoveColor == playerId;
+	    }
+	}
+	//client not a player
+	return false;
     }
 
     //check if playerorderlist + observerlist is subset of received responses
