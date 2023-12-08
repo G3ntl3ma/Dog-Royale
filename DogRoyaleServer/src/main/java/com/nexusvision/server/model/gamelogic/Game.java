@@ -449,9 +449,6 @@ public final class Game {
      *
      * @return An object representing the Move to be executed, null if no cards left or illegal move
      */
-    //TODO CardType is Card in interface doc
-    
-    //if move not legal do nothing and execute handle illegal move
     public Move getMove(boolean skip, CardType card, int selectedValue,
 			int pieceId, boolean isStarter, Integer opponentPieceId) {
 	Player player = this.getCurrentPlayer();
@@ -508,7 +505,6 @@ public final class Game {
      *
      * @param player An object representing the player to exclude from the round
      */
-    //exclude from round
     public void excludeFromRound(Player player) {
 	this.discardHandCards(); //of current player
 	this.playersRemaining--;
