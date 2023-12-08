@@ -169,7 +169,8 @@ public class GameLobby {
     public boolean tryMove(boolean skip, int card, int selectedValue,
                            int pieceId, boolean isStarter, Integer opponentPieceId) {
         boolean success = this.game.tryMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
-        return success;
+	boolean gameOver = this.game.nextPlayer(); //if no nextPlayer exists game is over
+	return success;
     }
 
     //success boolean

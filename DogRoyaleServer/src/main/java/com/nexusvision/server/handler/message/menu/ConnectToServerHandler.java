@@ -12,7 +12,7 @@ import com.nexusvision.server.controller.ServerController;
 import lombok.Data;
 
 /**
- * Handles a connectToServer request
+ * Handles a <code>connectToServer</code> request
  *
  * @author felixwr
  */
