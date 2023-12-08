@@ -15,7 +15,6 @@ import lombok.Data;
  *
  * @author felixwr
  */
-@Data
 public class ConnectToServerHandler extends Handler implements MenuMessageHandler<ConnectToServer> {
 
     @Override

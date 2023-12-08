@@ -8,19 +8,15 @@ import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * The Server-Controller that can start up the server
@@ -30,8 +26,8 @@ import java.util.Random;
 public class ServerController {
     @Getter
     private static final ServerController instance = new ServerController();
+    private  static final Logger logger = LogManager.getLogger(ServerController.class);
 
-    private final Logger logger = LogManager.getLogger(ServerController.class);
     private final ExecutorService executorService = Executors.newFixedThreadPool(100);
 
     private final HashMap<Integer, Client> clientMap = new HashMap<>();
@@ -40,7 +36,8 @@ public class ServerController {
     // ArrayList<Socket> clientSockets = new ArrayList<>();
     private final HashMap<Integer, ClientHandler> handlerMap = new HashMap<>();
 
-    private ServerController() {}
+    private ServerController() {
+    }
 
     /**
      * Setup <code>ServerSocket</code>, create threads for incoming connections
@@ -56,9 +53,9 @@ public class ServerController {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 logger.info("New connection request from " + clientSocket.getInetAddress());
-		int newClientID = this.createNewClient();
-		ClientHandler clientHandler = new ClientHandler(clientSocket, newClientID);
-		handlerMap.put(newClientID, clientHandler);
+                int newClientID = this.createNewClient();
+                ClientHandler clientHandler = new ClientHandler(clientSocket, newClientID);
+                handlerMap.put(newClientID, clientHandler);
                 executorService.submit(clientHandler);
             }
         } catch (IOException e) {
@@ -69,15 +66,14 @@ public class ServerController {
     public GameLobby getGameOfPlayer(int clientID) {
         for (int key : lobbyMap.keySet()) {
             GameLobby g = lobbyMap.get(key);
-	    //see if player in players of game
-	    for (int i = 0; i < g.getPlayerOrderList().size(); i++) {
-            if(g.getPlayerOrderList().get(i) == clientID) {
-		        return g;
-		    }
-	    }
-
+            //see if player in players of game
+            for (int i = 0; i < g.getPlayerOrderList().size(); i++) {
+                if (g.getPlayerOrderList().get(i) == clientID) {
+                    return g;
+                }
+            }
         }
-	return null;
+        return null;
     }
 
     public ArrayList<GameLobby> getStateGames(int gameCount, GameState state) {
@@ -94,14 +90,14 @@ public class ServerController {
         return gameLobbys;
     }
 
-    public void sendToAllLobbyMembers(GameLobby g,String message) {
-        for(int clientId : g.getPlayerOrderList()){
-	    //get the client
+    public void sendToAllLobbyMembers(GameLobby lobby, String message) {
+        for (int clientId : lobby.getPlayerOrderList()) {
+            //get the client
             ClientHandler handler = handlerMap.get(clientId);
             try {
-		handler.broadcast(message);
+                handler.broadcast(message);
+            } catch (Exception e) {
             }
-            catch(Exception e){};
         }
     }
 
@@ -234,8 +230,8 @@ public class ServerController {
      * linked to that id
      *
      * @param playerOrderList The player order list
-     * @param playerColorMap The player color map
-     * @param observerList The observer id list
+     * @param playerColorMap  The player color map
+     * @param observerList    The observer id list
      * @return The lobby id
      */
     public int createNewLobby(ArrayList<Integer> playerOrderList, HashMap<Integer, Colors> playerColorMap,
@@ -289,7 +285,7 @@ public class ServerController {
         return lobbyMap.size();
     }
 
-//    public boolean getObserver(int clientID) {
+    //    public boolean getObserver(int clientID) {
 //        return clientIDMapObserver.get(clientID);
 //    }
 //

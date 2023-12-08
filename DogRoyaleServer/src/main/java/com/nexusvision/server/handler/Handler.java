@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
  */
 public abstract class Handler {
     private static final Logger logger = LogManager.getLogger(ClientHandler.class);
-    Gson gson = new GsonBuilder()
+    protected static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
             .create();
 

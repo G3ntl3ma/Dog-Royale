@@ -1,14 +1,13 @@
 package com.nexusvision.server.controller;
 
+import com.nexusvision.server.model.enums.Colors;
+import com.nexusvision.server.model.enums.GameState;
+import com.nexusvision.server.model.gamelogic.Game;
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import com.nexusvision.server.model.enums.CardType;
-import com.nexusvision.server.model.enums.GameState;
-import com.nexusvision.server.model.enums.Colors;
-import com.nexusvision.server.model.gamelogic.Game;
-import lombok.Data;
 
 @Data
 public class GameLobby {
@@ -27,8 +26,8 @@ public class GameLobby {
      * Creates a GameLobby with the given parameters
      *
      * @param playerOrderList The player order list
-     * @param observerList The observer ID list
-     * @param playerColorMap The player color list
+     * @param observerList    The observer ID list
+     * @param playerColorMap  The player color list
      */
     public GameLobby(ArrayList<Integer> playerOrderList, HashMap<Integer, Colors> playerColorMap,
                      ArrayList<Integer> observerList) {
@@ -40,27 +39,27 @@ public class GameLobby {
     }
 
     public void receiveResponse(int clientId) {
-	//if id not in list add
+        //if id not in list add
     }
 
     public void resetResponseList() {
-	this.receivedResponses = new ArrayList<>();
+        this.receivedResponses = new ArrayList<>();
     }
 
     public boolean receivedFromEveryone() {
-	//buggy
-	//return this.receivedReponses.size() >= this.playerOrderList.size() + this.observerList.size();
+        //buggy
+        //return this.receivedReponses.size() >= this.playerOrderList.size() + this.observerList.size();
 
-	for (int i = 0; i < this.playerOrderList.size(); i++) {
-	    //check if this id is in the list of reponses
-	    this.playerOrderList.get(i);
-	}
-	for (int i = 0; i < this.observerList.size(); i++) {
-	    //check if this id is in the list of reponses
-	    this.observerList.get(i);
+        for (int i = 0; i < this.playerOrderList.size(); i++) {
+            //check if this id is in the list of reponses
+            this.playerOrderList.get(i);
+        }
+        for (int i = 0; i < this.observerList.size(); i++) {
+            //check if this id is in the list of reponses
+            this.observerList.get(i);
 
-	}
-	return true;
+        }
+        return true;
     }
 
     /**
@@ -85,7 +84,7 @@ public class GameLobby {
      * Adds a player to the lobby
      *
      * @param clientID The client ID of the player being added
-     * @param color The color of the player being added
+     * @param color    The color of the player being added
      */
     public void addPlayer(int clientID, Colors color) {
         playerOrderList.add(clientID);
@@ -138,7 +137,7 @@ public class GameLobby {
     //success boolean
     public boolean tryMove(boolean skip, int card, int selectedValue,
                            int pieceId, boolean isStarter, Integer opponentPieceId) {
-	return this.game.tryMove(skip, card,  selectedValue, pieceId, isStarter, opponentPieceId);
+        return this.game.tryMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
     }
 
     //success boolean

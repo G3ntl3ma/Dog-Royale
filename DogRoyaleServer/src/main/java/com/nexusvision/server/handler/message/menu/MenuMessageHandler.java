@@ -13,10 +13,6 @@ import com.nexusvision.utils.NewLineAppendingSerializer;
  */
 public interface MenuMessageHandler<T> {
 
-    Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
-            .create();
-
     /**
      * Handle the received code
      *

@@ -1,8 +1,6 @@
 package com.nexusvision.server.handler;
 
 import com.google.gson.*;
-
-
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.message.menu.*;
 import com.nexusvision.server.model.messages.menu.*;
@@ -10,7 +8,10 @@ import com.nexusvision.utils.NewLineAppendingSerializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
@@ -25,49 +26,32 @@ public class ClientHandler extends Handler implements Runnable {
     private final Socket clientSocket;
     private final ServerController serverController;
     private final int clientID;
-    
-    private PrintWriter broadcaster;
+    private final PrintWriter broadcaster;
 
-    private enum State {
-        CONNECT_TO_SERVER,
-        REQUEST_GAME_LIST_AND_TOURNAMENT_INFO,
-        REQUEST_GAME_LIST,
-        REQUEST_TOURNAMENT_INFO,
-        REQUEST_JOIN,
-        REQUEST_FIND_TOURNAMENT,
-        REQUEST_TECH_DATA,
-        START_GAME;
-        // TODO: Add requests for game
-    };
-    
     private State expectedState = State.CONNECT_TO_SERVER;
 
-    Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
-            .create();
-
     /**
-     * Constructor for the clienthandler
+     * Constructor for <code>ClientHandler</code>
      *
      * @param clientSocket An instance representing the socket connection to a client
-     * @param clientID An integer representing the Id for the client associated with this ClientHandler
+     * @param clientID     An integer representing the Id for the client associated with this ClientHandler
      */
     public ClientHandler(Socket clientSocket, int clientID) {
         serverController = ServerController.getInstance();
         this.clientSocket = clientSocket;
         this.clientID = clientID;
-	//this might block because iirc you need a buffered reader first, not sure
+        //this might block because iirc you need a buffered reader first, not sure
+        PrintWriter writer;
         try {
-            this.broadcaster = new PrintWriter(clientSocket.getOutputStream(), false);
+            writer = new PrintWriter(clientSocket.getOutputStream(), false);
+        } catch (Exception e) {
+            writer = null;
         }
-        catch(Exception e) {
-            this.broadcaster = null;
-        }
+        broadcaster = writer;
     }
 
     /**
      * Represents the logic for handling incoming messages from a client
-     *
      */
     @Override
     public void run() {
@@ -98,11 +82,10 @@ public class ClientHandler extends Handler implements Runnable {
 
     /**
      * Writes the specified message to the broadcaster
-     *
      */
     public void broadcast(String message) {
-	this.broadcaster.write(message);
-	this.broadcaster.flush();
+        this.broadcaster.write(message);
+        this.broadcaster.flush();
     }
 
     private String handle(String request) {
@@ -115,8 +98,8 @@ public class ClientHandler extends Handler implements Runnable {
             if (type == TypeMenue.connectToServer.getOrdinal()) {
                 return handleConnectToServer(request);
             } else if (type == TypeMenue.requestGameList.getOrdinal()
-                    || type == TypeMenue.requestTournamentInfo.getOrdinal()) {
-                return handleRequestGameListAndTournamentInfo(request, type);
+                    || type == TypeMenue.findTournament.getOrdinal()) {
+                return handleRequestGameListAndFindTournament(request, type);
             } else if (type == TypeMenue.joinGameAsObserver.getOrdinal()) {
                 return handleJoinGameAsObserver(request);
             } else if (type == TypeMenue.joinGameAsParticipant.getOrdinal()) {
@@ -143,7 +126,7 @@ public class ClientHandler extends Handler implements Runnable {
         try {
             ConnectToServer connectToServer = gson.fromJson(request, ConnectToServer.class);
             String response = new ConnectToServerHandler().handle(connectToServer, clientID);
-            expectedState = State.REQUEST_GAME_LIST_AND_TOURNAMENT_INFO;
+            expectedState = State.REQUEST_GAME_LIST_AND_FIND_TOURNAMENT;
             logger.info("Client " + clientID + " connected successfully");
             return response;
         } catch (JsonSyntaxException e) {
@@ -152,27 +135,27 @@ public class ClientHandler extends Handler implements Runnable {
         }
     }
 
-    private String handleRequestGameListAndTournamentInfo(String request, int type) throws HandlingException {
+    private String handleRequestGameListAndFindTournament(String request, int type) throws HandlingException {
         switch (expectedState) {
-            case REQUEST_GAME_LIST_AND_TOURNAMENT_INFO:
+            case REQUEST_GAME_LIST_AND_FIND_TOURNAMENT:
                 if (type == TypeMenue.requestGameList.getOrdinal()) {
-                    return handleRequestGameList(request, State.REQUEST_TOURNAMENT_INFO);
+                    return handleRequestGameList(request, State.FIND_TOURNAMENT);
                 }
-                return handleRequestTournamentInfo(request, State.REQUEST_GAME_LIST);
+                return handleFindTournament(request, State.REQUEST_GAME_LIST);
             case REQUEST_GAME_LIST:
                 if (type != TypeMenue.requestGameList.getOrdinal()) {
                     return handleError("Received requestTournamentInfo but expected requestGameList",
-                            TypeMenue.returnTournamentInfo.getOrdinal());
+                            TypeMenue.findTournament.getOrdinal());
                 }
                 return handleRequestGameList(request, State.REQUEST_JOIN);
-            case REQUEST_TOURNAMENT_INFO:
-                if (type != TypeMenue.requestTournamentInfo.getOrdinal()) {
-                    return handleError("Received requestGameList but expected requestTournamentInfo",
+            case FIND_TOURNAMENT:
+                if (type != TypeMenue.findTournament.getOrdinal()) {
+                    return handleError("Received requestGameList but expected findTournament",
                             TypeMenue.requestGameList.getOrdinal());
                 }
-                return handleRequestTournamentInfo(request, State.REQUEST_JOIN);
+                return handleFindTournament(request, State.REQUEST_JOIN);
             default:
-                return handleError("Received wrong type, expected requestGameList or requestTournamentInfo");
+                return handleError("Received wrong type, expected requestGameList or findTournament");
         }
     }
 
@@ -182,7 +165,7 @@ public class ClientHandler extends Handler implements Runnable {
             RequestGameList requestGameList = gson.fromJson(request, RequestGameList.class);
             String response = new RequestGameListHandler().handle(requestGameList, clientID);
             expectedState = nextState;
-            logger.info("com.nexusvision.server.model.gamelogic.Game list request was successful");
+            logger.info("Game list request was successful");
             return response;
         } catch (JsonSyntaxException e) {
             return handleError("Wrong message format from type requestGameList",
@@ -190,17 +173,17 @@ public class ClientHandler extends Handler implements Runnable {
         }
     }
 
-    private String handleRequestTournamentInfo(String request, State nextState) throws HandlingException {
+    private String handleFindTournament(String request, State nextState) throws HandlingException {
         logger.info("Trying to handle tournament info request");
         try {
-            RequestTournamentInfo requestTournamentInfo = gson.fromJson(request, RequestTournamentInfo.class);
-            String response = new RequestTournamentInfoHandler().handle(requestTournamentInfo, clientID);
+            FindTournament findTournament = gson.fromJson(request, FindTournament.class);
+            String response = new FindTournamentHandler().handle(findTournament, clientID);
             expectedState = nextState;
-            logger.info("Tournament info request was successful");
+            logger.info("Find tournament request was successful");
             return response;
         } catch (JsonSyntaxException e) {
-            return handleError("Wrong message format from type requestTournamentInfo",
-                    TypeMenue.requestTournamentInfo.getOrdinal(), e);
+            return handleError("Wrong message format from type findTournament",
+                    TypeMenue.findTournament.getOrdinal(), e);
         }
     }
 
@@ -257,5 +240,17 @@ public class ClientHandler extends Handler implements Runnable {
                 && jsonRequest.get("type").getAsJsonPrimitive().isNumber()
                 && jsonRequest.get("type").getAsNumber().doubleValue()
                 == (int) jsonRequest.get("type").getAsNumber().doubleValue();
+    }
+
+    private enum State {
+        CONNECT_TO_SERVER,
+        REQUEST_GAME_LIST_AND_FIND_TOURNAMENT,
+        REQUEST_GAME_LIST,
+        FIND_TOURNAMENT,
+        REQUEST_JOIN,
+        REQUEST_FIND_TOURNAMENT,
+        REQUEST_TECH_DATA,
+        START_GAME;
+        // TODO: Add requests for game
     }
 }
