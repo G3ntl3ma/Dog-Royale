@@ -10,6 +10,6 @@ public class ReturnGameListHandler extends Handler implements MenuMessageHandler
         if (message.getRunningGames() == null){
 
         }
-        return "Games were added successfully to GUI";
+        return null;
     };
 }

@@ -15,4 +15,7 @@ public class Error extends AbstractMenuMessage {
     private String message;
 
 
+    public void setMessage(String errorMessage) {
+        this.message = errorMessage;
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.myapplication.handler;
 
+import com.example.myapplication.controller.ClientController;
 import com.example.myapplication.handler.messageHandler.game.*;
 import com.example.myapplication.handler.messageHandler.menu.*;
 import com.example.myapplication.messages.game.*;
@@ -25,8 +26,11 @@ import java.net.Socket;
 
 
 public class ServerHandler extends Handler implements Runnable {
+    private static  ServerHandler instance ;
     private static final Logger logger = LogManager.getLogger(ServerHandler.class);
-    private final Socket serverSocket;
+    private static final Object lock = new Object();  // For thread-safety
+    private static  Socket serverSocket;
+    private final PrintWriter broadcaster;
     @Getter
     @Setter
     private static int clientID;
@@ -48,7 +52,16 @@ public class ServerHandler extends Handler implements Runnable {
 
     public ServerHandler(Socket serverSocket)
     {
+
         this.serverSocket = serverSocket;
+        PrintWriter writer;
+        try {
+            writer = new PrintWriter(serverSocket.getOutputStream(), false);
+        } catch (Exception e) {
+            writer = null;
+        }
+        broadcaster = writer;
+
     }
     public void run() {
         try {
@@ -59,10 +72,13 @@ public class ServerHandler extends Handler implements Runnable {
 
             String request, response;
             while (true) {
-                if ((request = reader.readLine()) != null) {
+                if ((request = reader.readLine()) != null ) {
                     response = handle(request);
-                    writer.println(response);
-                    writer.flush();
+                    if (response != null){
+                        writer.println(response);
+                        writer.flush();
+                    }
+
                 }
             }
         } catch (IOException e) {
@@ -75,6 +91,14 @@ public class ServerHandler extends Handler implements Runnable {
             }
         }
     }
+    /**
+     * Writes the specified message to the broadcaster
+     */
+    public void broadcast(String message) {
+        this.broadcaster.write(message);
+        this.broadcaster.flush();
+    }
+
     private String handle(String request) {
         try {
             JsonObject jsonRequest = JsonParser.parseString(request).getAsJsonObject();

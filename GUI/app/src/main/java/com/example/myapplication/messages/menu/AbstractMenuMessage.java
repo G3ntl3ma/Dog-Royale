@@ -12,4 +12,7 @@ public abstract class AbstractMenuMessage {
     protected Integer type;
 
 
+    public void setType(int ordinal) {
+        this.type = ordinal;
+    }
 }

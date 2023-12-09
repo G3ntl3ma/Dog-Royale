@@ -39,4 +39,8 @@ public class HandlingException extends Exception {
         super(message, cause);
         this.type = type;
     }
+
+    public int getType() {
+        return this.type;
+    }
 }

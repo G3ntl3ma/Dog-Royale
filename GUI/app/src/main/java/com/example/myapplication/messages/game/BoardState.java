@@ -15,6 +15,8 @@ public class BoardState extends AbstractGameMessage {
     private boolean gameOver;
     private List<Integer> winnerOrder;
 
+
+
     @Data
     public static class Piece {
         private int pieceId;
