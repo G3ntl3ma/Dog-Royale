@@ -1,0 +1,39 @@
+package com.nexusvision.server.handler.message.game;
+
+import com.nexusvision.server.controller.GameLobby;
+import com.nexusvision.server.controller.ServerController;
+import com.nexusvision.server.handler.message.MessageHandler;
+import com.nexusvision.server.model.enums.CardType;
+import com.nexusvision.server.model.gamelogic.Card;
+import com.nexusvision.server.model.gamelogic.Game;
+import com.nexusvision.server.model.messages.game.DrawCards;
+import com.nexusvision.server.model.messages.game.Move;
+import com.nexusvision.server.model.messages.game.TypeGame;
+
+import java.util.ArrayList;
+
+//get drawn cards at the start of the game
+//this is not a response to a message
+//TODO move this code to where it belongs
+public class ThrowAwayClass extends MessageHandler<Move> {
+    @Override
+    protected String performHandle(Move message, int clientID) {
+        ServerController serverController = ServerController.getInstance();
+        GameLobby gameLobby = serverController.getGameOfPlayer(clientID);
+        Game game = gameLobby.getGame();
+        ArrayList<CardType> _drawnCards = new ArrayList<CardType>();
+        for(int playerId = 0; playerId < gameLobby.getPlayerOrderList().size(); playerId++) {
+            if(clientID == gameLobby.getPlayerOrderList().get(playerId)) {
+                for(Card card : game.getPlayers().get(playerId).getCards()) {
+                    _drawnCards.add(card.getType());
+                }
+            }
+        }
+
+        DrawCards drawCards = new DrawCards();
+        drawCards.setType(TypeGame.drawCards.getOrdinal());
+        drawCards.setDroppedCards(new ArrayList<>());
+        drawCards.setDrawnCards(_drawnCards);
+        return gson.toJson(drawCards);
+    }
+}

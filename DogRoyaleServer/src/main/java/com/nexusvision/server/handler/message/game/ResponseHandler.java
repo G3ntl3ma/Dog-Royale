@@ -8,17 +8,17 @@ import com.nexusvision.server.model.gamelogic.Figure;
 import com.nexusvision.server.model.gamelogic.Game;
 import com.nexusvision.server.model.gamelogic.Player;
 import com.nexusvision.server.model.messages.game.BoardState;
-import com.nexusvision.server.model.messages.game.Move;
+import com.nexusvision.server.model.messages.game.*;
 import com.nexusvision.server.model.messages.game.TypeGame;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ResponseHandler extends MessageHandler<Move> {
+public class ResponseHandler extends MessageHandler<Response> {
 
     @Override
-    protected String performHandle(Move message, int clientID) {
+    protected String performHandle(Response message, int clientID) {
         ServerController serverController = ServerController.getInstance();
         //message.isUpdated() is always true
 
