@@ -201,6 +201,11 @@ public class Game_board extends Fragment {
         viewModel.setFigure_handler(figure_handler); //setting the figure handler for the viewModel to use it in different classes later on
         //
         //
+        //setting the boardUpdater
+
+        boardUpdater = new BoardUpdater();
+
+
         //Set the Last Card
         lastCardViewModel.getLastCard().observe(getViewLifecycleOwner(), type ->{
             switch (type) {
