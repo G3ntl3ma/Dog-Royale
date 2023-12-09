@@ -35,7 +35,8 @@ public class ServerHandler extends Handler implements Runnable {
     @Getter
     @Setter
     private static int clientID;
-    private enum State {
+    @Getter
+    public enum State {
         CONNECT_MENU,
         REQUEST_FIND_TOURNAMENT,
         REQUEST_GAME_LIST,
@@ -45,7 +46,8 @@ public class ServerHandler extends Handler implements Runnable {
         LOBBY,
         GAME,
     }
-
+    @Getter
+    @Setter //TODO remove
     private State expectedState = State.CONNECT_MENU;
     Gson gson = new GsonBuilder()
             .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
@@ -191,6 +193,7 @@ public class ServerHandler extends Handler implements Runnable {
             ReturnGameList returnGameList = gson.fromJson(request, ReturnGameList.class);
             String response = new ReturnGameListHandler().handle(returnGameList);
             expectedState = State.MAIN_MENU;
+            ClientController.getInstance().navigateToFirstFragment();//after establishing connection and getting tournamentinfo and gamelist, this makes the window change to next.
             logger.info("ReturnGameList was handled successfully");
             return response;
         }catch(JsonSyntaxException e){
@@ -208,6 +211,7 @@ public class ServerHandler extends Handler implements Runnable {
             String response = new ConnectedToGameHandler().handle(connectedToGame);
             if (connectedToGame.isSuccess()){
                 expectedState = State.LOBBY;
+
             }
             logger.info("ConnectedToGame was handled successfully");
             return response;

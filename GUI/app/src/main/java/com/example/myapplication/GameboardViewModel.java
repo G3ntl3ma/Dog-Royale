@@ -33,6 +33,8 @@ public class GameboardViewModel extends ViewModel {
     MutableLiveData<List<Integer>> CardsInHand = new MutableLiveData<>(new ArrayList<Integer>(6));
     MutableLiveData<PlayerInformationTable> playerInformationTable = new MutableLiveData<>();
 
+
+    //TODO delete that 0 when automatically setting the last player with first move
     MutableLiveData<Integer> LastPlayer = new MutableLiveData<>();
 
     public MutableLiveData<Integer> getField_size() {
@@ -66,6 +68,22 @@ public class GameboardViewModel extends ViewModel {
     public MutableLiveData<Figure_handler> getFigure_handler() {return figure_handler;}
 
     public void setFigure_handler(Figure_handler figure_handler) {this.figure_handler.setValue(figure_handler);}
+
+    public MutableLiveData<int[]> getStart_fields() {
+        return start_fields;
+    }
+
+    public void setStart_fields(int[] start_fields) {
+        this.start_fields.setValue(start_fields);
+    }
+
+    public MutableLiveData<int[]> getDrawFields() {
+        return drawFields;
+    }
+
+    public void setDrawFields(int[] drawFields) {
+        this.drawFields.setValue(drawFields);
+    }
 
 
     //////**********REPLACE WITH RETURN GAMEINFORMATION**********//////

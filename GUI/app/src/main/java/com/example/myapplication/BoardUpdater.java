@@ -40,24 +40,40 @@ public class BoardUpdater {
     {
         if (boardState.getGameOver())
         {
+
+            System.out.println("1");
             TextView textView = new TextView(winnerOrder.getContext());
+
+            System.out.println("1");
             textView.setText("Game Over");
 
-        }
+            System.out.println("3");
 
+        }
+        System.out.println("1");
         viewModel.setFiguresInBank(new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0, 0 ,0 )));
         //setting the the figures to their new position
         for (   BoardState.Piece piece : boardState.getPieces()) {
+
+            System.out.println("2");
             figure_handler.moveFigure(piece.getClientId(), piece.getPieceId(), piece.getPosition(), piece.getIsOnBench(), piece.getInHousePosition(), boardState.getRound(), boardState.getMoveCount());
 
             System.out.println("OWO3");
             }
         //changing the FiguresInBank Info in the PlayerInformationTable
         for ( Order order : gameInformation.getPlayerOrder().getOrder()) {
+
+            System.out.println("3");
         playerInformationTable.changeFigureInfo(order.getClientId(), viewModel.getFiguresInBank().getValue().get(gameInformation.getPlayerClientNumber(order.getClientId())));
+
+            System.out.println("4");
             }
+
+        System.out.println("5");
         //changing the CardsInHand Info in the PlayerInformationTable
         playerInformationTable.changeCardInfoDynamically(viewModel.getLastPlayer().getValue(), gameInformation);
+
+        System.out.println("6");
         viewModel.setLastPlayer(boardState.getNextPlayer());
 
 
