@@ -12,12 +12,26 @@ import com.nexusvision.server.model.messages.menu.ConnectedToGame;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
 import lombok.Data;
 
+/**
+ * Handles a <code>JoinGameAsParticipant</code> request
+ *
+ * @author felixwr, aermysh, dgehse
+ */
 public class JoinGameAsParticipantHandler extends MessageHandler<JoinGameAsParticipant> {
 
+    /**
+     * Handles the logic for a client joining a game as a participant.
+     * It verifies the client ID, retrieves the associated game lobby, adds the client as a player with a specific color,
+     * creates a success response and returns the response
+     *
+     * @param message An Instance of the <code>JoinGameAsParticipant</code> representing a client's request to join a game as a participant
+     * @param clientId An Integer representing the Id of the requesting client
+     * @return A JSON String representing the response to the client
+     */
     @Override
-    protected String performHandle(JoinGameAsParticipant message, int clientID) throws HandlingException {
+    protected String performHandle(JoinGameAsParticipant message, int clientId) throws HandlingException {
 
-        verifyClientID(clientID, message.getClientId());
+        verifyClientID(clientId, message.getClientId());
         ServerController serverController = ServerController.getInstance();
 
         GameLobby lobby = serverController.getLobbyById(message.getGameId());
