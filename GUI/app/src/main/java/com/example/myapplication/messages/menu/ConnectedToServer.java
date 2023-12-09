@@ -10,6 +10,6 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class ConnectedToServer extends AbstractMenuMessage {
+public class ConnectedToServer {
     private int clientId;
 }

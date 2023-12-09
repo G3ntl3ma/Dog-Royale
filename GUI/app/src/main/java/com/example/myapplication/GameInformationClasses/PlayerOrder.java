@@ -15,5 +15,8 @@ public class PlayerOrder{
         this.order = order;
     }
 
+    public List<Order> getOrder(){
+        return this.order;
+    }
 
 }

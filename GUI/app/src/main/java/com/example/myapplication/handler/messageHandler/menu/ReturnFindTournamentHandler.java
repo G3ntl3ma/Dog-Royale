@@ -6,6 +6,8 @@ import com.example.myapplication.handler.ServerHandler;
 import com.example.myapplication.messages.menu.ReturnFindTournament;
 import com.example.myapplication.messages.menu.TypeMenu;
 import com.example.myapplication.messages.menu.RequestGameList;
+import com.example.myapplication.messages.menu.ReturnFindTournament;
+
 import lombok.Data;
 
 @Data
