@@ -113,7 +113,7 @@ public class ClientHandler extends Handler implements Runnable {
             } else if (type == TypeMenue.requestTechData.getOrdinal()) {
                 return handleRequestTechData(request);
             }
-            // TODO: ALl other cases
+            // TODO: Register for tournament, request tournament info, all game cases
             else {
                 return handleError("The request has no valid type");
             }

@@ -26,7 +26,7 @@ import java.util.concurrent.Executors;
 public class ServerController {
     @Getter
     private static final ServerController instance = new ServerController();
-    private  static final Logger logger = LogManager.getLogger(ServerController.class);
+    private static final Logger logger = LogManager.getLogger(ServerController.class);
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(100);
 
