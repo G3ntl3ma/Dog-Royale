@@ -9,13 +9,13 @@ import lombok.Data;
  */
 @Data
 public class Figure  {
-    Field field;
-    boolean isInBank; //ignore field if isInBank
-    boolean isInHouse; //cant be swapped for example
-    int color;
+    private Field field;
+    private boolean isOnBench; //ignore field if isInBank
+    private boolean isInHouse; //cant be swapped for example
+    private int color;
 
     public Figure(int color) {
-        this.isInBank = true;
+        this.isOnBench = true;
         this.isInHouse = false;
         this.color = color;
     }

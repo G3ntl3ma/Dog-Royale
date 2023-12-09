@@ -135,77 +135,79 @@ public class Card {
 	 */
     //move generator for card
     public void getMoves(Game game, Figure figure, ArrayList<Move> moves, Player player) { //target figure
-	Field to;
-	switch (this.type) {
-	case swapCard:
-	    if (figure.isInBank || figure.isInHouse) break;
-	    for(int i = 0; i < game.players.size(); i++) {
-		if(i == figure.color) continue;
-		Player opponent = game.players.get(i);
-		for (int j = 0; j < opponent.figures.size(); j++) {
-		    Figure oppfigure = opponent.figures.get(j);
-		    if (!oppfigure.isInBank && !oppfigure.isInHouse &&  oppfigure.field.type!= FieldType.START ) {
-			moves.add(new Move(player ,figure.field, oppfigure.field, true, this));
-		    }
-		}
-	    }
-	    break;
-	case magnetCard:
-		if (figure.isInBank || figure.isInHouse) break;
-		to = figure.field;
-		Field next = to.next;
-		while (next.isEmpty()) { 
-		    to = next;
-		    next = next.next;
-		}
-		if(figure.field != to) { //move that does nothing allowed???
-		    moves.add(new Move(player, figure.field, to, false, this));
-		}
-		break;
-	case oneToSeven:
-		if (figure.isInBank) break;
-		addStepMove(moves, 7,  figure, game, player, /*range*/ true);		
-		break;
-	case plusMinus4:
-		if (figure.isInBank) break;
-		addStepMove(moves, 4, figure, game, player, false);
-		addStepMove(moves, -4, figure, game, player, false);		
-		break;
-	case startCard1:
-	    if (figure.isInBank && (player.startField.isEmpty() ||  player.startField.figure.color != figure.color)) {
-		moves.add(new Move(player, this));
-	    }
-	    else if (!figure.isInBank) {
-		addStepMove(moves, 13,  figure, game, player, false);
-	    }
-	    break;
-	case startCard2:
-	    if (figure.isInBank && (player.startField.isEmpty() ||  player.startField.figure.color != figure.color)) {
-		moves.add(new Move(player, this));
-	    }
-	    else if (!figure.isInBank){
-		addStepMove(moves, 1,  figure, game, player, false);
-		addStepMove(moves, 11,  figure, game, player, false);
-	    }
-	    break;
-	case copyCard:
-	    int inx = game.pile.size() -1 ;
-	    for (int i = inx; i > 0; i--) {
-		Card lastcard = game.pile.get(game.pile.size() - 1);
-		if (lastcard.type != CardType.copyCard) { 
-		    // lastcard.getMoves(game, figure, moves);//bug, sets wrong usedcard
-		    this.type = lastcard.type;
-		    this.getMoves(game, figure, moves, player);
-		    this.type = CardType.copyCard; //hacky
-		    break; 
-		}
-	    }
-	    break;
-	default: //normal
-	    if (figure.isInBank) break;
-	    addStepMove(moves, this.getOrdinal(),  figure, game, player, false);
-	    break;
-	}
+        Field to;
+        switch (this.type) {
+            case swapCard:
+                if (figure.isOnBench() || figure.isInHouse()) break;
+                for (int i = 0; i < game.getPlayers().size(); i++) {
+                    if (i == figure.getColor()) continue;
+                    Player opponent = game.getPlayers().get(i);
+                    for (int j = 0; j < opponent.getFigures().size(); j++) {
+                        Figure oppfigure = opponent.getFigures().get(j);
+                        if (!oppfigure.isOnBench() && !oppfigure.isInHouse() && oppfigure.getField().getType() != FieldType.START) {
+                            moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this));
+                        }
+                    }
+                }
+                break;
+            case magnetCard:
+                if (figure.isOnBench() || figure.isInHouse()) break;
+                to = figure.getField();
+                Field next = to.getNext();
+                while (next.isEmpty()) {
+                    to = next;
+                    next = next.getNext();
+                }
+                if (figure.getField() != to) { //move that does nothing allowed???
+                    moves.add(new Move(player, figure.getField(), to, false, this));
+                }
+                break;
+            case oneToSeven:
+                if (figure.isOnBench()) break;
+                addStepMove(moves, 7, figure, game, player, /*range*/ true);
+                break;
+            case plusMinus4:
+                if (figure.isOnBench()) break;
+                addStepMove(moves, 4, figure, game, player, false);
+                addStepMove(moves, -4, figure, game, player, false);
+                break;
+            case startCard1:
+                if (figure.isOnBench()
+                        && (player.getStartField().isEmpty()
+                        || player.getStartField().getFigure().getColor() != figure.getColor())) {
+                    moves.add(new Move(player, this));
+                } else if (!figure.isOnBench()) {
+                    addStepMove(moves, 13, figure, game, player, false);
+                }
+                break;
+            case startCard2:
+                if (figure.isOnBench()
+                        && (player.getStartField().isEmpty()
+                        || player.getStartField().getFigure().getColor() != figure.getColor())) {
+                    moves.add(new Move(player, this));
+                } else if (!figure.isOnBench()) {
+                    addStepMove(moves, 1, figure, game, player, false);
+                    addStepMove(moves, 11, figure, game, player, false);
+                }
+                break;
+            case copyCard:
+                int inx = game.getPile().size() - 1;
+                for (int i = inx; i > 0; i--) {
+                    Card lastcard = game.getPile().get(game.getPile().size() - 1);
+                    if (lastcard.type != CardType.copyCard) {
+                        // lastCard.getMoves(game, figure, moves);//bug, sets wrong usedCard
+                        this.type = lastcard.type;
+                        this.getMoves(game, figure, moves, player);
+                        this.type = CardType.copyCard; //hacky
+                        break;
+                    }
+                }
+                break;
+            default: //normal
+                if (figure.isOnBench()) break;
+                addStepMove(moves, this.getOrdinal(), figure, game, player, false);
+                break;
+        }
     }
 
 	/**

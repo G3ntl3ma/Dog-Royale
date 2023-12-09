@@ -13,17 +13,17 @@ import java.util.ArrayList;
 @Data
 public final class Player {
 
-    final int color;
-    public boolean excluded = false;
-    public boolean outThisRound = false;
-    ArrayList<Figure> figures = new ArrayList<>();
-    ArrayList<Card> cards = new ArrayList<>();
-    Field startField; //accessed a lot in other classes
-    int houseFirstIndex;
-    int figuresInBank;
-    int figuresInHouse;
-    int lastMoveCountFigureMovedIntoHouse;
-    int houseOccupationIndex; //index of housefield that with last figure TODO unused
+    private final int playerId;
+    private boolean excluded = false;
+    private boolean outThisRound = false;
+    private ArrayList<Figure> figures = new ArrayList<>();
+    private ArrayList<Card> cards = new ArrayList<>();
+    private Field startField; //accessed a lot in other classes
+    private int houseFirstIndex;
+    private int figuresInBank;
+    private int figuresInHouse;
+    private int lastMoveCountFigureMovedIntoHouse;
+    private int houseOccupationIndex; //index of housefield that with last figure TODO unused
 
     /**
      * Constructor for the Player
@@ -31,9 +31,9 @@ public final class Player {
      * @param color       An Integer representing the color of the player
      * @param figurecount An Integer representing the amount of figures a player has
      */
-    public Player(int color, int figurecount) {
+    public Player(int playerId, int figurecount) {
         this.figuresInBank = figurecount;
-        this.color = color;
+        this.playerId = playerId;
         this.lastMoveCountFigureMovedIntoHouse = 0;
         for (int i = 0; i < figurecount; i++) {
             figures.add(new Figure(color));
@@ -47,7 +47,7 @@ public final class Player {
      */
     public Figure getFirstFigureInBank() {
         for (int i = 0; i < figures.size(); i++) {
-            if (this.figures.get(i).isInBank) {
+            if (this.figures.get(i).isOnBench()) {
                 return this.figures.get(i);
             }
         }
@@ -61,7 +61,7 @@ public final class Player {
      * Prints information player, figures in bank, figures in house and the cards
      */
     public void printInfo() {
-        System.out.print("player " + this.color + " figbank " + this.figuresInBank + " figs in house " + this.figuresInHouse);
+        System.out.print("player " + this.playerId + " figbank " + this.figuresInBank + " figs in house " + this.figuresInHouse);
         System.out.print(" cards ");
         this.printCards();
         System.out.println("");
@@ -137,8 +137,9 @@ public final class Player {
             seenCardTypes[this.cards.get(i).type.ordinal()] = true;
             for (int j = 0; j < this.figures.size(); j++) {
                 // System.out.println("figure " + j);
-                if (seenBankFigure && this.figures.get(j).isInBank == true) continue;
-                if (this.figures.get(j).isInBank == true && (this.cards.get(i).type == CardType.startCard1 || this.cards.get(i).type == CardType.startCard2)) {
+                if (seenBankFigure && this.figures.get(j).isOnBench()) continue;
+                if (this.figures.get(j).isOnBench() && (this.cards.get(i).getType() == CardType.startCard1
+                        || this.cards.get(i).getType() == CardType.startCard2)) {
                     seenBankFigure = true;
                 }
                 this.cards.get(i).getMoves(game, this.figures.get(j), moves, this);

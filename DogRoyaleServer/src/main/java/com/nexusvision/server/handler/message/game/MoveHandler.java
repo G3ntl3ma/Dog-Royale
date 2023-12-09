@@ -44,7 +44,7 @@ public class MoveHandler extends MessageHandler<Move> {
                 //3.14 send kick message to everyone
                 //remove clientId from the arraylist in the lobby
                 gameLobby.removePlayer(clientID);
-                int playerId = gameLobby.getGame().getPlayerToMoveColor();
+                int playerId = gameLobby.getGame().getPlayerToMoveId();
                 int clientId = gameLobby.getPlayerOrderList().get(playerId);
                 String reason = "illegal move";
                 Kick kick = new Kick();

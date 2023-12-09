@@ -133,17 +133,17 @@ public final class Move  {
 
 	    game.occupied[player.color] = true;
 
-	    //TODO assert figcol == playercol
-	    // System.out.println("figs in bank " + this.player.figuresInBank);
-	    // System.out.println("fig col " + figure.color);
-	    // System.out.println("plyer col " + this.player.color);
-	}
-	else { //normal move
-	    if (!to.isEmpty()) {
-		Player opponent = game.players.get(to.figure.color);
-		opponent.figuresInBank++;
-		to.figure.isInBank = true;
-	    }
+            //TODO assert figcol == playercol
+            // System.out.println("figs in bank " + this.player.figuresInBank);
+            // System.out.println("fig col " + figure.color);
+            // System.out.println("plyer col " + this.player.color);
+        } else { //normal move
+            assert to != null;
+            if (!to.isEmpty()) {
+                Player opponent = game.getPlayers().get(to.getFigure().getColor());
+                opponent.setFiguresInBank(opponent.getFiguresInBank() + 1);
+                to.getFigure().setOnBench(true);
+            }
 
 	    if (to.type== FieldType.HOUSE) {
 		player.houseOccupationIndex = to.val;

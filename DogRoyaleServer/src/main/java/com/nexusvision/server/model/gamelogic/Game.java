@@ -45,11 +45,11 @@ public final class Game {
     /**
      * The Constructor initializes Games
      *
-     * @param conf A String holding information about the board and players
-     * @param figureCount An Integer representing the number of figures in the game
-     * @param initialHandCardCount An Integer representing the initial number of cards each player should have in their hand
-     * @param maximumTotalMoves An integer representing the maximum number of moves allowed this game
-     * @param consequences An object representing the consequences for illegal moves
+     * @param conf                  A String holding information about the board and players
+     * @param figuresPerPlayer      An Integer representing the number of figures in the game
+     * @param initialCardsPerPlayer An Integer representing the initial number of cards each player should have in their hand
+     * @param maximumTotalMoves     An integer representing the maximum number of moves allowed this game
+     * @param consequences          An object representing the consequences for illegal moves
      */
     public Game(String conf, int figureCount, int initialHandCardCount, int maximumTotalMoves ,int consequences) {
 	this.players = new ArrayList<>();
@@ -149,12 +149,12 @@ public final class Game {
      *
      */
     public void distributeCards() {
-	for (int i = 0; i < this.initialHandCardCount; i++) {
-	    for (int j = 0; j < this.players.size(); j++) {
-		this.players.get(j).draw(this);
-	    }
-	}
-	this.firstMoveOfRound = true;
+        for (int i = 0; i < this.initialCardsPerPlayer; i++) {
+            for (Player player : this.players) {
+                player.draw(this);
+            }
+        }
+        this.firstMoveOfRound = true;
     }
 
     /**
@@ -239,8 +239,8 @@ public final class Game {
 	this.mainFieldCount = max;
 
 
-	int totalfieldcount = fieldcount + figureCount * players; //playercount
-	this.board = new Field[totalfieldcount];
+        int totalFieldCount = fieldCount + figuresPerPlayer * players; //playerCount
+        this.board = new Field[totalFieldCount];
 
 	this.startIndexs = new int[players];
 	this.occupied = new boolean[players];
@@ -276,19 +276,19 @@ public final class Game {
 		    // this.board.add(new Field(fieldcount++, 'h'));
 		    this.board[fieldcount] = new Field(fieldcount, FieldType.HOUSE);
 
-		    fieldcount++;
-		}
-		for (int j = off; j < figureCount-1 + off; j++) {
-		    this.board[j].setNext(this.board[j+1]);
-		    // this.board[j+1].setPrev(this.board[j]); //house fields dont have prev field
-		}
-		seenstarts++;
-		this.board[i].setHouse(this.board[off]);
-		// this.board[off].setPrev(this.board[i]); //house fields dont have prev field
-	    }
-	}
-	this.playersRemaining = this.players.size();
-	
+                    fieldCount++;
+                }
+                for (int j = off; j < figuresPerPlayer - 1 + off; j++) {
+                    this.board[j].setNext(this.board[j + 1]);
+                    // this.board[j+1].setPrev(this.board[j]); //house fields dont have prev field
+                }
+                seenStarts++;
+                this.board[i].setHouse(this.board[off]);
+                // this.board[off].setPrev(this.board[i]); //house fields dont have prev field
+            }
+        }
+        this.playersRemaining = this.players.size();
+
     }
 
     /**
@@ -384,15 +384,14 @@ public final class Game {
 
 
     public boolean checkOver() {
-	for (int i = 0; i < this.players.size(); i++) {
-	    if(this.players.get(i).figuresInHouse == this.figureCount) {
-		return true;
-	    }
-	}
-	
-	if (this.movesMade >= this.maximumTotalMoves) return true;
-	if (!this.nextPlayer()) return true;
-	return false;
+        for (Player player : this.players) {
+            if (player.getFiguresInHouse() == this.figuresPerPlayer) {
+                return true;
+            }
+        }
+
+        if (this.movesMade >= this.maximumTotalMoves) return true;
+        return !this.nextPlayer();
     }
 
     public ArrayList<Player> getWinners() {
