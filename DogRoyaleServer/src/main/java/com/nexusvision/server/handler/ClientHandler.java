@@ -92,7 +92,6 @@ public class ClientHandler extends Handler implements Runnable {
      * Responsible for processing and handling a client request
      *
      * @param request A String representing the request received from the client
-     *
      * @return A String representing a response to the client's request
      */
     private String handle(String request) {
@@ -129,7 +128,6 @@ public class ClientHandler extends Handler implements Runnable {
      * Responsible for handling requests of type <code>connectToServer</code>
      *
      * @param request A String representing the request received from the client
-     *
      * @return A String representing a response to the client's <code>connectToServer</code> request
      */
     private String handleConnectToServer(String request) throws HandlingException {
@@ -154,7 +152,6 @@ public class ClientHandler extends Handler implements Runnable {
      *
      * @param request A String representing the request received from the client
      * @param type An Integer representing the type of the request
-     *
      * @return A String representing a response to the client's <code>requestGameList</code> request or <code>findTournament</code> request
      */
     private String handleRequestGameListAndFindTournament(String request, int type) throws HandlingException {
@@ -186,7 +183,6 @@ public class ClientHandler extends Handler implements Runnable {
      *
      * @param request A String representing the request received from the client
      * @param nextState An object representing the next expected state after successfully handling the current request
-     *
      * @return A String representing a response to the client's <code>requestGameList</code> request
      */
     private String handleRequestGameList(String request, State nextState) throws HandlingException {
@@ -208,7 +204,6 @@ public class ClientHandler extends Handler implements Runnable {
      *
      * @param request A String representing the request received from the client
      * @param nextState An object representing the next expected state after successfully handling the current request
-     *
      * @return A String representing a response to the client's <code>findTournament</code> request
      */
     private String handleFindTournament(String request, State nextState) throws HandlingException {
@@ -229,7 +224,6 @@ public class ClientHandler extends Handler implements Runnable {
      * Responsible for handling requests of type <code>joinGameAsObserver</code>
      *
      * @param request A String representing the request received from the client
-     *
      * @return A String representing a response to the client's <code>joinGameAsObserver</code> request
      */
     private String handleJoinGameAsObserver(String request) throws HandlingException {
@@ -253,7 +247,6 @@ public class ClientHandler extends Handler implements Runnable {
      * Responsible for handling requests of type <code>joinGameAsParticipant</code>
      *
      * @param request A String representing the request received from the client
-     *
      * @return A String representing a response to the client's <code>joinGameAsParticipant</code> request
      */
     private String handleJoinGameAsParticipant(String request) throws HandlingException {
@@ -277,7 +270,6 @@ public class ClientHandler extends Handler implements Runnable {
      * Responsible for handling requests of type <code>requestTechData</code>
      *
      * @param request A String representing the request received from the client
-     *
      * @return A String representing a response to the client's <code>requestTechData</code> request
      */
     private String handleRequestTechData(String request) throws HandlingException {
@@ -297,7 +289,6 @@ public class ClientHandler extends Handler implements Runnable {
      * Checks whether an object contains a field named "type" with a numeric value that can be represented as an integer
      *
      * @param jsonRequest A JSON object typically representing the request received from the client
-     *
      * @return A Boolean representing if type can be displayed as an Integer or not
      */
     private boolean isTypeInt(JsonObject jsonRequest) {

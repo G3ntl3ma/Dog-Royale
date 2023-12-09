@@ -24,7 +24,6 @@ public abstract class Handler {
      * Handles errors
      *
      * @param errorMessage A String describing the nature of the error that occurred
-     *
      * @return a string, which is a JSON representation of an Error object
      */
     protected String handleError(String errorMessage) {
@@ -40,7 +39,6 @@ public abstract class Handler {
      *
      * @param errorMessage A String describing the nature of the error that occurred
      * @param type An Integer representing the type of the error
-     *
      * @return a string, which is a JSON representation of an Error object
      */
     protected String handleError(String errorMessage, int type) {
@@ -57,7 +55,6 @@ public abstract class Handler {
      *
      * @param errorMessage A String describing the nature of the error that occurred
      * @param e An instance of the Exception class representing the exception or error that occurred
-     *
      * @return a string, which is a JSON representation of an Error object
      */
     protected String handleError(String errorMessage, Exception e) {
@@ -74,7 +71,6 @@ public abstract class Handler {
      * @param errorMessage A String describing the nature of the error that occurred
      * @param type An Integer representing the type of the error
      * @param e An instance of the Exception class representing the exception or error that occurred
-     *
      * @return a string, which is a JSON representation of an Error object
      */
     protected String handleError(String errorMessage, int type, Exception e) {

@@ -18,7 +18,6 @@ public class NewLineAppendingSerializer<T> implements JsonSerializer<T> {
      * @param src an object to be serialized
      * @param typeOfSrc type of the source object
      * @param context an object providing facilities for serialization
-     *
      * @return the serialized JSON String
      */
     @Override
