@@ -11,11 +11,23 @@ import com.nexusvision.server.model.messages.game.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
+/**
+ * Handles messages of type <code>Move</code>
+ *
+ * @author dgehse, felixwr
+ */
 //respond with 3.8 (validity of move to all)
 //also kind of needs to respond with 3.4 to one client
 public class MoveHandler extends MessageHandler<Move> {
 
+    /**
+     * Processes and validates a player's move in a game, handling various scenarios, including illegal moves with consequences
+     * It communicates with the <code>ServerController</code> and sends notifications to all lobby members about the move's validity.
+     *
+     * @param message An Object representing a <code>Move</code> including details whether the move is a skip, the card used, the selected value ect.
+     * @param clientID An Integer representing the Id of the requesting client
+     * @return A String representing the drawn cards
+     */
     @Override
     protected String performHandle(Move message, int clientID) {
         ServerController serverController = ServerController.getInstance();

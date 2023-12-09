@@ -10,8 +10,21 @@ import com.nexusvision.server.model.messages.menu.Error;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Handling all requests of type <code>ReturnLobbyConfig</code>
+ *
+ * @author felixwr, dgehse
+ */
 public class ReturnLobbyConfigHandler extends MessageHandler<ReturnLobbyConfig> {
 
+    /**
+     * Handles a client's request to configure lobby settings for a game. It extracts various parameters from the received message,
+     * performs validation checks, and sets up error handling.
+     *
+     * @param message An Instance of the <code>ReturnLobbyConfig</code> representing a client's request for technical data
+     * @param clientID An Integer representing the Id of the requesting client
+     * @return sea //TODO Placeholder
+     */
     @Override
     protected String performHandle(ReturnLobbyConfig message, int clientID) {
 
