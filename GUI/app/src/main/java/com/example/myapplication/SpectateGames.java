@@ -84,7 +84,11 @@ public class SpectateGames extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Timer timer = new Timer(60_000);
+        timer.startTimer();
+        LastCard lastCard = new LastCard();
+        lastCard.setNewLastCard(CardType.MAGNET);
+        lastCard.showLastCard(true);
 
         adapter = new SpectateGamesAdapter(getContext(), games, SpectateGames.this);
         binding.SpectateGamesRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -115,7 +119,7 @@ public class SpectateGames extends Fragment {
         binding.spectateGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addGame(new Game("Hello", 15, 4 , 6, 100, 20));
+                addGame(new Game("Hello", 15, 4 , 6, 100, 20, new int[]{0,1,6,99,33}, new int[]{0,24,49,74}));
             }
 
         });

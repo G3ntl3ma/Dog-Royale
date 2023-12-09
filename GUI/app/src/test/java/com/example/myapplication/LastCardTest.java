@@ -10,17 +10,18 @@ import static org.mockito.Mockito.when;
 
 class LastCardTest {
 
-    CardType cardType = new CardType();
     @Mock
     private LastCard lastCard;
+    private CardType type;
+
     @Test
-    void setNewLastCard() {
-        Mockito.doReturn("true").when(lastCard.setNewLastCard();
-        Assertions.assertEquals("true",lastCard.setNewLastCard());
+    public void setNewLastCard() {
+        lastCard.setNewLastCard(type);
+        assertEquals(type,lastCard.gettype());
     }
 
     @Test
-    void lastCardAvailable() {
+    public void lastCardAvailable() {
         Mockito.doReturn("true").when(lastCard.lastCardAvailable());
         Assertions.assertEquals("true", lastCard.lastCardAvailable());
     }

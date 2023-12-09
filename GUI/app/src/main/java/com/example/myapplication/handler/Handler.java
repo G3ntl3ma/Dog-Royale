@@ -1,7 +1,7 @@
-package GUI.app.src.main.java.com.example.myapplication.handler;
+package com.example.myapplication.handler;
 
-import GUI.app.src.main.java.com.example.myapplication.messages.menu.Error;
-import GUI.app.src.main.java.com.example.myapplication.messages.menu.TypeMenu;
+import com.example.myapplication.messages.menu.Error;
+import com.example.myapplication.messages.menu.TypeMenu;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

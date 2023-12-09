@@ -30,14 +30,7 @@
             android:textSize="15sp"
             android:text="6/6"/>
 
-        <TextView
-            android:id="@+id/timeSecondsView"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:text="120s"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            ></TextView>
+
 
         <Button
             android:id="@+id/Spectate_Button"

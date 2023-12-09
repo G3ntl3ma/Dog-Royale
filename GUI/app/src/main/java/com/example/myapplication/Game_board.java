@@ -58,6 +58,8 @@ public class Game_board extends Fragment {
 
     private LastCard last_card; //the last card played
     private GameboardViewModel viewModel; // is the GameBoardViewModel in which we store information about the Gameboard globally
+    private TimerviewModel timerviewModel;
+    private LastCardViewModel lastCardViewModel;
     //testwise
     private int position = 0 ; // positions for the test figure to move - I know we dont get the change but the new position but that doesnt matter
     private int move_count = 0;
@@ -145,6 +147,9 @@ public class Game_board extends Fragment {
 
         GameBoard.setLayoutParams(params); //setting the Layout Parameters to the GameBoard Layout
 
+        viewModel = new ViewModelProvider(requireActivity()).get(GameboardViewModel.class); //creating the ViewModel
+        timerviewModel = new ViewModelProvider(requireActivity()).get(TimerviewModel.class);
+        lastCardViewModel = new ViewModelProvider(requireActivity()).get(LastCardViewModel.class);
         System.out.println("normale Felder: " + viewModel.getField_size().getValue());
 
         gameInformation = viewModel.getGameInformation().getValue(); //getting the GameInformation from the ViewModel (the information about the game is stored in here)
@@ -196,16 +201,56 @@ public class Game_board extends Fragment {
         viewModel.setFigure_handler(figure_handler); //setting the figure handler for the viewModel to use it in different classes later on
         //
         //
+        //Set the Last Card
+        lastCardViewModel.getLastCard().observe(getViewLifecycleOwner(), type ->{
+            switch (type) {
+                case COPY: binding.lastCardView.setImageResource(R.drawable.card_copy);
+                    break;
+                case SWAP: binding.lastCardView.setImageResource(R.drawable.card_switch);
+                    break;
+                case MAGNET: binding.lastCardView.setImageResource(R.drawable.card_magnet);
+                    break;
+                case RANGE_7: binding.lastCardView.setImageResource(R.drawable.card1to7);
+                    break;
+                case NORMAL_2: binding.lastCardView.setImageResource(R.drawable.card2);
+                    break;
+                case NORMAL_3: binding.lastCardView.setImageResource(R.drawable.card3);
+                    break;
+                case NORMAL_5: binding.lastCardView.setImageResource(R.drawable.card5);
+                    break;
+                case NORMAL_6: binding.lastCardView.setImageResource(R.drawable.card6);
+                    break;
+                case NORMAL_8: binding.lastCardView.setImageResource(R.drawable.card8);
+                    break;
+                case NORMAL_9: binding.lastCardView.setImageResource(R.drawable.card9);
+                    break;
+                case NORMAL_10: binding.lastCardView.setImageResource(R.drawable.card10);
+                    break;
+                case NORMAL_12: binding.lastCardView.setImageResource(R.drawable.card12);
+                    break;
+                case PLUS_MINUS_4: binding.lastCardView.setImageResource(R.drawable.card_plusminus4);
+                    break;
+                case START_13: binding.lastCardView.setImageResource(R.drawable.card_1_or_11);
+                    break;
+                case START_1_11: binding.lastCardView.setImageResource(R.drawable.card_start_13);
+                    break;
+            }
 
-        boardUpdater = new BoardUpdater();
-        //Setting the first move to the first player
-        viewModel.setLastPlayer(new Integer(0));
+        });
 
-        //creating the timer
-        Timer timer = new Timer(600_000, binding);
-        timer.startTimer();
-        last_card = new LastCard(binding);
-        last_card.lastCardAvailable(true);
+        lastCardViewModel.getShowLastCard().observe(getViewLifecycleOwner(), show ->{
+            if(show){
+                binding.lastCardView.setVisibility(View.VISIBLE);
+            }
+            else {
+                binding.lastCardView.setVisibility(View.INVISIBLE);
+            }
+
+        });
+        //Set the Timer
+        timerviewModel.getTime().observe(getViewLifecycleOwner(), time -> {
+            binding.timerView.setText(time);
+        });
 
 
         //NUR ZUM TESTEN für figuren movement

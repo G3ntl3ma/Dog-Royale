@@ -21,7 +21,6 @@ public class SpectateGamesViewholder extends RecyclerView.ViewHolder{
     public SpectateGamesViewholder(@NonNull View itemView){
         super(itemView);
         gameID =  itemView.findViewById(R.id.gameID);
-        time = itemView.findViewById(R.id.timeSecondsView);
         players = itemView.findViewById(R.id.Players);
         spectate_button = itemView.findViewById(R.id.Spectate_Button);
     }

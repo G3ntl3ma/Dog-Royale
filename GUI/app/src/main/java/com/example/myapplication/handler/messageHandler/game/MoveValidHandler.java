@@ -1,18 +1,19 @@
-package GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.game;
+package com.example.myapplication.handler.messageHandler.game;
 
-import GUI.app.src.main.java.com.example.myapplication.handler.Handler;
-import GUI.app.src.main.java.com.example.myapplication.handler.HandlingException;
-import GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.menu.MenuMessageHandler;
-import GUI.app.src.main.java.com.example.myapplication.messages.game.TypeGame;
+import com.example.myapplication.handler.Handler;
+import com.example.myapplication.handler.HandlingException;
+import com.example.myapplication.handler.messageHandler.menu.MenuMessageHandler;
+import com.example.myapplication.messages.game.Response;
+import com.example.myapplication.messages.game.TypeGame;
 import com.example.myapplication.messages.game.MoveValid;
 
-public class MoveValidHandler extends Handler implements MenuMessageHandler<com.example.myapplication.messages.game.MoveValid> {
+public class MoveValidHandler extends Handler implements MenuMessageHandler<MoveValid> {
 
     @Override
     public String handle(MoveValid message) throws HandlingException {
         //TODO just show message invalid move if it isn't
         try {//send Updated
-            com.example.myapplication.messages.game.Response response = new com.example.myapplication.messages.game.Response();
+            Response response = new Response();
             response.setUpdated(true);
 
             return gson.toJson(response);

@@ -11,4 +11,8 @@ import lombok.Data;
 @Data
 public class ConnectedToGame {
     private boolean success;
+
+    public boolean isSuccess() {
+        return success;
+    }
 }
