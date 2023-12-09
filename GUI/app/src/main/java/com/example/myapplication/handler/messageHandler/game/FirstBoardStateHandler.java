@@ -12,7 +12,7 @@ public class FirstBoardStateHandler extends Handler implements GameMessageHandle
         // TODO create Game Board
         try {
             Response response = new Response();
-            response.setUpdated(true);
+           // response.setUpdated(true);
 
             return gson.toJson(response);
         } catch (Exception e) {
