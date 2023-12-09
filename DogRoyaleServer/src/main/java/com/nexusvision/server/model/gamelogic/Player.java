@@ -28,14 +28,14 @@ public final class Player {
     /**
      * Constructor for the Player
      *
-     * @param color       An Integer representing the color of the player
-     * @param figurecount An Integer representing the amount of figures a player has
+     * @param playerId       An Integer representing the playerId of the player
+     * @param figureCount An Integer representing the amount of figures a player has
      */
-    public Player(int playerId, int figurecount) {
-        this.figuresInBank = figurecount;
+    public Player(int playerId, int figureCount) {
+        this.figuresInBank = figureCount;
         this.playerId = playerId;
         this.lastMoveCountFigureMovedIntoHouse = 0;
-        for (int i = 0; i < figurecount; i++) {
+        for (int i = 0; i < figureCount; i++) {
             figures.add(new Figure(playerId));
         }
     }
@@ -61,7 +61,7 @@ public final class Player {
      * Prints information player, figures in bank, figures in house and the cards
      */
     public void printInfo() {
-        System.out.print("player " + this.playerId + " figbank " + this.figuresInBank + " figs in house " + this.figuresInHouse);
+        System.out.print("player " + this.playerId + " figBank " + this.figuresInBank + " figs in house " + this.figuresInHouse);
         System.out.print(" cards ");
         this.printCards();
         System.out.println("");
