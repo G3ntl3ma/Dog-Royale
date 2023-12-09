@@ -1,6 +1,6 @@
 package com.example.myapplication.messages.menu;
 
-import com.example.myapplication.messages.game.AbstractGameMessage;
+
 import lombok.Data;
 
 /**

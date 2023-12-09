@@ -1,4 +1,4 @@
-package GUI.app.src.main.java.com.example.myapplication.handler;
+package com.example.myapplication.handler;
 
 import lombok.Getter;
 
@@ -38,5 +38,9 @@ public class HandlingException extends Exception {
     public HandlingException(String message, Throwable cause, int type) {
         super(message, cause);
         this.type = type;
+    }
+
+    public int getType() {
+        return this.type;
     }
 }

@@ -1,4 +1,4 @@
-package GUI.app.src.main.java.com.example.myapplication.messages.game;
+package com.example.myapplication.messages.game;
 
 public enum TypeGame {
     liveTimer,

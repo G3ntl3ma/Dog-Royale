@@ -11,4 +11,8 @@ import lombok.Data;
 @Data
 public class ConnectedToGame extends AbstractMenuMessage {
     private boolean success;
+
+    public boolean isSuccess() {
+        return success;
+    }
 }

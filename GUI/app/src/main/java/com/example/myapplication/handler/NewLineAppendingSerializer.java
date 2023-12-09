@@ -1,4 +1,4 @@
-package GUI.app.src.main.java.com.example.myapplication.handler;
+package com.example.myapplication.handler;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;

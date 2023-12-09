@@ -1,7 +1,9 @@
-package GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.game;
+package com.example.myapplication.handler.messageHandler.game;
+
+import com.example.myapplication.messages.game.Kick;
 
 public class KickHandler {
-    public void handle(com.example.myapplication.messages.game.Kick message) {
+    public void handle(Kick message) {
         //TODO
     };
 }

@@ -1,8 +1,8 @@
-package GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.game;
+package com.example.myapplication.handler.messageHandler.game;
 
-import GUI.app.src.main.java.com.example.myapplication.handler.Handler;
-import GUI.app.src.main.java.com.example.myapplication.handler.HandlingException;
-import GUI.app.src.main.java.com.example.myapplication.messages.sync.LiveTimer;
+import com.example.myapplication.handler.Handler;
+import com.example.myapplication.handler.HandlingException;
+import com.example.myapplication.messages.sync.LiveTimer;
 
 
 public class LiveTimerHandler extends Handler implements GameMessageHandler<LiveTimer> {

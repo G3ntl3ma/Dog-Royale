@@ -1,7 +1,9 @@
-package GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.menu;
+package com.example.myapplication.handler.messageHandler.menu;
+
+import com.example.myapplication.messages.menu.ReturnTechData;
 
 public class ReturnTechDataHandler {
-    public void handle(com.example.myapplication.messages.menu.ReturnTechData message) {
+    public void handle(ReturnTechData message) {
         //TODO Handle this
     };
 }

@@ -1,8 +1,7 @@
 package com.example.myapplication.messages.menu;
 
 
-import com.example.myapplication.messages.game.Abbrechen;
-import com.example.myapplication.messages.game.AbstractGameMessage;
+
 import lombok.Data;
 
 import java.util.HashMap;

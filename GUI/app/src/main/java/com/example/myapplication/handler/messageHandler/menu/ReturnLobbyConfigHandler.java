@@ -1,8 +1,8 @@
-package GUI.app.src.main.java.com.example.myapplication.handler.messageHandler.menu;
+package com.example.myapplication.handler.messageHandler.menu;
 
-import GUI.app.src.main.java.com.example.myapplication.handler.Handler;
-import GUI.app.src.main.java.com.example.myapplication.handler.HandlingException;
-import GUI.app.src.main.java.com.example.myapplication.messages.menu.ReturnLobbyConfig;
+import com.example.myapplication.handler.Handler;
+import com.example.myapplication.handler.HandlingException;
+import com.example.myapplication.messages.menu.ReturnLobbyConfig;
 
 public class ReturnLobbyConfigHandler extends Handler implements MenuMessageHandler<ReturnLobbyConfig>{
     @Override

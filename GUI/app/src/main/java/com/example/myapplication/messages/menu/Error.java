@@ -1,4 +1,4 @@
-package GUI.app.src.main.java.com.example.myapplication.messages.menu;
+package com.example.myapplication.messages.menu;
 
 
 import lombok.Data;
@@ -10,6 +10,12 @@ import lombok.Data;
  */
 @Data
 public class Error extends AbstractMenuMessage {
+
     private TypeMenu dataId;
     private String message;
+
+
+    public void setMessage(String errorMessage) {
+        this.message = errorMessage;
+    }
 }
