@@ -120,8 +120,9 @@ public class GameLobby {
     public void addPlayer(int clientID, Colors color) {
         playerOrderList.add(clientID);
         playerColorMap.put(clientID, color);
+        // TODO: What if more players get added then maxPlayerCount allows?
         if (playerOrderList.size() == this.maxPlayerCount) {
-            gameState = GameState.IN_PROGRESS;
+            gameState = GameState.IN_PROGRESS; // TODO: Ausrichter decides when game gets started
         }
     }
 

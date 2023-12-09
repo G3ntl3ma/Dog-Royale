@@ -20,7 +20,7 @@ public class JoinGameAsObserverHandler extends MessageHandler<JoinGameAsObserver
         lobby.addObserver(message.getClientId());
 
         ConnectedToGame connectedToGame = new ConnectedToGame();
-        connectedToGame.setType(TypeMenue.joinGameAsObserver.getOrdinal());
+        connectedToGame.setType(TypeMenue.connectedToGame.getOrdinal());
         connectedToGame.setSuccess(true);
 
         return gson.toJson(connectedToGame);
