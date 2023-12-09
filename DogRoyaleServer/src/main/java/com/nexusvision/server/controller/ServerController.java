@@ -63,6 +63,12 @@ public class ServerController {
         }
     }
 
+    /**
+     * Searching for a game lobby associated with a specific player
+     *
+     * @param clientID An Integer representing the Id of the player for whom the associated game lobby is being searched
+     * @return An object representing the game the player is participating otherwise null
+     */
     public GameLobby getGameOfPlayer(int clientID) {
         for (int key : lobbyMap.keySet()) {
             GameLobby g = lobbyMap.get(key);
@@ -76,6 +82,13 @@ public class ServerController {
         return null;
     }
 
+    /**
+     * Gets a specific number of game lobbies in a particular game state
+     *
+     * @param gameCount An Integer representing the maximum number of games to retrieve
+     * @param state An Enum representing the game state for filtering
+     * @return An ArrayList containing gameCount amount (or less) of Game lobbies
+     */
     public ArrayList<GameLobby> getStateGames(int gameCount, GameState state) {
         int foundCount = 0;
         ArrayList<GameLobby> gameLobbys = new ArrayList<>();
@@ -90,6 +103,12 @@ public class ServerController {
         return gameLobbys;
     }
 
+    /**
+     * Sends a message to all members of a game lobby
+     *
+     * @param lobby An Object representing the lobby to which the message should be sent
+     * @param message A String representing the message to be broadcasted to all players in the lobby
+     */
     public void sendToAllLobbyMembers(GameLobby lobby, String message) {
         for (int clientId : lobby.getPlayerOrderList()) {
             //get the client
@@ -257,6 +276,21 @@ public class ServerController {
         return lobbyMap.get(lobbyID);
     }
 
+    /**
+     * Sets the configuration parameters for a game
+     *
+     * @param gameID An Integer representing the Id of the game
+     * @param playerCount An Integer representing the number of players in the game
+     * @param fieldSize An Integer representing the size of the gamefield
+     * @param figuresPerPlayer An Integer representing the number of figures each player has
+     * @param drawFieldpositions A List of Integers representing the position of the drawfields in the game
+     * @param startFields A List of Integers representing the positions of start fields on the game board
+     * @param initialCardsPerPlayer An Integer representing the initial number of cards each player recieves
+     * @param thinkingTimePerMove An Integer representing the maximum time a player has to make a move
+     * @param consequencesForInvalidMove An Integer representing the consequences for an invalid move
+     * @param maxGameDuration An Integer representing the maximum duration of a game
+     * @param maxTotalMoves An Integer representing the maximum total number of moves allowed in the game
+     */
     public void setConfiguration(int gameID, int playerCount, int fieldSize, int figuresPerPlayer, List<Integer> drawFieldpositions,
                                  List<Integer> startFields, int initialCardsPerPlayer, int thinkingTimePerMove,
                                  int consequencesForInvalidMove, int maxGameDuration, int maxTotalMoves) {
@@ -281,6 +315,11 @@ public class ServerController {
 //        return clientIDMapName.get(clientID);
 //    }
 
+    /**
+     * Gets the gamecount
+     *
+     * @return An Integer representing the count of games
+     */
     public int getGameCount() {
         return lobbyMap.size();
     }
@@ -289,6 +328,13 @@ public class ServerController {
 //        return clientIDMapObserver.get(clientID);
 //    }
 //
+
+    /**
+     * Checks if a ClientId is registered
+     *
+     * @param clientId An Integer representing the Id of the client
+     * @return A Boolean if true the clientId is registered
+     */
     public boolean clientIdRegistered(int clientId) {
         return clientMap.containsKey(clientId);
     }

@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * The GameLobby represents a lobby and handles the mangement of players, observers and game-related information
+ *
+ * @author dgehse, felixwr
+ */
 @Data
 public class GameLobby {
 

@@ -93,7 +93,6 @@ public class Card {
 	 * @param isStarter A boolean indicating whether the move is initiated by a starter card
 	 * @param opponentPieceId An optional parameter representing the identifier of an opponent's figure (can be null)
 	 * @param player An object representing the player making the move
-	 *
 	 * @return the first move of the ArrayList moves
 	 */
     public Move getMove(Game game, int selectedValue,

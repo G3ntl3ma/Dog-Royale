@@ -446,7 +446,6 @@ public final class Game {
      * @param pieceId An Integer representing the id of the piece
      * @param isStarter A Boolean indicating whether the move is the starting move
      * @param opponentPieceId An optional Integer representing the identifier of the opponent's piece
-     *
      * @return An object representing the Move to be executed, null if no cards left or illegal move
      */
     public Move getMove(boolean skip, CardType card, int selectedValue,
@@ -483,7 +482,6 @@ public final class Game {
      * @param pieceId An Integer representing the id of the piece
      * @param isStarter A Boolean indicating whether the move is the starting move
      * @param opponentPieceId An optional Integer representing the identifier of the opponent's piece
-     *
      * @return A Boolean indicating if move was legal or not
      */
     public boolean tryMove(boolean skip, int cardOrdinal, int selectedValue,
@@ -542,9 +540,7 @@ public final class Game {
      *
      * @param playerId An Integer representing Id of the player
      * @param pieceId An Integer representing Id of a figure
-     *
      * @return An Integer indicating the position of the figure in the house
-     *
      */
     public Integer getHousePosition(int playerId, int pieceId) {
 	Figure f = this.players.get(playerId).figures.get(pieceId);
