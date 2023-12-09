@@ -59,7 +59,7 @@ public class SpectateGamesAdapter extends RecyclerView.Adapter<SpectateGamesView
                     viewModel.setDrawFields(current_game.getDrawFields());
                     viewModel.setStart_fields(current_game.getStartFields());
                 NavHostFragment.findNavController(spectateGames)
-                        .navigate(R.id.action_SpectateGames_to_game_board_layout);
+                        .navigate(R.id.action_SpectateGames_to_waitingScreen);
             }
         });
     }

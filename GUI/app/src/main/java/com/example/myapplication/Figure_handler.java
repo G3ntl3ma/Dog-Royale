@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
-import android.os.health.SystemHealthManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.List;
 
@@ -21,6 +23,12 @@ public class Figure_handler {
 
     private int screen_width; //width of the screen the field is created in
 
+    private PlayerInformationTable playerInformationTable; //is the PlayerInformationTable in which we want to change the information about the figures in bank
+
+    private GameboardViewModel viewModel; // is the GameBoardViewModel in which we store information about the Gameboard globally
+
+
+
 
     /** Constructor
      *
@@ -32,7 +40,7 @@ public class Figure_handler {
      * @param homefield_size is the size of the homefields
      * @param screen_width is the width of the screen the field is created in
      */
-    public Figure_handler(RelativeLayout layout, int figure_count, int player_count, List<Integer> colors, int figure_size, int homefield_size, int screen_width)
+    public Figure_handler(RelativeLayout layout, int figure_count, int player_count, List<Integer> colors, int figure_size, int homefield_size, int screen_width, PlayerInformationTable playerInformationTable)
     {
         this.layout = layout;
         this.figure_count = figure_count;
@@ -41,6 +49,9 @@ public class Figure_handler {
         this.figure_size = figure_size;
         this.homefield_size = homefield_size;
         this.screen_width = screen_width;
+        this.playerInformationTable = playerInformationTable;
+
+        this.viewModel =  MainActivity.getGameboardViewModel();
     }
     public void setLayout(RelativeLayout layout)
     {
@@ -88,7 +99,7 @@ public class Figure_handler {
     }
 
 
-    /** creates the figures in the layout
+    /** creates figures in the layout
      *
      */
 
@@ -96,10 +107,12 @@ public class Figure_handler {
     {
         for (int j = 0; j < player_count; j++) //for each player
         {
+            int pieceId = 0; //id for piece
             for (int i = 0; i < figure_count; i++)  //create figure_count figures
             {
-                Figure figure = new Figure(i, j, screen_width,screen_width ,figure_size); //instanciating new figure
-                figure.createFigure(layout, colors.get(j));                 //creating it in the layout
+                Figure figure = new Figure(pieceId, j, screen_width,screen_width ,figure_size); //instanciating new figure
+                figure.createFigure(layout, colors.get(j));
+                pieceId++;//increasing pieceId by 1;
             }
         }
 
@@ -112,16 +125,19 @@ public class Figure_handler {
      * @param position is the position on the board, null if in House
      * @param isOnBench is true, if the figure is on the bench
      * @param inHousePosition is the position in the house, null if not in House
+     * @param round is the current round
      */
-    public void moveFigure(int playernumber, String pieceId, Integer position, boolean isOnBench, Integer inHousePosition)
+    public void moveFigure(int playernumber, int pieceId, Integer position, boolean isOnBench, Integer inHousePosition, Integer round, Integer move)
     {
 
-        ImageView figure = layout.findViewWithTag(pieceId);         //finding the figure in the layout
+        ImageView figure = layout.findViewWithTag("figure" + playernumber + "_" + pieceId);         //finding the figure in the layout
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) figure.getLayoutParams();  //getting the layoutparams of the figure
 
         if (isOnBench)
         {
             layoutParams.setMargins(layout.getWidth(), layout.getWidth(), 0, 0);    //setting the layoutparams to the bench (bench is just out of screen -> invisible)
+            viewModel.changeFigureInBankValue(playernumber, 1); //changing the value of figures in bank for the given player
+            System.out.println("Figures in Bank:" + viewModel.getFiguresInBank());
         }
         else
         {
@@ -144,7 +160,15 @@ public class Figure_handler {
                figure.setLayoutParams(layoutParams);
            }
         }
+        ConstraintLayout constraintLayout = (ConstraintLayout) layout.getParent(); //getting the Layout the TextView for turns is in
+        TextView turns = constraintLayout.findViewById(R.id.Turns); //getting the TextView for the turns
+        //setting the text
+        turns.setText("Move: " + move +"/" + viewModel.getGameInformation().getValue().getMaximumTotalMoves().toString());
+        TextView rounds = constraintLayout.findViewById(R.id.Rounds); //getting the TextView for the rounds
+        rounds.setText("Round: " + round.toString());
     }
+
+
 
 
 }

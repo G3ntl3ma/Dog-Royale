@@ -9,7 +9,7 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class RequestGameList extends com.example.myapplication.messages.menu.AbstractMenuMessage {
+public class RequestGameList  {
     private int clientID;
     private int gameCountStarting;
     private int gameCountInProgress;

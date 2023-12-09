@@ -27,11 +27,14 @@
         android:label="Spectate running Games"
         tools:layout="@layout/fragment_spectate_games">
         <action
-            android:id="@+id/action_current_games_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-        <action
             android:id="@+id/action_SpectateGames_to_game_board_layout"
             app:destination="@id/game_board_layout" />
+        <action
+            android:id="@+id/action_SpectateGames_to_waitingScreen"
+            app:destination="@id/waitingScreen" />
+        <action
+            android:id="@+id/action_SpectateGames_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
     </fragment>
     <fragment
         android:id="@+id/StartingGames"
@@ -44,6 +47,9 @@
         <action
             android:id="@+id/action_StartingGames_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_StartingGames_to_waitingScreen"
+            app:destination="@id/waitingScreen" />
     </fragment>
     <fragment
         android:id="@+id/matchHistory"
@@ -71,5 +77,14 @@
         <action
             android:id="@+id/action_startScreen_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/waitingScreen"
+        android:name="com.example.myapplication.WaitingScreen"
+        android:label="fragment_waiting_screen"
+        tools:layout="@layout/fragment_waiting_screen" >
+        <action
+            android:id="@+id/action_waitingScreen_to_game_board_layout"
+            app:destination="@id/game_board_layout" />
     </fragment>
 </navigation>

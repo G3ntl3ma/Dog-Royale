@@ -8,7 +8,7 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class RequestTournamentInfo extends AbstractMenuMessage {
+public class RequestTournamentInfo  {
     private int clientId;
     private int tournamentId;
 }

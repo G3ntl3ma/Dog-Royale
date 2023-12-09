@@ -28,6 +28,13 @@ public class GameboardViewModel extends ViewModel {
     MutableLiveData<int[]> start_fields = new MutableLiveData<>();
     MutableLiveData<int[]> drawFields = new MutableLiveData<>();
 
+    MutableLiveData<List<Integer>> FiguresInBank = new MutableLiveData<>(new ArrayList<Integer>(6));
+
+    MutableLiveData<List<Integer>> CardsInHand = new MutableLiveData<>(new ArrayList<Integer>(6));
+    MutableLiveData<PlayerInformationTable> playerInformationTable = new MutableLiveData<>();
+
+    MutableLiveData<Integer> LastPlayer = new MutableLiveData<>();
+
     public MutableLiveData<Integer> getField_size() {
         return field_size;
     }
@@ -60,13 +67,55 @@ public class GameboardViewModel extends ViewModel {
 
     public void setFigure_handler(Figure_handler figure_handler) {this.figure_handler.setValue(figure_handler);}
 
+
+    //////**********REPLACE WITH RETURN GAMEINFORMATION**********//////
     public MutableLiveData<GameInformation> getGameInformation() {
         //testweise
-       gameInformation.setValue(new GameInformation(new Integer(6), new Integer(100), new Integer(20) , Arrays.asList(new Color(1, R.color.p1_color), new Color(2, R.color.p2_color), new Color(3, R.color.p3_color), new Color(4, R.color.p4_color), new Color(5, R.color.p5_color), new Color(6, R.color.p6_color)), new DrawCardFields(5, Arrays.asList(1, 4, 7, 10, 13)), new StartFields(6, Arrays.asList(12, 0, 24, 83, 69, 45)), new Integer(5), new PlayerOrder(OrderType.fixed, Arrays.asList(new Order(1, "OwO"), new Order(2, "UwU"), new Order(3, "AwA"), new Order(4, "QwQ"), new Order(5, "XwX"))),  Arrays.asList(new Observer(new Integer(1), "OwO")), new Integer(5), new Integer(5), new Integer(1), new Integer(15), new Integer(5)));
+       gameInformation.setValue(new GameInformation(new Integer(6), new Integer(100), new Integer(20) , Arrays.asList(new Color(0, R.color.p1_color), new Color(1, R.color.p2_color), new Color(2, R.color.p3_color), new Color(3, R.color.p4_color), new Color(4, R.color.p5_color), new Color(5, R.color.p6_color)), new DrawCardFields(5, Arrays.asList(1, 4, 7, 10, 13)), new StartFields(6, Arrays.asList(12, 0, 24, 83, 69, 45)), new Integer(5), new PlayerOrder(OrderType.fixed, Arrays.asList(new Order(0, "OwO"), new Order(1, "UwU"), new Order(2, "AwA"), new Order(3, "QwQ"), new Order(4, "XwX"))),  Arrays.asList(new Observer(new Integer(1), "OwO")), new Integer(5), new Integer(5), new Integer(1), new Integer(15), new Integer(5)));
         return gameInformation;
     }
 
+    /**
+     * Sets the gameInformation
+     * @param gameInformation is the gameInformation to be set
+     */
     public void setGameInformation(GameInformation gameInformation) {
         this.gameInformation.setValue(gameInformation);
+
+    }
+
+    public MutableLiveData<List<Integer>> getFiguresInBank() {
+        return FiguresInBank;
+    }
+
+    public void setFiguresInBank(List<Integer> figuresInBank) {
+        FiguresInBank.setValue(figuresInBank);
+    }
+
+    public MutableLiveData<PlayerInformationTable> getPlayerInformationTable() {
+        return playerInformationTable;
+    }
+
+    public void setPlayerInformationTable(PlayerInformationTable playerInformationTable) {
+        this.playerInformationTable.setValue(playerInformationTable);
+    }
+
+    public MutableLiveData<Integer> getLastPlayer() {
+        return LastPlayer;
+    }
+
+    public void setLastPlayer(Integer lastPlayer) {
+        LastPlayer.setValue(lastPlayer);
+    }
+
+    /**
+     * Changes the value of figuresInBank for the given amount for the given playerww
+     * @param playerNumber the number of the player
+     * @param figureNumber the number of figures to change
+     */
+    public void changeFigureInBankValue(int playerNumber, int figureNumber) {
+        List<Integer> temp = this.FiguresInBank.getValue();
+        temp.set(playerNumber, temp.get(playerNumber) + figureNumber);
+        FiguresInBank.setValue(temp);
     }
 }

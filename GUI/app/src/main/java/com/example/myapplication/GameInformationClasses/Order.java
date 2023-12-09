@@ -8,4 +8,12 @@ public class Order {
         this.clientId = clientId;
         this.name = name;
     }
+
+    public Integer getClientId(){
+        return this.clientId;
+    }
+
+    public String getName(){
+        return this.name;
+    }
 }
