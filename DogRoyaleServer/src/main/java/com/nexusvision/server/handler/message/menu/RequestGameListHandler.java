@@ -12,15 +12,24 @@ import com.nexusvision.server.model.messages.menu.TypeMenue;
 import java.util.ArrayList;
 
 /**
- * Handling all requests of type requestGameList
+ * Handling all requests of type <code>requestGameList</code>
  *
  * @author felixwr
  */
 public class RequestGameListHandler extends MessageHandler<RequestGameList> {
 
+    /**
+     * Handles a client's request for a list of games, retrieves game lobbies based on their states,
+     * prepares lists of game information, creates a ReturnGameList object.
+     * The response includes information about starting, running, and finished games.
+     *
+     * @param message An Instance of the <code>RequestGameList</code> representing a client's request for a list of games
+     * @param clientId An Integer representing the Id of the requesting client
+     * @return A JSON String representing the response to the client
+     */
     @Override
-    protected String performHandle(RequestGameList message, int clientID) throws HandlingException {
-        verifyClientID(clientID, message.getClientID());
+    protected String performHandle(RequestGameList message, int clientId) throws HandlingException {
+        verifyClientID(clientId, message.getClientID());
         ServerController serverController = ServerController.getInstance();
 
         ArrayList<GameLobby> startingLobbyList = serverController.getStateGames(message.getGameCountStarting(), GameState.STARTING);

@@ -1,9 +1,9 @@
 package com.nexusvision.config;
 
 import lombok.Getter;
-import org.apache.commons.configuration2.XMLConfiguration;
-import org.apache.commons.configuration2.builder.fluent.Configurations;
-import org.apache.commons.configuration2.ex.ConfigurationException;
+//import org.apache.commons.configuration2.XMLConfiguration;
+//import org.apache.commons.configuration2.builder.fluent.Configurations;
+//import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

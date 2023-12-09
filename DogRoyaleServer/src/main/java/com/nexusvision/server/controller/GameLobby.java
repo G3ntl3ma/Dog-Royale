@@ -48,6 +48,11 @@ public class GameLobby {
         isPaused = false;
     }
 
+    /**
+     * Receives and tracks responses from client
+     *
+     * @param clientId An Integer representing the Id of the client
+     */
     public void receiveResponse(int clientId) {
         for (int i = 0; i < this.receivedResponses.size(); i++) {
             if (clientId == this.receivedResponses.get(i)) return;
@@ -55,10 +60,20 @@ public class GameLobby {
         this.receivedResponses.add(clientId);
     }
 
+    /**
+     * Resets List of received responses
+     *
+     */
     public void resetResponseList() {
         this.receivedResponses = new ArrayList<>();
     }
 
+    /**
+     * Checks if it is the turn of the player with a certain clientId
+     *
+     * @param clientId An Integer representing the Id of the player to check if it is their turn
+     * @return A Boolean true if its the player's turn otherwise false
+     */
     public boolean checkPlayerTurn(int clientId) {
         for (int playerId = 0; playerId < this.playerOrderList.size(); playerId++) {
             if (this.playerOrderList.get(playerId) == clientId) {
@@ -70,9 +85,14 @@ public class GameLobby {
     }
 
     //check if playerorderlist + observerlist is subset of received responses
+    /**
+     * Checks whether responses have been received from every player and observer in the game lobby
+     *
+     * @return A Boolean indicating if responses from every player and observer have been received or not
+     */
     public boolean receivedFromEveryone() {
         for (int i = 0; i < this.playerOrderList.size(); i++) {
-            //check if this id is in the list of reponses
+            //check if this id is in the list of responses
             int idToFind = this.playerOrderList.get(i);
             boolean found = false;
             for (int j = 0; j < this.receivedResponses.size(); j++) {
@@ -101,30 +121,30 @@ public class GameLobby {
     /**
      * Adds an observer to the lobby
      *
-     * @param clientID The client ID of the observer being added
+     * @param clientId The client Id of the observer being added
      */
-    public void addObserver(int clientID) {
-        observerList.add(clientID);
+    public void addObserver(int clientId) {
+        observerList.add(clientId);
     }
 
     /**
      * Removes an observer from the lobby
      *
-     * @param clientID The client ID of the observer being removed
+     * @param clientId The client Id of the observer being removed
      */
-    public void removeObserver(int clientID) {
-        observerList.remove(clientID);
+    public void removeObserver(int clientId) {
+        observerList.remove(clientId);
     }
 
     /**
      * Adds a player to the lobby
      *
-     * @param clientID The client ID of the player being added
+     * @param clientId The client Id of the player being added
      * @param color    The color of the player being added
      */
-    public void addPlayer(int clientID, Colors color) {
-        playerOrderList.add(clientID);
-        playerColorMap.put(clientID, color);
+    public void addPlayer(int clientId, Colors color) {
+        playerOrderList.add(clientId);
+        playerColorMap.put(clientId, color);
         // TODO: What if more players get added then maxPlayerCount allows?
         if (playerOrderList.size() == this.maxPlayerCount) {
             gameState = GameState.IN_PROGRESS; // TODO: Ausrichter decides when game gets started
@@ -134,18 +154,18 @@ public class GameLobby {
     /**
      * Removes a player from the lobby
      *
-     * @param clientID The client ID of the player being removed
+     * @param clientId The client Id of the player being removed
      */
-    public void removePlayer(int clientID) {
-        playerOrderList.remove(clientID);
-        playerColorMap.remove(clientID);
+    public void removePlayer(int clientId) {
+        playerOrderList.remove(clientId);
+        playerColorMap.remove(clientId);
         if (playerOrderList.isEmpty()) {
             gameState = GameState.FINISHED;
         }
     }
 
     // TODO
-    public void getColorOfPlayer(int clientID) { //return colortype
+    public void getColorOfPlayer(int clientId) { //return colortype
 
     }
 
@@ -158,20 +178,43 @@ public class GameLobby {
         return playerOrderList.size();
     }
 
+    /**
+     * Sets GameState to <code>IN_PROGRESS</code>
+     *
+     */
     // TODO: Sending board states to all clients (somehow, maybe not inside this class)
     public void runGame() {
         gameState = GameState.IN_PROGRESS;
     }
 
+    /**
+     * Unpauses the game
+     *
+     */
     public void unpauseGame() {
         isPaused = false;
     }
 
+    /**
+     * Pause the game
+     *
+     */
     public void pauseGame() {
         isPaused = true;
     }
 
     //success boolean
+    /**
+     * Attempts to make a move
+     *
+     * @param skip A Boolean indicating whether to skip the move or not
+     * @param card An Integer representing the card used for the move
+     * @param selectedValue An Integer representing a selected value for the move
+     * @param pieceId An Integer representing the Id of the figure involved in the move
+     * @param isStarter A Boolean indicating if the move is a starter move
+     * @param opponentPieceId An Integer representing the Id of the opponents figure
+     * @return A Boolean indicating if the move was successful
+     */
     public boolean tryMove(boolean skip, int card, int selectedValue,
                            int pieceId, boolean isStarter, Integer opponentPieceId) {
         boolean success = this.game.tryMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
@@ -179,6 +222,20 @@ public class GameLobby {
 	return success;
     }
 
+    /**
+     * Sets the configuration parameters for a game
+     *
+     * @param playerCount An Integer representing the number of players in the game
+     * @param fieldSize An Integer representing the size of the gamefield
+     * @param figuresPerPlayer An Integer representing the number of figures each player has
+     * @param drawFieldpositions A List of Integers representing the position of the drawfields in the game
+     * @param startFields A List of Integers representing the positions of start fields on the game board
+     * @param initialCardsPerPlayer An Integer representing the initial number of cards each player recieves
+     * @param thinkingTimePerMove An Integer representing the maximum time a player has to make a move
+     * @param consequencesForInvalidMove An Integer representing the consequences for an invalid move
+     * @param maxGameDuration An Integer representing the maximum duration of a game
+     * @param maxTotalMoves An Integer representing the maximum total number of moves allowed in the game
+     */
     //success boolean
     public boolean setConfiguration(int playerCount, int fieldSize, int figuresPerPlayer, List<Integer> drawFieldpositions,
                                     List<Integer> startFields, int initialCardsPerPlayer, int thinkingTimePerMove,

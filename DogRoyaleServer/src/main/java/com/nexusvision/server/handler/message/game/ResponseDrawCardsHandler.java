@@ -4,15 +4,15 @@ import com.nexusvision.server.controller.GameLobby;
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.message.MessageHandler;
 import com.nexusvision.server.model.gamelogic.Game;
-import com.nexusvision.server.model.messages.game.Move;
+import com.nexusvision.server.model.messages.game.*;
 import com.nexusvision.server.model.messages.game.UpdateDrawCards;
 
 import java.util.ArrayList;
 
 //3.5
-public class ResponseDrawCardsHandler extends MessageHandler<Move> {
+public class ResponseDrawCardsHandler extends MessageHandler<Response> {
     @Override
-    protected String performHandle(Move message, int clientID) {
+    protected String performHandle(Response message, int clientID) {
         //update draw card
         ServerController serverController = ServerController.getInstance();
         GameLobby gameLobby = serverController.getGameOfPlayer(clientID);

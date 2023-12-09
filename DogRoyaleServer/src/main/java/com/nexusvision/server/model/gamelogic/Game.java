@@ -30,6 +30,7 @@ public final class Game {
     private int playerToMoveColor;
     final int maximumTotalMoves;
     private Card drawnCard;
+    private ArrayList<Card> discardedCards;
     int movesMade;
     int playersRemaining;
     private int round; //round counter
@@ -123,8 +124,9 @@ public final class Game {
      * Discarding a player's hand considering the state of the pile
      *
      */
-    public void discardHandCards() {
+    public ArrayList<Card> discardHandCards() {
 	Player player = this.getCurrentPlayer();
+	this.discardedCards = new ArrayList<>(player.cards);
 	if (player.cards.size() > 0) {
 	    if (this.pile.size() > 0) {
 		//keep the last card the same
@@ -139,6 +141,7 @@ public final class Game {
 	    }
 	    player.cards = new ArrayList<>();
 	}
+	return discardedCards;
     }
 
     /**
@@ -503,9 +506,9 @@ public final class Game {
      *
      * @param player An object representing the player to exclude from the round
      */
-    public void excludeFromRound(Player player) {
-	this.discardHandCards(); //of current player
+    public void excludeFromRound(Player player) { //return cards??
 	this.playersRemaining--;
+	this.discardHandCards(); //of current player
 	// this.nextPlayer();
     }
 
@@ -517,7 +520,8 @@ public final class Game {
     public void excludeFromGame(Player player) {
 	player.setExclude();
 	this.playersRemaining--;
-	// this.nextPlayer();
+	this.discardHandCards();
+	//TODO throw away cards
     }
 
     /**
