@@ -18,16 +18,23 @@ import lombok.Data;
  */
 public class ConnectToServerHandler extends MessageHandler<ConnectToServer> {
 
+    /**
+     * Handles a <code>connectToServer</code> request
+     *
+     * @param message An instance of <code>connectToServer</code> representing the client's connection request message
+     * @param clientId An Integer representing the Id of the client
+     * @return A String representing a <code>ConnectedToServer</code> message
+     */
     @Override
-    protected String performHandle(ConnectToServer message, int clientID) throws HandlingException {
+    protected String performHandle(ConnectToServer message, int clientId) throws HandlingException {
             ServerController serverController = ServerController.getInstance();
-            Client client = serverController.getClientById(clientID);
+            Client client = serverController.getClientById(clientId);
             client.setName(message.getName());
             client.setObserver(message.getIsObserver());
 
             ConnectedToServer connectedToServer = new ConnectedToServer();
             connectedToServer.setType(TypeMenue.connectedToServer.getOrdinal());
-            connectedToServer.setClientId(clientID);
+            connectedToServer.setClientId(clientId);
 
             return gson.toJson(connectedToServer);
     }

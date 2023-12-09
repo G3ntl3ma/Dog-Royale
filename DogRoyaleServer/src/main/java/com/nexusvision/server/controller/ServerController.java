@@ -66,15 +66,15 @@ public class ServerController {
     /**
      * Searching for a game lobby associated with a specific player
      *
-     * @param clientID An Integer representing the Id of the player for whom the associated game lobby is being searched
+     * @param clientId An Integer representing the Id of the player for whom the associated game lobby is being searched
      * @return An object representing the game the player is participating otherwise null
      */
-    public GameLobby getGameOfPlayer(int clientID) {
+    public GameLobby getGameOfPlayer(int clientId) {
         for (int key : lobbyMap.keySet()) {
             GameLobby g = lobbyMap.get(key);
             //see if player in players of game
             for (int i = 0; i < g.getPlayerOrderList().size(); i++) {
-                if (g.getPlayerOrderList().get(i) == clientID) {
+                if (g.getPlayerOrderList().get(i) == clientId) {
                     return g;
                 }
             }
@@ -235,13 +235,13 @@ public class ServerController {
     }
 
     /**
-     * Gets the client object linked to clientID
+     * Gets the client object linked to clientId
      *
-     * @param clientID The search parameter to find the client object
+     * @param clientId The search parameter to find the client object
      * @return The client object
      */
-    public Client getClientById(int clientID) {
-        return clientMap.get(clientID);
+    public Client getClientById(int clientId) {
+        return clientMap.get(clientId);
     }
 
     /**
