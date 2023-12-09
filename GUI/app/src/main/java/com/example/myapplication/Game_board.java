@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.example.myapplication.GameInformationClasses.Color;
 import com.example.myapplication.GameInformationClasses.Order;
 import com.example.myapplication.databinding.FragmentGameBoardBinding;
+import com.example.myapplication.messages.game.BoardState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,8 +59,8 @@ public class Game_board extends Fragment {
     private LastCard last_card; //the last card played
     private GameboardViewModel viewModel; // is the GameBoardViewModel in which we store information about the Gameboard globally
     //testwise
-    private int position = 2 ; // positions for the test figure to move - I know we dont get the change but the new position but that doesnt matter
-
+    private int position = 0 ; // positions for the test figure to move - I know we dont get the change but the new position but that doesnt matter
+    private int move_count = 0;
     public Game_board() {
         // Required empty public constructor
     }
@@ -183,6 +184,7 @@ public class Game_board extends Fragment {
         List<Order> order = gameInformation.getPlayerOrder().getOrder();
         PlayerInformationTable playerInformationTable = new PlayerInformationTable(playerInformationTableView, order, player_count, figure_count, gameInformation.getInitialCardsPerPlayer());
         playerInformationTable.BuildTable();
+        viewModel.setPlayerInformationTable(playerInformationTable);
                     //instanziating  the figure handler
         Figure_handler figure_handler = new Figure_handler(GameBoard, figure_count, player_count, colors, creator.getField_width(), creator.getHomefield_size(), pxWidth, playerInformationTable);
         figure_handler.create_figures(); //creating the figures
@@ -191,6 +193,9 @@ public class Game_board extends Fragment {
         viewModel.setFigure_handler(figure_handler); //setting the figure handler for the viewModel to use it in different classes later on
         //
         //
+
+        //Setting the first move to the first player
+        viewModel.setLastPlayer(new Integer(0));
 
         //creating the timer
         Timer timer = new Timer(600_000, binding);
@@ -202,21 +207,19 @@ public class Game_board extends Fragment {
 
         //NUR ZUM TESTEN für figuren movement
 
+
         binding.moveFigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (((RelativeLayout.LayoutParams) GameBoard.findViewWithTag("figure0_1").getLayoutParams()).leftMargin == pxWidth) {
-                    figure_handler.moveFigure(0, "figure0_1", position, false, null, position);
-                } else {
-                    position += 2;
-                    if (position >= field_size) {
-                        figure_handler.moveFigure(0, "figure0_1", null, false, position - field_size, position );
-                    } else {
-                        figure_handler.moveFigure(0, "figure0_1", position, false, null, position);
-                    }
+                BoardUpdater boardUpdater = new BoardUpdater();
+                List<BoardState.Piece> pieces = new ArrayList<>();
+                pieces.add(new BoardState.Piece(0, 0, position, false, 0));
 
-                }
+                BoardState boardState = new BoardState(pieces, null, null, 0, move_count, 0, false, null);
+                boardUpdater.UpdateBoard(boardState);
+                position++;
+                move_count++;
             }
 
         });

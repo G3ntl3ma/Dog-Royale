@@ -3,6 +3,7 @@ package com.example.myapplication;
 import com.example.myapplication.GameInformationClasses.Color;
 import com.example.myapplication.GameInformationClasses.DrawCardFields;
 import com.example.myapplication.GameInformationClasses.Observer;
+import com.example.myapplication.GameInformationClasses.Order;
 import com.example.myapplication.GameInformationClasses.PlayerOrder;
 import com.example.myapplication.GameInformationClasses.StartFields;
 
@@ -47,6 +48,10 @@ public class GameInformation {
     public static Integer maximumTotalMoves;
 
 
+    //puts the clientId and the order of the player in a dictionary for easier access
+    public static Dictionary<Integer, Integer> playerOrderDictionary = new Hashtable<Integer, Integer>();
+
+
 
     public GameInformation(Integer playerCount, Integer fieldsize, Integer figuresPerPlayer, List<Color> colors, DrawCardFields drawCardFields, StartFields startFields, Integer initialCardsPerPlayer, PlayerOrder playerOrder, List<Observer> observer, Integer thinkTimePerMove, Integer visualizationTimePerMove, Integer consequencesForInvalidMove, Integer maximumGameDuration, Integer maximumTotalMoves) {
         this.playerCount = playerCount;
@@ -63,6 +68,12 @@ public class GameInformation {
         this.consequencesForInvalidMove = consequencesForInvalidMove;
         this.maximumGameDuration = maximumGameDuration;
         this.maximumTotalMoves = maximumTotalMoves;
+
+        int count = 0;
+        for (Order order : playerOrder.getOrder()) {
+            playerOrderDictionary.put(order.getClientId(), count);
+            count++;
+        }
     }
 
     public static void setPlayerCount(Integer playerCount) {
@@ -177,6 +188,12 @@ public class GameInformation {
     public static Integer getMaximumTotalMoves() {
         return maximumTotalMoves;
     }
+
+    public Integer getPlayerClientNumber(Integer clientId) {
+        return playerOrderDictionary.get(clientId);
+    }
+
+
 
 }
 

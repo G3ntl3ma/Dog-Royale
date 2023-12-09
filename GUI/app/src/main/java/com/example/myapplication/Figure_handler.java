@@ -98,10 +98,8 @@ public class Figure_handler {
         return figure_size;
     }
 
-    private int turn = 1;
 
-
-    /** creates the figures in the layout
+    /** creates figures in the layout
      *
      */
 
@@ -109,10 +107,12 @@ public class Figure_handler {
     {
         for (int j = 0; j < player_count; j++) //for each player
         {
+            int pieceId = 0; //id for piece
             for (int i = 0; i < figure_count; i++)  //create figure_count figures
             {
-                Figure figure = new Figure(i, j, screen_width,screen_width ,figure_size); //instanciating new figure
-                figure.createFigure(layout, colors.get(j));                 //creating it in the layout
+                Figure figure = new Figure(pieceId, j, screen_width,screen_width ,figure_size); //instanciating new figure
+                figure.createFigure(layout, colors.get(j));
+                pieceId++;//increasing pieceId by 1;
             }
         }
 
@@ -127,16 +127,17 @@ public class Figure_handler {
      * @param inHousePosition is the position in the house, null if not in House
      * @param round is the current round
      */
-    public void moveFigure(int playernumber, String pieceId, Integer position, boolean isOnBench, Integer inHousePosition, Integer round)
+    public void moveFigure(int playernumber, int pieceId, Integer position, boolean isOnBench, Integer inHousePosition, Integer round, Integer move)
     {
 
-        ImageView figure = layout.findViewWithTag(pieceId);         //finding the figure in the layout
+        ImageView figure = layout.findViewWithTag("figure" + playernumber + "_" + pieceId);         //finding the figure in the layout
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) figure.getLayoutParams();  //getting the layoutparams of the figure
 
         if (isOnBench)
         {
             layoutParams.setMargins(layout.getWidth(), layout.getWidth(), 0, 0);    //setting the layoutparams to the bench (bench is just out of screen -> invisible)
             viewModel.changeFigureInBankValue(playernumber, 1); //changing the value of figures in bank for the given player
+            System.out.println("Figures in Bank:" + viewModel.getFiguresInBank());
         }
         else
         {
@@ -162,10 +163,9 @@ public class Figure_handler {
         ConstraintLayout constraintLayout = (ConstraintLayout) layout.getParent(); //getting the Layout the TextView for turns is in
         TextView turns = constraintLayout.findViewById(R.id.Turns); //getting the TextView for the turns
         //setting the text
-        turns.setText("Turn: " + turn +"/" + viewModel.getGameInformation().getValue().getMaximumTotalMoves().toString());
+        turns.setText("Move: " + move +"/" + viewModel.getGameInformation().getValue().getMaximumTotalMoves().toString());
         TextView rounds = constraintLayout.findViewById(R.id.Rounds); //getting the TextView for the rounds
         rounds.setText("Round: " + round.toString());
-        this.turn +=1;
     }
 
 

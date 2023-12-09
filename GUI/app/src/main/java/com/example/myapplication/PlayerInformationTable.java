@@ -13,6 +13,8 @@ import com.example.myapplication.GameInformationClasses.Order;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PlayerInformationTable {
@@ -27,7 +29,7 @@ public class PlayerInformationTable {
 
     private Integer StartCards;
 
-
+    private List<Integer> cardsInHand;
     private GameboardViewModel viewModel;
 
 
@@ -47,6 +49,7 @@ public class PlayerInformationTable {
         this.StartCards = StartCards;
 
         this.viewModel = MainActivity.getGameboardViewModel();
+        this.cardsInHand = new ArrayList<>(Arrays.asList(StartCards, StartCards, StartCards, StartCards, StartCards, StartCards, StartCards));
     }
 
     /**
@@ -63,8 +66,8 @@ public class PlayerInformationTable {
      */
     public void BuildTable(){
 
-        for (Order name: playerNames) {
-            LinearLayout Player = new LinearLayout(layout.getContext());
+        for (Order name: playerNames) { //for every player in Order
+            LinearLayout Player = new LinearLayout(layout.getContext()); //creates LinearLayout to hold Views for player
             Player.setOrientation(LinearLayout.VERTICAL);
 
             Player.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -73,6 +76,8 @@ public class PlayerInformationTable {
             Player.setMinimumWidth(ConvertDpToPx(100));
 
             Player.setTag("Player" + name.getClientId());
+
+            System.out.println(Player.getTag());
 
             TextView PlayerText = new TextView(layout.getContext());
             PlayerText.setText(name.getName());
@@ -94,7 +99,9 @@ public class PlayerInformationTable {
             TextView figuresInBank = new TextView(layout.getContext());
             figuresInBank.setText("Figures in Bank: " + "\n" + StartFigures);
             figuresInBank.setTextAppearance(R.style.gameBoardTheme);
-            figuresInBank.setTag("Figures in Bank" + StartFigures);
+            figuresInBank.setTag("Player" + name.getClientId() + "Figures");
+
+            System.out.println("gegebener Tag:" + figuresInBank.getTag());
             LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutParams3.setMargins(0, ConvertDpToPx(10), 0, 0);
             figuresInBank.setLayoutParams(layoutParams3);
@@ -123,7 +130,9 @@ public class PlayerInformationTable {
      * @param figuresInBank is the new value of figures in bank
      */
     public void changeFigureInfo(Integer clientId, Integer figuresInBank){
+        //finds Textview for figures in bank for player
         TextView figuresInBankView = layout.findViewWithTag("Player" + clientId + "Figures");
+        //sets the text of the TextView to the new value
         figuresInBankView.setText("Figures in Bank: " + "\n" + figuresInBank);
     }
 
@@ -133,7 +142,23 @@ public class PlayerInformationTable {
      * @param cardsInHand is the new value of figures in bank
      */
     public void changeCardInfo(Integer clientId, Integer cardsInHand){
+        //finds Textview for cards in hand for player
         TextView cardsInHandView = layout.findViewWithTag("Player" + clientId + "Cards");
+        //sets the text of the TextView to the new value
         cardsInHandView.setText("Cards in Hand: " + "\n" + cardsInHand);
+    }
+
+    /**
+     * Changes the value of figuresInBank for the given amount for the given player dynamically (everytime called -> -1 cards)
+     * @param clientId is the number of the player
+     * @param gameInformation is the Information we want to take ClientId to PlayerNumber Conversion from
+     */
+    public void changeCardInfoDynamically(Integer clientId, GameInformation gameInformation)
+    {
+        TextView cardsInHandView = layout.findViewWithTag("Player" + clientId + "Cards"); //finds the TextView for cards in Hand for player
+        //sets the card value to card value -1 for player
+        cardsInHand.set(gameInformation.getPlayerClientNumber(clientId), this.cardsInHand.get(gameInformation.getPlayerClientNumber(clientId)) - 1);
+        //sets the text of the TextView to the new value
+        cardsInHandView.setText("Cards in Hand: " + "\n" + this.cardsInHand.get(gameInformation.getPlayerClientNumber(clientId)));
     }
 }
