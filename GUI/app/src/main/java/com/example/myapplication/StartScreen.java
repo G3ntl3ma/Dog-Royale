@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-import static com.example.myapplication.handler.messageHandler.menu.MenuMessageHandler.gson;
-
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,14 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.myapplication.controller.ClientController;
 import com.example.myapplication.databinding.FragmentStartScreenBinding;
-import com.example.myapplication.handler.HandlingException;
-import com.example.myapplication.handler.ServerHandler;
-import com.example.myapplication.messages.game.TypeGame;
-import com.example.myapplication.messages.menu.ConnectToServer;
-import com.example.myapplication.messages.menu.ConnectedToServer;
-import com.example.myapplication.messages.menu.TypeMenu;
 
 
 /**
@@ -31,7 +22,6 @@ import com.example.myapplication.messages.menu.TypeMenu;
 public class StartScreen extends Fragment {
     private StartScreenViewModel viewModel;
     FragmentStartScreenBinding binding;
-    ClientController clientController = ClientController.getInstance();
     public StartScreen() {
         // Required empty public constructor
     }
@@ -48,16 +38,9 @@ public class StartScreen extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-    // New method for navigation
-    public void navigateToFirstFragment() {
-        NavHostFragment.findNavController(StartScreen.this)
-                .navigate(R.id.action_startScreen_to_FirstFragment);
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
     }
 
@@ -86,25 +69,10 @@ public class StartScreen extends Fragment {
                 }
                 else {
                     viewModel.setUsername(username);
-                    ConnectToServer connectToServer = new ConnectToServer();
-                    connectToServer.setType(TypeMenu.connectToServer.getOrdinal());
-                    connectToServer.setName(username);
-                    connectToServer.setIsObserver(true);
-                    binding.button.setEnabled(false);
-                    try{
-                        clientController.sendConnectToServerRequest(connectToServer,StartScreen.this);
-                    }
-                    catch (
-                            HandlingException e) {
-                        binding.button.setError("connection failed");
-                    }
-
-
-
+                    NavHostFragment.findNavController(StartScreen.this)
+                            .navigate(R.id.action_startScreen_to_FirstFragment);
                 }
-
             }
-
         });
     }
 }
