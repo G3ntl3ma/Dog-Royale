@@ -1,5 +1,10 @@
 package com.example.myapplication;
 
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.example.myapplication.GameInformationClasses.Order;
 import com.example.myapplication.messages.game.BoardState;
 
@@ -14,6 +19,8 @@ public class BoardUpdater {
     private PlayerInformationTable playerInformationTable;
     private GameInformation gameInformation;
 
+    private LinearLayout winnerOrder;
+
     public BoardUpdater()
     {
 
@@ -21,6 +28,8 @@ public class BoardUpdater {
         this.figure_handler = viewModel.getFigure_handler().getValue();
         this.playerInformationTable = viewModel.getPlayerInformationTable().getValue();
         this.gameInformation = viewModel.getGameInformation().getValue();
+        ConstraintLayout layout = (ConstraintLayout) figure_handler.getLayout().getParent();
+        this.winnerOrder = layout.findViewById(R.id.WinnerTable);
     }
 
     /**
@@ -29,6 +38,13 @@ public class BoardUpdater {
      */
     public void UpdateBoard(BoardState boardState)
     {
+        if (boardState.getGameOver())
+        {
+            TextView textView = new TextView(winnerOrder.getContext());
+            textView.setText("Game Over");
+
+        }
+
         viewModel.setFiguresInBank(new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0, 0 ,0 )));
         //setting the the figures to their new position
         for (   BoardState.Piece piece : boardState.getPieces()) {
@@ -43,6 +59,8 @@ public class BoardUpdater {
         //changing the CardsInHand Info in the PlayerInformationTable
         playerInformationTable.changeCardInfoDynamically(viewModel.getLastPlayer().getValue(), gameInformation);
         viewModel.setLastPlayer(boardState.getNextPlayer());
+
+
     }
 
 }
