@@ -3,7 +3,6 @@ package com.nexusvision.server.model.gamelogic;
 import com.nexusvision.server.model.enums.Penalty;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 //TODO tests to write
@@ -38,8 +37,8 @@ public class Main {
      * @param args Command-line arguments (Optional).
      */
     public static void main(String[] args) {
-	System.out.println("start");
-	
+        System.out.println("start");
+
         //s = start field, n = normal field, k = draw (k)carn
         String conf = "snnnnknnnnsnnnnknnnnsnnnnknnnn";
         int figureCount = 4;
@@ -58,7 +57,7 @@ public class Main {
         int handCardCount = 10;
 
         long start = System.currentTimeMillis();
-        long functime = 0;
+        long funcTime = 0;
 
         int gamesToPlay = 10000;
         int totalMoves = 0;
@@ -75,47 +74,45 @@ public class Main {
             int round = 0;
 
             while (winner == null) {
-                if(round != 0) {
+                if (round != 0) {
                     game.reshuffle();
-                    game.reinit();
+                    game.reInit();
                 }
                 game.distributeCards();
 
                 while (!game.roundOver() && winner == null) {
-                    long startfunc = System.currentTimeMillis();
+                    long startFunc = System.currentTimeMillis();
 
                     ArrayList<Move> moves = new ArrayList<>();
-                    Player curplyer = game.getCurrentPlayer();
-                    // System.out.println("gen moves for player " + curplyer.col);
-                    curplyer.generateMoves(game, moves); //TODO this is the slowest function by far
-                    long endfunc = System.currentTimeMillis();
-                    functime += (endfunc - startfunc);
-		    // moves.get(0).printcard();
-		    if(moves.size() > 0) {
-			if(curplyer.color == human) {
-			    game.printBoard();
-			    ArrayList<Move> humanmoves = new ArrayList<>();
-			    System.out.println("Enter a card to use: ");
-			    int cardinx = reader.nextInt();
-			    System.out.println("Enter a figure to use it on: ");
-			    int figinx = reader.nextInt();
-			    Figure chosenfigure = curplyer.figures.get(figinx);
-			    curplyer.cards.get(cardinx).getMoves(game, chosenfigure, humanmoves, curplyer);
-			    for (int ii = 0; ii < humanmoves.size(); ii++) {
-				humanmoves.get(ii).printmove();
-			    }
-			    System.out.println("choose a move: ");
-			    int moveinx = reader.nextInt();
-			    humanmoves.get(moveinx).printmove();
-			    humanmoves.get(moveinx).execute(game);
-			}
-			else { //computer move
-			    moves.get(0).execute(game);
-			}
-		    }
-		    else {
-			curplyer.setOutThisRound();
-		    }
+                    Player curPlayer = game.getCurrentPlayer();
+                    // System.out.println("gen moves for player " + curPlayer.col);
+                    curPlayer.generateMoves(game, moves); //TODO this is the slowest function by far
+                    long endFunc = System.currentTimeMillis();
+                    funcTime += (endFunc - startFunc);
+                    // moves.get(0).printcard();
+                    if (!moves.isEmpty()) {
+                        if (curPlayer.getPlayerId() == human) {
+                            game.printBoard();
+                            ArrayList<Move> humanMoves = new ArrayList<>();
+                            System.out.println("Enter a card to use: ");
+                            int cardInx = reader.nextInt();
+                            System.out.println("Enter a figure to use it on: ");
+                            int figInx = reader.nextInt();
+                            Figure chosenfigure = curPlayer.getFigures().get(figInx);
+                            curPlayer.getCards().get(cardInx).getMoves(game, chosenfigure, humanMoves, curPlayer);
+                            for (Move humanMove : humanMoves) {
+                                humanMove.printmove();
+                            }
+                            System.out.println("choose a move: ");
+                            int moveInx = reader.nextInt();
+                            humanMoves.get(moveInx).printmove();
+                            humanMoves.get(moveInx).execute(game);
+                        } else { //computer move
+                            moves.get(0).execute(game);
+                        }
+                    } else {
+                        curPlayer.setOutThisRound();
+                    }
                     // game.printBoard();
                     winners = game.getWinners();
                     winner = winners.get(0);
@@ -132,15 +129,16 @@ public class Main {
             // 	System.out.println("rank " + i + ":" + winners.get(i).color);
             // }
 
-            wins[winner.color]++;
+            assert winner != null;
+            wins[winner.getPlayerId()]++;
         }
         long end = System.currentTimeMillis();
 
-        System.out.println("total time " + (double) (end - start)/1000 + "s " + (double) gamesToPlay*1000/(end-start) + "games/s " + (double) totalMoves*1000/(end-start) + " moves/s");
+        System.out.println("total time " + (double) (end - start) / 1000 + "s " + (double) gamesToPlay * 1000 / (end - start) + "games/s " + (double) totalMoves * 1000 / (end - start) + " moves/s");
         for (int i = 0; i < players; i++) {
             System.out.println("player " + i + ": " + wins[i] + " wins");
         }
-        System.out.println( "functime/totaltime " + (double) (functime*100/(end - start)) + "%" );
+        System.out.println("funcTime/totaltime " + (double) (funcTime * 100 / (end - start)) + "%");
         reader.close();
 
     }

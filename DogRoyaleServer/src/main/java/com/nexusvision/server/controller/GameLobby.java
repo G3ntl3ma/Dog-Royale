@@ -18,6 +18,8 @@ import java.util.List;
 public class GameLobby {
 
     private final int id;
+    private final ServerController serverController;
+
     private Game game;
     private GameState gameState;
     private boolean isPaused;
@@ -46,6 +48,7 @@ public class GameLobby {
         this.observerList = observerList;
         gameState = GameState.STARTING;
         isPaused = false;
+        serverController = ServerController.getInstance();
     }
 
     /**
@@ -62,7 +65,6 @@ public class GameLobby {
 
     /**
      * Resets List of received responses
-     *
      */
     public void resetResponseList() {
         this.receivedResponses = new ArrayList<>();
@@ -71,13 +73,13 @@ public class GameLobby {
     /**
      * Checks if it is the turn of the player with a certain clientId
      *
-     * @param clientId An Integer representing the Id of the player to check if it is their turn
-     * @return A Boolean true if its the player's turn otherwise false
+     * @param clientId An Integer representing the ID of the player to check if it is their turn
+     * @return A Boolean true if it's the player's turn otherwise false
      */
     public boolean checkPlayerTurn(int clientId) {
         for (int playerId = 0; playerId < this.playerOrderList.size(); playerId++) {
             if (this.playerOrderList.get(playerId) == clientId) {
-                return this.game.getPlayerToMoveColor() == playerId;
+                return this.game.getPlayerToMoveId() == playerId;
             }
         }
         //client not a player
@@ -85,6 +87,7 @@ public class GameLobby {
     }
 
     //check if playerorderlist + observerlist is subset of received responses
+
     /**
      * Checks whether responses have been received from every player and observer in the game lobby
      *
@@ -145,7 +148,7 @@ public class GameLobby {
     public void addPlayer(int clientId, Colors color) {
         playerOrderList.add(clientId);
         playerColorMap.put(clientId, color);
-        // TODO: What if more players get added then maxPlayerCount allows?
+        // TODO: What if more players get added then maxPlayerCount allows? How to add with nickname?
         if (playerOrderList.size() == this.maxPlayerCount) {
             gameState = GameState.IN_PROGRESS; // TODO: Ausrichter decides when game gets started
         }
@@ -154,7 +157,7 @@ public class GameLobby {
     /**
      * Removes a player from the lobby
      *
-     * @param clientId The client Id of the player being removed
+     * @param clientId The client ID of the player being removed
      */
     public void removePlayer(int clientId) {
         playerOrderList.remove(clientId);
@@ -180,7 +183,6 @@ public class GameLobby {
 
     /**
      * Sets GameState to <code>IN_PROGRESS</code>
-     *
      */
     // TODO: Sending board states to all clients (somehow, maybe not inside this class)
     public void runGame() {
@@ -189,7 +191,6 @@ public class GameLobby {
 
     /**
      * Unpauses the game
-     *
      */
     public void unpauseGame() {
         isPaused = false;
@@ -197,44 +198,46 @@ public class GameLobby {
 
     /**
      * Pause the game
-     *
      */
     public void pauseGame() {
         isPaused = true;
     }
 
     //success boolean
+
     /**
      * Attempts to make a move
      *
-     * @param skip A Boolean indicating whether to skip the move or not
-     * @param card An Integer representing the card used for the move
-     * @param selectedValue An Integer representing a selected value for the move
-     * @param pieceId An Integer representing the Id of the figure involved in the move
-     * @param isStarter A Boolean indicating if the move is a starter move
-     * @param opponentPieceId An Integer representing the Id of the opponents figure
+     * @param skip            A Boolean indicating whether to skip the move or not
+     * @param card            An Integer representing the card used for the move
+     * @param selectedValue   An Integer representing a selected value for the move
+     * @param pieceId         An Integer representing the ID of the figure involved in the move
+     * @param isStarter       A Boolean indicating if the move is a starter move
+     * @param opponentPieceId An Integer representing the ID of the opponents figure
      * @return A Boolean indicating if the move was successful
      */
     public boolean tryMove(boolean skip, int card, int selectedValue,
                            int pieceId, boolean isStarter, Integer opponentPieceId) {
         boolean success = this.game.tryMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
-	boolean gameOver = this.game.nextPlayer(); //if no nextPlayer exists game is over
-	return success;
+        boolean gameOver = this.game.nextPlayer(); //if no nextPlayer exists game is over
+        int nextMoveClientId = this.playerOrderList.get(this.game.getPlayerToMoveId());
+        serverController.setMove(nextMoveClientId);
+        return success;
     }
 
     /**
      * Sets the configuration parameters for a game
      *
-     * @param playerCount An Integer representing the number of players in the game
-     * @param fieldSize An Integer representing the size of the gamefield
-     * @param figuresPerPlayer An Integer representing the number of figures each player has
-     * @param drawFieldpositions A List of Integers representing the position of the drawfields in the game
-     * @param startFields A List of Integers representing the positions of start fields on the game board
-     * @param initialCardsPerPlayer An Integer representing the initial number of cards each player recieves
-     * @param thinkingTimePerMove An Integer representing the maximum time a player has to make a move
+     * @param playerCount                An Integer representing the number of players in the game
+     * @param fieldSize                  An Integer representing the size of the gamefield
+     * @param figuresPerPlayer           An Integer representing the number of figures each player has
+     * @param drawFieldpositions         A List of Integers representing the position of the drawfields in the game
+     * @param startFields                A List of Integers representing the positions of start fields on the game board
+     * @param initialCardsPerPlayer      An Integer representing the initial number of cards each player recieves
+     * @param thinkingTimePerMove        An Integer representing the maximum time a player has to make a move
      * @param consequencesForInvalidMove An Integer representing the consequences for an invalid move
-     * @param maxGameDuration An Integer representing the maximum duration of a game
-     * @param maxTotalMoves An Integer representing the maximum total number of moves allowed in the game
+     * @param maxGameDuration            An Integer representing the maximum duration of a game
+     * @param maxTotalMoves              An Integer representing the maximum total number of moves allowed in the game
      */
     //success boolean
     public boolean setConfiguration(int playerCount, int fieldSize, int figuresPerPlayer, List<Integer> drawFieldpositions,

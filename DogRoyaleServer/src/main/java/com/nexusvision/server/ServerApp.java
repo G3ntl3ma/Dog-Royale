@@ -1,5 +1,6 @@
 package com.nexusvision.server;
 
+import com.nexusvision.config.AppConfig;
 import com.nexusvision.server.controller.ServerController;
 
 /**
@@ -8,7 +9,7 @@ import com.nexusvision.server.controller.ServerController;
  * @author felixwr
  */
 public class ServerApp {
-    private static final int PORT = 8082;
+    private static final int PORT = Integer.parseInt(AppConfig.getInstance().getProperty("port"));
 
     /**
      * Entry point for the server, sets up controller and connects to port

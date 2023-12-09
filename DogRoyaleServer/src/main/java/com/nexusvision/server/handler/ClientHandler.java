@@ -2,9 +2,11 @@ package com.nexusvision.server.handler;
 
 import com.google.gson.*;
 import com.nexusvision.server.controller.ServerController;
+import com.nexusvision.server.handler.message.game.ResponseHandler;
 import com.nexusvision.server.handler.message.menu.*;
+import com.nexusvision.server.model.messages.game.Response;
+import com.nexusvision.server.model.messages.game.TypeGame;
 import com.nexusvision.server.model.messages.menu.*;
-import com.nexusvision.utils.NewLineAppendingSerializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,8 +65,8 @@ public class ClientHandler extends Handler implements Runnable {
 
             String request, response;
             while (true) {
-                if ((request = reader.readLine()) != null) {
-                    response = handle(request);
+                if ((request = reader.readLine()) != null
+                        && (response = handle(request)) != null) {
                     writer.println(response);
                     writer.flush();
                 }
@@ -86,6 +88,19 @@ public class ClientHandler extends Handler implements Runnable {
     public void broadcast(String message) {
         this.broadcaster.write(message);
         this.broadcaster.flush();
+    }
+
+    /**
+     * Lets the client handler know that the game has started
+     *
+     * @return true if successful
+     */
+    public boolean startGame() {
+        if (expectedState != State.WAITING_FOR_GAME_START) {
+            return false;
+        }
+        expectedState = State.NO_MOVE;
+        return true;
     }
 
     /**
@@ -112,6 +127,8 @@ public class ClientHandler extends Handler implements Runnable {
                 return handleJoinGameAsParticipant(request);
             } else if (type == TypeMenue.requestTechData.getOrdinal()) {
                 return handleRequestTechData(request);
+            } else if (type == TypeGame.response.getOrdinal()) {
+                return handleResponse(request);
             }
             // TODO: Register for tournament, request tournament info, all game cases
             else {
@@ -234,7 +251,7 @@ public class ClientHandler extends Handler implements Runnable {
         try {
             JoinGameAsObserver joinGameAsObserver = gson.fromJson(request, JoinGameAsObserver.class);
             String response = new JoinGameAsObserverHandler().handle(joinGameAsObserver, clientID);
-            expectedState = State.START_GAME;
+            expectedState = State.WAITING_FOR_GAME_START;
             logger.info("Join game as observer was successful");
             return response;
         } catch (JsonSyntaxException e) {
@@ -257,7 +274,7 @@ public class ClientHandler extends Handler implements Runnable {
         try {
             JoinGameAsParticipant joinGameAsParticipant = gson.fromJson(request, JoinGameAsParticipant.class);
             String response = new JoinGameAsParticipantHandler().handle(joinGameAsParticipant, clientID);
-            expectedState = State.START_GAME;
+            expectedState = State.WAITING_FOR_GAME_START;
             logger.info("Join game as participant was successful");
             return response;
         } catch (JsonSyntaxException e) {
@@ -286,6 +303,27 @@ public class ClientHandler extends Handler implements Runnable {
     }
 
     /**
+     * Responsible for handling requests of type <code>response</code>
+     *
+     * @param request A String representing the request received from the client
+     * @return A String representing a response to the client's <code>response</code> message
+     * @throws HandlingException If anything goes wrong while handling the message
+     */
+    private String handleResponse(String request) throws HandlingException {
+        if (expectedState != State.NO_MOVE && expectedState != State.WAIT_FOR_MOVE) {
+            return handleError("Didn't expect message of type response", TypeGame.response.getOrdinal());
+        }
+        logger.info("Received response of client " + clientID);
+        try {
+            Response response = gson.fromJson(request, Response.class);
+            return new ResponseHandler().handle(response, clientID);
+        } catch (JsonSyntaxException e) {
+            return handleError("Wrong message format from type response",
+                    TypeMenue.requestTechData.getOrdinal(), e);
+        }
+    }
+
+    /**
      * Checks whether an object contains a field named "type" with a numeric value that can be represented as an integer
      *
      * @param jsonRequest A JSON object typically representing the request received from the client
@@ -305,9 +343,8 @@ public class ClientHandler extends Handler implements Runnable {
         REQUEST_GAME_LIST,
         FIND_TOURNAMENT,
         REQUEST_JOIN,
-        REQUEST_FIND_TOURNAMENT,
-        REQUEST_TECH_DATA,
-        START_GAME;
-        // TODO: Add requests for game
+        WAITING_FOR_GAME_START,
+        WAIT_FOR_MOVE,
+        NO_MOVE; // TODO: handle types
     }
 }

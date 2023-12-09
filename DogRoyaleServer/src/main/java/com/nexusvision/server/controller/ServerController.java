@@ -111,13 +111,47 @@ public class ServerController {
      */
     public void sendToAllLobbyMembers(GameLobby lobby, String message) {
         for (int clientId : lobby.getPlayerOrderList()) {
-            //get the client
-            ClientHandler handler = handlerMap.get(clientId);
-            try {
-                handler.broadcast(message);
-            } catch (Exception e) {
-            }
+            sendToClient(clientId, message);
         }
+    }
+
+    /**
+     * Sends a message to the specified clientId
+     *
+     * @param clientId The clientId which will receive the message
+     * @param message The message to be sent
+     */
+    public void sendToClient(int clientId, String message) {
+        ClientHandler handler = handlerMap.get(clientId);
+        try {
+            handler.broadcast(message);
+        } catch (Exception e) {
+            logger.error("Error while trying to send a message to " + clientId);
+        }
+    }
+
+    public void setMove(int clientId) {
+
+    }
+
+    /**
+     * Starts the game for all clients of the specified lobby
+     *
+     * @param lobby The lobby whose clients should get their game started
+     * @param boardStateMessage The boardStateMessage that is being used to start the game for the clients
+     * @return true if successful
+     */
+    public boolean startGameForLobby(GameLobby lobby, String boardStateMessage) {
+        boolean isSuccessful = true;
+        for (int clientId : lobby.getPlayerOrderList()) {
+            ClientHandler handler = handlerMap.get(clientId);
+            isSuccessful = isSuccessful && handler.startGame();
+        }
+        if (!isSuccessful) {
+            return false;
+        }
+        sendToAllLobbyMembers(lobby, boardStateMessage);
+        return true;
     }
 
     // ALLE NICHT NÖTIG DA EINE GAME LOBBY DAS GANZE ANBIETET

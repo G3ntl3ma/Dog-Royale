@@ -1,9 +1,6 @@
 package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.FieldType;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import lombok.Data;
 
 /**
@@ -12,23 +9,16 @@ import lombok.Data;
  * @author dgehse
  */
 @Data
-public final class Field  {
+public final class Field {
 
-    final int val; //TODO better name
-    final FieldType type;
+    private final int val; //TODO better name
+    private final FieldType type;
 
-    Figure figure;
+    private Figure figure;
+    private Field next;
+    private Field house;
+    private Field prev;  //these should be final TODO rename to set
 
-    Field next;
-    Field house;
-    Field prev;  //these should be final
-
-    /**
-     * Constructor that initializes a Field object
-     *
-     * @param val //TODO better name
-     * @param type An Enum representing the type of the Field
-     */
     public Field(int val, FieldType type) {
         this.val = val;
         this.figure = null;
@@ -38,14 +28,13 @@ public final class Field  {
     /**
      * Constructor that initializes a Field object
      *
-     * @param val //TODO better name
+     * @param val      //TODO better name
      * @param typeChar A Char representing the type of the Field
      */
     public Field(int val, char typeChar) {
         this.val = val;
         this.figure = null;
-        switch (typeChar)
-        {
+        switch (typeChar) {
             case 'h':
                 this.type = FieldType.HOUSE;
                 break;
@@ -76,30 +65,27 @@ public final class Field  {
 
     /**
      * Prints the value of val //TODO Better Name
-     *
      */
-    public void printval() {
+    public void printVal() {
         System.out.println(this.val);
     }
 
     /**
      * Prints the val of this, previous and next Field //TODO Better Name
-     *
      */
-    public void printvals() {
+    public void printVals() {
         System.out.println("this val");
         System.out.println(this.val);
         System.out.println("next val");
-        this.next.printval();
+        this.next.printVal();
         System.out.println("prev val");
-        this.prev.printval();
+        this.prev.printVal();
     }
 
     /**
      * Prints the type of the Field
-     *
      */
-    public void printtype() {
+    public void printType() {
 
         switch (type) {
             case NORMAL:
@@ -123,42 +109,14 @@ public final class Field  {
 
     /**
      * Prints the type of this, previous and next Field
-     *
      */
-    public void printtypes() {
+    public void printTypes() {
         System.out.println("this type");
         System.out.println(this.type);
         System.out.println("next type");
-        this.next.printtype();
+        this.next.printType();
         System.out.println("prev type");
-        this.prev.printtype();
-    }
-
-    /**
-     * Setter for next Field
-     *
-     * @param field An object representing a Field on the Board
-     */
-    public void setNext(Field field) {
-        this.next = field;
-    }
-
-    /**
-     * Setter for a house field
-     *
-     * @param field An object representing a Field on the Board
-     */
-    public void setHouse(Field field) {
-        this.house = field;
-    }
-
-    /**
-     * Setter for previous Field
-     *
-     * @param field An object representing a Field on the Board
-     */
-    public void setPrev(Field field) { //TODO rename to set
-        this.prev = field;
+        this.prev.printType();
     }
 
     /**
@@ -166,14 +124,13 @@ public final class Field  {
      *
      * @param figure An object representing a figure, which will be assigned to a field
      */
-    public void setfigure(Figure figure) {
+    public void setFigure(Figure figure) {
         this.figure = figure;
-        figure.field = this;
+        figure.setField(this);
     }
 
     /**
      * Make a field empty
-     *
      */
     public void setEmpty() {
         this.figure = null;

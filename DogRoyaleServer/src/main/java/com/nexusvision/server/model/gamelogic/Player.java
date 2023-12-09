@@ -36,7 +36,7 @@ public final class Player {
         this.playerId = playerId;
         this.lastMoveCountFigureMovedIntoHouse = 0;
         for (int i = 0; i < figurecount; i++) {
-            figures.add(new Figure(color));
+            figures.add(new Figure(playerId));
         }
     }
 
@@ -71,12 +71,12 @@ public final class Player {
      * Prints information about all the figures in every house
      */
     public void printHouse() {
-        Field house = this.startField.house;
+        Field house = this.startField.getHouse();
         System.out.print("house: ");
         while (house != null) {
-            if (!house.isEmpty()) System.out.print(house.figure.color + "-");
+            if (!house.isEmpty()) System.out.print(house.getFigure().getColor() + "-");
             else System.out.print("_" + "-");
-            house = house.next;
+            house = house.getNext();
         }
         System.out.println("");
     }
@@ -87,10 +87,10 @@ public final class Player {
      * @param game an object representing the game
      */
     public void draw(Game game) {
-        if (game.deck.size() == 0) {
+        if (game.getDeck().isEmpty()) {
             game.reshuffle();
         }
-        Card pop = game.deck.remove(game.deck.size() - 1);
+        Card pop = game.getDeck().remove(game.getDeck().size() - 1);
         game.setDrawnCard(pop);
         this.cards.add(pop);
     }
@@ -99,8 +99,8 @@ public final class Player {
      * Prints all cards from the player
      */
     public void printCards() {
-        for (int i = 0; i < this.cards.size(); i++) {
-            System.out.print(this.cards.get(i).type + " ");
+        for (Card card : this.cards) {
+            System.out.print(card.getType() + " ");
         }
     }
 
@@ -127,14 +127,14 @@ public final class Player {
     public void generateMoves(Game game, ArrayList<Move> moves) {
         boolean[] seenCardTypes = new boolean[CardType.values().length];
         boolean seenBankFigure = false;
-        for (int i = 0; i < seenCardTypes.length; i++) {
-            seenCardTypes[i] = false;
-        }
-        // System.out.println("this player coloror " + this.color);
+//        for (int i = 0; i < seenCardTypes.length; i++) {                 Probably not necessary
+//            seenCardTypes[i] = false;
+//        }
+        // System.out.println("this player color " + this.color);
         for (int i = 0; i < this.cards.size(); i++) {
             // System.out.println("card " + i + ": " + this.cards.get(i).typ);
-            if (seenCardTypes[this.cards.get(i).type.ordinal()]) continue;
-            seenCardTypes[this.cards.get(i).type.ordinal()] = true;
+            if (seenCardTypes[this.cards.get(i).getType().ordinal()]) continue;
+            seenCardTypes[this.cards.get(i).getType().ordinal()] = true;
             for (int j = 0; j < this.figures.size(); j++) {
                 // System.out.println("figure " + j);
                 if (seenBankFigure && this.figures.get(j).isOnBench()) continue;
