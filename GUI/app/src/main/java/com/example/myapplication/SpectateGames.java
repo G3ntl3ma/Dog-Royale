@@ -107,7 +107,7 @@ public class SpectateGames extends Fragment {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(SpectateGames.this)
-                        .navigate(R.id.action_current_games_to_FirstFragment);
+                        .navigate(R.id.action_SpectateGames_to_FirstFragment);
 
             }
 

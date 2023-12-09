@@ -61,6 +61,7 @@ public class Game_board extends Fragment {
     //testwise
     private int position = 0 ; // positions for the test figure to move - I know we dont get the change but the new position but that doesnt matter
     private int move_count = 0;
+    private BoardUpdater boardUpdater;
     public Game_board() {
         // Required empty public constructor
     }
@@ -119,7 +120,9 @@ public class Game_board extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
+
         viewModel = new ViewModelProvider(requireActivity()).get(GameboardViewModel.class); //creating the ViewModel
+
 
         RelativeLayout GameBoard = binding.gameBoardLayout; //getting the Layout for the GameBoard
 
@@ -194,6 +197,7 @@ public class Game_board extends Fragment {
         //
         //
 
+        boardUpdater = new BoardUpdater();
         //Setting the first move to the first player
         viewModel.setLastPlayer(new Integer(0));
 
@@ -204,7 +208,6 @@ public class Game_board extends Fragment {
         last_card.lastCardAvailable(true);
 
 
-
         //NUR ZUM TESTEN für figuren movement
 
 
@@ -212,7 +215,6 @@ public class Game_board extends Fragment {
             @Override
             public void onClick(View view) {
 
-                BoardUpdater boardUpdater = new BoardUpdater();
                 List<BoardState.Piece> pieces = new ArrayList<>();
                 pieces.add(new BoardState.Piece(0, 0, position, false, 0));
 

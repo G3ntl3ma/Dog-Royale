@@ -56,7 +56,7 @@ public class SpectateGamesAdapter extends RecyclerView.Adapter<SpectateGamesView
                     viewModel.setPlayer_count(current_game.getCurrentPlayers());
                     viewModel.setFigure_count(current_game.getFigureCount());
                 NavHostFragment.findNavController(spectateGames)
-                        .navigate(R.id.action_SpectateGames_to_game_board_layout);
+                        .navigate(R.id.action_SpectateGames_to_waitingScreen);
             }
         });
     }
