@@ -24,6 +24,8 @@ public class GameboardViewModel extends ViewModel {
     //MutableLiveData<Game_board_creator> game_board_creator= new MutableLiveData<>();
     MutableLiveData<Figure_handler> figure_handler= new MutableLiveData<>();
 
+    MutableLiveData<List<Integer>> FiguresInBank = new MutableLiveData<>();
+
     public MutableLiveData<Integer> getField_size() {
         return field_size;
     }
@@ -64,5 +66,25 @@ public class GameboardViewModel extends ViewModel {
 
     public void setGameInformation(GameInformation gameInformation) {
         this.gameInformation.setValue(gameInformation);
+
+    }
+
+    public MutableLiveData<List<Integer>> getFiguresInBank() {
+        return FiguresInBank;
+    }
+
+    public void setFiguresInBank(List<Integer> figuresInBank) {
+        FiguresInBank.setValue(figuresInBank);
+    }
+
+    /**
+     * Changes the value of figuresInBank for the given amount for the given player (1-6)
+     * @param playerNumber the number of the player
+     * @param figureNumber the number of figures to change
+     */
+    public void changeFigureInBankValue(int playerNumber, int figureNumber) {
+        List<Integer> temp = this.FiguresInBank.getValue();
+        temp.set(playerNumber, temp.get(playerNumber) + figureNumber);
+        FiguresInBank.setValue(temp);
     }
 }

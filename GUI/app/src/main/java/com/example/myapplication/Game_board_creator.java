@@ -1,19 +1,12 @@
 package com.example.myapplication;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import android.app.Fragment;
-import android.content.Context;
-import android.graphics.PorterDuff;
-import android.icu.text.RelativeDateTimeFormatter;
+
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-
-
-import com.example.myapplication.databinding.FragmentGameBoardBinding;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 
 public class Game_board_creator{
@@ -38,6 +31,8 @@ public class Game_board_creator{
 
     private int homefield_size; //width and height of the homefields
 
+    private Integer maxRounds; //number of rounds to be played
+
 
     // private FragmentGameBoardBinding binding;
 
@@ -53,7 +48,7 @@ public class Game_board_creator{
      * @param start_fields is the list of start fields
      * @param card_draw_fields is the list of card draw fields
      */
-    public Game_board_creator(RelativeLayout Layout, int width, int player_count, int field_size, int figure_count, List<Integer> colors, List<Integer> start_fields, List<Integer> card_draw_fields)
+    public Game_board_creator(RelativeLayout Layout, int width, int player_count, int field_size, int figure_count, List<Integer> colors, List<Integer> start_fields, List<Integer> card_draw_fields, Integer maxRounds)
     {
 
         this.layout = Layout;
@@ -65,6 +60,7 @@ public class Game_board_creator{
         this.start_fields = start_fields;
         this.start_fields_position = new Tuple[player_count];
         this.card_draw_fields = card_draw_fields;
+        this.maxRounds = maxRounds;
     }
 
 
@@ -216,6 +212,10 @@ public class Game_board_creator{
 
         createCardDrawfields(); //create card draw fields
 
+        //setting the Round counter to 1/MaxRounds
+        ConstraintLayout constraintLayout = (ConstraintLayout) layout.getParent();
+        TextView textView =  (TextView) constraintLayout.findViewById(R.id.Turns);
+        textView.setText("Turn: 1/" + this.maxRounds);
 
     }
     /**
