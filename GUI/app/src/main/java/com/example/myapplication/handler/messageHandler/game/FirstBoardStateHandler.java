@@ -9,7 +9,7 @@ import com.example.myapplication.messages.game.BoardState;
 public class FirstBoardStateHandler extends Handler implements GameMessageHandler<BoardState>{
     @Override
     public String handle(BoardState message) throws HandlingException {
-        // TODO create Game Board
+
         try {
             Response response = new Response();
             response.setUpdated(true);

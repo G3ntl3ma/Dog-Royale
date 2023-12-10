@@ -1,6 +1,7 @@
 package com.example.myapplication.handler.messageHandler.game;
 
 
+import com.example.myapplication.BoardUpdater;
 import com.example.myapplication.handler.Handler;
 import com.example.myapplication.handler.HandlingException;
 import com.example.myapplication.messages.game.TypeGame;
@@ -12,10 +13,9 @@ public class BoardStateHandler extends Handler implements GameMessageHandler<Boa
     @Override
     public String handle(BoardState message) throws HandlingException {
 
-            //TODO update the Board accordingly
-        if(message.getGameOver()){
-            //TODO show winners and leave game change State
-        }
+        BoardUpdater boardUpdater = new BoardUpdater();// TODO make sure it works like this
+        boardUpdater.UpdateBoard(message);
+
         try {
             com.example.myapplication.messages.game.Response response = new com.example.myapplication.messages.game.Response();
             response.setUpdated(true);

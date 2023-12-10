@@ -13,7 +13,7 @@ import java.util.List;
  * @author kellerb
  */
 @Data
-public class RegisteredForTournament {
+public class RegisteredForTournament extends AbstractMenuMessage{
     private List<Player> players;
     private boolean success;
     private int tournamentId;

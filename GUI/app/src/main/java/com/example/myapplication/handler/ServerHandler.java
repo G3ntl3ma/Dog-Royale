@@ -7,6 +7,8 @@ import com.example.myapplication.messages.game.*;
 import com.example.myapplication.messages.menu.*;
 import com.example.myapplication.messages.sync.*;
 import com.google.gson.*;
+import com.google.gson.stream.MalformedJsonException;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
@@ -28,9 +30,10 @@ import java.net.Socket;
 public class ServerHandler extends Handler implements Runnable {
     private static  ServerHandler instance ;
     private static final Logger logger = LogManager.getLogger(ServerHandler.class);
-    private static final Object lock = new Object();  // For thread-safety
-    private static  Socket serverSocket;
+//    private static final Object lock = new Object();  // For thread-safety
+    private Socket serverSocket;
     private final PrintWriter broadcaster;
+    private final ClientController clientController;
 
 
     @Getter
@@ -51,10 +54,14 @@ public class ServerHandler extends Handler implements Runnable {
             .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
             .create();
 
-    public ServerHandler(Socket serverSocket)
-    {
-
-        this.serverSocket = serverSocket;
+    public static synchronized ServerHandler getInstance(Socket socket) {
+        if (instance == null) {
+            instance = new ServerHandler(socket);
+        }
+        return instance;}
+    private ServerHandler(Socket socket) {
+        clientController = ClientController.getInstance();
+        this.serverSocket = socket;
         PrintWriter writer;
         try {
             writer = new PrintWriter(serverSocket.getOutputStream(), false);
@@ -62,8 +69,12 @@ public class ServerHandler extends Handler implements Runnable {
             writer = null;
         }
         broadcaster = writer;
+}
 
-    }
+
+
+
+    @Override
     public void run() {
         try {
             BufferedReader reader = new BufferedReader(
@@ -73,16 +84,18 @@ public class ServerHandler extends Handler implements Runnable {
 
             String request, response;
             while (true) {
-                if ((request = reader.readLine()) != null ) {
-                    response = handle(request);
-                    if (response != null){
-                        writer.println(response);
-                        writer.flush();
-                    }
 
+                if ((request = reader.readLine()) != null
+                        && (response = handle(request)) != null) {
+                    logger.info("this is the message from server: " + request);
+                    writer.println(response);
+                    writer.flush();
                 }
             }
-        } catch (IOException e) {
+        }catch (JsonSyntaxException | MalformedJsonException e) {
+            // Handle MalformedJsonException
+            logger.error("The request is not in json format: " + e.getMessage());}
+        catch (IOException e) {
             logger.error("Error while trying to read the server message: " + e.getMessage());
         } finally {
             try {
@@ -95,10 +108,21 @@ public class ServerHandler extends Handler implements Runnable {
     /**
      * Writes the specified message to the broadcaster
      */
-    public void broadcast(String message) {
-        this.broadcaster.write(message);
-        this.broadcaster.flush();
+    public synchronized void broadcast(String message) {
+        new Thread(() -> {
+            try (PrintWriter writer = this.broadcaster) {
+                if (writer != null) {
+                    writer.write(message);
+                    writer.flush();
+                } else {
+                    logger.error("Error broadcasting message: broadcaster is null");
+                }
+            } catch (Exception e) {
+                logger.error("Error broadcasting message", e);
+            }
+        }).start();
     }
+
 
     private String handle(String request) {
         try {
@@ -240,6 +264,7 @@ public class ServerHandler extends Handler implements Runnable {
                     BoardState boardState = gson.fromJson(request, BoardState.class);
                     String response = new FirstBoardStateHandler().handle(boardState);
                     expectedState = State.GAME;
+                    ClientController.getInstance().navigateToGame();
                     logger.info("FirstBoardState was handled successfully");
                     return response;//update message
                 }catch (JsonSyntaxException e){
@@ -250,7 +275,7 @@ public class ServerHandler extends Handler implements Runnable {
                 try{
                     BoardState boardState = gson.fromJson(request, BoardState.class);
                     String response = new BoardStateHandler().handle(boardState);//if gameOver it shows the end screen with winners and takes you back to connect menu
-                    if(boardState.isGameOver()){expectedState = State.CONNECT_MENU;}
+                    if(boardState.getGameOver()){expectedState = State.CONNECT_MENU;}
                     logger.info("BoardState was handled successfully");
                     return response;//update message
                 }catch (JsonSyntaxException e){
