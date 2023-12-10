@@ -10,7 +10,8 @@ gesamtarbeitszeit: 40,50h
 
 ## Projektmanagement
 - Meeting 
-  - 2023-11-20 0,5h
+  - 2023-12-08 0,3h
+  - 2023-12-10 0,3h
   
 ## Werkzeuge
 - Test Entwicklung
