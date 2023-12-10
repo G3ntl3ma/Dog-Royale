@@ -127,8 +127,13 @@ public class GameboardViewModel extends ViewModel {
     public void setPlayerNames(Dictionary playerNames) {
         this.playerNames.setValue(playerNames);
     }
-    public String getPlayerName(int playerNumber) {
-        return( playerNames.getValue().get(playerNumber));
+    /**
+     * Returns the name of the player for the given ClientId
+     * @param clientId is the number of the player
+     * @return the name of the player
+     */
+    public String getPlayerName(int clientId) {
+        return( playerNames.getValue().get(clientId));
     }
 
     public MutableLiveData<Integer> getLastPlayer() {
