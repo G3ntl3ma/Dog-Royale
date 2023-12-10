@@ -1,5 +1,6 @@
 package com.example.myapplication.handler.messageHandler.menu;
 
+import com.example.myapplication.controller.ClientController;
 import com.example.myapplication.handler.Handler;
 import com.example.myapplication.handler.HandlingException;
 import com.example.myapplication.handler.ServerHandler;
@@ -25,7 +26,7 @@ public class ReturnFindTournamentHandler extends Handler implements MenuMessageH
             //remains unhandled, just sends RequestGameList request
             RequestGameList requestGameList = new RequestGameList();
             requestGameList.setType(TypeMenu.requestGameList.getOrdinal());
-            requestGameList.setClientID(ServerHandler.getClientID());
+            requestGameList.setClientID(ClientController.getClientID());
             requestGameList.setGameCountStarting(10);//10 games To show
             requestGameList.setGameCountInProgress(10);
             requestGameList.setGameCountFinished(10);

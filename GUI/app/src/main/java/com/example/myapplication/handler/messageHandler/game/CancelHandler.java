@@ -10,7 +10,7 @@ public class CancelHandler extends Handler implements MenuMessageHandler<Cancel>
     @Override
     public String handle(Cancel message) throws HandlingException {
         //TODO show winners message.winnerOrder
-        //TODO and then request tournament directly
+        //TODO return to GameList
         return null;
     }
 }

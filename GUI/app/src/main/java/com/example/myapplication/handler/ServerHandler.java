@@ -9,8 +9,8 @@ import com.example.myapplication.messages.sync.*;
 import com.google.gson.*;
 import lombok.Getter;
 import lombok.Setter;
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,9 +31,8 @@ public class ServerHandler extends Handler implements Runnable {
     private static final Object lock = new Object();  // For thread-safety
     private static  Socket serverSocket;
     private final PrintWriter broadcaster;
-    @Getter
-    @Setter
-    private static int clientID;
+
+
     @Getter
     public enum State {
         CONNECT_MENU,
@@ -210,6 +209,7 @@ public class ServerHandler extends Handler implements Runnable {
             String response = new ConnectedToGameHandler().handle(connectedToGame);
             if (connectedToGame.isSuccess()){
                 expectedState = State.LOBBY;
+                ClientController.getInstance().navigateToLobby();
 
             }
             logger.info("ConnectedToGame was handled successfully");

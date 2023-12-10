@@ -129,4 +129,7 @@ public class SpectateGames extends Fragment {
     public void addGame(Game game){
         viewModel.addGame(game);
     }
+
+    public void navigateToLobby() {//TODO go to game_board
+    }
 }

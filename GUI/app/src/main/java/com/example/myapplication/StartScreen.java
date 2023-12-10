@@ -86,13 +86,9 @@ public class StartScreen extends Fragment {
                 }
                 else {
                     viewModel.setUsername(username);
-                    ConnectToServer connectToServer = new ConnectToServer();
-                    connectToServer.setType(TypeMenu.connectToServer.getOrdinal());
-                    connectToServer.setName(username);
-                    connectToServer.setIsObserver(true);
                     binding.button.setEnabled(false);
                     try{
-                        clientController.sendConnectToServerRequest(connectToServer,StartScreen.this);
+                        clientController.sendConnectToServerRequest(username,StartScreen.this);
                     }
                     catch (
                             HandlingException e) {
