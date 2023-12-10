@@ -1,6 +1,6 @@
 package com.nexusvision.server.model.gamelogic;
 
-import com.nexusvision.server.model.enums.CardType;
+import com.nexusvision.server.model.enums.Card;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -16,8 +16,8 @@ public final class Player {
     private final int playerId;
     private boolean excluded = false;
     private boolean outThisRound = false;
-    private ArrayList<Figure> figures = new ArrayList<>();
-    private ArrayList<Card> cards = new ArrayList<>();
+    private ArrayList<Figure> figureList = new ArrayList<>();
+    private ArrayList<Card> cardList = new ArrayList<>();
     private Field startField; //accessed a lot in other classes
     private int houseFirstIndex;
     private int figuresInBank;
@@ -28,7 +28,7 @@ public final class Player {
     /**
      * Constructor for the Player
      *
-     * @param playerId       An Integer representing the playerId of the player
+     * @param playerId    An Integer representing the playerId of the player
      * @param figureCount An Integer representing the amount of figures a player has
      */
     public Player(int playerId, int figureCount) {
@@ -36,7 +36,7 @@ public final class Player {
         this.playerId = playerId;
         this.lastMoveCountFigureMovedIntoHouse = 0;
         for (int i = 0; i < figureCount; i++) {
-            figures.add(new Figure(playerId));
+            figureList.add(new Figure(playerId));
         }
     }
 
@@ -45,16 +45,29 @@ public final class Player {
      *
      * @return an object representing the figure
      */
-    public Figure getFirstFigureInBank() {
-        for (int i = 0; i < figures.size(); i++) {
-            if (this.figures.get(i).isOnBench()) {
-                return this.figures.get(i);
+    public Figure getFirstOnBench() {
+        for (int i = 0; i < figureList.size(); i++) {
+            if (this.figureList.get(i).isOnBench()) {
+                return this.figureList.get(i);
             }
         }
 
-        System.out.println("unreachable getfirstinbank");
-        System.exit(23);
-        return this.figures.get(0);
+        System.out.println("unreachable getfirstonbench");
+        System.exit(42);
+        return this.figureList.get(0);
+    }
+
+    /**
+     * Gets the card list with the integer ordinal values
+     *
+     * @return The card integer list
+     */
+    public ArrayList<Integer> getCardListInteger() {
+        ArrayList<Integer> cardList = new ArrayList<>();
+        for (Card card : this.cardList) {
+            cardList.add(card.getOrdinal());
+        }
+        return cardList;
     }
 
     /**
@@ -92,15 +105,15 @@ public final class Player {
         }
         Card pop = game.getDeck().remove(game.getDeck().size() - 1);
         game.setDrawnCard(pop);
-        this.cards.add(pop);
+        this.cardList.add(pop);
     }
 
     /**
      * Prints all cards from the player
      */
     public void printCards() {
-        for (Card card : this.cards) {
-            System.out.print(card.getType() + " ");
+        for (Card card : this.cardList) {
+            System.out.print(card + " ");
         }
     }
 
@@ -122,28 +135,31 @@ public final class Player {
      * Generate and collect possible moves
      *
      * @param game  An object representing the game
-     * @param moves an ArrayList storing the represented moves
+     * @return An ArrayList storing the represented moves
      */
-    public void generateMoves(Game game, ArrayList<Move> moves) {
-        boolean[] seenCardTypes = new boolean[CardType.values().length];
-        boolean seenBankFigure = false;
+    public ArrayList<Move> generateMoves(Game game) {
+        ArrayList<Move> moves = new ArrayList<>();
+        boolean[] seenCardTypes = new boolean[Card.values().length];
+        boolean seenBenchFigure = false;
 //        for (int i = 0; i < seenCardTypes.length; i++) {                 Probably not necessary
 //            seenCardTypes[i] = false;
 //        }
         // System.out.println("this player color " + this.color);
-        for (int i = 0; i < this.cards.size(); i++) {
+        for (Card card : cardList) {
+            game.getCardService().setType(card);
             // System.out.println("card " + i + ": " + this.cards.get(i).typ);
-            if (seenCardTypes[this.cards.get(i).getType().ordinal()]) continue;
-            seenCardTypes[this.cards.get(i).getType().ordinal()] = true;
-            for (int j = 0; j < this.figures.size(); j++) {
+            if (seenCardTypes[card.ordinal()]) continue;
+            seenCardTypes[card.ordinal()] = true;
+            for (Figure figure : figureList) {
                 // System.out.println("figure " + j);
-                if (seenBankFigure && this.figures.get(j).isOnBench()) continue;
-                if (this.figures.get(j).isOnBench() && (this.cards.get(i).getType() == CardType.startCard1
-                        || this.cards.get(i).getType() == CardType.startCard2)) {
-                    seenBankFigure = true;
+                if (seenBenchFigure && figure.isOnBench()) continue;
+                if (figure.isOnBench() && (card == Card.startCard1
+                        || card == Card.startCard2)) {
+                    seenBenchFigure = true;
                 }
-                this.cards.get(i).getMoves(game, this.figures.get(j), moves, this);
+                game.getCardService().getMoves(game, figure, moves, this);
             }
         }
+        return moves;
     }
 }

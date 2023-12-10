@@ -2,10 +2,10 @@ package com.nexusvision.server.handler;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.nexusvision.server.model.messages.AbstractMessage;
 import com.nexusvision.server.model.messages.menu.Error;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
 import com.nexusvision.utils.NewLineAppendingSerializer;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,8 +14,8 @@ import org.apache.logging.log4j.Logger;
  *
  * @author felixwr
  */
+@Log4j2
 public abstract class Handler {
-    private static final Logger logger = LogManager.getLogger(ClientHandler.class);
     protected static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
             .create();
@@ -27,7 +27,7 @@ public abstract class Handler {
      * @return a string, which is a JSON representation of an Error object
      */
     protected String handleError(String errorMessage) {
-        logger.error(errorMessage);
+        log.error(errorMessage);
         Error error = new Error();
         error.setType(TypeMenue.error.getOrdinal());
         error.setMessage(errorMessage);
@@ -42,7 +42,7 @@ public abstract class Handler {
      * @return a string, which is a JSON representation of an Error object
      */
     protected String handleError(String errorMessage, int type) {
-        logger.error(errorMessage);
+        log.error(errorMessage);
         Error error = new Error();
         error.setType(TypeMenue.error.getOrdinal());
         error.setType(type);
@@ -58,7 +58,7 @@ public abstract class Handler {
      * @return a string, which is a JSON representation of an Error object
      */
     protected String handleError(String errorMessage, Exception e) {
-        logger.error(errorMessage + ": " + e.getMessage());
+        log.error(errorMessage + ": " + e.getMessage());
         Error error = new Error();
         error.setType(TypeMenue.error.getOrdinal());
         error.setMessage(errorMessage);
@@ -74,7 +74,7 @@ public abstract class Handler {
      * @return a string, which is a JSON representation of an Error object
      */
     protected String handleError(String errorMessage, int type, Exception e) {
-        logger.error(errorMessage + ": " + e.getMessage());
+        log.error(errorMessage + ": " + e.getMessage());
         Error error = new Error();
         error.setType(TypeMenue.error.getOrdinal());
         error.setType(type);

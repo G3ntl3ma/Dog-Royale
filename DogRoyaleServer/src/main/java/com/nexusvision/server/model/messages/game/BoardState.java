@@ -1,6 +1,6 @@
 package com.nexusvision.server.model.messages.game;
 
-import com.nexusvision.server.model.enums.CardType;
+import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.messages.AbstractMessage;
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import java.util.List;
 public class BoardState extends AbstractMessage {
     private List<Piece> pieces;
     private List<DiscardItem> discardPile;
-    private CardType lastPlayedCard;
+    private int lastPlayedCard;
     private int round;
     private int moveCount;
     private int nextPlayer;
@@ -29,6 +29,6 @@ public class BoardState extends AbstractMessage {
     @Data
     public static class DiscardItem {
         private int clientId;
-        private CardType card;
+        private int card;
     }
 }

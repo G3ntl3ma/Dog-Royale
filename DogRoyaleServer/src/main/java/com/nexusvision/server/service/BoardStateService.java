@@ -1,7 +1,6 @@
 package com.nexusvision.server.service;
 
-import com.nexusvision.server.controller.GameLobby;
-import com.nexusvision.server.model.enums.CardType;
+import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.gamelogic.Figure;
 import com.nexusvision.server.model.gamelogic.Game;
 import com.nexusvision.server.model.gamelogic.Player;
@@ -12,20 +11,17 @@ import java.util.ArrayList;
 
 public class BoardStateService {
 
-    private BoardState getBoardState(GameLobby gameLobby) {
-        Game game = gameLobby.getGame();
+    public BoardState generateBoardState(Game game, ArrayList<Integer> playerOrderList) {
         BoardState boardState = new BoardState();
         boardState.setType(TypeGame.boardState.getOrdinal());
 
-        ArrayList<Integer> playerOrderList = gameLobby.getPlayerOrderList();
-
         //pieces position
-        ArrayList<BoardState.Piece> _pieces = new ArrayList<>();
+        ArrayList<BoardState.Piece> piecesList = new ArrayList<>();
         for (int playerId = 0; playerId < playerOrderList.size(); playerId++) {
             int clientId = playerOrderList.get(playerId);
-            Player player = game.getPlayers().get(playerId);
+            Player player = game.getPlayerList().get(playerId);
 
-            for (int pieceId = 0; pieceId < player.getFigures().size(); pieceId++) {
+            for (int pieceId = 0; pieceId < player.getFigureList().size(); pieceId++) {
                 BoardState.Piece piece = new BoardState.Piece();
 
                 Figure figure = player.getFigureList().get(pieceId);
@@ -37,31 +33,28 @@ public class BoardStateService {
                 piece.setPosition(position);
                 piece.setOnBench(isOnBench);
                 piece.setInHousePosition(inHousePosition);
-                _pieces.add(piece);
+                piecesList.add(piece);
             }
         }
-        boardState.setPieces(_pieces);
+        boardState.setPieces(piecesList);
 
-        ArrayList<BoardState.DiscardItem> _cards = new ArrayList<>();
+        ArrayList<BoardState.DiscardItem> cardList = new ArrayList<>();
         for (int i = 0; i < game.getPile().size(); i++) {
-            CardType cardType = game.getPile().get(i).getType();
-            BoardState.DiscardItem _card = new BoardState.DiscardItem();
-            _card.setClientId(42); //fake clientId because it doesnt matter
-            _card.setCard(cardType);
-            _cards.add(_card);
+            Card card = game.getPile().get(i);
+            BoardState.DiscardItem discardItem = new BoardState.DiscardItem();
+            discardItem.setClientId(42); //fake clientId because it doesn't matter
+            discardItem.setCard(card.getOrdinal());
+            cardList.add(discardItem);
         }
-        boardState.setDiscardPile(_cards);
+        boardState.setDiscardPile(cardList);
 
         //get last played card
-        boardState.setLastPlayedCard(game.getLastCard().getType());
+        boardState.setLastPlayedCard(game.getLastCard().getOrdinal());
         boardState.setRound(game.getRound());
         boardState.setMoveCount(game.getMovesMade());
-        //boardState.setNextPlayer(game.getMovesMade()); //TODO
-        boardState.setGameOver(game.checkOver());
-        ArrayList<Player> playerWinOrder = new ArrayList<>();
-        game.getOrder(playerWinOrder);
-        List<Integer> playerWinOrderId = playerWinOrder.stream().map(Player::getPlayerId).collect(Collectors.toList());
-        boardState.setWinnerOrder(playerWinOrderId);
+        boardState.setNextPlayer(game.getPlayerToMoveId());
+        boardState.setGameOver(game.checkGameOver());
+        boardState.setWinnerOrder(game.getWinnerOrder());
         return boardState;
     }
 }

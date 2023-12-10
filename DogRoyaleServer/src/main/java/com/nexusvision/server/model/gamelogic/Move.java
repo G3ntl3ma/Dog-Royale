@@ -1,6 +1,8 @@
 package com.nexusvision.server.model.gamelogic;
 
+import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.FieldType;
+import lombok.Data;
 
 /**
  * This class generates Moves
@@ -98,15 +100,15 @@ public final class Move {
     public void execute(Game game) {
         game.setDrawnCard(null);
         // System.out.println("cards num before " + this.player.cards.size());
-        if (this.cardUsed != null) {
-            player.getCards().remove(this.cardUsed);
-            game.getPile().add(this.cardUsed);
+        if (cardUsed != null) {
+            player.getCardList().remove(cardUsed);
+            game.getPile().add(cardUsed);
         }
         // System.out.println("cards num after 1 " + this.player.cards.size());
         if (isSwapMove) {
             assert to != null;
             Figure temp = to.getFigure();
-            Player opponent = game.getPlayers().get(to.getFigure().getColor());
+            Player opponent = game.getPlayerList().get(to.getFigure().getOwnerId());
             //set figure of field
             assert from != null;
             to.setFigure(from.getFigure());
@@ -131,13 +133,13 @@ public final class Move {
             //TODO assert figs in bank > 0
             // System.out.println("isStartMove move");
             // System.out.println("figs in bank before " + this.player.figuresInBank);
-            Figure figure = this.player.getFirstFigureInBank();
+            Figure figure = player.getFirstOnBench();
             Field to = player.getStartField();
             figure.setOnBench(false);
             figure.setInHouse(false);
 
             if (!to.isEmpty()) {
-                Player opponent = game.getPlayers().get(to.getFigure().getColor());
+                Player opponent = game.getPlayerList().get(to.getFigure().getOwnerId());
                 opponent.setFiguresInBank(opponent.getFiguresInBank() + 1);
                 //set field of figure
                 to.getFigure().setOnBench(true);
@@ -156,7 +158,7 @@ public final class Move {
         } else { //normal move
             assert to != null;
             if (!to.isEmpty()) {
-                Player opponent = game.getPlayers().get(to.getFigure().getColor());
+                Player opponent = game.getPlayerList().get(to.getFigure().getOwnerId());
                 opponent.setFiguresInBank(opponent.getFiguresInBank() + 1);
                 to.getFigure().setOnBench(true);
             }
@@ -213,7 +215,6 @@ public final class Move {
         }
         System.out.println("swap figs " + this.isSwapMove + " isStartMove " + this.isStartMove + " player.color " + this.player.getPlayerId());
     }
-
 
     /**
      * Gets the Field type

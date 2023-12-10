@@ -2,11 +2,14 @@ package com.nexusvision.server.handler;
 
 import com.google.gson.*;
 import com.nexusvision.server.controller.ServerController;
+import com.nexusvision.server.handler.message.game.LeaveObsHandler;
+import com.nexusvision.server.handler.message.game.LeavePlayerHandler;
+import com.nexusvision.server.handler.message.game.MoveHandler;
 import com.nexusvision.server.handler.message.game.ResponseHandler;
 import com.nexusvision.server.handler.message.menu.*;
-import com.nexusvision.server.model.messages.game.Response;
-import com.nexusvision.server.model.messages.game.TypeGame;
+import com.nexusvision.server.model.messages.game.*;
 import com.nexusvision.server.model.messages.menu.*;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,8 +25,8 @@ import java.net.Socket;
  *
  * @author felixwr
  */
+@Log4j2
 public class ClientHandler extends Handler implements Runnable {
-    private static final Logger logger = LogManager.getLogger(ClientHandler.class);
 
     private final Socket clientSocket;
     private final ServerController serverController;
@@ -72,12 +75,12 @@ public class ClientHandler extends Handler implements Runnable {
                 }
             }
         } catch (IOException e) {
-            logger.error("Error while trying to read the client message: " + e.getMessage());
+            log.error("Error while trying to read the client message: " + e.getMessage());
         } finally {
             try {
                 clientSocket.close();
             } catch (IOException e) {
-                logger.error("Error while trying to close the connection: " + e.getMessage());
+                log.error("Error while trying to close the connection: " + e.getMessage());
             }
         }
     }
@@ -100,6 +103,19 @@ public class ClientHandler extends Handler implements Runnable {
             return false;
         }
         expectedState = State.NO_MOVE;
+        return true;
+    }
+
+    /**
+     * Notifies the client handler that he needs to wait for a move
+     *
+     * @return true if notifying was successful
+     */
+    public boolean setWaitingForMove() {
+        if (expectedState != State.NO_MOVE) {
+            return false;
+        }
+        expectedState = State.WAITING_FOR_MOVE;
         return true;
     }
 
@@ -129,8 +145,12 @@ public class ClientHandler extends Handler implements Runnable {
                 return handleRequestTechData(request);
             } else if (type == TypeGame.response.getOrdinal()) {
                 return handleResponse(request);
+            } else if (type == TypeGame.leaveObs.getOrdinal()) {
+                return handleLeaveObs(request);
+            } else if (type == TypeGame.leavePlayer.getOrdinal()) {
+                return handleLeavePlayer(request);
             }
-            // TODO: Register for tournament, request tournament info, all game cases
+            // TODO: Register for tournament, request tournament info
             else {
                 return handleError("The request has no valid type");
             }
@@ -151,12 +171,12 @@ public class ClientHandler extends Handler implements Runnable {
         if (expectedState != State.CONNECT_TO_SERVER) {
             return handleError("Received wrong type, didn't expect connectToServer");
         }
-        logger.info("Trying to connect client " + clientID);
+        log.info("Trying to connect client " + clientID);
         try {
             ConnectToServer connectToServer = gson.fromJson(request, ConnectToServer.class);
             String response = new ConnectToServerHandler().handle(connectToServer, clientID);
             expectedState = State.REQUEST_GAME_LIST_AND_FIND_TOURNAMENT;
-            logger.info("Client " + clientID + " connected successfully");
+            log.info("Client " + clientID + " connected successfully");
             return response;
         } catch (JsonSyntaxException e) {
             return handleError("Wrong message format from type connectToServer",
@@ -203,12 +223,12 @@ public class ClientHandler extends Handler implements Runnable {
      * @return A String representing a response to the client's <code>requestGameList</code> request
      */
     private String handleRequestGameList(String request, State nextState) throws HandlingException {
-        logger.info("Trying to handle game list request");
+        log.info("Trying to handle game list request");
         try {
             RequestGameList requestGameList = gson.fromJson(request, RequestGameList.class);
             String response = new RequestGameListHandler().handle(requestGameList, clientID);
             expectedState = nextState;
-            logger.info("Game list request was successful");
+            log.info("Game list request was successful");
             return response;
         } catch (JsonSyntaxException e) {
             return handleError("Wrong message format from type requestGameList",
@@ -224,12 +244,12 @@ public class ClientHandler extends Handler implements Runnable {
      * @return A String representing a response to the client's <code>findTournament</code> request
      */
     private String handleFindTournament(String request, State nextState) throws HandlingException {
-        logger.info("Trying to handle tournament info request");
+        log.info("Trying to handle tournament info request");
         try {
             FindTournament findTournament = gson.fromJson(request, FindTournament.class);
             String response = new FindTournamentHandler().handle(findTournament, clientID);
             expectedState = nextState;
-            logger.info("Find tournament request was successful");
+            log.info("Find tournament request was successful");
             return response;
         } catch (JsonSyntaxException e) {
             return handleError("Wrong message format from type findTournament",
@@ -247,12 +267,12 @@ public class ClientHandler extends Handler implements Runnable {
         if (expectedState != State.REQUEST_JOIN) {
             return handleError("Received wrong type, didn't expect joinGameAsObserver");
         }
-        logger.info("Trying to handle join game as observer request");
+        log.info("Trying to handle join game as observer request");
         try {
             JoinGameAsObserver joinGameAsObserver = gson.fromJson(request, JoinGameAsObserver.class);
             String response = new JoinGameAsObserverHandler().handle(joinGameAsObserver, clientID);
             expectedState = State.WAITING_FOR_GAME_START;
-            logger.info("Join game as observer was successful");
+            log.info("Join game as observer was successful");
             return response;
         } catch (JsonSyntaxException e) {
             return handleError("Wrong message format from type joinGameAsObserver",
@@ -270,12 +290,12 @@ public class ClientHandler extends Handler implements Runnable {
         if (expectedState != State.REQUEST_JOIN) {
             return handleError("Received wrong type, didn't expect joinGameAsParticipant");
         }
-        logger.info("Trying to handle join game as participant request");
+        log.info("Trying to handle join game as participant request");
         try {
             JoinGameAsParticipant joinGameAsParticipant = gson.fromJson(request, JoinGameAsParticipant.class);
             String response = new JoinGameAsParticipantHandler().handle(joinGameAsParticipant, clientID);
             expectedState = State.WAITING_FOR_GAME_START;
-            logger.info("Join game as participant was successful");
+            log.info("Join game as participant was successful");
             return response;
         } catch (JsonSyntaxException e) {
             return handleError("Wrong message format from type joinGameAsParticipant",
@@ -290,11 +310,11 @@ public class ClientHandler extends Handler implements Runnable {
      * @return A String representing a response to the client's <code>requestTechData</code> request
      */
     private String handleRequestTechData(String request) throws HandlingException {
-        logger.info("Trying to handle tech data request");
+        log.info("Trying to handle tech data request");
         try {
             RequestTechData requestTechData = gson.fromJson(request, RequestTechData.class);
             String response = new RequestTechDataHandler().handle(requestTechData, clientID);
-            logger.info("Request tech data was successful");
+            log.info("Request tech data was successful");
             return response;
         } catch (JsonSyntaxException e) {
             return handleError("Wrong message format from type requestTechData",
@@ -310,16 +330,83 @@ public class ClientHandler extends Handler implements Runnable {
      * @throws HandlingException If anything goes wrong while handling the message
      */
     private String handleResponse(String request) throws HandlingException {
-        if (expectedState != State.NO_MOVE && expectedState != State.WAIT_FOR_MOVE) {
+        if (expectedState != State.NO_MOVE && expectedState != State.WAITING_FOR_MOVE) {
             return handleError("Didn't expect message of type response", TypeGame.response.getOrdinal());
         }
-        logger.info("Received response of client " + clientID);
+        log.info("Received response of client " + clientID);
         try {
             Response response = gson.fromJson(request, Response.class);
             return new ResponseHandler().handle(response, clientID);
         } catch (JsonSyntaxException e) {
             return handleError("Wrong message format from type response",
                     TypeMenue.requestTechData.getOrdinal(), e);
+        }
+    }
+
+    /**
+     * Responsible for handling requests of type <code>move</code>
+     *
+     * @param request A String representing the request received from the client
+     * @return A String representing a response to the client's <code>move</code> message
+     * @throws HandlingException If anything goes wrong while handling the message
+     */
+    private String handleMove(String request) throws HandlingException {
+        if (expectedState != State.WAITING_FOR_MOVE) {
+            return handleError("Didn't expect message of type move", TypeGame.move.getOrdinal());
+        }
+        log.info("Handling move of client " + clientID);
+        try {
+            Move move = gson.fromJson(request, Move.class);
+            return new MoveHandler().handle(move, clientID);
+        } catch (JsonSyntaxException e) {
+            return handleError("Wrong message format from type move",
+                    TypeGame.move.getOrdinal(), e);
+        }
+    }
+
+    /**
+     * Responsible for handling requests of type <code>leaveObs</code>
+     *
+     * @param request A String representing the request received from the client
+     * @return A String representing a response to the client's <code>leaveObs</code> message
+     * @throws HandlingException If anything goes wrong while handling the message
+     */
+    private String handleLeaveObs(String request) throws HandlingException {
+        if (expectedState != State.NO_MOVE
+                && expectedState != State.WAITING_FOR_MOVE
+                && expectedState != State.WAITING_FOR_GAME_START) {
+            return handleError("Received wrong type, didn't expect leaveObs");
+        }
+        log.info("Trying to handle leave observer request");
+        try {
+            LeaveObs leaveObs = gson.fromJson(request, LeaveObs.class);
+            return new LeaveObsHandler().handle(leaveObs, clientID);
+        } catch (JsonSyntaxException e) {
+            return handleError("Wrong message format from type leaveObs",
+                    TypeGame.leaveObs.getOrdinal(), e);
+        }
+    }
+
+    /**
+     * Responsible for handling requests of type <code>leavePlayer</code>
+     *
+     * @param request A String representing the request received from the client
+     * @return A String representing a response to the client's <code>leavePlayer</code> message
+     * @throws HandlingException If anything goes wrong while handling the message
+     */
+    private String handleLeavePlayer(String request) throws HandlingException {
+        if (expectedState != State.NO_MOVE
+                && expectedState != State.WAITING_FOR_MOVE
+                && expectedState != State.WAITING_FOR_GAME_START) {
+            return handleError("Received wrong type, didn't expect leavePlayer");
+        }
+        log.info("Trying to handle leave player request");
+        try {
+            LeavePlayer leavePlayer = gson.fromJson(request, LeavePlayer.class);
+            return new LeavePlayerHandler().handle(leavePlayer, clientID);
+        } catch (JsonSyntaxException e) {
+            return handleError("Wrong message format from type leavePlayer",
+                    TypeGame.leavePlayer.getOrdinal(), e);
         }
     }
 
@@ -344,7 +431,7 @@ public class ClientHandler extends Handler implements Runnable {
         FIND_TOURNAMENT,
         REQUEST_JOIN,
         WAITING_FOR_GAME_START,
-        WAIT_FOR_MOVE,
-        NO_MOVE; // TODO: handle types
+        WAITING_FOR_MOVE,
+        NO_MOVE;
     }
 }

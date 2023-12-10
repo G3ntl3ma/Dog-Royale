@@ -22,7 +22,7 @@ public class ResponseDrawCardsHandler extends MessageHandler<Response> {
         ArrayList<Integer> clientIds = gameLobby.getPlayerOrderList();
         for (int playerId = 0; playerId < clientIds.size(); playerId++) {
             int clientId = clientIds.get(playerId);
-            int count = game.getPlayers().get(playerId).getCards().size();
+            int count = game.getPlayerList().get(playerId).getCardList().size();
             UpdateDrawCards.HandCard _handCard = new UpdateDrawCards.HandCard();
             _handCard.setClientId(clientId);
             _handCard.setCount(count);

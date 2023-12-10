@@ -5,6 +5,7 @@ import com.nexusvision.server.model.entities.Client;
 import com.nexusvision.server.model.enums.Colors;
 import com.nexusvision.server.model.enums.GameState;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,10 +24,10 @@ import java.util.concurrent.Executors;
  *
  * @author felixwr
  */
+@Log4j2
 public class ServerController {
     @Getter
     private static final ServerController instance = new ServerController();
-    private static final Logger logger = LogManager.getLogger(ServerController.class);
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(100);
 
@@ -47,26 +48,26 @@ public class ServerController {
      */
     public void startServer(int port) {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            logger.info("ServerSocket started successfully on port " + port);
-            logger.info("Waiting for connections...");
+            log.info("ServerSocket started successfully on port " + port);
+            log.info("Waiting for connections...");
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                logger.info("New connection request from " + clientSocket.getInetAddress());
+                log.info("New connection request from " + clientSocket.getInetAddress());
                 int newClientID = this.createNewClient();
                 ClientHandler clientHandler = new ClientHandler(clientSocket, newClientID);
                 handlerMap.put(newClientID, clientHandler);
                 executorService.submit(clientHandler);
             }
         } catch (IOException e) {
-            logger.error(e.getStackTrace());
+            log.error(e.getStackTrace());
         }
     }
 
     /**
      * Searching for a game lobby associated with a specific player
      *
-     * @param clientId An Integer representing the Id of the player for whom the associated game lobby is being searched
+     * @param clientId An Integer representing the id of the player for whom the associated game lobby is being searched
      * @return An object representing the game the player is participating otherwise null
      */
     public GameLobby getGameOfPlayer(int clientId) {
@@ -103,17 +104,19 @@ public class ServerController {
         return gameLobbys;
     }
 
-    /**
-     * Sends a message to all members of a game lobby
-     *
-     * @param lobby An Object representing the lobby to which the message should be sent
-     * @param message A String representing the message to be broadcasted to all players in the lobby
-     */
-    public void sendToAllLobbyMembers(GameLobby lobby, String message) {
-        for (int clientId : lobby.getPlayerOrderList()) {
-            sendToClient(clientId, message);
-        }
-    }
+//    /**
+//     * Sends a message to all members of a game lobby
+//     *
+//     * @param lobby An Object representing the lobby to which the message should be sent
+//     * @param message A String representing the message to be broadcasted to all players in the lobby
+//     */
+//    public void sendToAllLobbyMembers(GameLobby lobby, String message) {
+//        ArrayList<Integer> clientList = new ArrayList<>(lobby.getPlayerOrderList());
+//        clientList.addAll(lobby.getObserverList());
+//        for (int clientId : clientList) {
+//            sendToClient(clientId, message);
+//        }
+//    }
 
     /**
      * Sends a message to the specified clientId
@@ -126,12 +129,19 @@ public class ServerController {
         try {
             handler.broadcast(message);
         } catch (Exception e) {
-            logger.error("Error while trying to send a message to " + clientId);
+            log.error("Error while trying to send a message to " + clientId);
         }
     }
 
-    public void setMove(int clientId) {
-
+    /**
+     * Notifies the client handler that he needs to wait for a move
+     *
+     * @param clientId The client handler getting notified
+     * @return true if successful
+     */
+    public boolean setWaitingForMove(int clientId) {
+        ClientHandler handler = handlerMap.get(clientId);
+        return handler.setWaitingForMove();
     }
 
     /**
@@ -153,102 +163,6 @@ public class ServerController {
         lobby.sendToAllClients(boardStateMessage);
         return true;
     }
-
-    // ALLE NICHT NÖTIG DA EINE GAME LOBBY DAS GANZE ANBIETET
-//    public ArrayList<GameLobby> getStartingGames(int gameCount) {
-//        int foundCount = 0;
-//        ArrayList<GameLobby> gameLobbys = new ArrayList<>();
-//        for (int key : lobbyMap.keySet()) {
-//            GameLobby g = lobbyMap.get(key);
-//            if (g.getGameState() == GameState.STARTING) {
-//                gameLobbys.add(g);
-//                foundCount++;
-//            }
-//            if (foundCount == gameCount) break;
-//        }
-//        return gameLobbys;
-//    }
-//
-//    public ArrayList<GameLobby> getRunningGames(int gameCount) {
-//        int foundCount = 0;
-//        ArrayList<GameLobby> gameLobbys = new ArrayList<>();
-//        for (int key : lobbyMap.keySet()) {
-//            GameLobby g = lobbyMap.get(key);
-//            if (g.getGameState() == GameState.IN_PROGRESS) {
-//                gameLobbys.add(g);
-//                foundCount++;
-//            }
-//            if (foundCount == gameCount) break;
-//        }
-//        return gameLobbys;
-//    }
-//
-//    public boolean addPlayer(int gameId, int clientId) {
-//        for (int i = 0; i < lobbyList.size(); i++) {
-//            if (lobbyList.get(i).getGameID() == gameId) {
-//                lobbyList.get(i).addPlayer(clientId);
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-//
-//    public boolean addObserver(int gameId, int clientId) {
-//        for (int i = 0; i < lobbyList.size(); i++) {
-//            if (lobbyList.get(i).getGameID() == gameId) {
-//                lobbyList.get(i).addObserver(clientId);
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
-//    public ArrayList<GameLobby> getFinishedGames(int gameCount) {
-//        int foundCount = 0;
-//        ArrayList<GameLobby> gameLobbys = new ArrayList<>();
-//        for (int i = 0; i < lobbyList.size(); i++) {
-//            GameLobby g = lobbyList.get(i);
-//            if (g.gameCompleted == true) {
-//                gameLobbys.add(g);
-//                foundCount++;
-//            }
-//            if (foundCount == gameCount) break;
-//        }
-//        return gameLobbys;
-//    }
-
-//    public int getGameId(GameLobby g) {
-//        return g.getGameID();
-//    }
-
-//    public int getCurrentPlayerCount(GameLobby g) {
-//        return g.getCurrentPlayerCount();
-//    }
-//
-//    public int getMaxPlayerCount(GameLobby g) {
-//        return g.playerCount;
-//    }
-
-//    public int generateGameID() {
-//        // TODO: Sollte besser positiv sein
-//        //@author Farah-ey wenn Du "ran.nextInt(Zahl);" verwendest werden die Zahlen von 0 bis Zahl ausgewählt und somit positiv)
-//        Random ran = new Random();
-//        int newGameID = 0;
-//
-//        boolean found = true;
-//        while (found) {
-//            found = false;
-//            newGameID = ran.nextInt(Integer.MAX_VALUE);
-//            for (int i = 0; i < lobbyList.size(); i++) {
-//                int key = lobbyList.get(i).getGameID();
-//                if (key == newGameID) {
-//                    found = true;
-//                    break;
-//                }
-//            }
-//        }
-//        return newGameID;
-//    }
 
     /**
      * Generates a client id that doesn't exist yet and saves a new client object
@@ -337,18 +251,6 @@ public class ServerController {
         }
     }
 
-//    public void setUsername(int clientID, String userName) {
-//        clientIDMapName.put(clientID, userName);
-//    }
-//
-//    public void setObserver(int clientID, boolean isObserver) {
-//        clientIDMapObserver.put(clientID, isObserver);
-//    }
-//
-//    public String getUsername(int clientID) {
-//        return clientIDMapName.get(clientID);
-//    }
-
     /**
      * Gets the gamecount
      *
@@ -357,11 +259,6 @@ public class ServerController {
     public int getGameCount() {
         return lobbyMap.size();
     }
-
-    //    public boolean getObserver(int clientID) {
-//        return clientIDMapObserver.get(clientID);
-//    }
-//
 
     /**
      * Checks if a ClientId is registered

@@ -2,16 +2,18 @@ package com.nexusvision.server.model.gamelogic;
 
 //import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
 
-import com.nexusvision.server.model.enums.CardType;
+import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.FieldType;
 import com.nexusvision.server.model.enums.Penalty;
+import com.nexusvision.server.service.CardService;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 /**
- * This class represents the game and manages com.nexusvision.server.model.gamelogic.Player, Cards, Moves and more
+ * This class represents the game and manages Player, Cards, Moves and more
  *
  * @author dgehse
  */
@@ -22,9 +24,9 @@ public final class Game {
     private final int initialCardsPerPlayer;
     private final int maximumTotalMoves;
     // private final int maximumGameDuration; //in gamelobby class
-    private final Penalty consequences;
+    private final Penalty consequencesForInvalidMove;
     boolean[] occupied; //unused
-    private ArrayList<Player> players;
+    private ArrayList<Player> playerList;
     private Field[] board;
     private ArrayList<Card> deck;
     private ArrayList<Card> pile;
@@ -32,7 +34,7 @@ public final class Game {
     private int playerToStartColor;
     private int playerToMoveId;
     private Card drawnCard;
-    private ArrayList<Card> discardedCards;
+    private ArrayList<Card> discardedCardList;
     private int movesMade;
     private int playersRemaining;
     private int round; //round counter
@@ -42,26 +44,27 @@ public final class Game {
     private CardService cardService;
 
     /**
-     * The Constructor initializes Games
+     * The constructor initializes games
      *
-     * @param conf                  A String holding information about the board and players
-     * @param figuresPerPlayer      An Integer representing the number of figures in the game
-     * @param initialCardsPerPlayer An Integer representing the initial number of cards each player should have in their hand
-     * @param maximumTotalMoves     An integer representing the maximum number of moves allowed this game
-     * @param consequences          An object representing the consequences for illegal moves
+     * @param conf                       A String holding information about the board and players
+     * @param figuresPerPlayer           An Integer representing the number of figures in the game
+     * @param initialCardsPerPlayer      An Integer representing the initial number of cards each player should have in their hand
+     * @param maximumTotalMoves          An integer representing the maximum number of moves allowed this game
+     * @param consequencesForInvalidMove An object representing the consequences for illegal moves
      */
-    public Game(String conf, int figuresPerPlayer, int initialCardsPerPlayer, int maximumTotalMoves, int consequences) {
-        this.players = new ArrayList<>();
+    public Game(String conf, int figuresPerPlayer, int initialCardsPerPlayer, int maximumTotalMoves, int consequencesForInvalidMove) {
+        this.playerList = new ArrayList<>();
         this.deck = new ArrayList<>();
         this.pile = new ArrayList<>();
-        this.playerToMoveId = 0;
+        this.playerToMoveId = 0; // TODO: Should this really be the first player? Check please
         this.playerToStartColor = 0;
         this.movesMade = 0;
         this.maximumTotalMoves = maximumTotalMoves;
         this.figuresPerPlayer = figuresPerPlayer;
         this.initialCardsPerPlayer = initialCardsPerPlayer;
         this.round = 0;
-        this.consequences = Penalty.values()[consequences];
+        this.consequencesForInvalidMove = Penalty.values()[consequencesForInvalidMove];
+        this.cardService = new CardService(null);
         init(conf);
     }
 
@@ -77,14 +80,14 @@ public final class Game {
      */
     public void reshuffle() {
         // System.out.println("reshuffle start deck size " + this.deck.size() + " pile size " + this.pile.size());
-        this.deck.addAll(this.pile);
+        deck.addAll(pile);
         //throw away hand cards
-        for (Player player : this.players) {
-            this.deck.addAll(player.getCards());
-            player.setCards(new ArrayList<>());
+        for (Player player : playerList) {
+            deck.addAll(player.getCardList());
+            player.setCardList(new ArrayList<>());
         }
-        this.pile = new ArrayList<>();
-        Collections.shuffle(this.deck);
+        pile = new ArrayList<>();
+        Collections.shuffle(deck);
         // System.out.println("reshuffle done deck size " + this.deck.size() + " pile size " + this.pile.size());
     }
 
@@ -94,60 +97,59 @@ public final class Game {
     public void reInit() { //for next round
         //assert not everyone is excluded
         this.playersRemaining = 0;
-        for (Player player : this.players) {
+        for (Player player : playerList) {
             player.setOutThisRound(false);
             if (!player.isExcluded()) {
-                this.playersRemaining++;
+                playersRemaining++;
             }
         }
         int excludedCount = 0;
         do {
-            this.playerToStartColor = (this.playerToStartColor + 1) % this.players.size();
-            if (excludedCount >= this.players.size()) {
+            playerToStartColor = (playerToStartColor + 1) % playerList.size();
+            if (excludedCount >= playerList.size()) {
                 //game over
                 break;
             }
             excludedCount++;
-        } while (!this.players.get(this.playerToStartColor).isExcluded());
+        } while (!playerList.get(playerToStartColor).isExcluded());
 
-
-        this.playerToMoveId = this.playerToStartColor;
-        this.round++;
+        playerToMoveId = playerToStartColor;
+        round++;
         // System.out.println(this.round);
     }
 
     /**
-     * Discarding a player's hand considering the state of the pile
+     * Discarding the current player's hand considering the state of the pile
      */
     public ArrayList<Card> discardHandCards() {
-        Player player = this.getCurrentPlayer();
-        this.discardedCards = new ArrayList<>(player.getCards());
-        if (!player.getCards().isEmpty()) {
-            if (!this.pile.isEmpty()) {
+        Player player = getCurrentPlayer();
+        discardedCardList = new ArrayList<>(player.getCardList());
+        if (!player.getCardList().isEmpty()) {
+            if (!pile.isEmpty()) {
                 //keep the last card the same
                 //pop
-                Card pop = this.pile.remove(this.pile.size() - 1);
-                this.pile.addAll(player.getCards());
+                Card pop = pile.remove(pile.size() - 1);
+                pile.addAll(player.getCardList());
                 //read
-                this.pile.add(pop);
+                pile.add(pop);
             } else {
-                this.pile.addAll(player.getCards());
+                pile.addAll(player.getCardList());
             }
-            player.setCards(new ArrayList<>());
+            player.setCardList(new ArrayList<>());
         }
-        return discardedCards;
+        return discardedCardList;
     }
 
     /**
      * Distribute Cards to the players
      */
     public void distributeCards() {
-        for (int i = 0; i < this.initialCardsPerPlayer; i++) {
-            for (Player player : this.players) {
+        for (int i = 0; i < initialCardsPerPlayer; i++) {
+            for (Player player : playerList) {
                 player.draw(this);
             }
         }
-        this.firstMoveOfRound = true;
+        firstMoveOfRound = true;
     }
 
     /**
@@ -155,28 +157,28 @@ public final class Game {
      */
     public void printBoard() {
         System.out.println("BOARD=================");
-        System.out.println("player to move " + this.playerToMoveId);
-        for (Player p : this.players) {
+        System.out.println("player to move " + playerToMoveId);
+        for (Player p : playerList) {
             p.printInfo();
             p.printHouse();
         }
         for (int i = 0; i < this.mainFieldCount; i++) {
             System.out.print(i + "-");
         }
-        System.out.println("");
-        for (int i = 0; i < this.mainFieldCount; i++) {
+        System.out.println();
+        for (int i = 0; i < mainFieldCount; i++) {
             // Field f = this.board.get(i);
-            Field f = this.board[i];
+            Field f = board[i];
             System.out.print(f.getType() + "-");
         }
-        System.out.println("");
-        for (int i = 0; i < this.mainFieldCount; i++) {
+        System.out.println();
+        for (int i = 0; i < mainFieldCount; i++) {
             Field f = this.board[i];
             if (!f.isEmpty()) System.out.print(f.getFigure().getOwnerId() + "-");
             else System.out.print("_" + "-");
         }
-        System.out.println("");
-        this.printTotalCards();
+        System.out.println();
+        printTotalCards();
         System.out.println("===================");
     }
 
@@ -185,26 +187,26 @@ public final class Game {
      */
     public void initDeck() {
         for (int i = 0; i < 7; i++) {
-            this.deck.add(new Card(CardType.card2));
-            this.deck.add(new Card(CardType.card3));
-            this.deck.add(new Card(CardType.plusMinus4));
-            this.deck.add(new Card(CardType.card5));
-            this.deck.add(new Card(CardType.card6));
-            this.deck.add(new Card(CardType.oneToSeven));
-            this.deck.add(new Card(CardType.card8));
-            this.deck.add(new Card(CardType.card9));
-            this.deck.add(new Card(CardType.card10));
-            this.deck.add(new Card(CardType.card12));
-            this.deck.add(new Card(CardType.swapCard));
-            this.deck.add(new Card(CardType.copyCard));
+            this.deck.add(Card.card2);
+            this.deck.add(Card.card3);
+            this.deck.add(Card.plusMinus4);
+            this.deck.add(Card.card5);
+            this.deck.add(Card.card6);
+            this.deck.add(Card.oneToSeven);
+            this.deck.add(Card.card8);
+            this.deck.add(Card.card9);
+            this.deck.add(Card.card10);
+            this.deck.add(Card.card12);
+            this.deck.add(Card.swapCard);
+            this.deck.add(Card.copyCard);
         }
 
         for (int i = 0; i < 10; i++) {
-            this.deck.add(new Card(CardType.startCard1));
-            this.deck.add(new Card(CardType.startCard2));
+            this.deck.add(Card.startCard1);
+            this.deck.add(Card.startCard2);
         }
         for (int i = 0; i < 6; i++) {
-            this.deck.add(new Card(CardType.magnetCard));
+            this.deck.add(Card.magnetCard);
         }
 
         // Collections.shuffle(this.deck, new Random(666)); //deterministic seed
@@ -241,7 +243,7 @@ public final class Game {
 
         //add players Player
         for (int playerCol = 0; playerCol < players; playerCol++) {
-            this.players.add(new Player(playerCol, figuresPerPlayer));
+            this.playerList.add(new Player(playerCol, figuresPerPlayer));
         }
         int seenStarts = 0;
         for (int i = 0; i < fieldCount; i++) {
@@ -256,9 +258,9 @@ public final class Game {
                 // this.players.get(seenStarts++).startField = this.board.get(i); //init starts
                 this.startIndexes[seenStarts] = i;
                 this.occupied[seenStarts] = false;
-                this.players.get(seenStarts).setStartField(this.board[i]); //init starts
+                this.playerList.get(seenStarts).setStartField(this.board[i]); //init starts
                 int off = fieldCount;
-                this.players.get(seenStarts).setHouseFirstIndex(fieldCount);
+                this.playerList.get(seenStarts).setHouseFirstIndex(fieldCount);
                 for (int j = off; j < figuresPerPlayer + off; j++) {
                     this.board[fieldCount] = new Field(fieldCount, FieldType.HOUSE);
 
@@ -273,8 +275,7 @@ public final class Game {
                 // this.board[off].setPrev(this.board[i]); //house fields dont have prev field
             }
         }
-        this.playersRemaining = this.players.size();
-
+        this.playersRemaining = this.playerList.size();
     }
 
     /**
@@ -283,7 +284,7 @@ public final class Game {
      * @return The current player
      */
     public Player getCurrentPlayer() {
-        return this.players.get(this.playerToMoveId);
+        return playerList.get(playerToMoveId);
     }
 
     /**
@@ -292,13 +293,13 @@ public final class Game {
      * @return true as long as there are remaining players
      */
     public boolean nextPlayer() {
-        this.firstMoveOfRound = false;
+        firstMoveOfRound = false;
         int count = 0;
-        if (this.playersRemaining == 0) return false;
+        if (playersRemaining == 0) return false;
         //get next player who is not out yet if there is anyone
         do {
-            this.playerToMoveId = (this.playerToMoveId + 1) % this.players.size();
-            if (count >= this.players.size()) {
+            playerToMoveId = (playerToMoveId + 1) % playerList.size();
+            if (count >= playerList.size()) {
                 return false;
             }
             count++;
@@ -312,11 +313,11 @@ public final class Game {
      */
     public void printTotalCards() {
         int handSum = 0;
-        for (Player player : this.players) {
-            handSum += player.getCards().size();
+        for (Player player : playerList) {
+            handSum += player.getCardList().size();
         }
-        int totalSum = this.deck.size() + this.pile.size() + handSum;
-        System.out.println("total cards in game " + totalSum + " deck " + this.deck.size() + " pile " + this.pile.size() + " hands " + handSum);
+        int totalSum = deck.size() + pile.size() + handSum;
+        System.out.println("total cards in game " + totalSum + " deck " + deck.size() + " pile " + pile.size() + " hands " + handSum);
         if (totalSum != 110) {
             throw new RuntimeException("total sum of cards is " + totalSum + " instead of 110");
         }
@@ -344,50 +345,59 @@ public final class Game {
      *
      * @return An ArrayList with all the winners
      */
-    public ArrayList<Player> getOrder(ArrayList<Player> playerWinOrder) {
+    public ArrayList<Integer> getWinnerOrder() {
         //iterate through players in random order to make ties random order
-        ArrayList<Player> randomOrderPlayers = new ArrayList<>(this.players);
+        ArrayList<Player> randomOrderPlayers = new ArrayList<>(playerList);
         Collections.shuffle(randomOrderPlayers);
-        for (Player randomOrderPlayer : randomOrderPlayers) {
+
+        ArrayList<Player> playerWinOrder = new ArrayList<>();
+        ArrayList<Integer> playerIdWinOrder = new ArrayList<>();
+        for (Player player : randomOrderPlayers) {
             //find first 1, insert before
-            boolean foundInx = false;
-            for (int j = 0; j < playerWinOrder.size(); j++) {
-                if (compare(playerWinOrder.get(j), randomOrderPlayer) == 1) {
-                    playerWinOrder.add(j, randomOrderPlayer);
-                    foundInx = true;
+            boolean inserted = false;
+            for (int i = 0; i < playerWinOrder.size(); i++) {
+                if (compare(playerWinOrder.get(i), player) == 1) {
+                    playerWinOrder.add(i, player);
+                    inserted = true;
                     break;
                 }
             }
             //if no 1 then append
-            if (!foundInx) {
-                playerWinOrder.add(randomOrderPlayer);
+            if (!inserted) {
+                playerWinOrder.add(player);
             }
         }
-        return playerWinOrder;
+        return (ArrayList<Integer>) playerWinOrder.stream().map(Player::getPlayerId).collect(Collectors.toList());
     }
 
-
-    public boolean checkOver() {
-        for (Player player : this.players) {
-            if (player.getFiguresInHouse() == this.figuresPerPlayer) {
+    /**
+     * True if the game is over
+     *
+     * @return true if the game is over
+     */
+    public boolean checkGameOver() {
+        for (Player player : playerList) {
+            if (player.getFiguresInHouse() == figuresPerPlayer) {
                 return true;
             }
         }
 
-        if (this.movesMade >= this.maximumTotalMoves) return true;
+        if (movesMade >= maximumTotalMoves) return true;
         return !this.nextPlayer();
     }
 
-    public ArrayList<Player> getWinners() {
-        ArrayList<Player> playerWinOrder = new ArrayList<>();
-
-        if (this.checkOver()) {
-            getOrder(playerWinOrder);
-            return playerWinOrder;
-        }
-        playerWinOrder.add(null);
-        return playerWinOrder;
-    }
+    // Eventuell nicht nötig, da man sowieso erst einmal checken muss ob das Spiel zuende ist bevor man
+    // sich winner holen möchte
+//    public ArrayList<Player> getWinners() {
+//        ArrayList<Player> playerWinOrder;
+//
+//        if (checkGameOver()) {
+//            playerWinOrder = getWinnerOrder();
+//            return playerWinOrder;
+//        }
+//        playerWinOrder.add(null);
+//        return playerWinOrder;
+//    }
 
     /**
      * Increments round by 1
@@ -409,7 +419,7 @@ public final class Game {
      * @return A Boolean, when true the round is over
      */
     public boolean roundOver() {
-        return this.playersRemaining == 0;
+        return playersRemaining == 0;
     }
 
     /**
@@ -424,24 +434,24 @@ public final class Game {
     /**
      * Checks for legal moves and retrieves moves if legal
      *
-     * @param skip            A Boolean indicating whether to skip the move
-     * @param card            An Enum representing the type of the card
-     * @param selectedValue   An Integer representing a selected value for the move
-     * @param pieceId         An Integer representing the id of the piece
-     * @param isStarter       A Boolean indicating whether the move is the starting move
-     * @param opponentPieceId An optional Integer representing the identifier of the opponent's piece
-     * @return An object representing the Move to be executed, null if no cards left or illegal move
+     * @param skip            A boolean indicating whether to skip the move
+     * @param card            An enum representing the type of the card
+     * @param selectedValue   An integer representing a selected value for the move
+     * @param pieceId         An integer representing the id of the piece
+     * @param isStarter       A boolean indicating whether the move is the starting move
+     * @param opponentPieceId An optional integer representing the identifier of the opponent's piece
+     * @return An object representing the move to be executed, null if no cards left or illegal move
      */
-    public Move getMove(boolean skip, CardType card, int selectedValue,
+    public Move getMove(boolean skip, Card card, int selectedValue,
                         int pieceId, boolean isStarter, Integer opponentPieceId) {
         cardService.setType(card);
         Player player = getCurrentPlayer();
         if (card == null || skip) return null;
         //check if cardType in cards
         Card foundCard = null;
-        for (int i = 0; i < player.getCards().size(); i++) {
-            if (player.getCards().get(i).getType() == card) {
-                foundCard = player.getCards().get(i);
+        for (int i = 0; i < player.getCardList().size(); i++) {
+            if (player.getCardList().get(i) == card) {
+                foundCard = player.getCardList().get(i);
                 break;
             }
         }
@@ -449,8 +459,7 @@ public final class Game {
         cardService.setType(foundCard);
         Move move = cardService.getMove(this, selectedValue, pieceId, isStarter, opponentPieceId, player);
         //for m in legalMoves see if functionally the same
-        ArrayList<Move> moves = new ArrayList<>();
-        player.generateMoves(this, moves); //TODO only need to gen moves for a particular card type
+        ArrayList<Move> moves = player.generateMoves(this); //TODO only need to gen moves for a particular card type
         for (Move value : moves) {
             if (value.equal(move)) {
                 return move;
@@ -472,7 +481,7 @@ public final class Game {
      */
     public boolean tryMove(boolean skip, int cardOrdinal, int selectedValue,
                            int pieceId, boolean isStarter, Integer opponentPieceId) {
-        CardType card = CardType.values()[cardOrdinal];
+        Card card = Card.getType(cardOrdinal);
         Move move = getMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
         if (move == null) {
             handleIllegalMove();
@@ -489,8 +498,8 @@ public final class Game {
      * @param player An object representing the player to exclude from the round
      */
     public void excludeFromRound(Player player) { //return cards??
-        this.playersRemaining--;
-        this.discardHandCards(); //of current player
+        playersRemaining--;
+        discardHandCards(); //of current player
         // this.nextPlayer();
     }
 
@@ -510,9 +519,9 @@ public final class Game {
      * Handles illegal move and applies penalties
      */
     public void handleIllegalMove() {
-        if (consequences == Penalty.kickFromGame) {
+        if (consequencesForInvalidMove == Penalty.kickFromGame) {
             excludeFromGame(this.getCurrentPlayer());
-        } else if (consequences == Penalty.excludeFromRound) {
+        } else if (consequencesForInvalidMove == Penalty.excludeFromRound) {
             excludeFromRound(this.getCurrentPlayer());
         } else {
             //unreachable
@@ -527,9 +536,9 @@ public final class Game {
      * @return An Integer indicating the position of the figure in the house
      */
     public Integer getHousePosition(int playerId, int pieceId) {
-        Figure f = this.players.get(playerId).getFigures().get(pieceId);
+        Figure f = this.playerList.get(playerId).getFigureList().get(pieceId);
         if (!f.isInHouse()) return null;
-        return this.players.size() - (f.getField().getVal() - this.players.get(playerId).getHouseFirstIndex()) + 1;
+        return this.playerList.size() - (f.getField().getFieldId() - this.playerList.get(playerId).getHouseFirstIndex()) + 1;
     }
 
     public void removePlayerFromBoard(Player player) {

@@ -98,8 +98,9 @@ public class Main {
                             int cardInx = reader.nextInt();
                             System.out.println("Enter a figure to use it on: ");
                             int figInx = reader.nextInt();
-                            Figure chosenfigure = curPlayer.getFigures().get(figInx);
-                            curPlayer.getCards().get(cardInx).getMoves(game, chosenfigure, humanMoves, curPlayer);
+                            Figure chosenfigure = curPlayer.getFigureList().get(figInx);
+                            game.getCardService().setType(curPlayer.getCardList().get(cardInx));
+                            game.getCardService().getMoves(game, chosenfigure, humanMoves, curPlayer);
                             for (Move humanMove : humanMoves) {
                                 humanMove.printMove();
                             }
@@ -114,8 +115,10 @@ public class Main {
                         curPlayer.setOutThisRound();
                     }
                     // game.printBoard();
-                    winners = game.getWinners();
-                    winner = winners.get(0);
+                    if (game.checkGameOver()) {
+                        winners = game.getWinnerOrder();
+                        winner = winners.get(0);
+                    }
                     totalMoves++;
                     if (totalMoves >= maxMoves) break;
                 }

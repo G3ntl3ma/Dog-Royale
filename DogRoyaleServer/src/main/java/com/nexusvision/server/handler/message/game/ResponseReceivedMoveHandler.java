@@ -3,8 +3,8 @@ package com.nexusvision.server.handler.message.game;
 import com.nexusvision.server.controller.GameLobby;
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.message.MessageHandler;
-import com.nexusvision.server.model.enums.CardType;
-import com.nexusvision.server.model.gamelogic.Card;
+import com.nexusvision.server.model.enums.Card;
+import com.nexusvision.server.service.CardService;
 import com.nexusvision.server.model.gamelogic.Game;
 import com.nexusvision.server.model.messages.game.DrawCards;
 import com.nexusvision.server.model.messages.game.Response;
@@ -22,9 +22,9 @@ public class ResponseReceivedMoveHandler extends MessageHandler<Response> {
         GameLobby gameLobby = serverController.getGameOfPlayer(clientID);
         Game game = gameLobby.getGame();
         DrawCards drawCards = new DrawCards();
-        ArrayList<CardType> _droppedCards = new ArrayList<>();
-        for(Card card : game.getDiscardedCards()) {
-            _droppedCards.add(card.getType());
+        ArrayList<Integer> _droppedCards = new ArrayList<>();
+        for(Card card : game.getDiscardedCardList()) {
+            _droppedCards.add(card.ordinal());
         }
         drawCards.setType(TypeGame.drawCards.getOrdinal());
         drawCards.setDroppedCards(_droppedCards);

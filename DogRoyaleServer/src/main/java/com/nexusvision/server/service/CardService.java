@@ -1,7 +1,8 @@
-package com.nexusvision.server.model.gamelogic;
+package com.nexusvision.server.service;
 
-import com.nexusvision.server.model.enums.CardType;
+import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.FieldType;
+import com.nexusvision.server.model.gamelogic.*;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -12,10 +13,10 @@ import java.util.ArrayList;
  * @author dgehse
  */
 @Data
-public class Card {
-    private CardType type;
+public class CardService {
+    private Card type;
 
-    public Card(CardType type) {
+    public CardService(Card type) {
         this.type = type;
     }
 
@@ -48,7 +49,7 @@ public class Card {
 
         if (!to.isEmpty()) { //check.isEmpty()ness first otherwise to.figure is null and therefore to.figure.color bug
             if ((to.getType() == FieldType.START
-                    && to == game.getPlayers().get(to.getFigure().getColor()).getStartField())
+                    && to == game.getPlayerList().get(to.getFigure().getOwnerId()).getStartField())
                     || to.getType() == FieldType.HOUSE) {
                 return;
             }
@@ -64,7 +65,7 @@ public class Card {
             } else {
                 steps--;
                 //check if move passes own startField
-                if (game.getPlayers().get(figure.getColor()).getStartField() == to) {
+                if (game.getPlayerList().get(figure.getOwnerId()).getStartField() == to) {
                     to = to.getHouse();
                 } else to = to.getNext();
             }
@@ -73,7 +74,7 @@ public class Card {
             //check if fields occupied and startField of that figure
             if (!to.isEmpty()) { //check.isEmpty()ness first otherwise to.figure is null and therefore to.figure.color bug
                 if ((to.getType() == FieldType.START
-                        && to == game.getPlayers().get(to.getFigure().getColor()).getStartField())
+                        && to == game.getPlayerList().get(to.getFigure().getOwnerId()).getStartField())
                         || to.getType() == FieldType.HOUSE) {
                     return;
                 }
@@ -97,8 +98,8 @@ public class Card {
      */
     public Move getMove(Game game, int selectedValue,
                         int pieceId, boolean isStarter, Integer opponentPieceId, Player player) {
-        Figure figure = player.getFigures().get(pieceId);
-        Figure oppfigure = player.getFigures().get(opponentPieceId);
+        Figure figure = player.getFigureList().get(pieceId);
+        Figure oppfigure = player.getFigureList().get(opponentPieceId);
         ArrayList<Move> moves = new ArrayList<>();
         switch (this.type) {
             case swapCard:
@@ -139,11 +140,11 @@ public class Card {
         switch (this.type) {
             case swapCard:
                 if (figure.isOnBench() || figure.isInHouse()) break;
-                for (int i = 0; i < game.getPlayers().size(); i++) {
-                    if (i == figure.getColor()) continue;
-                    Player opponent = game.getPlayers().get(i);
-                    for (int j = 0; j < opponent.getFigures().size(); j++) {
-                        Figure oppfigure = opponent.getFigures().get(j);
+                for (int i = 0; i < game.getPlayerList().size(); i++) {
+                    if (i == figure.getOwnerId()) continue;
+                    Player opponent = game.getPlayerList().get(i);
+                    for (int j = 0; j < opponent.getFigureList().size(); j++) {
+                        Figure oppfigure = opponent.getFigureList().get(j);
                         if (!oppfigure.isOnBench() && !oppfigure.isInHouse() && oppfigure.getField().getType() != FieldType.START) {
                             moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this.type));
                         }
@@ -194,11 +195,11 @@ public class Card {
                 int inx = game.getPile().size() - 1;
                 for (int i = inx; i > 0; i--) {
                     Card lastcard = game.getPile().get(game.getPile().size() - 1);
-                    if (lastcard.type != CardType.copyCard) {
+                    if (lastcard != Card.copyCard) {
                         // lastCard.getMoves(game, figure, moves);//bug, sets wrong usedCard
                         this.type = lastcard;
                         this.getMoves(game, figure, moves, player);
-                        this.type = CardType.copyCard; //hacky
+                        this.type = Card.copyCard; //hacky
                         break;
                     }
                 }
