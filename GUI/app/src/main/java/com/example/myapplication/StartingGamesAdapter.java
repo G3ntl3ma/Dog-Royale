@@ -50,7 +50,7 @@ public class StartingGamesAdapter extends RecyclerView.Adapter<StartingScreenVie
                     //changed - deletet stuff
 
                 NavHostFragment.findNavController(startinggames)
-                        .navigate(R.id.action_SpectateGames_to_waitingScreen);
+                        .navigate(R.id.action_StartingGames_to_waitingScreen);
             }
         });
     }

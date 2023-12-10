@@ -15,14 +15,16 @@ public class ServerViewModel extends ViewModel {
     List<Game> gamesList = new ArrayList<Game>();
     MutableLiveData<List<Game>> games = new MutableLiveData<>();
 
-    MutableLiveData<List<Game>> spectateGames = new MutableLiveData<>();
-    MutableLiveData<List<Game>> runningGames = new MutableLiveData<>();
+    MutableLiveData<List<Game>> spectateGames = new MutableLiveData<>(new ArrayList<Game>());
+    MutableLiveData<List<Game>> runningGames = new MutableLiveData<>(new ArrayList<Game>());
 
-    MutableLiveData<List<MatchHistory>> matchHistory = new MutableLiveData<>();
+    MutableLiveData<List<MatchHistory>> matchHistory = new MutableLiveData<>(new ArrayList<MatchHistory>());
     boolean setup = false;
 
-    public void setMatchHistory(List<MatchHistory> matchHistory){
-        this.matchHistory.setValue(matchHistory);
+    public void setMatchHistory(List<ReturnGameList.FinishedGame> matchHistory){
+        for (ReturnGameList.FinishedGame match: matchHistory) {
+            addMatchHistory(new MatchHistory(match.getGameId(), match.getWinnerPlayerId()));
+        }
     }
 
     public LiveData<List<MatchHistory>> getMatchHistory(){

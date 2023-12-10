@@ -86,8 +86,8 @@ public class StartingGames extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         adapter = new StartingGamesAdapter(getContext(), games, this);
-        binding.recyclerView.setAdapter(adapter);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.StartingGamesRecyclerView.setAdapter(adapter);
+        binding.StartingGamesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         viewModel = new ViewModelProvider(requireActivity()).get(ServerViewModel.class);
 
         viewModel.getRunningGames().observe(getViewLifecycleOwner(), list -> {

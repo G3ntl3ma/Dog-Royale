@@ -145,7 +145,7 @@ public class Game_board extends Fragment {
 
         /**DELETE AND DO WITH MESSAGE
          */
-        ReturnLobbyConfig insertReturnLobbyConfig = new ReturnLobbyConfig(new Integer(6), new Integer(100), new Integer(20) , Arrays.asList(new Color(0, R.color.p1_color), new Color(1, R.color.p2_color), new Color(2, R.color.p3_color), new Color(3, R.color.p4_color), new Color(4, R.color.p5_color), new Color(5, R.color.p6_color)), new DrawCardFields(5, Arrays.asList(1, 4, 7, 10, 13)), new StartFields(6, Arrays.asList(12, 0, 24, 83, 69, 45)), new Integer(5), new PlayerOrder(OrderType.fixed, Arrays.asList(new Order(0, "OwO"), new Order(1, "UwU"), new Order(2, "AwA"), new Order(3, "QwQ"), new Order(4, "XwX"))),  Arrays.asList(new Observer(new Integer(1), "OwO")), new Integer(5), new Integer(5), new Integer(1), new Integer(15), new Integer(5));
+        ReturnLobbyConfig insertReturnLobbyConfig = new ReturnLobbyConfig(new Integer(6), new Integer(40), new Integer(10) , Arrays.asList(new Color(0, R.color.p1_color), new Color(1, R.color.p2_color), new Color(2, R.color.p3_color), new Color(3, R.color.p4_color), new Color(4, R.color.p5_color), new Color(5, R.color.p6_color)), new DrawCardFields(5, Arrays.asList(1, 4, 7, 10, 13)), new StartFields(6, Arrays.asList(0, 7, 14, 21, 28, 35)), new Integer(5), new PlayerOrder(OrderType.fixed, Arrays.asList(new Order(0, "OwO"), new Order(1, "UwU"), new Order(2, "AwA"), new Order(3, "QwQ"), new Order(4, "XwX"))),  Arrays.asList(new Observer(new Integer(1), "OwO")), new Integer(5), new Integer(5), new Integer(1), new Integer(15), new Integer(5));
         viewModel.setGameInformation(new GameInformation(insertReturnLobbyConfig));
         /**DELETE AND DO WITH MESSAGE
         */
@@ -290,18 +290,29 @@ public class Game_board extends Fragment {
         });
         //NUR ZUM TESTEN für figuren movement
 
-
         binding.moveFigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Creating a List with DiscardItems for Testing
                 List<BoardState.DiscardItem> DiscardItems = new ArrayList<>(Arrays.asList(new BoardState.DiscardItem(0, BoardState.getCard12()), new BoardState.DiscardItem(1, BoardState.getCardCopy()), new BoardState.DiscardItem(2, BoardState.getCard3()), new BoardState.DiscardItem(3, BoardState.getCardMagnet())));
                 List<BoardState.Piece> pieces = new ArrayList<>();
-                pieces.add(new BoardState.Piece(0, 0, position, false, 0));
-                System.out.println("Name:" + viewModel.getPlayerName(0));
-                BoardState boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, false, new  ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
+                BoardState boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, false, new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
+                if (position <gameInformation.getFieldsize()) {
+                    pieces.add(new BoardState.Piece(0, 0, position, false, 0));
+                    System.out.println("Name:" + viewModel.getPlayerName(0));
+                    boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, false, new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
+                } else if (gameInformation.getFiguresPerPlayer() + gameInformation.getFieldsize()> position) {
+                    pieces.add(new BoardState.Piece(0, 0, null, false, position - gameInformation.getFieldsize()));
+                    boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, false, new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
+
+                } else
+                {
+                    pieces.add(new BoardState.Piece(0, 0, null, false, position - gameInformation.getFieldsize()));
+                    boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, true, new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
+                }
+
                 boardUpdater.UpdateBoard(boardState);
-                position++;
+                position+=2;
                 move_count++;
             }
 
