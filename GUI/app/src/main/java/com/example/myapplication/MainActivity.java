@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 
 
+import android.app.ActionBar;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -29,6 +30,7 @@ import com.example.myapplication.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 
@@ -51,11 +53,14 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
         setSupportActionBar(binding.toolbar);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
+
 
         serverViewModel = new ViewModelProvider(this).get(ServerViewModel.class);
         gameboardViewModel = new ViewModelProvider(this).get(GameboardViewModel.class);

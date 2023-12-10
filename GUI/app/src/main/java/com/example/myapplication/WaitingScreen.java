@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -77,6 +78,14 @@ public class WaitingScreen extends Fragment {
             public void onClick(View view) {
                 NavHostFragment.findNavController(WaitingScreen.this)
                         .navigate(R.id.action_waitingScreen_to_game_board_layout);
+            }
+        });
+
+        binding.goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(WaitingScreen.this)
+                        .navigate(R.id.action_waitingScreen_to_FirstFragment);
             }
         });
     }

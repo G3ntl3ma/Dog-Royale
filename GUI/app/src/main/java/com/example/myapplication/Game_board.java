@@ -5,11 +5,14 @@ import android.graphics.PorterDuff;
 import android.media.Image;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavHost;
 import androidx.navigation.fragment.NavHostFragment;
 
 
@@ -97,6 +100,15 @@ public class Game_board extends Fragment {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                NavHostFragment.findNavController(Game_board.this)
+                        .navigate(R.id.action_game_board_layout_to_FirstFragment);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         super.onCreate(savedInstanceState);
     }
 
@@ -273,6 +285,10 @@ public class Game_board extends Fragment {
         });
 
 
+
+
+
+
         //NUR ZUM TESTEN für figuren movement
 
 
@@ -290,5 +306,8 @@ public class Game_board extends Fragment {
             }
 
         });
+
+
+
     }
 }
