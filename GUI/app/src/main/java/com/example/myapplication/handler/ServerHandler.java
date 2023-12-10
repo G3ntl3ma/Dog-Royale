@@ -1,5 +1,7 @@
 package com.example.myapplication.handler;
 
+import android.os.AsyncTask;
+
 import com.example.myapplication.controller.ClientController;
 import com.example.myapplication.handler.messageHandler.game.*;
 import com.example.myapplication.handler.messageHandler.menu.*;
@@ -59,7 +61,7 @@ public class ServerHandler extends Handler implements Runnable {
             instance = new ServerHandler(socket);
         }
         return instance;}
-    private ServerHandler(Socket socket) {
+    public ServerHandler(Socket socket) {
         clientController = ClientController.getInstance();
         this.serverSocket = socket;
         PrintWriter writer;
@@ -70,7 +72,6 @@ public class ServerHandler extends Handler implements Runnable {
         }
         broadcaster = writer;
 }
-
 
 
 
@@ -104,23 +105,24 @@ public class ServerHandler extends Handler implements Runnable {
                 logger.error("Error while trying to close the connection: " + e.getMessage());
             }
         }
+
     }
     /**
      * Writes the specified message to the broadcaster
      */
-    public synchronized void broadcast(String message) {
-        new Thread(() -> {
-            try (PrintWriter writer = this.broadcaster) {
-                if (writer != null) {
-                    writer.write(message);
-                    writer.flush();
-                } else {
-                    logger.error("Error broadcasting message: broadcaster is null");
-                }
-            } catch (Exception e) {
-                logger.error("Error broadcasting message", e);
+    public void broadcast(String message) {
+        new Thread(() -> {try (PrintWriter writer = this.broadcaster) {
+            if (writer != null) {
+                writer.write(message);
+                writer.flush();
+            } else {
+                logger.error("Error broadcasting message: broadcaster is null");
             }
-        }).start();
+        } catch (Exception e) {
+            logger.error("Error broadcasting message", e);
+        }}).start();
+
+
     }
 
 
