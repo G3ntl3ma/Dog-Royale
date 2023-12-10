@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     static CurrentGameViewModel currentGameViewModel;
     static TimerviewModel timerviewModel;
     static LastCardViewModel lastCardViewModel;
+    static DiscardPileViewModel discardPileViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         currentGameViewModel = new ViewModelProvider(this).get(CurrentGameViewModel.class);
         timerviewModel = new ViewModelProvider(this).get(TimerviewModel.class);
         lastCardViewModel = new ViewModelProvider(this).get(LastCardViewModel.class);
+        discardPileViewModel = new ViewModelProvider(this).get(DiscardPileViewModel.class);
     }
 
     @Override
@@ -102,4 +104,5 @@ public class MainActivity extends AppCompatActivity {
     public static CurrentGameViewModel getCurrentGameViewModel(){return currentGameViewModel;}
     public static TimerviewModel getTimerViewModel(){return timerviewModel;}
     public static LastCardViewModel getLastCardViewModel(){return lastCardViewModel;}
+    public static DiscardPileViewModel getDiscardPileViewModel(){return discardPileViewModel;}
 }

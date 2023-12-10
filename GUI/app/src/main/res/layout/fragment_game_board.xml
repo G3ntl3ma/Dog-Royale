@@ -134,4 +134,32 @@
 
     </LinearLayout>
 
+    <ScrollView
+        android:id="@+id/GameHistoryView"
+        android:layout_width="wrap_content"
+        android:layout_height="65dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginBottom="23dp"
+        app:layout_constraintBottom_toTopOf="@+id/game_board_layout"
+        app:layout_constraintStart_toEndOf="@+id/timerView">
+
+        <TextView
+            android:id="@+id/MatchHistoryText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:text="Hello"/>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/GameHistoryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:layout_marginBottom="10dp"
+        android:text="Game History"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/GameHistoryView"
+        app:layout_constraintStart_toEndOf="@+id/timerView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
