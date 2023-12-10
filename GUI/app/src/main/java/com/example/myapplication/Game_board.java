@@ -298,8 +298,13 @@ public class Game_board extends Fragment {
 
                 List<BoardState.Piece> pieces = new ArrayList<>();
                 pieces.add(new BoardState.Piece(0, 0, position, false, 0));
+
+
+
+                pieces.add(new BoardState.Piece(0, 0, position, false, 0));
+
                 System.out.println("Name:" + viewModel.getPlayerName(0));
-                BoardState boardState = new BoardState(pieces, null, null, 0, move_count, 0, true, new  ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
+                BoardState boardState = new BoardState(pieces, null, null, 0, move_count, 0, false, new  ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
                 boardUpdater.UpdateBoard(boardState);
                 position++;
                 move_count++;

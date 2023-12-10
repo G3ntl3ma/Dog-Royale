@@ -79,7 +79,6 @@ public class GameInformation {
         int count = 0;
         for (Order order : playerOrder.getOrder()) {
             playerOrderDictionary.put(order.getClientId(), count);
-            System.out.println("clientId: " + order.getClientId() + " count: " + count);
             count++;
         }
 
@@ -102,6 +101,13 @@ public class GameInformation {
         this.maximumGameDuration = returnLobbyConfig.getMaximumGameDuration();
         this.maximumTotalMoves = returnLobbyConfig.getMaximumTotalMoves();
 
+        viewModel = MainActivity.getGameboardViewModel();
+        int count = 0;
+        for (Order order : playerOrder.getOrder()) {
+            playerOrderDictionary.put(order.getClientId(), count);
+            System.out.println("clientId: " + order.getClientId() + " count: " + count);
+            count++;
+        }
     }
 
     public static void setPlayerCount(Integer playerCount) {
@@ -218,7 +224,6 @@ public class GameInformation {
     }
 
     public Integer getPlayerClientNumber(Integer clientId) {
-        System.out.println("clientId: " + clientId);
         return playerOrderDictionary.get(clientId);
     }
 

@@ -95,9 +95,10 @@ public class BoardUpdater {
                 }
                 //changing the FiguresInBank Info in the PlayerInformationTable
                 for (Order order : gameInformation.getPlayerOrder().getOrder()) {
-
-                    playerInformationTable.changeFigureInfo(order.getClientId(), viewModel.getFiguresInBank().getValue().get(gameInformation.getPlayerClientNumber(order.getClientId())));
-
+                    System.out.println("Called");
+                    Integer playerNumber = viewModel.getFiguresInBank().getValue().get(gameInformation.getPlayerClientNumber(order.getClientId()));
+                    playerInformationTable.changeFigureInfo(order.getClientId(), playerNumber);
+                    System.out.println("Called2");
                 }
 
 
