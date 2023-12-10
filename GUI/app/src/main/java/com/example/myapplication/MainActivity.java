@@ -4,6 +4,7 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 
+import com.example.myapplication.controller.ClientController;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+    ClientController clientController = ClientController.getInstance();
 
     static ServerViewModel serverViewModel;
     static GameboardViewModel gameboardViewModel;
