@@ -9,8 +9,6 @@ import com.nexusvision.server.model.messages.game.BoardState;
 import com.nexusvision.server.model.messages.game.TypeGame;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class BoardStateService {
 
@@ -30,8 +28,8 @@ public class BoardStateService {
             for (int pieceId = 0; pieceId < player.getFigures().size(); pieceId++) {
                 BoardState.Piece piece = new BoardState.Piece();
 
-                Figure figure = player.getFigures().get(pieceId);
-                int position = figure.getField().getVal();
+                Figure figure = player.getFigureList().get(pieceId);
+                int position = figure.getField().getFieldId();
                 boolean isOnBench = figure.isOnBench();
                 Integer inHousePosition = game.getHousePosition(playerId, pieceId);
                 piece.setPieceId(pieceId);

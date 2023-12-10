@@ -39,6 +39,8 @@ public final class Game {
     private boolean firstMoveOfRound;
     private int[] startIndexes; //indeces of startFields, unused
 
+    private CardService cardService;
+
     /**
      * The Constructor initializes Games
      *
@@ -170,7 +172,7 @@ public final class Game {
         System.out.println("");
         for (int i = 0; i < this.mainFieldCount; i++) {
             Field f = this.board[i];
-            if (!f.isEmpty()) System.out.print(f.getFigure().getColor() + "-");
+            if (!f.isEmpty()) System.out.print(f.getFigure().getOwnerId() + "-");
             else System.out.print("_" + "-");
         }
         System.out.println("");
@@ -222,10 +224,8 @@ public final class Game {
             if (conf.charAt(i) == 's') players++;
         }
 
-        int max = conf.length(); //TODO ??
         int fieldCount = conf.length();
-        this.mainFieldCount = max;
-
+        this.mainFieldCount = fieldCount;
 
         int totalFieldCount = fieldCount + figuresPerPlayer * players; //playerCount
         this.board = new Field[totalFieldCount];
@@ -235,7 +235,7 @@ public final class Game {
 
         // System.out.println("conf string length " + max);
 
-        for (int i = 0; i < max; i++) {
+        for (int i = 0; i < fieldCount; i++) {
             this.board[i] = new Field(i, conf.charAt(i));
         }
 
@@ -244,15 +244,14 @@ public final class Game {
             this.players.add(new Player(playerCol, figuresPerPlayer));
         }
         int seenStarts = 0;
-        for (int i = 0; i < max; i++) {
-            int prev = ((i - 1) + max) % max;
-            int next = (i + 1) % max;
+        for (int i = 0; i < fieldCount; i++) {
+            int prev = ((i - 1) + fieldCount) % fieldCount;
+            int next = (i + 1) % fieldCount;
 
             this.board[i].setNext(this.board[next]);
             this.board[i].setPrev(this.board[prev]);
             // this.board[i].settype(conf.charAt(i));
 
-            //TODO add house fields
             if (conf.charAt(i) == 's') {
                 // this.players.get(seenStarts++).startField = this.board.get(i); //init starts
                 this.startIndexes[seenStarts] = i;
@@ -261,7 +260,6 @@ public final class Game {
                 int off = fieldCount;
                 this.players.get(seenStarts).setHouseFirstIndex(fieldCount);
                 for (int j = off; j < figuresPerPlayer + off; j++) {
-                    // this.board.add(new Field(fieldCount++, 'h'));
                     this.board[fieldCount] = new Field(fieldCount, FieldType.HOUSE);
 
                     fieldCount++;
@@ -436,7 +434,8 @@ public final class Game {
      */
     public Move getMove(boolean skip, CardType card, int selectedValue,
                         int pieceId, boolean isStarter, Integer opponentPieceId) {
-        Player player = this.getCurrentPlayer();
+        cardService.setType(card);
+        Player player = getCurrentPlayer();
         if (card == null || skip) return null;
         //check if cardType in cards
         Card foundCard = null;
@@ -447,7 +446,8 @@ public final class Game {
             }
         }
         if (foundCard == null) return null;
-        Move move = foundCard.getMove(this, selectedValue, pieceId, isStarter, opponentPieceId, player);
+        cardService.setType(foundCard);
+        Move move = cardService.getMove(this, selectedValue, pieceId, isStarter, opponentPieceId, player);
         //for m in legalMoves see if functionally the same
         ArrayList<Move> moves = new ArrayList<>();
         player.generateMoves(this, moves); //TODO only need to gen moves for a particular card type
@@ -515,6 +515,7 @@ public final class Game {
         } else if (consequences == Penalty.excludeFromRound) {
             excludeFromRound(this.getCurrentPlayer());
         } else {
+            //unreachable
         }
     }
 
@@ -530,5 +531,22 @@ public final class Game {
         if (!f.isInHouse()) return null;
         return this.players.size() - (f.getField().getVal() - this.players.get(playerId).getHouseFirstIndex()) + 1;
     }
+
+    public void removePlayerFromBoard(Player player) {
+        //dont touch figures in house for winner order
+        for (Figure figure : player.getFigureList()) {
+            figure.setField(null);
+        }
+        for (Field field : this.board) {
+            field.setFigure(null);
+        }
+    }
+
+    public Move getRandomMove() {
+        ArrayList<Move> moves = getCurrentPlayer().generateMoves(this);
+        if (moves.isEmpty()) return null;
+        return moves.get(0);
+    }
+
 }
 

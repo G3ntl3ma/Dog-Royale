@@ -11,16 +11,16 @@ import lombok.Data;
 @Data
 public final class Field {
 
-    private final int val; //TODO better name
+    private final int fieldId;
     private final FieldType type;
 
     private Figure figure;
     private Field next;
     private Field house;
-    private Field prev;  //these should be final TODO rename to set
+    private Field prev;  //TODO rename to set
 
-    public Field(int val, FieldType type) {
-        this.val = val;
+    public Field(int fieldId, FieldType type) {
+        this.fieldId = fieldId;
         this.figure = null;
         this.type = type;
     }
@@ -32,7 +32,7 @@ public final class Field {
      * @param typeChar A Char representing the type of the Field
      */
     public Field(int val, char typeChar) {
-        this.val = val;
+        this.fieldId = val;
         this.figure = null;
         switch (typeChar) {
             case 'h':
@@ -67,7 +67,7 @@ public final class Field {
      * Prints the value of val //TODO Better Name
      */
     public void printVal() {
-        System.out.println(this.val);
+        System.out.println(this.fieldId);
     }
 
     /**
@@ -75,7 +75,7 @@ public final class Field {
      */
     public void printVals() {
         System.out.println("this val");
-        System.out.println(this.val);
+        System.out.println(this.fieldId);
         System.out.println("next val");
         this.next.printVal();
         System.out.println("prev val");

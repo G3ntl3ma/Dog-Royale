@@ -74,7 +74,7 @@ public final class Player {
         Field house = this.startField.getHouse();
         System.out.print("house: ");
         while (house != null) {
-            if (!house.isEmpty()) System.out.print(house.getFigure().getColor() + "-");
+            if (!house.isEmpty()) System.out.print(house.getFigure().getOwnerId() + "-");
             else System.out.print("_" + "-");
             house = house.getNext();
         }

@@ -7,6 +7,7 @@ import com.nexusvision.server.model.enums.FieldType;
  *
  * @author dgehse
  */
+@Data
 public final class Move {
 
     private final Field from;
@@ -34,6 +35,20 @@ public final class Move {
         this.cardUsed = cardUsed;
     }
 
+    public int getSelectedValue() {
+        //formula
+        //(startfieldofplayervalue + tofieldvalue - firsthousefieldinx) - currentfieldvalue
+        if(to.getType() == FieldType.HOUSE && from.getType() != FieldType.HOUSE) {
+            int toValue = player.getStartField().getFieldId() + to.getFieldId() - player.getHouseFirstIndex();
+            int fromvalue = from.getFieldId();
+            return toValue - fromvalue;
+        }
+        else {
+            return to.getFieldId() - from.getFieldId();
+        }
+
+    }
+
     /**
      * Constructor for the Move
      *
@@ -56,7 +71,8 @@ public final class Move {
      */
     public boolean equal(Move move) {
         //TODO readability
-        if (this.from == move.from && this.to == move.to && this.isSwapMove == move.isSwapMove && this.isStartMove == move.isStartMove &&
+        if (this.from == move.from && this.to == move.to && this.isSwapMove == move.isSwapMove
+                && this.isStartMove == move.isStartMove &&
                 this.player == move.player && this.cardUsed == move.cardUsed) {
             return true;
         }
@@ -64,13 +80,12 @@ public final class Move {
         if (this.from == null || move.from == null || this.to == null || move.to == null) {
             return this.from == null && move.from == null && this.to == null && move.to == null &&
                     this.isSwapMove == move.isSwapMove && this.isStartMove == move.isStartMove
-                    && this.player.getPlayerId() == move.player.getPlayerId() && this.cardUsed.getType() == move.cardUsed.getType();
+                    && this.player.getPlayerId() == move.player.getPlayerId() && this.cardUsed == move.cardUsed;
         }
 
-
-        return this.from.getVal() == move.from.getVal() && this.to.getVal() == move.to.getVal() &&
+        return this.from.getFieldId() == move.from.getFieldId() && this.to.getFieldId() == move.to.getFieldId() &&
                 this.isSwapMove == move.isSwapMove && this.isStartMove == move.isStartMove
-                && this.player.getPlayerId() == move.player.getPlayerId() && this.cardUsed.getType() == move.cardUsed.getType();
+                && this.player.getPlayerId() == move.player.getPlayerId() && this.cardUsed == move.cardUsed;
     }
 
     /**
@@ -147,7 +162,7 @@ public final class Move {
             }
 
             if (to.getType() == FieldType.HOUSE) {
-                player.setHouseOccupationIndex(to.getVal());
+                player.setHouseOccupationIndex(to.getFieldId());
             }
 
             assert from != null;
@@ -157,7 +172,7 @@ public final class Move {
                 from.getFigure().setInHouse(true);
             }
 
-            //possible??
+            //moving out of house not possible but
             if (to.getType() != FieldType.HOUSE && from.getType() == FieldType.HOUSE) {
                 player.setFiguresInHouse(player.getFiguresInHouse() - 1);
                 from.getFigure().setInHouse(false);
@@ -166,7 +181,6 @@ public final class Move {
             // from.empty() = true;
             to.setFigure(from.getFigure());
             from.setEmpty();
-
 
             if (to.getType() == FieldType.DRAW) {
                 // System.out.println("player " + player.color + " karte ziehen!");
@@ -189,13 +203,13 @@ public final class Move {
     /**
      * Prints information of the move
      */
-    public void printmove() {
-        System.out.print("card type " + this.cardUsed.getType() + " ");
+    public void printMove() {
+        System.out.print("card type " + this.cardUsed + " ");
         if (this.from != null) {
-            System.out.print("from " + this.from.getVal() + " ");
+            System.out.print("from " + this.from.getFieldId() + " ");
         }
         if (this.to != null) {
-            System.out.print("to " + this.to.getVal() + " ");
+            System.out.print("to " + this.to.getFieldId() + " ");
         }
         System.out.println("swap figs " + this.isSwapMove + " isStartMove " + this.isStartMove + " player.color " + this.player.getPlayerId());
     }

@@ -69,8 +69,8 @@ public class Main {
             Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
             game.initDeck();
 
-            Player winner = null;
-            ArrayList<Player> winners = new ArrayList<>();
+            Integer winner = null;
+            ArrayList<Integer> winners = new ArrayList<>();
             int round = 0;
 
             while (winner == null) {
@@ -86,7 +86,7 @@ public class Main {
                     ArrayList<Move> moves = new ArrayList<>();
                     Player curPlayer = game.getCurrentPlayer();
                     // System.out.println("gen moves for player " + curPlayer.col);
-                    curPlayer.generateMoves(game, moves); //TODO this is the slowest function by far
+                    curPlayer.generateMoves(game); //TODO this is the slowest function by far
                     long endFunc = System.currentTimeMillis();
                     funcTime += (endFunc - startFunc);
                     // moves.get(0).printcard();
@@ -101,11 +101,11 @@ public class Main {
                             Figure chosenfigure = curPlayer.getFigures().get(figInx);
                             curPlayer.getCards().get(cardInx).getMoves(game, chosenfigure, humanMoves, curPlayer);
                             for (Move humanMove : humanMoves) {
-                                humanMove.printmove();
+                                humanMove.printMove();
                             }
                             System.out.println("choose a move: ");
                             int moveInx = reader.nextInt();
-                            humanMoves.get(moveInx).printmove();
+                            humanMoves.get(moveInx).printMove();
                             humanMoves.get(moveInx).execute(game);
                         } else { //computer move
                             moves.get(0).execute(game);
@@ -130,7 +130,7 @@ public class Main {
             // }
 
             assert winner != null;
-            wins[winner.getPlayerId()]++;
+            wins[winner]++;
         }
         long end = System.currentTimeMillis();
 

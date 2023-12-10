@@ -150,7 +150,7 @@ public class ServerController {
         if (!isSuccessful) {
             return false;
         }
-        sendToAllLobbyMembers(lobby, boardStateMessage);
+        lobby.sendToAllClients(boardStateMessage);
         return true;
     }
 

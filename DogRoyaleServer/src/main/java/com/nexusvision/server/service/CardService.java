@@ -54,7 +54,7 @@ public class Card {
             }
         }
 
-        if (range || steps == 0) moves.add(new Move(player, figure.getField(), to, false, this));
+        if (range || steps == 0) moves.add(new Move(player, figure.getField(), to, false, this.type));
 
         while (steps != 0) {
             // System.out.println(steps);
@@ -79,7 +79,7 @@ public class Card {
                 }
             }
             if (range || steps == 0) {
-                moves.add(new Move(player, figure.getField(), to, false, this));
+                moves.add(new Move(player, figure.getField(), to, false, this.type));
             }
         }
     }
@@ -102,13 +102,13 @@ public class Card {
         ArrayList<Move> moves = new ArrayList<>();
         switch (this.type) {
             case swapCard:
-                moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this));
+                moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this.type));
                 break;
             case startCard1:
                 /*fallthrough*/
             case startCard2:
                 if (isStarter) {
-                    moves.add(new Move(player, this));
+                    moves.add(new Move(player, this.type));
                     break;
                 }
                 //else fallthrough
@@ -145,7 +145,7 @@ public class Card {
                     for (int j = 0; j < opponent.getFigures().size(); j++) {
                         Figure oppfigure = opponent.getFigures().get(j);
                         if (!oppfigure.isOnBench() && !oppfigure.isInHouse() && oppfigure.getField().getType() != FieldType.START) {
-                            moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this));
+                            moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this.type));
                         }
                     }
                 }
@@ -159,7 +159,7 @@ public class Card {
                     next = next.getNext();
                 }
                 if (figure.getField() != to) { //move that does nothing allowed???
-                    moves.add(new Move(player, figure.getField(), to, false, this));
+                    moves.add(new Move(player, figure.getField(), to, false, this.type));
                 }
                 break;
             case oneToSeven:
@@ -174,8 +174,8 @@ public class Card {
             case startCard1:
                 if (figure.isOnBench()
                         && (player.getStartField().isEmpty()
-                        || player.getStartField().getFigure().getColor() != figure.getColor())) {
-                    moves.add(new Move(player, this));
+                        || player.getStartField().getFigure().getOwnerId() != figure.getOwnerId())) {
+                    moves.add(new Move(player, this.type));
                 } else if (!figure.isOnBench()) {
                     addStepMove(moves, 13, figure, game, player, false);
                 }
@@ -183,8 +183,8 @@ public class Card {
             case startCard2:
                 if (figure.isOnBench()
                         && (player.getStartField().isEmpty()
-                        || player.getStartField().getFigure().getColor() != figure.getColor())) {
-                    moves.add(new Move(player, this));
+                        || player.getStartField().getFigure().getOwnerId() != figure.getOwnerId())) {
+                    moves.add(new Move(player, this.type));
                 } else if (!figure.isOnBench()) {
                     addStepMove(moves, 1, figure, game, player, false);
                     addStepMove(moves, 11, figure, game, player, false);
@@ -196,7 +196,7 @@ public class Card {
                     Card lastcard = game.getPile().get(game.getPile().size() - 1);
                     if (lastcard.type != CardType.copyCard) {
                         // lastCard.getMoves(game, figure, moves);//bug, sets wrong usedCard
-                        this.type = lastcard.type;
+                        this.type = lastcard;
                         this.getMoves(game, figure, moves, player);
                         this.type = CardType.copyCard; //hacky
                         break;
