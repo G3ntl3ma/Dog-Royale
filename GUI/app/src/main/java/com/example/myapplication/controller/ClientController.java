@@ -59,9 +59,13 @@ public class ClientController {
 
     private ClientController() {
         new SocketInitializationTask().execute();
+
     }
+
     private void initializeServerHandler(Socket socket) {
         this.serverHandler = ServerHandler.getInstance(socket);
+
+
     }
 
     private static class SocketInitializationTask extends AsyncTask<Void, Void, Socket> {
@@ -82,6 +86,7 @@ public class ClientController {
         protected void onPostExecute(Socket socket) {
             if (socket != null) {
                 instance.initializeServerHandler(socket);
+
             }
         }
     }

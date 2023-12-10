@@ -109,7 +109,7 @@ public class ServerHandler extends Handler implements Runnable {
      * Writes the specified message to the broadcaster
      */
     public synchronized void broadcast(String message) {
-        new Thread(() -> {
+
             try (PrintWriter writer = this.broadcaster) {
                 if (writer != null) {
                     writer.write(message);
@@ -120,7 +120,7 @@ public class ServerHandler extends Handler implements Runnable {
             } catch (Exception e) {
                 logger.error("Error broadcasting message", e);
             }
-        }).start();
+
     }
 
 
