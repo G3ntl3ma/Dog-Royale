@@ -3,7 +3,7 @@ name: Mattes Hachmeyer
 imt: hachmeye
 gruppe: 01
 woche: 08
-gesamtarbeitszeit: 1,30h
+gesamtarbeitszeit: 12,30h
 ---
 
 <!--
@@ -30,5 +30,16 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 ## Sprint Planning
 - Sprint Meeting
   - 2023-12-04 1,30h
+- Meeting
+  - 2023-12-07 2,00h
+
+## Dokumentation
+- DevOps Dokument
+  - 2023-12-09 1,00h
+  - 2023-12-10 6,00h
+
+## Interface-Komitee
+- Meeting
+  - 2023-12-08 2,00h
 
 
