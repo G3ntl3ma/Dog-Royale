@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import static org.junit.Assert.*;
 
+import androidx.lifecycle.Lifecycle;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.test.espresso.Espresso;
@@ -45,6 +46,15 @@ public class FirstFragmentTest {
             org.junit.Assert.assertEquals(navController.getCurrentDestination().getId(), R.id.matchhistory);
         });
     }
-
-
+    @Test
+    public void testFirstFragmentLifeCycle(){
+        FragmentScenario<FirstFragment> scenario = FragmentScenario.launchInContainer(FirstFragment.class);
+        scenario.onFragment(fragment -> {
+            assertTrue(fragment.getView() != null);
+        });
+        scenario.moveToState(Lifecycle.State.DESTROYED);
+        scenario.onFragment(fragment -> {
+            assertTrue(fragment.getView() == null);
+        });
+    }
 }

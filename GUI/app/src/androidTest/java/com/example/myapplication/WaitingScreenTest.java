@@ -1,6 +1,9 @@
 package com.example.myapplication;
 
 
+import static org.junit.Assert.assertTrue;
+
+import androidx.lifecycle.Lifecycle;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.fragment.app.testing.FragmentScenario;
@@ -18,11 +21,20 @@ import org.junit.Test;
 
 class WaitingScreenTest {
     @Test
-    FragmentScenario<StartingGames> waitingFragmentScenario = FragmentScenario.launchInContainer(StartingGames.class);
+    public void testNavigation_WaitingScreen() {
+        FragmentScenario<StartingGames> waitingFragmentScenario = FragmentScenario.launchInContainer(StartingGames.class);
         Espresso.onView(ViewMatchers.withId(R.id.continuebutton)).perform(ViewActions.click());
         waitingFragmentScenario.onFragment(fragment -> {
-        NavController navController = Navigation.findNavController(fragment.requireView());
-        org.junit.Assert.assertEquals(navController.getCurrentDestination().getId(), R.id.gaBo_const_l);
-    });
-
+            NavController navController = Navigation.findNavController(fragment.requireView());
+            org.junit.Assert.assertEquals(navController.getCurrentDestination().getId(), R.id.gaBo_const_l);
+        });
+    }
+    @Test
+    public void testWaitingScreenLifeCycle(){
+        FragmentScenario<WaitingScreen> scenario = FragmentScenario.launchInContainer(WaitingScreen.class);
+        scenario.onFragment(fragment -> {
+            assertTrue(fragment.getView() != null);
+        });
+        scenario.moveToState(Lifecycle.State.DESTROYED);
+    }
 }
