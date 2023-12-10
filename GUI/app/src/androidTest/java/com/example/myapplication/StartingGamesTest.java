@@ -31,7 +31,7 @@ public class StartingGamesTest {
         Espresso.onView(ViewMatchers.withId(R.id.spectateGameButton2)).perform(ViewActions.click());
         startFragmentScenario.onFragment(fragment -> {
             NavController navController = Navigation.findNavController(fragment.requireView());
-            org.junit.Assert.assertEquals(navController.getCurrentDestination().getId(), R.id.gaBo_const_l);
+            org.junit.Assert.assertEquals(navController.getCurrentDestination().getId(), R.id.waitingScreen);
         });
     }
 }
