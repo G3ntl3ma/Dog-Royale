@@ -27,9 +27,6 @@
         android:label="Spectate running Games"
         tools:layout="@layout/fragment_spectate_games">
         <action
-            android:id="@+id/action_SpectateGames_to_game_board_layout"
-            app:destination="@id/game_board_layout" />
-        <action
             android:id="@+id/action_SpectateGames_to_waitingScreen"
             app:destination="@id/waitingScreen" />
         <action
@@ -41,9 +38,6 @@
         android:name="com.example.myapplication.StartingGames"
         android:label="Starting Games"
         tools:layout="@layout/fragment_starting_games" >
-        <action
-            android:id="@+id/action_StartingGames_to_game_board_layout"
-            app:destination="@id/game_board_layout" />
         <action
             android:id="@+id/action_StartingGames_to_FirstFragment"
             app:destination="@id/FirstFragment" />
