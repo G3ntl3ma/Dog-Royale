@@ -13,7 +13,7 @@ import java.util.List;
  * @author kellerb
  */
 @Data
-public class ReturnFindTournament  {
+public class ReturnFindTournament extends AbstractMenuMessage {
     private List<TournamentStart> tournamentStarting;
     private List<TournamentInProgress> tournamentInProgress;
     private List<TournamentFinish> tournamentFinished;

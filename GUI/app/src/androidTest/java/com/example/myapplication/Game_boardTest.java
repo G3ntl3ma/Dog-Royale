@@ -10,7 +10,6 @@ import org.junit.runners.JUnit4;
 
 @RunWith(AndroidJUnit4.class)
 public class Game_boardTest {
-    @Test
 
 
 }

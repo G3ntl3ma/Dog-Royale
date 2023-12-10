@@ -6,12 +6,7 @@ import com.example.myapplication.messages.menu.ConnectedToGame;
 
 public class ConnectedToGameHandler extends Handler implements MenuMessageHandler<ConnectedToGame> {
     public String handle(ConnectedToGame message) throws HandlingException {
-        if (message.isSuccess()){
-            //TODO show on the GUI the waiting for game to start window
-            return "Connection to game was successful";
+        return null;
         }
-        else{//maybe show message: connection to game failed try again
-            return "Connection to game was not successful";
-        }
-    };
+
 }

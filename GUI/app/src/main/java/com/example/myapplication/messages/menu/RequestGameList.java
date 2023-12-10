@@ -9,7 +9,7 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class RequestGameList  {
+public class RequestGameList extends AbstractMenuMessage {
     private int clientID;
     private int gameCountStarting;
     private int gameCountInProgress;

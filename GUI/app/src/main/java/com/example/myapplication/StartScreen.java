@@ -86,7 +86,7 @@ public class StartScreen extends Fragment {
                 }
                 else {
                     viewModel.setUsername(username);
-                    binding.button.setEnabled(false);
+//                    binding.button.setEnabled(true);
                     try{
                         clientController.sendConnectToServerRequest(username,StartScreen.this);
                     }
