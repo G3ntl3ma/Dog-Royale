@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -47,6 +48,7 @@ public class ClientController {
     private  static final Logger logger = LogManager.getLogger(ClientController.class);
 
     private StartScreen startScreen;
+    private static final Executor executor = Executors.newSingleThreadExecutor();
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(100);
     private StartingGames startingGames;//instance that is sent to now what window to control
@@ -64,6 +66,7 @@ public class ClientController {
 
     private void initializeServerHandler(Socket socket) {
         this.serverHandler = ServerHandler.getInstance(socket);
+
 
 
     }
@@ -86,6 +89,8 @@ public class ClientController {
         protected void onPostExecute(Socket socket) {
             if (socket != null) {
                 instance.initializeServerHandler(socket);
+                ServerHandler serverHandler = ServerHandler.getInstance(socket);
+                executor.execute(serverHandler);
 
             }
         }
