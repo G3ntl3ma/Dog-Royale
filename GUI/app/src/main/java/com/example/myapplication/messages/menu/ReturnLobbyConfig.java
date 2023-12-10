@@ -41,6 +41,79 @@ public class ReturnLobbyConfig{
     private Integer maximumTotalMoves;
 
 
+    public ReturnLobbyConfig(Integer playerCount, Integer fieldsize, Integer figuresPerPlayer, List<com.example.myapplication.GameInformationClasses.Color> colors, com.example.myapplication.GameInformationClasses.DrawCardFields drawCardFields, com.example.myapplication.GameInformationClasses.StartFields startFields, Integer initialCardsPerPlayer, com.example.myapplication.GameInformationClasses.PlayerOrder playerOrder, List<com.example.myapplication.GameInformationClasses.Observer> observer, Integer thinkTimePerMove, Integer visualizationTimePerMove, Integer consequencesForInvalidMove, Integer maximumGameDuration, Integer maximumTotalMoves) {
+        this.playerCount = playerCount;
+        this.fieldsize = fieldsize;
+        this.figuresPerPlayer = figuresPerPlayer;
+        this.colors = colors;
+        this.drawCardFields = drawCardFields;
+        this.startFields = startFields;
+        this.initialCardsPerPlayer = initialCardsPerPlayer;
+        this.playerOrder = playerOrder;
+        this.observer = observer;
+        this.thinkTimePerMove = thinkTimePerMove;
+        this.visualizationTimePerMove = visualizationTimePerMove;
+        this.consequencesForInvalidMove = consequencesForInvalidMove;
+        this.maximumGameDuration = maximumGameDuration;
+        this.maximumTotalMoves = maximumTotalMoves;
+    }
+
+    public Integer getPlayerCount() {
+        return playerCount;
+    }
+
+    public Integer getFieldsize() {
+        return fieldsize;
+    }
+
+    public Integer getFiguresPerPlayer() {
+        return figuresPerPlayer;
+    }
+
+    public List<com.example.myapplication.GameInformationClasses.Color> getColors() {
+        return colors;
+    }
+
+    public com.example.myapplication.GameInformationClasses.DrawCardFields getDrawCardFields() {
+        return drawCardFields;
+    }
+
+    public com.example.myapplication.GameInformationClasses.StartFields getStartFields() {
+        return startFields;
+    }
+
+    public Integer getInitialCardsPerPlayer() {
+        return initialCardsPerPlayer;
+    }
+
+    public com.example.myapplication.GameInformationClasses.PlayerOrder getPlayerOrder() {
+        return playerOrder;
+    }
+
+    public List<com.example.myapplication.GameInformationClasses.Observer> getObserver() {
+        return observer;
+    }
+
+    public Integer getThinkTimePerMove() {
+        return thinkTimePerMove;
+    }
+
+    public Integer getVisualizationTimePerMove() {
+        return visualizationTimePerMove;
+    }
+
+    public Integer getConsequencesForInvalidMove() {
+        return consequencesForInvalidMove;
+    }
+
+    public Integer getMaximumGameDuration() {
+        return maximumGameDuration;
+    }
+
+    public Integer getMaximumTotalMoves() {
+        return maximumTotalMoves;
+    }
+
 
 }
 

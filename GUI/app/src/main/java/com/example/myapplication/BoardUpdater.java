@@ -12,6 +12,7 @@ import com.example.myapplication.messages.game.BoardState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Dictionary;
 import java.util.List;
 
 public class BoardUpdater {
@@ -38,18 +39,17 @@ public class BoardUpdater {
      * Updates the board with the information from BoardState
      * @param boardState is the BoardState from which we get the information of the new boardState
      */
-    public void UpdateBoard(BoardState boardState)
-    {
-        if (boardState.getGameOver())
-        {
+    public void UpdateBoard(BoardState boardState) {
+
+        //creates Leaderboard
+        if (boardState.getGameOver()) {
             int counter = 1;
-            for ( Integer player : boardState.getWinnerOrder()) {
+            for (Integer player : boardState.getWinnerOrder()) {
                 TextView textView = new TextView(winnerOrder.getContext());
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
-                textView.setTextAppearance( R.style.Leaderboard);
+                textView.setTextAppearance(R.style.Leaderboard);
                 textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                switch(counter)
-                {
+                switch (counter) {
                     case 1:
 
 
@@ -85,26 +85,31 @@ public class BoardUpdater {
             }
             winnerOrder.setVisibility(LinearLayout.VISIBLE);
         }
-        viewModel.setFiguresInBank(new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0, 0 ,0 )));
-        //setting the the figures to their new position
-        for (   BoardState.Piece piece : boardState.getPieces()) {
+        else {
+                viewModel.setFiguresInBank(new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0, 0, 0)));
+                //setting the the figures to their new position
+                for (BoardState.Piece piece : boardState.getPieces()) {
 
-            figure_handler.moveFigure(piece.getClientId(), piece.getPieceId(), piece.getPosition(), piece.getIsOnBench(), piece.getInHousePosition(), boardState.getRound(), boardState.getMoveCount());
+                    figure_handler.moveFigure(piece.getClientId(), piece.getPieceId(), piece.getPosition(), piece.getIsOnBench(), piece.getInHousePosition(), boardState.getRound(), boardState.getMoveCount());
 
-            }
-        //changing the FiguresInBank Info in the PlayerInformationTable
-        for ( Order order : gameInformation.getPlayerOrder().getOrder()) {
+                }
+                //changing the FiguresInBank Info in the PlayerInformationTable
+                for (Order order : gameInformation.getPlayerOrder().getOrder()) {
 
-        playerInformationTable.changeFigureInfo(order.getClientId(), viewModel.getFiguresInBank().getValue().get(gameInformation.getPlayerClientNumber(order.getClientId())));
+                    playerInformationTable.changeFigureInfo(order.getClientId(), viewModel.getFiguresInBank().getValue().get(gameInformation.getPlayerClientNumber(order.getClientId())));
 
-            }
-
-        //changing the CardsInHand Info in the PlayerInformationTable
-        playerInformationTable.changeCardInfoDynamically(viewModel.getLastPlayer().getValue(), gameInformation);
-
-        viewModel.setLastPlayer(boardState.getNextPlayer()); //setting the last player to the next player
+                }
 
 
+
+                //changing the CardsInHand Info in the PlayerInformationTable
+                playerInformationTable.changeCardInfoDynamically(viewModel.getLastPlayer().getValue(), gameInformation);
+
+                viewModel.setLastPlayer(boardState.getNextPlayer()); //setting the last player to the next player
+
+
+
+        }
     }
 
 }

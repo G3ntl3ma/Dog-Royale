@@ -13,6 +13,8 @@ import com.example.myapplication.GameInformationClasses.StartFields;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 import java.util.List;
@@ -33,8 +35,7 @@ public class GameboardViewModel extends ViewModel {
     MutableLiveData<List<Integer>> CardsInHand = new MutableLiveData<>(new ArrayList<Integer>(6));
     MutableLiveData<PlayerInformationTable> playerInformationTable = new MutableLiveData<>();
 
-
-    //TODO delete that 0 when automatically setting the last player with first move
+    MutableLiveData<Dictionary<Integer, String>> playerNames = new MutableLiveData<>(new Hashtable<>());
     MutableLiveData<Integer> LastPlayer = new MutableLiveData<>();
 
     public MutableLiveData<Integer> getField_size() {
@@ -89,16 +90,19 @@ public class GameboardViewModel extends ViewModel {
     //////**********REPLACE WITH RETURN GAMEINFORMATION**********//////
     public MutableLiveData<GameInformation> getGameInformation() {
         //testweise
-       gameInformation.setValue(new GameInformation(new Integer(6), new Integer(100), new Integer(20) , Arrays.asList(new Color(0, R.color.p1_color), new Color(1, R.color.p2_color), new Color(2, R.color.p3_color), new Color(3, R.color.p4_color), new Color(4, R.color.p5_color), new Color(5, R.color.p6_color)), new DrawCardFields(5, Arrays.asList(1, 4, 7, 10, 13)), new StartFields(6, Arrays.asList(12, 0, 24, 83, 69, 45)), new Integer(5), new PlayerOrder(OrderType.fixed, Arrays.asList(new Order(0, "OwO"), new Order(1, "UwU"), new Order(2, "AwA"), new Order(3, "QwQ"), new Order(4, "XwX"))),  Arrays.asList(new Observer(new Integer(1), "OwO")), new Integer(5), new Integer(5), new Integer(1), new Integer(15), new Integer(5)));
-        return gameInformation;
+       return gameInformation;
     }
     /**
      * Sets the gameInformation
      * @param gameInformation is the gameInformation to be set
      */
     public void setGameInformation(GameInformation gameInformation) {
+        Dictionary<Integer, String> namesDict = this.playerNames.getValue();
+        for (   Order order: gameInformation.getPlayerOrder().getOrder()) {
+                namesDict.put(order.getClientId(), order.getName());
+        }
+        this.playerNames.setValue(namesDict);
         this.gameInformation.setValue(gameInformation);
-
     }
 
     public MutableLiveData<List<Integer>> getFiguresInBank() {
@@ -115,6 +119,16 @@ public class GameboardViewModel extends ViewModel {
 
     public void setPlayerInformationTable(PlayerInformationTable playerInformationTable) {
         this.playerInformationTable.setValue(playerInformationTable);
+    }
+
+    public MutableLiveData<Dictionary<Integer, String>> getPlayerNames() {
+        return playerNames;
+    }
+    public void setPlayerNames(Dictionary playerNames) {
+        this.playerNames.setValue(playerNames);
+    }
+    public String getPlayerName(int playerNumber) {
+        return( playerNames.getValue().get(playerNumber));
     }
 
     public MutableLiveData<Integer> getLastPlayer() {

@@ -9,6 +9,7 @@ import com.example.myapplication.GameInformationClasses.Observer;
 import com.example.myapplication.GameInformationClasses.Order;
 import com.example.myapplication.GameInformationClasses.PlayerOrder;
 import com.example.myapplication.GameInformationClasses.StartFields;
+import com.example.myapplication.messages.menu.ReturnLobbyConfig;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -81,6 +82,25 @@ public class GameInformation {
             System.out.println("clientId: " + order.getClientId() + " count: " + count);
             count++;
         }
+
+    }
+
+    public GameInformation(ReturnLobbyConfig returnLobbyConfig)
+    {
+        this.playerCount = returnLobbyConfig.getPlayerCount();
+        this.fieldsize = returnLobbyConfig.getFieldsize();
+        this.figuresPerPlayer = returnLobbyConfig.getFiguresPerPlayer();
+        this.colors = returnLobbyConfig.getColors();
+        this.drawCardFields = returnLobbyConfig.getDrawCardFields();
+        this.startFields = returnLobbyConfig.getStartFields();
+        this.initialCardsPerPlayer = returnLobbyConfig.getInitialCardsPerPlayer();
+        this.playerOrder = returnLobbyConfig.getPlayerOrder();
+        this.observer = returnLobbyConfig.getObserver();
+        this.thinkTimePerMove = returnLobbyConfig.getThinkTimePerMove();
+        this.visualizationTimePerMove = returnLobbyConfig.getVisualizationTimePerMove();
+        this.consequencesForInvalidMove = returnLobbyConfig.getConsequencesForInvalidMove();
+        this.maximumGameDuration = returnLobbyConfig.getMaximumGameDuration();
+        this.maximumTotalMoves = returnLobbyConfig.getMaximumTotalMoves();
 
     }
 

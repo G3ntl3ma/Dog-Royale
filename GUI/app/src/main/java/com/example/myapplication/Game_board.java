@@ -26,9 +26,15 @@ import android.widget.TextView;
 
 //databinding
 import com.example.myapplication.GameInformationClasses.Color;
+import com.example.myapplication.GameInformationClasses.DrawCardFields;
+import com.example.myapplication.GameInformationClasses.Observer;
 import com.example.myapplication.GameInformationClasses.Order;
+import com.example.myapplication.GameInformationClasses.OrderType;
+import com.example.myapplication.GameInformationClasses.PlayerOrder;
+import com.example.myapplication.GameInformationClasses.StartFields;
 import com.example.myapplication.databinding.FragmentGameBoardBinding;
 import com.example.myapplication.messages.game.BoardState;
+import com.example.myapplication.messages.menu.ReturnLobbyConfig;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -126,6 +132,14 @@ public class Game_board extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(GameboardViewModel.class); //creating the ViewModel
 
 
+        /**DELETE AND DO WITH MESSAGE
+         */
+        ReturnLobbyConfig insertReturnLobbyConfig = new ReturnLobbyConfig(new Integer(6), new Integer(100), new Integer(20) , Arrays.asList(new Color(0, R.color.p1_color), new Color(1, R.color.p2_color), new Color(2, R.color.p3_color), new Color(3, R.color.p4_color), new Color(4, R.color.p5_color), new Color(5, R.color.p6_color)), new DrawCardFields(5, Arrays.asList(1, 4, 7, 10, 13)), new StartFields(6, Arrays.asList(12, 0, 24, 83, 69, 45)), new Integer(5), new PlayerOrder(OrderType.fixed, Arrays.asList(new Order(0, "OwO"), new Order(1, "UwU"), new Order(2, "AwA"), new Order(3, "QwQ"), new Order(4, "XwX"))),  Arrays.asList(new Observer(new Integer(1), "OwO")), new Integer(5), new Integer(5), new Integer(1), new Integer(15), new Integer(5));
+        viewModel.setGameInformation(new GameInformation(insertReturnLobbyConfig));
+        /**DELETE AND DO WITH MESSAGE
+        */
+
+
         RelativeLayout GameBoard = binding.gameBoardLayout; //getting the Layout for the GameBoard
 
         LinearLayout playerInformationTableView = binding.playerInformationTable;
@@ -193,7 +207,7 @@ public class Game_board extends Fragment {
         PlayerInformationTable playerInformationTable = new PlayerInformationTable(playerInformationTableView, order, player_count, figure_count, gameInformation.getInitialCardsPerPlayer());
         playerInformationTable.BuildTable();
         viewModel.setPlayerInformationTable(playerInformationTable);
-        viewModel.setLastPlayer(gameInformation.getPlayerOrder().getOrder().get(0).getClientId());
+        viewModel.setLastPlayer(order.get(0).getClientId());
                     //instanziating  the figure handler
         Figure_handler figure_handler = new Figure_handler(GameBoard, figure_count, player_count, colors, creator.getField_width(), creator.getHomefield_size(), pxWidth, playerInformationTable);
         figure_handler.create_figures(); //creating the figures
@@ -268,7 +282,7 @@ public class Game_board extends Fragment {
 
                 List<BoardState.Piece> pieces = new ArrayList<>();
                 pieces.add(new BoardState.Piece(0, 0, position, false, 0));
-
+                System.out.println("Name:" + gameInformation.getPlayerOrder().getName(0));
                 BoardState boardState = new BoardState(pieces, null, null, 0, move_count, 0, true, new  ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
                 boardUpdater.UpdateBoard(boardState);
                 position++;
