@@ -136,7 +136,7 @@ public class BoardState extends AbstractGameMessage {
         this.gameOver = gameOver;
         this.winnerOrder = winnerOrder;
         this.discardPileViewModel = MainActivity.getDiscardPileViewModel();
-        this.discardPileViewModel.set_DiscardPile(discardPile);
+
     }
 
     /** Add a new Item to the Discard Pile, which will be shown in the Game History

@@ -17,8 +17,13 @@ public class DiscardPileViewModel extends ViewModel {
         System.out.println("Set DiscardPile has been reached!");
         GameboardViewModel viewModel = MainActivity.getGameboardViewModel();
         output= "";
-        for(int i = 0; i < items.size(); i++){
-            output += viewModel.getPlayerName(items.get(i).getClientId()) + ": " + items.get(i).getCard() + "\n";
+        try {
+            for (int i = 0; i < items.size(); i++) {
+                output += "- " + viewModel.getPlayerName(items.get(i).getClientId()) + ": " + items.get(i).getCard() + "\n";
+            }
+        }
+        catch (NullPointerException e) {
+            System.out.println("DiscardPile was empty!");
         }
         System.out.println("The Output String is: " + output);
         this.OutputString.setValue(output);

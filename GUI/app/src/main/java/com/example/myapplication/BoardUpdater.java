@@ -22,6 +22,8 @@ public class BoardUpdater {
     private PlayerInformationTable playerInformationTable;
     private GameInformation gameInformation;
 
+    private DiscardPileViewModel discardPileViewModel;
+
     private LinearLayout winnerOrder;
 
     public BoardUpdater()
@@ -31,8 +33,10 @@ public class BoardUpdater {
         this.figure_handler = viewModel.getFigure_handler().getValue();
         this.playerInformationTable = viewModel.getPlayerInformationTable().getValue();
         this.gameInformation = viewModel.getGameInformation().getValue();
+        this.discardPileViewModel = MainActivity.getDiscardPileViewModel();
         ConstraintLayout layout = (ConstraintLayout) figure_handler.getLayout().getParent();
         this.winnerOrder = layout.findViewById(R.id.WinnerTable);
+
     }
 
     /**
@@ -95,10 +99,8 @@ public class BoardUpdater {
                 }
                 //changing the FiguresInBank Info in the PlayerInformationTable
                 for (Order order : gameInformation.getPlayerOrder().getOrder()) {
-                    System.out.println("Called");
                     Integer playerNumber = viewModel.getFiguresInBank().getValue().get(gameInformation.getPlayerClientNumber(order.getClientId()));
                     playerInformationTable.changeFigureInfo(order.getClientId(), playerNumber);
-                    System.out.println("Called2");
                 }
 
 
@@ -111,6 +113,7 @@ public class BoardUpdater {
 
 
         }
+        this.discardPileViewModel.set_DiscardPile(boardState.getDiscardPile());
     }
 
 }

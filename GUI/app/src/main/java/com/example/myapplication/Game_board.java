@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.media.Image;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -294,16 +295,11 @@ public class Game_board extends Fragment {
             @Override
             public void onClick(View view) {
                 //Creating a List with DiscardItems for Testing
-                List<BoardState.DiscardItem> DiscardItems = new ArrayList<>();
-                DiscardItems.add(new BoardState.DiscardItem(0, BoardState.getCard12()));
-                DiscardItems.add(new BoardState.DiscardItem(1, BoardState.getCardCopy()));
+                List<BoardState.DiscardItem> DiscardItems = new ArrayList<>(Arrays.asList(new BoardState.DiscardItem(0, BoardState.getCard12()), new BoardState.DiscardItem(1, BoardState.getCardCopy()), new BoardState.DiscardItem(2, BoardState.getCard3()), new BoardState.DiscardItem(3, BoardState.getCardMagnet())));
                 List<BoardState.Piece> pieces = new ArrayList<>();
                 pieces.add(new BoardState.Piece(0, 0, position, false, 0));
                 System.out.println("Name:" + viewModel.getPlayerName(0));
                 BoardState boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, false, new  ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
-                boardState.addDiscardItem(new BoardState.DiscardItem(2, BoardState.getCard3()));
-                boardState.addDiscardItem(new BoardState.DiscardItem(3, BoardState.getCardMagnet()));
-                boardState.addDiscardItem(new BoardState.DiscardItem(4, BoardState.getCard9()));
                 boardUpdater.UpdateBoard(boardState);
                 position++;
                 move_count++;
