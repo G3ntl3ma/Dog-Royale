@@ -10,7 +10,7 @@ import java.util.List;
  * @author kellerb
  */
 @Data
-public class ReturnTechData extends AbstractMenuMessage{
+public class ReturnTechData {
     private String serverVersion;
     private String supportedProtocol;
     private List<Integer> embeddedExtensions;

@@ -21,9 +21,44 @@ public class BoardState extends AbstractGameMessage {
     public static class Piece {
         private int pieceId;
         private int clientId;
-        private int position;
+        private Integer position;
         private boolean isOnBench;
-        private int inHousePosition;
+        private Integer inHousePosition;
+
+        public Piece(int pieceId, int clientId, Integer position, boolean isOnBench, Integer inHousePosition)
+        {
+            this.pieceId = pieceId;
+            this.clientId = clientId;
+            this.position = position;
+            this.isOnBench = isOnBench;
+            this.inHousePosition = inHousePosition;
+        }
+
+        public int getPieceId()
+        {
+            return pieceId;
+        }
+
+        public int getClientId()
+        {
+            return clientId;
+        }
+
+        public Integer getPosition()
+        {
+            return position;
+        }
+
+        public boolean getIsOnBench()
+        {
+            return isOnBench;
+        }
+
+        public Integer getInHousePosition()
+        {
+            return inHousePosition;
+        }
+
     }
 
     @Data
@@ -31,4 +66,58 @@ public class BoardState extends AbstractGameMessage {
         private int clientId;
         private Card card;
     }
+
+    public List<Piece> getPieces()
+    {
+        return pieces;
+    }
+
+    public List<DiscardItem> getDiscardPile()
+    {
+        return discardPile;
+    }
+
+    public Card getLastPlayedCard()
+    {
+        return lastPlayedCard;
+    }
+
+    public int getRound()
+    {
+        return round;
+    }
+
+    public int getMoveCount()
+    {
+        return moveCount;
+    }
+
+    public int getNextPlayer()
+    {
+        return nextPlayer;
+    }
+
+    public boolean getGameOver()
+    {
+        return gameOver;
+    }
+
+    public List<Integer> getWinnerOrder()
+    {
+        return winnerOrder;
+    }
+
+
+    public BoardState(List<Piece> pieces, List<DiscardItem> discardPile, Card lastPlayedCard, int round, int moveCount, int nextPlayer, boolean gameOver, List<Integer> winnerOrder)
+    {
+        this.pieces = pieces;
+        this.discardPile = discardPile;
+        this.lastPlayedCard = lastPlayedCard;
+        this.round = round;
+        this.moveCount = moveCount;
+        this.nextPlayer = nextPlayer;
+        this.gameOver = gameOver;
+        this.winnerOrder = winnerOrder;
+    }
+
 }

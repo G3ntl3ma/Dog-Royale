@@ -8,7 +8,7 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class JoinGameAsObserver extends com.example.myapplication.messages.menu.AbstractMenuMessage {
+public class JoinGameAsObserver  {
     private int gameId;
     private int clientId;
 }

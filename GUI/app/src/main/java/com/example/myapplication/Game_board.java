@@ -18,15 +18,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 //databinding
 import com.example.myapplication.GameInformationClasses.Color;
+import com.example.myapplication.GameInformationClasses.Order;
 import com.example.myapplication.databinding.FragmentGameBoardBinding;
+import com.example.myapplication.messages.game.BoardState;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -56,8 +61,9 @@ public class Game_board extends Fragment {
     private TimerviewModel timerviewModel;
     private LastCardViewModel lastCardViewModel;
     //testwise
-    private int position = 2 ; // positions for the test figure to move - I know we dont get the change but the new position but that doesnt matter
-
+    private int position = 0 ; // positions for the test figure to move - I know we dont get the change but the new position but that doesnt matter
+    private int move_count = 0;
+    private BoardUpdater boardUpdater;
     public Game_board() {
         // Required empty public constructor
     }
@@ -116,6 +122,15 @@ public class Game_board extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
+
+        viewModel = new ViewModelProvider(requireActivity()).get(GameboardViewModel.class); //creating the ViewModel
+
+
+        RelativeLayout GameBoard = binding.gameBoardLayout; //getting the Layout for the GameBoard
+
+        LinearLayout playerInformationTableView = binding.playerInformationTable;
+
+
         //getting Display information
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
 
@@ -129,7 +144,7 @@ public class Game_board extends Fragment {
         );
         params.topToTop = binding.gaBoConstL.getId();  //setting the top constraint of the LayoutParameters to the top of the ConstraintLayout
         params.bottomToBottom = binding.gaBoConstL.getId();  //setting the bottom constraint of the LayoutParameters to the bottom of the ConstraintLayout
-        RelativeLayout GameBoard = binding.gameBoardLayout; //getting the Layout for the GameBoard
+
         GameBoard.setLayoutParams(params); //setting the Layout Parameters to the GameBoard Layout
 
         viewModel = new ViewModelProvider(requireActivity()).get(GameboardViewModel.class); //creating the ViewModel
@@ -163,24 +178,34 @@ public class Game_board extends Fragment {
 
                     //set colors of the start fields for gameboard creation
         start_colors = gameInformation.getColors();
+
+        Integer maxRounds = gameInformation.getMaximumTotalMoves();
         List<Integer> colors = new ArrayList<>();
             //iterating trough colors to get the color value
         for (Color color : start_colors) {
             colors.add(color.getColor());           //getting the actual color value from the Color class
         }
                     //creating the gameboardcreator that creates the gameboard
-        Game_board_creator creator = new Game_board_creator(GameBoard, pxWidth, player_count, field_size, figure_count, colors, start_positions, draw_fields);
+        Game_board_creator creator = new Game_board_creator(GameBoard, pxWidth, player_count, field_size, figure_count, colors, start_positions, draw_fields, maxRounds);
         creator.createFields(); //creating the fields
 
-
+        List<Order> order = gameInformation.getPlayerOrder().getOrder();
+        PlayerInformationTable playerInformationTable = new PlayerInformationTable(playerInformationTableView, order, player_count, figure_count, gameInformation.getInitialCardsPerPlayer());
+        playerInformationTable.BuildTable();
+        viewModel.setPlayerInformationTable(playerInformationTable);
                     //instanziating  the figure handler
-        Figure_handler figure_handler = new Figure_handler(GameBoard, figure_count, player_count, colors, creator.getField_width(), creator.getHomefield_size(), pxWidth);
+        Figure_handler figure_handler = new Figure_handler(GameBoard, figure_count, player_count, colors, creator.getField_width(), creator.getHomefield_size(), pxWidth, playerInformationTable);
         figure_handler.create_figures(); //creating the figures
         //
         //
         viewModel.setFigure_handler(figure_handler); //setting the figure handler for the viewModel to use it in different classes later on
         //
         //
+        //setting the boardUpdater
+
+        boardUpdater = new BoardUpdater();
+
+
         //Set the Last Card
         lastCardViewModel.getLastCard().observe(getViewLifecycleOwner(), type ->{
             switch (type) {
@@ -235,21 +260,18 @@ public class Game_board extends Fragment {
 
         //NUR ZUM TESTEN für figuren movement
 
+
         binding.moveFigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (((RelativeLayout.LayoutParams) GameBoard.findViewWithTag("figure0_1").getLayoutParams()).leftMargin == pxWidth) {
-                    figure_handler.moveFigure(0, "figure0_1", position, false, null);
-                } else {
-                    position += 2;
-                    if (position >= field_size) {
-                        figure_handler.moveFigure(0, "figure0_1", null, false, position - field_size );
-                    } else {
-                        figure_handler.moveFigure(0, "figure0_1", position, false, null);
-                    }
+                List<BoardState.Piece> pieces = new ArrayList<>();
+                pieces.add(new BoardState.Piece(0, 0, position, false, 0));
 
-                }
+                BoardState boardState = new BoardState(pieces, null, null, 0, move_count, 0, false, null);
+                boardUpdater.UpdateBoard(boardState);
+                position++;
+                move_count++;
             }
 
         });

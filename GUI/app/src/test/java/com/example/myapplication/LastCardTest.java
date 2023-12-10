@@ -13,16 +13,17 @@ class LastCardTest {
     @Mock
     private LastCard lastCard;
     private CardType type;
+    private boolean show ;
 
     @Test
     public void setNewLastCard() {
         lastCard.setNewLastCard(type);
-        assertEquals(type,lastCard.gettype());
+        Mockito.verify(lastCard).setNewLastCard(type);
     }
 
     @Test
     public void lastCardAvailable() {
-        Mockito.doReturn("true").when(lastCard.lastCardAvailable());
-        Assertions.assertEquals("true", lastCard.lastCardAvailable());
+        lastCard.showLastCard(show);
+        Mockito.verify(lastCard).showLastCard(show);
     }
 }

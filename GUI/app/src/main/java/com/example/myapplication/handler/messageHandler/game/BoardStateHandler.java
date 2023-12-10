@@ -13,7 +13,7 @@ public class BoardStateHandler extends Handler implements GameMessageHandler<Boa
     public String handle(BoardState message) throws HandlingException {
 
             //TODO update the Board accordingly
-        if(message.isGameOver()){
+        if(message.getGameOver()){
             //TODO show winners and leave game change State
         }
         try {
