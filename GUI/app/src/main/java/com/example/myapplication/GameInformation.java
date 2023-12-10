@@ -1,5 +1,8 @@
 package com.example.myapplication;
 
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.myapplication.GameInformationClasses.Color;
 import com.example.myapplication.GameInformationClasses.DrawCardFields;
 import com.example.myapplication.GameInformationClasses.Observer;
@@ -47,6 +50,8 @@ public class GameInformation {
     public static Integer maximumGameDuration;
     public static Integer maximumTotalMoves;
 
+    private ViewModel viewModel;
+
 
     //puts the clientId and the order of the player in a dictionary for easier access
     public static Dictionary<Integer, Integer> playerOrderDictionary = new Hashtable<Integer, Integer>();
@@ -69,12 +74,14 @@ public class GameInformation {
         this.maximumGameDuration = maximumGameDuration;
         this.maximumTotalMoves = maximumTotalMoves;
 
+        viewModel = MainActivity.getGameboardViewModel();
         int count = 0;
         for (Order order : playerOrder.getOrder()) {
             playerOrderDictionary.put(order.getClientId(), count);
             System.out.println("clientId: " + order.getClientId() + " count: " + count);
             count++;
         }
+
     }
 
     public static void setPlayerCount(Integer playerCount) {

@@ -193,6 +193,7 @@ public class Game_board extends Fragment {
         PlayerInformationTable playerInformationTable = new PlayerInformationTable(playerInformationTableView, order, player_count, figure_count, gameInformation.getInitialCardsPerPlayer());
         playerInformationTable.BuildTable();
         viewModel.setPlayerInformationTable(playerInformationTable);
+        viewModel.setLastPlayer(gameInformation.getPlayerOrder().getOrder().get(0).getClientId());
                     //instanziating  the figure handler
         Figure_handler figure_handler = new Figure_handler(GameBoard, figure_count, player_count, colors, creator.getField_width(), creator.getHomefield_size(), pxWidth, playerInformationTable);
         figure_handler.create_figures(); //creating the figures
@@ -268,7 +269,7 @@ public class Game_board extends Fragment {
                 List<BoardState.Piece> pieces = new ArrayList<>();
                 pieces.add(new BoardState.Piece(0, 0, position, false, 0));
 
-                BoardState boardState = new BoardState(pieces, null, null, 0, move_count, 0, false, null);
+                BoardState boardState = new BoardState(pieces, null, null, 0, move_count, 0, true, new  ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
                 boardUpdater.UpdateBoard(boardState);
                 position++;
                 move_count++;

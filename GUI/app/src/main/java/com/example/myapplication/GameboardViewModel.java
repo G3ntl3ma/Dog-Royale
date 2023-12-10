@@ -35,7 +35,7 @@ public class GameboardViewModel extends ViewModel {
 
 
     //TODO delete that 0 when automatically setting the last player with first move
-    MutableLiveData<Integer> LastPlayer = new MutableLiveData<>(0);
+    MutableLiveData<Integer> LastPlayer = new MutableLiveData<>();
 
     public MutableLiveData<Integer> getField_size() {
         return field_size;

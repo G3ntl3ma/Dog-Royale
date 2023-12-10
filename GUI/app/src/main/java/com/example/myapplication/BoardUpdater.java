@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.graphics.Color;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,41 +42,66 @@ public class BoardUpdater {
     {
         if (boardState.getGameOver())
         {
+            int counter = 1;
+            for ( Integer player : boardState.getWinnerOrder()) {
+                TextView textView = new TextView(winnerOrder.getContext());
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+                textView.setTextAppearance( R.style.Leaderboard);
+                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                switch(counter)
+                {
+                    case 1:
 
-            System.out.println("1");
-            TextView textView = new TextView(winnerOrder.getContext());
 
-            System.out.println("1");
-            textView.setText("Game Over");
+                        textView.setText("1. Winner: " + gameInformation.getPlayerOrder().getName(player));
+                        textView.setTextColor(Color.parseColor("#FFFFC107"));
+                        textView.setTextSize(20);
+                        break;
+                    case 2:
+                        textView.setText(counter + "." + gameInformation.getPlayerOrder().getName(player));
 
-            System.out.println("3");
+                        textView.setTextSize(18);
+                        textView.setTextColor(Color.parseColor("#C5DFDA"));
+                        break;
+                    case 3:
+                        textView.setText(counter + "." + gameInformation.getPlayerOrder().getName(player));
 
+                        textView.setTextSize(16);
+                        textView.setTextColor(Color.parseColor("#BA4E26"));
+                        break;
+
+                    default:
+                        textView.setText(counter + "." + gameInformation.getPlayerOrder().getName(player));
+                }
+
+                textView.setLayoutParams(params);
+                textView.setTag("place" + counter);
+                winnerOrder.addView(textView);
+
+
+                counter++;
+
+            }
+            winnerOrder.setVisibility(LinearLayout.VISIBLE);
         }
-        System.out.println("1");
         viewModel.setFiguresInBank(new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0, 0 ,0 )));
         //setting the the figures to their new position
         for (   BoardState.Piece piece : boardState.getPieces()) {
 
-            System.out.println("2");
             figure_handler.moveFigure(piece.getClientId(), piece.getPieceId(), piece.getPosition(), piece.getIsOnBench(), piece.getInHousePosition(), boardState.getRound(), boardState.getMoveCount());
 
-            System.out.println("OWO3");
             }
         //changing the FiguresInBank Info in the PlayerInformationTable
         for ( Order order : gameInformation.getPlayerOrder().getOrder()) {
 
-            System.out.println("3");
         playerInformationTable.changeFigureInfo(order.getClientId(), viewModel.getFiguresInBank().getValue().get(gameInformation.getPlayerClientNumber(order.getClientId())));
 
-            System.out.println("4");
             }
 
-        System.out.println("5");
         //changing the CardsInHand Info in the PlayerInformationTable
         playerInformationTable.changeCardInfoDynamically(viewModel.getLastPlayer().getValue(), gameInformation);
 
-        System.out.println("6");
-        viewModel.setLastPlayer(boardState.getNextPlayer());
+        viewModel.setLastPlayer(boardState.getNextPlayer()); //setting the last player to the next player
 
 
     }
