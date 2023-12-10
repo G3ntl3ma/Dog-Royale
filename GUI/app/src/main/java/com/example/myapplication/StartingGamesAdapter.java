@@ -1,6 +1,3 @@
-/**
- * @author: leisen
- */
 package com.example.myapplication;
 
 import android.content.Context;
@@ -9,39 +6,36 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.databinding.FragmentSpectateGamesBinding;
-
 import java.util.List;
 
-public class SpectateGamesAdapter extends RecyclerView.Adapter<SpectateGamesViewholder>{
+public class StartingGamesAdapter extends RecyclerView.Adapter<StartingScreenViewHolder>{
 
     Context context;
+
     List<Game> games;
 
-    SpectateGames spectateGames;
+    StartingGames startinggames;
 
-    public SpectateGamesAdapter(Context context, List<Game> games, SpectateGames spectateGames) {
+    public StartingGamesAdapter(Context context, List<Game> games, StartingGames startinggames) {
+
         this.context = context;
+
         this.games = games;
-        this.spectateGames = spectateGames;
+
+        this.startinggames = startinggames;
     }
 
     @NonNull
     @Override
-    public SpectateGamesViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new SpectateGamesViewholder(LayoutInflater.from(context).inflate(R.layout.game_view, parent, false)).linkAdapter(this);
+    public StartingScreenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        return new StartingScreenViewHolder(LayoutInflater.from(context).inflate(R.layout.game_view, parent, false)).linkAdapter(this);
     }
 
-    /**
-     * Informationen für die einzelnen Elemente der Recyclerview werden hier zugewiesen, damit sie richtig angezeigt werden.
-     *
-     */
-    @Override
-    public void onBindViewHolder(@NonNull SpectateGamesViewholder holder, int position) {
+    public void onBindViewHolder(@NonNull StartingScreenViewHolder holder, int position) {
         //current_game hat die Infos für das Spiel
         Game current_game = games.get(holder.getAdapterPosition());
         holder.gameID.setText(current_game.getGameID());
@@ -55,16 +49,12 @@ public class SpectateGamesAdapter extends RecyclerView.Adapter<SpectateGamesView
                     GameboardViewModel viewModel = MainActivity.getGameboardViewModel();
                     //changed - deletet stuff
 
-                NavHostFragment.findNavController(spectateGames)
+                NavHostFragment.findNavController(startinggames)
                         .navigate(R.id.action_SpectateGames_to_waitingScreen);
             }
         });
     }
 
-
-
     @Override
-    public int getItemCount() {
-        return games.size();
-    }
+    public int getItemCount() {return games.size();}
 }

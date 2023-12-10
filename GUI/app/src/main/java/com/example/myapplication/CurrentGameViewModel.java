@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel;
 
 public class CurrentGameViewModel extends ViewModel {
 
-    MutableLiveData<String> current_game_id = new MutableLiveData<>();
+    MutableLiveData<Integer> current_game_id = new MutableLiveData<>(); //changed
 
-    public MutableLiveData<String> getCurrent_game_id() {
+    public MutableLiveData<Integer> getCurrent_game_id() {
         return current_game_id;
-    }
+    } //changed
 
-    public void setCurrent_game_id(String game_id) {
+    public void setCurrent_game_id(int game_id) { //changed
         this.current_game_id.setValue(game_id);
     }
 }

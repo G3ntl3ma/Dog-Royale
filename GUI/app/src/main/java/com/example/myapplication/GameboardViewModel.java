@@ -92,7 +92,6 @@ public class GameboardViewModel extends ViewModel {
        gameInformation.setValue(new GameInformation(new Integer(6), new Integer(100), new Integer(20) , Arrays.asList(new Color(0, R.color.p1_color), new Color(1, R.color.p2_color), new Color(2, R.color.p3_color), new Color(3, R.color.p4_color), new Color(4, R.color.p5_color), new Color(5, R.color.p6_color)), new DrawCardFields(5, Arrays.asList(1, 4, 7, 10, 13)), new StartFields(6, Arrays.asList(12, 0, 24, 83, 69, 45)), new Integer(5), new PlayerOrder(OrderType.fixed, Arrays.asList(new Order(0, "OwO"), new Order(1, "UwU"), new Order(2, "AwA"), new Order(3, "QwQ"), new Order(4, "XwX"))),  Arrays.asList(new Observer(new Integer(1), "OwO")), new Integer(5), new Integer(5), new Integer(1), new Integer(15), new Integer(5)));
         return gameInformation;
     }
-
     /**
      * Sets the gameInformation
      * @param gameInformation is the gameInformation to be set

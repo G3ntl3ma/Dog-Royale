@@ -5,7 +5,7 @@
 package com.example.myapplication;
 
 public class Game {
-    private String gameID;
+    private int gameID;
     private int timeSeconds;
     private int currentPlayers;
     private int maxPlayers;
@@ -14,7 +14,7 @@ public class Game {
     private int[] drawFields;
     private int[] startFields;
 
-    public Game(String gameID, int timeSeconds, int currentPlayers, int maxPlayers, int fieldSize, int figureCount, int[] drawFields, int[] startFields) {
+    public Game(int gameID, int timeSeconds, int currentPlayers, int maxPlayers, int fieldSize, int figureCount, int[] drawFields, int[] startFields) {
         this.gameID = gameID;
         this.timeSeconds = timeSeconds;
         this.currentPlayers = currentPlayers;
@@ -25,11 +25,11 @@ public class Game {
         this.startFields = startFields;
     }
 
-    public String getGameID() {
+    public int getGameID() {
         return gameID;
     }
 
-    public void setGameID(String gameID) {
+    public void setGameID(int gameID) {
         this.gameID = gameID;
     }
 

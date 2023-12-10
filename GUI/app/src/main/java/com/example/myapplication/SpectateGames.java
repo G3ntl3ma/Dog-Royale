@@ -95,7 +95,7 @@ public class SpectateGames extends Fragment {
         binding.SpectateGamesRecycleView.setAdapter(adapter);
         viewModel = new ViewModelProvider(requireActivity()).get(ServerViewModel.class);
 
-        viewModel.getGames().observe(getViewLifecycleOwner(), list -> {
+        viewModel.getSpectateGames().observe(getViewLifecycleOwner(), list -> {
             if(games.size()> 0){
                 for(int i = games.size()-1; i>=0; i--){
                     games.remove(i);
@@ -116,10 +116,13 @@ public class SpectateGames extends Fragment {
             }
 
         });
+
+
+
         binding.spectateGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addGame(new Game("Hello", 15, 4 , 6, 100, 20, new int[]{0,1,6,99,33}, new int[]{0,24,49,74}));
+                addGame(new Game(1, 15, 4 , 6, 100, 20, new int[]{0,1,6,99,33}, new int[]{0,24,49,74}));
             }
 
         });

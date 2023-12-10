@@ -4,13 +4,19 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.databinding.FragmentStartingGamesBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,9 +30,15 @@ public class StartingGames extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    List<Game> games = new ArrayList<>();
+    StartingGamesAdapter adapter;
+
+    private ServerViewModel viewModel;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
 
     private FragmentStartingGamesBinding binding;
 
@@ -72,6 +84,27 @@ public class StartingGames extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        adapter = new StartingGamesAdapter(getContext(), games, this);
+        binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        viewModel = new ViewModelProvider(requireActivity()).get(ServerViewModel.class);
+
+        viewModel.getRunningGames().observe(getViewLifecycleOwner(), list -> {
+            if(games.size()> 0){
+                for(int i = games.size()-1; i>=0; i--){
+                    games.remove(i);
+                }
+            }
+            for(int i = 0; i < list.size(); i++) {
+                games.add(list.get(i));
+            }
+            adapter.notifyDataSetChanged();
+        });
+
+        viewModelTest viewModelTest = new viewModelTest();
+
+
         binding.currentBackToMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
