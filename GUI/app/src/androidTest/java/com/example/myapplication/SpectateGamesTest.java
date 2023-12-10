@@ -3,6 +3,7 @@ package com.example.myapplication;
 import static org.junit.Assert.*;
 
 import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.Lifecycle;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.test.espresso.Espresso;
@@ -33,5 +34,15 @@ public class SpectateGamesTest {
             org.junit.Assert.assertEquals(navController.getCurrentDestination().getId(), R.id.gaBo_const_l);
         });
     }
-
+    @Test
+    public void testSpectateGamesLifeCycle(){
+        FragmentScenario<SpectateGames> scenario = FragmentScenario.launchInContainer(SpectateGames.class);
+        scenario.onFragment(fragment -> {
+            assertTrue(fragment.getView() != null);
+        });
+        scenario.moveToState(Lifecycle.State.DESTROYED);
+        scenario.onFragment(fragment -> {
+            assertTrue(fragment.getView() == null);
+        });
+    }
 }

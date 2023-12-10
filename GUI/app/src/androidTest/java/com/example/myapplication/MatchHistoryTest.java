@@ -3,6 +3,7 @@ package com.example.myapplication;
 import static org.junit.Assert.*;
 
 import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.Lifecycle;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.test.espresso.Espresso;
@@ -22,6 +23,17 @@ public class MatchHistoryTest {
         startFragmentScenario.onFragment(fragment -> {
             NavController navController = Navigation.findNavController(fragment.requireView());
             org.junit.Assert.assertEquals(navController.getCurrentDestination().getId(), R.id.FirstFragment);
+        });
+    }
+    @Test
+    public void testMatchHistroyLifeCycle(){
+        FragmentScenario<MatchHistory> scenario = FragmentScenario.launchInContainer(MatchHistory.class);
+        scenario.onFragment(fragment -> {
+            assertTrue(fragment.getView() != null);
+        });
+        scenario.moveToState(Lifecycle.State.DESTROYED);
+        scenario.onFragment(fragment -> {
+            assertTrue(fragment.getView() == null);
         });
     }
 }
