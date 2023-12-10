@@ -106,7 +106,7 @@ public class BoardUpdater {
 
 
                 //changing the CardsInHand Info in the PlayerInformationTable
-                playerInformationTable.changeCardInfoDynamically(viewModel.getLastPlayer().getValue(), gameInformation);
+               // playerInformationTable.changeCardInfoDynamically(viewModel.getLastPlayer().getValue(), gameInformation);
 
                 viewModel.setLastPlayer(boardState.getNextPlayer()); //setting the last player to the next player
 

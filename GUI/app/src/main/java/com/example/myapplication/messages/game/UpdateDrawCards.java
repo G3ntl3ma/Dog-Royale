@@ -17,5 +17,23 @@ public class UpdateDrawCards extends AbstractGameMessage{
     public static class HandCard{
         private int clientId;
         private int count;
+
+        public HandCard(int clientId, int count) {
+            this.clientId = clientId;
+            this.count = count;
+        }
+
+        public int getClientId() {
+            return clientId;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
     }
+    public List<HandCard> getHandCards() {
+        return handCards;
+    }
+
 }
