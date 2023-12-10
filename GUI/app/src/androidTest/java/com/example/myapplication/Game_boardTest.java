@@ -23,6 +23,4 @@ public class Game_boardTest {
             assertTrue(fragment.getView() == null);
         });
     }
-    @Test
-    
 }
