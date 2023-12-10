@@ -102,6 +102,7 @@
         android:foregroundTintMode="src_over"
         android:orientation="vertical"
         android:padding="50dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -122,26 +123,14 @@
             tools:layout_editor_absoluteY="100dp" />
 
         <TextView
-            android:id="@+id/textView2"
-            style="@style/Leaderboard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="qwqw"
-            android:textColor="#BA4E26"
-            tools:layout_conversion_absoluteHeight="19dp"
-            tools:layout_conversion_absoluteWidth="212dp"
-            tools:layout_editor_absoluteX="100dp"
-            tools:layout_editor_absoluteY="155dp" />
-
-        <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             tools:layout_conversion_absoluteHeight="19dp"
-            tools:layout_editor_absoluteY="174dp"
+            tools:layout_conversion_absoluteWidth="212dp"
             tools:layout_editor_absoluteX="100dp"
-            tools:layout_conversion_absoluteWidth="212dp" />
+            tools:layout_editor_absoluteY="174dp" />
 
     </LinearLayout>
 

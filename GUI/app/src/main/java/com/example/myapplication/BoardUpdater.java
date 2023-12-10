@@ -72,6 +72,7 @@ public class BoardUpdater {
 
                     default:
                         textView.setText(counter + "." + gameInformation.getPlayerOrder().getName(player));
+                        textView.setTextColor(Color.parseColor("#FF8FA19D"));
                 }
 
                 textView.setLayoutParams(params);
