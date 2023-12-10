@@ -85,31 +85,41 @@ public class MatchHistory extends Fragment {
 
 
         for (ServerViewModel.MatchHistory matchHistory: viewModel.getMatchHistory().getValue()) {
-            LinearLayout linearLayout = new LinearLayout(getContext());
-            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            linearLayout.setPadding(5, 5, 5, 5);
 
-            TextView textView = new TextView(getContext());
+            LinearLayout linearLayout = new LinearLayout(binding.MatchHistoryTable.getContext());
+            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout.LayoutParams linlayoutparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            linlayoutparams.setMargins(0, 50, 0, 5);
+            linearLayout.setLayoutParams(linlayoutparams);
+            linearLayout.setPadding(5, 5, 5, 5);
+            linearLayout.setTag("row" + matchHistory.getGameId());
+            binding.MatchHistoryTable.addView(linearLayout);
+
+            TextView textView = new TextView(linearLayout.getContext());
             System.out.println("MatchHistorygameID: " + matchHistory.getGameId());
             textView.setText("" + matchHistory.getGameId());
             LinearLayout.LayoutParams gameIdLayParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            gameIdLayParams.setMargins(20, 0, 30, 0 );
+            gameIdLayParams.setMargins(0, 0,0 , 0 );
+            gameIdLayParams.weight = 1;
             textView.setLayoutParams(gameIdLayParams);
-            textView.setTextSize(12);
+            textView.setTextSize(14);
             textView.setTextColor(getResources().getColor(R.color.white));
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             linearLayout.addView(textView);
 
-            TextView winnerText = new TextView(getContext());
+            TextView winnerText = new TextView(linearLayout.getContext());
             winnerText.setText("" + matchHistory.getWinner());
             LinearLayout.LayoutParams winnerLayParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            winnerLayParams.setMargins(20, 0, 30, 0 );
+            winnerLayParams.setMargins(0, 0, 0, 0 );
+            winnerLayParams.weight = 1;
             winnerText.setLayoutParams(winnerLayParams);
-            winnerText.setTextSize(12);
+            winnerText.setTextSize(14);
+
+            winnerText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             winnerText.setTextColor(getResources().getColor(R.color.white));
             linearLayout.addView(winnerText);
 
-            binding.MatchHistoryTable.addView(linearLayout);
+
 
         }
 

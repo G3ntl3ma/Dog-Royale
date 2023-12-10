@@ -26,6 +26,8 @@ public class ServerViewModel extends ViewModel {
     }
 
     public LiveData<List<MatchHistory>> getMatchHistory(){
+
+        //TODO: remove this
         this.matchHistory.setValue(new ArrayList<MatchHistory> (Arrays.asList(new MatchHistory(1, 1), new MatchHistory(2, 2)) ));
         return matchHistory;
     }
@@ -131,6 +133,7 @@ public class ServerViewModel extends ViewModel {
         {
             return gameId;
         }
+
 
         public int getWinner()
         {
