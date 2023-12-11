@@ -18,34 +18,46 @@ public class ServerViewModel extends ViewModel {
     MutableLiveData<List<Game>> spectateGames = new MutableLiveData<>(new ArrayList<Game>());
     MutableLiveData<List<Game>> runningGames = new MutableLiveData<>(new ArrayList<Game>());
 
-    MutableLiveData<List<MatchHistory>> matchHistory = new MutableLiveData<>(new ArrayList<MatchHistory>());
+    MutableLiveData<List<ReturnGameList.FinishedGame>> matchHistory = new MutableLiveData<>();
     boolean setup = false;
 
-    public void setMatchHistory(List<ReturnGameList.FinishedGame> matchHistory){
-        for (ReturnGameList.FinishedGame match: matchHistory) {
-            addMatchHistory(new MatchHistory(match.getGameId(), match.getWinnerPlayerId()));
-        }
+    /**
+     * Set a List with FinishedGame-Objects to will be displayed
+     * @param matchHistory
+     */
+    public void setFinishedGames(List<ReturnGameList.FinishedGame> matchHistory){
+        this.matchHistory.setValue(matchHistory);
     }
 
-    public LiveData<List<MatchHistory>> getMatchHistory(){
+    public MutableLiveData<List<ReturnGameList.FinishedGame>> getFinishedGames(){
+        //UNCOMMENT FOR TESTING
+        /*List<ReturnGameList.FinishedGame> games = new ArrayList<>();
+        games.add(new ReturnGameList.FinishedGame(1234, 5678));
+        games.add(new ReturnGameList.FinishedGame(123, 456));
+        games.add(new ReturnGameList.FinishedGame(12, 34));
+        matchHistory.setValue(games);*/
         return matchHistory;
     }
 
-    public void addMatchHistory(MatchHistory matchHistory){
-        List<MatchHistory> matchHistoryList = this.matchHistory.getValue();
-        matchHistoryList.add(matchHistory);
+    /**Add a new Game to the FinishedGames List that will be shown
+     *
+     * @param game
+     */
+    public void addFinishedGame(ReturnGameList.FinishedGame game){
+        List<ReturnGameList.FinishedGame> matchHistoryList = this.matchHistory.getValue();
+        matchHistoryList.add(game);
         this.matchHistory.setValue(matchHistoryList);
     }
 
-    public void removeMatchHistory(int pos){
-        List<MatchHistory> matchHistoryList = this.matchHistory.getValue();
+    public void removeFinishedGame(int pos){
+        List<ReturnGameList.FinishedGame> matchHistoryList = this.matchHistory.getValue();
         matchHistoryList.remove(pos);
         this.matchHistory.setValue(matchHistoryList);
     }
 
-    public void addMatchHistoryList(List<ReturnGameList.FinishedGame> matchHistory){
+    public void addFinishedGameList(List<ReturnGameList.FinishedGame> matchHistory){
         for (ReturnGameList.FinishedGame match: matchHistory) {
-            addMatchHistory(new MatchHistory(match.getGameId(), match.getWinnerPlayerId()));
+            addFinishedGame(match);
         }
     }
 

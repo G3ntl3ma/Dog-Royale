@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,10 @@ import android.widget.TextView;
 
 import com.example.myapplication.databinding.FragmentFirstBinding;
 import com.example.myapplication.databinding.FragmentMatchHistoryBinding;
+import com.example.myapplication.messages.menu.ReturnGameList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -37,6 +42,8 @@ public class MatchHistory extends Fragment {
     private FragmentMatchHistoryBinding binding;
 
     private ServerViewModel viewModel;
+    List<ReturnGameList.FinishedGame> games = new ArrayList<>();
+    FinishedGamesAdapter adapter;
     public MatchHistory() {
         // Required empty public constructor
     }
@@ -80,48 +87,25 @@ public class MatchHistory extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         viewModel = new ViewModelProvider(requireActivity()).get(ServerViewModel.class);
+        //Set up the Recyclerview
+        adapter = new FinishedGamesAdapter(getContext(), games, this);
+        binding.MatchHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.MatchHistoryRecyclerView.setAdapter(adapter);
 
 
-        for (ServerViewModel.MatchHistory matchHistory: viewModel.getMatchHistory().getValue()) {
+        viewModel.getFinishedGames().observe(getViewLifecycleOwner(), list -> {
+            if(games.size()> 0){
+                for(int i = games.size()-1; i>=0; i--){
+                    games.remove(i);
+                }
+            }
+            for(int i = 0; i < list.size(); i++) {
+                games.add(list.get(i));
+            }
+            adapter.notifyDataSetChanged();
+        });
 
-            LinearLayout linearLayout = new LinearLayout(binding.MatchHistoryTable.getContext());
-            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-            LinearLayout.LayoutParams linlayoutparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            linlayoutparams.setMargins(0, 50, 0, 5);
-            linearLayout.setLayoutParams(linlayoutparams);
-            linearLayout.setPadding(5, 5, 5, 5);
-            linearLayout.setTag("row" + matchHistory.getGameId());
-            binding.MatchHistoryTable.addView(linearLayout);
-
-            TextView textView = new TextView(linearLayout.getContext());
-            System.out.println("MatchHistorygameID: " + matchHistory.getGameId());
-            textView.setText("" + matchHistory.getGameId());
-            LinearLayout.LayoutParams gameIdLayParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            gameIdLayParams.setMargins(0, 0,0 , 0 );
-            gameIdLayParams.weight = 1;
-            textView.setLayoutParams(gameIdLayParams);
-            textView.setTextSize(14);
-            textView.setTextColor(getResources().getColor(R.color.white));
-            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            linearLayout.addView(textView);
-
-            TextView winnerText = new TextView(linearLayout.getContext());
-            winnerText.setText("" + matchHistory.getWinner());
-            LinearLayout.LayoutParams winnerLayParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            winnerLayParams.setMargins(0, 0, 0, 0 );
-            winnerLayParams.weight = 1;
-            winnerText.setLayoutParams(winnerLayParams);
-            winnerText.setTextSize(14);
-
-            winnerText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            winnerText.setTextColor(getResources().getColor(R.color.white));
-            linearLayout.addView(winnerText);
-
-
-
-        }
 
 
 

@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     static TimerviewModel timerviewModel;
     static LastCardViewModel lastCardViewModel;
     static DiscardPileViewModel discardPileViewModel;
+    static StartingGamesViewmodel startingGamesViewmodel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +63,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
 
-
+        //Set up all Viewmodels
         serverViewModel = new ViewModelProvider(this).get(ServerViewModel.class);
         gameboardViewModel = new ViewModelProvider(this).get(GameboardViewModel.class);
         currentGameViewModel = new ViewModelProvider(this).get(CurrentGameViewModel.class);
         timerviewModel = new ViewModelProvider(this).get(TimerviewModel.class);
         lastCardViewModel = new ViewModelProvider(this).get(LastCardViewModel.class);
         discardPileViewModel = new ViewModelProvider(this).get(DiscardPileViewModel.class);
+        startingGamesViewmodel = new ViewModelProvider(this).get(StartingGamesViewmodel.class);
     }
 
     @Override
@@ -105,4 +107,5 @@ public class MainActivity extends AppCompatActivity {
     public static TimerviewModel getTimerViewModel(){return timerviewModel;}
     public static LastCardViewModel getLastCardViewModel(){return lastCardViewModel;}
     public static DiscardPileViewModel getDiscardPileViewModel(){return discardPileViewModel;}
+    public static StartingGamesViewmodel getStartingGamesViewmodel(){return startingGamesViewmodel;}
 }
