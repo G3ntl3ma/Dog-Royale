@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.updater;
 
 import android.graphics.Color;
 import android.view.View;
@@ -7,7 +7,14 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.myapplication.DiscardPileViewModel;
+import com.example.myapplication.Figure_handler;
+import com.example.myapplication.GameInformation;
 import com.example.myapplication.GameInformationClasses.Order;
+import com.example.myapplication.GameboardViewModel;
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.PlayerInformationTable;
+import com.example.myapplication.R;
 import com.example.myapplication.messages.game.BoardState;
 
 import java.util.ArrayList;

@@ -1,14 +1,10 @@
 package com.example.myapplication;
 
-import android.app.ActionBar;
-import android.graphics.PorterDuff;
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
@@ -18,12 +14,8 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 //databinding
 import com.example.myapplication.GameInformationClasses.Color;
@@ -36,6 +28,7 @@ import com.example.myapplication.GameInformationClasses.StartFields;
 import com.example.myapplication.databinding.FragmentGameBoardBinding;
 import com.example.myapplication.messages.game.BoardState;
 import com.example.myapplication.messages.menu.ReturnLobbyConfig;
+import com.example.myapplication.updater.BoardUpdater;
 
 import java.util.ArrayList;
 import java.util.Arrays;
