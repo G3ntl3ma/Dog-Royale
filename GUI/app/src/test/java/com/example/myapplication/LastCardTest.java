@@ -17,7 +17,9 @@ class LastCardTest {
 
     @Test
     public void setNewLastCard() {
+        //call the method
         lastCard.setNewLastCard(type);
+        //verify this method has been used or not
         Mockito.verify(lastCard).setNewLastCard(type);
     }
 

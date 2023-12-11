@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static org.junit.Assert.*;
 
 import androidx.fragment.app.testing.FragmentScenario;
@@ -8,6 +9,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -18,30 +20,60 @@ import org.junit.runner.RunWith;
 public class StartingGamesTest {
     @Test
     public void testNavigation_Startinggames_menü() {
+        //start FragmentScenario
         FragmentScenario<StartingGames> startFragmentScenario = FragmentScenario.launchInContainer(StartingGames.class);
+        //zu sicher aller View
+        Espresso.onView(ViewMatchers.withId(R.id.current_back_to_main)).check(ViewAssertions.matches(isDisplayed()));
+        //runing Click
         Espresso.onView(ViewMatchers.withId(R.id.current_back_to_main)).perform(ViewActions.click());
+        //warten für Navigate fertig(Wie eine GPS fertig machen)
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //besichtigen the Ziel von Navigate
         startFragmentScenario.onFragment(fragment -> {
             NavController navController = Navigation.findNavController(fragment.requireView());
             org.junit.Assert.assertEquals(navController.getCurrentDestination().getId(), R.id.FirstFragment);
+            //schließ Scenario
+            startFragmentScenario.close();
         });
     }
 
     @Test
     public void testNavigation_Startinggames_gameboard() {
+        //start FragmentScenario
         FragmentScenario<StartingGames> startFragmentScenario = FragmentScenario.launchInContainer(StartingGames.class);
+        //zu sicher aller View
+        Espresso.onView(ViewMatchers.withId(R.id.spectateGameButton2)).check(ViewAssertions.matches(isDisplayed()));
+        //runing Click
         Espresso.onView(ViewMatchers.withId(R.id.spectateGameButton2)).perform(ViewActions.click());
+        //warten für Navigate fertig(Wie eine GPS fertig machen)
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //besichtigen the Ziel von Navigate
         startFragmentScenario.onFragment(fragment -> {
             NavController navController = Navigation.findNavController(fragment.requireView());
             org.junit.Assert.assertEquals(navController.getCurrentDestination().getId(), R.id.waitingScreen);
+            //schließ Scenario
+            startFragmentScenario.close();
         });
     }
     @Test
     public void testStratingGamesLifeCycle(){
+        //start Scenario
         FragmentScenario<StartingGames> scenario = FragmentScenario.launchInContainer(StartingGames.class);
+        //verify on CREATED zustand
         scenario.onFragment(fragment -> {
             assertTrue(fragment.getView() != null);
         });
+        //changed zustand to DESTROYED
         scenario.moveToState(Lifecycle.State.DESTROYED);
+        //verify on DESTROYED zustand
         scenario.onFragment(fragment -> {
             assertTrue(fragment.getView() == null);
         });
