@@ -1,3 +1,6 @@
+/**
+ * @author: leisen
+ */
 package com.example.myapplication;
 
 import android.view.View;
@@ -7,25 +10,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class StartingScreenViewHolder extends RecyclerView.ViewHolder {
+import com.example.myapplication.databinding.FragmentSpectateGamesBinding;
 
-   StartingGamesAdapter adapter;
+public class StartingGamesViewholder extends RecyclerView.ViewHolder{
 
-    TextView gameID, time, players;
+    StartingGamesAdapter adapter;
 
+    TextView gameID, players;
     Button spectate_button;
-
-    public StartingScreenViewHolder(@NonNull View itemView){
+    public StartingGamesViewholder(@NonNull View itemView){
         super(itemView);
         gameID =  itemView.findViewById(R.id.gameID);
         players = itemView.findViewById(R.id.Players);
         spectate_button = itemView.findViewById(R.id.Spectate_Button);
     }
 
-    public StartingScreenViewHolder linkAdapter(StartingGamesAdapter adapter){
+    public StartingGamesViewholder linkAdapter(StartingGamesAdapter adapter){
         this.adapter = adapter;
         return this;
     }
-
-
 }

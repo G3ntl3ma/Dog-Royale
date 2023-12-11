@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.databinding.FragmentStartingGamesBinding;
+import com.example.myapplication.messages.menu.ReturnGameList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +31,10 @@ public class StartingGames extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    List<Game> games = new ArrayList<>();
+    List<ReturnGameList.StartingGame> games = new ArrayList<>();
     StartingGamesAdapter adapter;
 
-    private ServerViewModel viewModel;
+    private StartingGamesViewmodel viewModel;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -85,12 +86,14 @@ public class StartingGames extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //Set up the Recyclerview
         adapter = new StartingGamesAdapter(getContext(), games, this);
-        binding.StartingGamesRecyclerView.setAdapter(adapter);
         binding.StartingGamesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        viewModel = new ViewModelProvider(requireActivity()).get(ServerViewModel.class);
+        binding.StartingGamesRecyclerView.setAdapter(adapter);
+        viewModel = new ViewModelProvider(requireActivity()).get(StartingGamesViewmodel.class);
 
-        viewModel.getRunningGames().observe(getViewLifecycleOwner(), list -> {
+
+        viewModel.getGamesList().observe(getViewLifecycleOwner(), list -> {
             if(games.size()> 0){
                 for(int i = games.size()-1; i>=0; i--){
                     games.remove(i);

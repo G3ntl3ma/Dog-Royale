@@ -9,17 +9,19 @@ import androidx.annotation.NonNull;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.messages.menu.ReturnGameList;
+
 import java.util.List;
 
-public class StartingGamesAdapter extends RecyclerView.Adapter<StartingScreenViewHolder>{
+public class StartingGamesAdapter extends RecyclerView.Adapter<StartingGamesViewholder>{
 
     Context context;
 
-    List<Game> games;
+    List<ReturnGameList.StartingGame> games;
 
     StartingGames startinggames;
 
-    public StartingGamesAdapter(Context context, List<Game> games, StartingGames startinggames) {
+    public StartingGamesAdapter(Context context, List<ReturnGameList.StartingGame> games, StartingGames startinggames) {
 
         this.context = context;
 
@@ -30,24 +32,20 @@ public class StartingGamesAdapter extends RecyclerView.Adapter<StartingScreenVie
 
     @NonNull
     @Override
-    public StartingScreenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public StartingGamesViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        return new StartingScreenViewHolder(LayoutInflater.from(context).inflate(R.layout.game_view, parent, false)).linkAdapter(this);
+        return new StartingGamesViewholder(LayoutInflater.from(context).inflate(R.layout.game_view, parent, false)).linkAdapter(this);
     }
 
-    public void onBindViewHolder(@NonNull StartingScreenViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull StartingGamesViewholder holder, int position) {
         //current_game hat die Infos für das Spiel
-        Game current_game = games.get(holder.getAdapterPosition());
-        holder.gameID.setText(current_game.getGameID());
-        holder.players.setText(Integer.toString(current_game.getCurrentPlayers()) + "/" + Integer.toString(current_game.getMaxPlayers()));
+        ReturnGameList.StartingGame current_game = games.get(holder.getAdapterPosition());
+        holder.gameID.setText(Integer.toString(current_game.getGameId()));
+        holder.players.setText(Integer.toString(current_game.getCurrentPlayerCount()) + "/" + Integer.toString(current_game.getMaxPlayerCount()));
 
         holder.spectate_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    CurrentGameViewModel currentGameViewModel = MainActivity.getCurrentGameViewModel();
-                    currentGameViewModel.setCurrent_game_id(current_game.getGameID());
-                    GameboardViewModel viewModel = MainActivity.getGameboardViewModel();
-                    //changed - deletet stuff
 
                 NavHostFragment.findNavController(startinggames)
                         .navigate(R.id.action_StartingGames_to_waitingScreen);
