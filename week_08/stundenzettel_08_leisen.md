@@ -3,7 +3,7 @@ name: Luca Timo Eisen
 imt: leisen
 gruppe: 1
 woche: 8
-gesamtarbeitszeit: 0h
+gesamtarbeitszeit: 21h
 ---
 
 <!--
@@ -26,3 +26,15 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 # Stundenzettel des Softwaretechnikpraktikums WS 2022/23
 
 ## Projektmanagement
+- Meetings
+  - 2023-12-04 1,30h
+  - 2023-12-08 0,30h
+## Implementierung
+- Spielverlauf in der GUI
+  - 2023-12-09 3,00h
+  - 2023-12-10 3,00h
+- Suche nach Bugs
+  - 2023-12-10 3,00h
+- Updateting SpectateGames, LastCard und Timer
+  - 2023-12-05 6,00h
+  - 2023-12-07 3,00h
