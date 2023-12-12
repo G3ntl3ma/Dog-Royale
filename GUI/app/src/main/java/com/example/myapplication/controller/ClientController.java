@@ -61,7 +61,6 @@ public class ClientController {
     private ServerHandler serverHandler;
 
     private ClientController() {
-        startClient();
 
     }
     public void startClient(){
