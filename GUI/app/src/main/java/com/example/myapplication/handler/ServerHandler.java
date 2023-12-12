@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 /**
@@ -33,8 +34,10 @@ public class ServerHandler extends Handler implements Runnable {
     private static  ServerHandler instance ;
     private static final Logger logger = LogManager.getLogger(ServerHandler.class);
 //    private static final Object lock = new Object();  // For thread-safety
-    private Socket serverSocket;
-    private final PrintWriter broadcaster;
+    private  Socket serverSocket;
+    private final ConcurrentLinkedQueue<String> messageQueue = new ConcurrentLinkedQueue<>();
+
+//    private final PrintWriter broadcaster;
     private final ClientController clientController;
 
 
@@ -64,19 +67,21 @@ public class ServerHandler extends Handler implements Runnable {
     public ServerHandler(Socket socket) {
         clientController = ClientController.getInstance();
         this.serverSocket = socket;
-        PrintWriter writer;
-        try {
-            writer = new PrintWriter(serverSocket.getOutputStream(), false);
-        } catch (Exception e) {
-            writer = null;
-        }
-        broadcaster = writer;
+//        this.serverSocket = socket;
+//        PrintWriter writer;
+//        try {
+//            writer = new PrintWriter(serverSocket.getOutputStream(), false);
+//        } catch (Exception e) {
+//            writer = null;
+//        }
+//        broadcaster = writer;
 }
 
 
 
     @Override
     public void run() {
+
         try {
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(serverSocket.getInputStream()));
@@ -92,6 +97,13 @@ public class ServerHandler extends Handler implements Runnable {
                     writer.println(response);
                     writer.flush();
                 }
+                String messageToSend = messageQueue.poll();
+                if (messageToSend != null) {
+                    writer.write(messageToSend);
+                    writer.flush();
+                }
+
+
             }
         }catch (JsonSyntaxException | MalformedJsonException e) {
             // Handle MalformedJsonException
@@ -111,19 +123,11 @@ public class ServerHandler extends Handler implements Runnable {
      * Writes the specified message to the broadcaster
      */
     public void broadcast(String message) {
-        new Thread(() -> {try (PrintWriter writer = this.broadcaster) {
-            if (writer != null) {
-                writer.write(message);
-                writer.flush();
-            } else {
-                logger.error("Error broadcasting message: broadcaster is null");
-            }
-        } catch (Exception e) {
-            logger.error("Error broadcasting message", e);
-        }}).start();
-
-
+        messageQueue.add(message);
     }
+
+
+
 
 
     private String handle(String request) {

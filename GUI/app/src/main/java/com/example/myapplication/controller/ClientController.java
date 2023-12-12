@@ -49,8 +49,9 @@ public class ClientController {
 
     private StartScreen startScreen;
     private static final Executor executor = Executors.newSingleThreadExecutor();
+    private static final Executor executor2 = Executors.newSingleThreadExecutor();
 
-    private final ExecutorService executorService = Executors.newFixedThreadPool(100);
+
     private StartingGames startingGames;//instance that is sent to now what window to control
     private SpectateGames spectateGames;
     private boolean startingGamesActive;//to know what was the last active window so the controller can act accordingly, like navigateToNextfragment
@@ -60,41 +61,65 @@ public class ClientController {
     private ServerHandler serverHandler;
 
     private ClientController() {
-        new SocketInitializationTask().execute();
+        startClient();
 
     }
-
-    private void initializeServerHandler(Socket socket) {
-        this.serverHandler = ServerHandler.getInstance(socket);
-
+    public void startClient(){
+        executor2.execute(new Runnable() {
 
 
-    }
-
-    private static class SocketInitializationTask extends AsyncTask<Void, Void, Socket> {
-        @Override
-        protected Socket doInBackground(Void... params) {
-            try {
-                String serverAddress = "192.168.0.208";
-                int serverPort = 8082;
-                return new Socket(serverAddress, serverPort);
-            } catch (IOException e) {
-                logger.error("Failed connection");
-                // Handle exception
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Socket socket) {
-            if (socket != null) {
-                instance.initializeServerHandler(socket);
-                ServerHandler serverHandler = ServerHandler.getInstance(socket);
-                executor.execute(serverHandler);
+            @Override
+            public void run() {
+                try(Socket socket = new Socket("192.168.0.208", 8082)) {
+                    logger.info("started client successfully");
+                    ServerHandler serverHandler = new ServerHandler(socket);
+                    setServerHandler(serverHandler);
+                    serverHandler.run();
+                }catch (IOException e) {
+                    logger.error("Failed connection");
+                    // Handle exception
+                }
 
             }
-        }
+        });}
+
+
+    private void setServerHandler(ServerHandler serverHandler) {
+        this.serverHandler = serverHandler;
     }
+
+
+//    private void initializeServerHandler(Socket socket) {
+//        this.serverHandler = ServerHandler.getInstance(socket);
+//
+//
+//
+//    }
+//
+//    private static class SocketInitializationTask extends AsyncTask<Void, Void, Socket> {
+//        @Override
+//        protected Socket doInBackground(Void... params) {
+//            try {
+//                String serverAddress = "192.168.0.208";
+//                int serverPort = 8082;
+//                return new Socket(serverAddress, serverPort);
+//            } catch (IOException e) {
+//                logger.error("Failed connection");
+//                // Handle exception
+//                return null;
+//            }
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Socket socket) {
+//            if (socket != null) {
+//                instance.initializeServerHandler(socket);
+//                ServerHandler serverHandler = ServerHandler.getInstance(socket);
+//                executor.execute(serverHandler);
+//
+//            }
+//        }
+//    }
 
     public void sendConnectToServerRequest(String username, StartScreen startScreen) throws HandlingException{
         ConnectToServer connectToServer = new ConnectToServer();
@@ -106,16 +131,7 @@ public class ClientController {
         if(gson.toJson(connectToServer) == null){
             logger.info("message is null");
         }
-        try{
             serverHandler.broadcast(gson.toJson(connectToServer));
-        }catch (Exception e){
-
-            throw new HandlingException("Exception while handling ",
-                    e, connectToServer.getType());
-        }
-
-
-
     }
     public void getWaitingScreen(WaitingScreen waitingScreen){
         this.waitingScreen = waitingScreen;
