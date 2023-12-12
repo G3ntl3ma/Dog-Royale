@@ -14,7 +14,7 @@ gesamtarbeitszeit: 3,30h
 
 
 ## Sonstiges
--Einarbeitung in Code für die Messe
+- Einarbeitung in Code für die Messe
   -2023-12-12 2h
 ## Werkzeuge
 - DevOp Dokument
