@@ -54,7 +54,7 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="156dp"
-            android:layout_height="157dp"
+            android:layout_height="156dp"
             android:layout_marginBottom="60dp"
             android:contentDescription="@null"
             android:src="@mipmap/ic_launcher_round"

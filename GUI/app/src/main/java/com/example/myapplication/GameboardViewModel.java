@@ -87,9 +87,8 @@ public class GameboardViewModel extends ViewModel {
     }
 
 
-    //////**********REPLACE WITH RETURN GAMEINFORMATION**********//////
+
     public MutableLiveData<GameInformation> getGameInformation() {
-        //testweise
        return gameInformation;
     }
     /**
