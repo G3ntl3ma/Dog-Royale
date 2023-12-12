@@ -9,31 +9,28 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.databinding.FragmentSpectateGamesBinding;
-
 import java.util.List;
 
-public class SpectateGamesAdapter extends RecyclerView.Adapter<SpectateGamesViewholder>{
+public class RunningGamesAdapter extends RecyclerView.Adapter<RunningGamesViewholder>{
 
     Context context;
     List<Game> games;
 
-    SpectateGames spectateGames;
+    RunningGames runningGames;
 
-    public SpectateGamesAdapter(Context context, List<Game> games, SpectateGames spectateGames) {
+    public RunningGamesAdapter(Context context, List<Game> games, RunningGames runningGames) {
         this.context = context;
         this.games = games;
-        this.spectateGames = spectateGames;
+        this.runningGames = runningGames;
     }
 
     @NonNull
     @Override
-    public SpectateGamesViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new SpectateGamesViewholder(LayoutInflater.from(context).inflate(R.layout.game_view, parent, false)).linkAdapter(this);
+    public RunningGamesViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new RunningGamesViewholder(LayoutInflater.from(context).inflate(R.layout.game_view, parent, false)).linkAdapter(this);
     }
 
     /**
@@ -41,7 +38,7 @@ public class SpectateGamesAdapter extends RecyclerView.Adapter<SpectateGamesView
      *
      */
     @Override
-    public void onBindViewHolder(@NonNull SpectateGamesViewholder holder, int position) {
+    public void onBindViewHolder(@NonNull RunningGamesViewholder holder, int position) {
         //current_game hat die Infos für das Spiel
         Game current_game = games.get(holder.getAdapterPosition());
         holder.gameID.setText(current_game.getGameID());
@@ -53,9 +50,8 @@ public class SpectateGamesAdapter extends RecyclerView.Adapter<SpectateGamesView
                     CurrentGameViewModel currentGameViewModel = MainActivity.getCurrentGameViewModel();
                     currentGameViewModel.setCurrent_game_id(current_game.getGameID());
                     GameboardViewModel viewModel = MainActivity.getGameboardViewModel();
-                    //changed - deletet stuff
 
-                NavHostFragment.findNavController(spectateGames)
+                NavHostFragment.findNavController(runningGames)
                         .navigate(R.id.action_SpectateGames_to_waitingScreen);
             }
         });

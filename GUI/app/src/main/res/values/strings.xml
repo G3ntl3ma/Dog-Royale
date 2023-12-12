@@ -7,7 +7,7 @@
     <string name="current_games_button">Running Games</string>
     <string name="upcomming_games">Starting Games</string>
     <string name="button_match_history">Match History</string>
-    <string name="menu_title">Hauptmenü</string>
+    <string name="menu_title">Mainmenu</string>
     <string name="next">Next</string>
     <string name="menu">Menu</string>
     <string name="spectate">SPECTATE</string>
@@ -17,8 +17,4 @@
     <string name="winnerID">Winner</string>
     <string name="figures_left_text">Figures in Bank:</string>
     <string name="cards_left_text">Cards in Hand:</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

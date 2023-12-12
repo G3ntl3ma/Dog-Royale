@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/text_color"
     android:backgroundTint="@color/text_color"
-    android:id="@+id/SpectateGames"
-    tools:context=".SpectateGames">
+    android:id="@+id/RunningGames"
+    tools:context=".RunningGames">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -154,7 +154,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="0dp"
                     android:backgroundTint="@color/button_color"
-                    android:text="New Game"
+                    android:text="Spectate"
                     android:textColor="@color/text_color" />
             </FrameLayout>
 

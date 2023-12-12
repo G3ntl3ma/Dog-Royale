@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -64,7 +63,7 @@ public class FirstFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.main_to_current);
+                        .navigate(R.id.main_to_running);
 
             }
 
@@ -86,7 +85,7 @@ public class FirstFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_Main_to_upcomming);
+                        .navigate(R.id.action_Main_to_starting);
 
             }
 

@@ -11,11 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 
-import com.example.myapplication.databinding.FragmentFirstBinding;
 import com.example.myapplication.databinding.FragmentMatchHistoryBinding;
 import com.example.myapplication.messages.menu.ReturnGameList;
 
@@ -113,7 +110,7 @@ public class MatchHistory extends Fragment {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(MatchHistory.this)
-                        .navigate(R.id.action_matchHistory_to_FirstFragment2);
+                        .navigate(R.id.action_matchHistory_to_FirstFragment);
 
 
             }

@@ -12,25 +12,25 @@
         tools:layout="@layout/fragment_first">
 
         <action
-            android:id="@+id/main_to_current"
-            app:destination="@id/SpectateGames" />
+            android:id="@+id/main_to_running"
+            app:destination="@id/RunningGames" />
         <action
-            android:id="@+id/action_Main_to_upcomming"
+            android:id="@+id/action_Main_to_starting"
             app:destination="@id/StartingGames" />
         <action
             android:id="@+id/action_FirstFragment_to_matchHistory"
             app:destination="@id/matchHistory" />
     </fragment>
     <fragment
-        android:id="@+id/SpectateGames"
-        android:name="com.example.myapplication.SpectateGames"
+        android:id="@+id/RunningGames"
+        android:name="com.example.myapplication.RunningGames"
         android:label="Spectate running Games"
         tools:layout="@layout/fragment_spectate_games">
         <action
             android:id="@+id/action_SpectateGames_to_waitingScreen"
             app:destination="@id/waitingScreen" />
         <action
-            android:id="@+id/action_SpectateGames_to_FirstFragment"
+            android:id="@+id/action_RunningGames_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
     <fragment
@@ -51,7 +51,7 @@
         android:label="Match History"
         tools:layout="@layout/fragment_match_history">
         <action
-            android:id="@+id/action_matchHistory_to_FirstFragment2"
+            android:id="@+id/action_matchHistory_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
     <fragment
@@ -75,8 +75,8 @@
     <fragment
         android:id="@+id/waitingScreen"
         android:name="com.example.myapplication.WaitingScreen"
-        android:label="fragment_waiting_screen"
-        tools:layout="@layout/fragment_waiting_screen" >
+        android:label="Waitingroom"
+        tools:layout="@layout/fragment_waiting_screen">
         <action
             android:id="@+id/action_waitingScreen_to_game_board_layout"
             app:destination="@id/game_board_layout" />

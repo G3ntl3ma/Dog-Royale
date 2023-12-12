@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-import static org.junit.Assert.*;
-
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -14,10 +12,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
-public class SpectateGamesTest {
+public class RunningGamesTest {
     @Test
     public void testNavigation_Spectategames_menü() {
-        FragmentScenario<SpectateGames> startFragmentScenario = FragmentScenario.launchInContainer(SpectateGames.class);
+        FragmentScenario<RunningGames> startFragmentScenario = FragmentScenario.launchInContainer(RunningGames.class);
         Espresso.onView(ViewMatchers.withId(R.id.current_back_to_main)).perform(ViewActions.click());
         startFragmentScenario.onFragment(fragment -> {
             NavController navController = Navigation.findNavController(fragment.requireView());
@@ -26,7 +24,7 @@ public class SpectateGamesTest {
     }
     @Test
     public void testNavigation_Spectategames_Gameboard() {
-        FragmentScenario<SpectateGames> startFragmentScenario = FragmentScenario.launchInContainer(SpectateGames.class);
+        FragmentScenario<RunningGames> startFragmentScenario = FragmentScenario.launchInContainer(RunningGames.class);
         Espresso.onView(ViewMatchers.withId(R.id.spectateGameButton)).perform(ViewActions.click());
         startFragmentScenario.onFragment(fragment -> {
             NavController navController = Navigation.findNavController(fragment.requireView());

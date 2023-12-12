@@ -74,12 +74,10 @@ public class Game_board extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment Game_board.
      */
     // TODO: Rename and change types and number of parameters
-    public static Game_board newInstance(String param1, String param2) {
+    public static Game_board newInstance() {
         Game_board fragment = new Game_board();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -309,6 +307,14 @@ public class Game_board extends Fragment {
                 move_count++;
             }
 
+        });
+
+        binding.leaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(Game_board.this)
+                        .navigate(R.id.action_game_board_layout_to_FirstFragment);
+            }
         });
     }
 }

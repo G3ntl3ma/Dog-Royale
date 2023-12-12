@@ -10,22 +10,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.databinding.FragmentSpectateGamesBinding;
+public class RunningGamesViewholder extends RecyclerView.ViewHolder{
 
-public class SpectateGamesViewholder extends RecyclerView.ViewHolder{
-
-    SpectateGamesAdapter adapter;
+    RunningGamesAdapter adapter;
 
     TextView gameID, time, players;
     Button spectate_button;
-    public SpectateGamesViewholder(@NonNull View itemView){
+    public RunningGamesViewholder(@NonNull View itemView){
         super(itemView);
         gameID =  itemView.findViewById(R.id.gameID);
         players = itemView.findViewById(R.id.Players);
         spectate_button = itemView.findViewById(R.id.Spectate_Button);
     }
 
-    public SpectateGamesViewholder linkAdapter(SpectateGamesAdapter adapter){
+    public RunningGamesViewholder linkAdapter(RunningGamesAdapter adapter){
         this.adapter = adapter;
         return this;
     }

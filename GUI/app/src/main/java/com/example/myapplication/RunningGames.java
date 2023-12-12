@@ -19,28 +19,20 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SpectateGames#newInstance} factory method to
+ * Use the {@link RunningGames#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SpectateGames extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+public class RunningGames extends Fragment {
 
     private FragmentSpectateGamesBinding binding;
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     //games enthält alle Spiele und für jedes Element in games wird der Adapter einen Eintrag in Spectate Games erstellen
     List<Game> games = new ArrayList<>();
-    SpectateGamesAdapter adapter;
+    RunningGamesAdapter adapter;
 
     private ServerViewModel viewModel;
-    private String mParam1;
-    private String mParam2;
 
-    public SpectateGames() {
+    public RunningGames() {
         // Required empty public constructor
     }
 
@@ -48,16 +40,11 @@ public class SpectateGames extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment CurrentGames.
      */
-    // TODO: Rename and change types and number of parameters
-    public static SpectateGames newInstance(String param1, String param2) {
-        SpectateGames fragment = new SpectateGames();
+    public static RunningGames newInstance() {
+        RunningGames fragment = new RunningGames();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,12 +52,6 @@ public class SpectateGames extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -90,7 +71,7 @@ public class SpectateGames extends Fragment {
         lastCard.setNewLastCard(CardType.MAGNET);
         lastCard.showLastCard(true);
 
-        adapter = new SpectateGamesAdapter(getContext(), games, SpectateGames.this);
+        adapter = new RunningGamesAdapter(getContext(), games, RunningGames.this);
         binding.SpectateGamesRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.SpectateGamesRecycleView.setAdapter(adapter);
         viewModel = new ViewModelProvider(requireActivity()).get(ServerViewModel.class);
@@ -110,8 +91,8 @@ public class SpectateGames extends Fragment {
         binding.currentBackToMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(SpectateGames.this)
-                        .navigate(R.id.action_SpectateGames_to_FirstFragment);
+                NavHostFragment.findNavController(RunningGames.this)
+                        .navigate(R.id.action_RunningGames_to_FirstFragment);
 
             }
 
@@ -122,7 +103,8 @@ public class SpectateGames extends Fragment {
         binding.spectateGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addGame(new Game(1, 15, 4 , 6, 100, 20, new int[]{0,1,6,99,33}, new int[]{0,24,49,74}));
+                NavHostFragment.findNavController(RunningGames.this)
+                        .navigate(R.id.action_SpectateGames_to_waitingScreen);
             }
 
         });
