@@ -18,6 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 //databinding
+import com.example.myapplication.GUILogic.Figure_handler;
+import com.example.myapplication.GUILogic.GameInformation;
+import com.example.myapplication.GUILogic.Game_board_creator;
+import com.example.myapplication.GUILogic.PlayerInformationTable;
 import com.example.myapplication.GameInformationClasses.Color;
 import com.example.myapplication.GameInformationClasses.DrawCardFields;
 import com.example.myapplication.GameInformationClasses.Observer;
@@ -290,6 +294,7 @@ public class Game_board extends Fragment {
                 BoardState boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, false, new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
                 if (position <gameInformation.getFieldsize()) {
                     pieces.add(new BoardState.Piece(0, 0, position, false, 0));
+                    pieces.add(new BoardState.Piece(1, 0, null, true, 0));
                     System.out.println("Name:" + viewModel.getPlayerName(0));
                     boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, false, new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
                 } else if (gameInformation.getFiguresPerPlayer() + gameInformation.getFieldsize()> position) {
@@ -299,7 +304,7 @@ public class Game_board extends Fragment {
                 } else
                 {
                     pieces.add(new BoardState.Piece(0, 0, null, false, position - gameInformation.getFieldsize()));
-                    boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, true, new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
+                    boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, true, new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4)));
                 }
 
                 boardUpdater.UpdateBoard(boardState);

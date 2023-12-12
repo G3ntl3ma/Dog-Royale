@@ -1,10 +1,14 @@
-package com.example.myapplication;
+package com.example.myapplication.GUILogic;
 
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.example.myapplication.GameboardViewModel;
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.R;
 
 import java.util.List;
 

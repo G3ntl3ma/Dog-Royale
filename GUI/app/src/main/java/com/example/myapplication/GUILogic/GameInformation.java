@@ -1,7 +1,6 @@
-package com.example.myapplication;
+package com.example.myapplication.GUILogic;
 
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.GameInformationClasses.Color;
 import com.example.myapplication.GameInformationClasses.DrawCardFields;
@@ -9,12 +8,12 @@ import com.example.myapplication.GameInformationClasses.Observer;
 import com.example.myapplication.GameInformationClasses.Order;
 import com.example.myapplication.GameInformationClasses.PlayerOrder;
 import com.example.myapplication.GameInformationClasses.StartFields;
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.messages.menu.ReturnLobbyConfig;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 import lombok.Data;
 
@@ -105,7 +104,6 @@ public class GameInformation {
         int count = 0;
         for (Order order : playerOrder.getOrder()) {
             playerOrderDictionary.put(order.getClientId(), count);
-            System.out.println("clientId: " + order.getClientId() + " count: " + count);
             count++;
         }
     }

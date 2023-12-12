@@ -3,20 +3,14 @@ package com.example.myapplication;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.GameInformationClasses.Color;
-import com.example.myapplication.GameInformationClasses.DrawCardFields;
-import com.example.myapplication.GameInformationClasses.Observer;
+import com.example.myapplication.GUILogic.Figure_handler;
+import com.example.myapplication.GUILogic.GameInformation;
+import com.example.myapplication.GUILogic.PlayerInformationTable;
 import com.example.myapplication.GameInformationClasses.Order;
-import com.example.myapplication.GameInformationClasses.OrderType;
-import com.example.myapplication.GameInformationClasses.PlayerOrder;
-import com.example.myapplication.GameInformationClasses.StartFields;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.List;
-
 import java.util.List;
 
 public class GameboardViewModel extends ViewModel {

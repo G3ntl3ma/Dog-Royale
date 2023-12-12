@@ -2,6 +2,8 @@ package com.example.myapplication;
 
 import static org.junit.Assert.*;
 
+import com.example.myapplication.GUILogic.Timer;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;

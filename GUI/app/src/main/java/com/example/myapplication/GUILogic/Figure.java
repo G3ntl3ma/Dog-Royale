@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.GUILogic;
 
 import androidx.core.content.ContextCompat;
 
@@ -6,6 +6,8 @@ import android.graphics.PorterDuff;
 import android.media.Image;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.example.myapplication.R;
 
 public class Figure {
     //the id of the figure

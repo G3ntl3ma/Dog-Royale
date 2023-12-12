@@ -1,13 +1,15 @@
 /**
  * @author: leisen
  */
-package com.example.myapplication;
+package com.example.myapplication.GUILogic;
 import android.os.CountDownTimer;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.TimerviewModel;
 import com.example.myapplication.databinding.FragmentGameBoardBinding;
 
 import java.util.Locale;

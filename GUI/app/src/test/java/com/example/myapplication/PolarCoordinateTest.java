@@ -2,7 +2,9 @@ package com.example.myapplication;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
+import com.example.myapplication.GUILogic.PolarCoordinate;
+import com.example.myapplication.GUILogic.Tuple;
+
 import org.junit.Test;
 
 public class PolarCoordinateTest {

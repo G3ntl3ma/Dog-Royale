@@ -1,10 +1,12 @@
-package com.example.myapplication;
+package com.example.myapplication.GUILogic;
 
 import android.graphics.PorterDuff;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.core.content.ContextCompat;
+
+import com.example.myapplication.R;
 
 public class Game_field {
 

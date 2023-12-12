@@ -4,12 +4,11 @@ import static org.junit.Assert.*;
 
 import android.widget.RelativeLayout;
 
+import com.example.myapplication.GUILogic.Game_field;
+
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.exceptions.base.MockitoAssertionError;
 
 public class Game_fieldTest {
 

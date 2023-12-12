@@ -2,6 +2,8 @@ package com.example.myapplication;
 
 import static org.junit.Assert.*;
 
+import com.example.myapplication.GUILogic.Tuple;
+
 import org.junit.Test;
 
 public class TupleTest {

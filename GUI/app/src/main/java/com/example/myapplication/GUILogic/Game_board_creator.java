@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.GUILogic;
 
 import java.util.List;
 
@@ -7,6 +7,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.example.myapplication.R;
 
 
 public class Game_board_creator{

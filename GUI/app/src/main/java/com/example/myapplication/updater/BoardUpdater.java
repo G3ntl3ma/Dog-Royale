@@ -8,19 +8,17 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.myapplication.DiscardPileViewModel;
-import com.example.myapplication.Figure_handler;
-import com.example.myapplication.GameInformation;
+import com.example.myapplication.GUILogic.Figure_handler;
+import com.example.myapplication.GUILogic.GameInformation;
 import com.example.myapplication.GameInformationClasses.Order;
 import com.example.myapplication.GameboardViewModel;
 import com.example.myapplication.MainActivity;
-import com.example.myapplication.PlayerInformationTable;
+import com.example.myapplication.GUILogic.PlayerInformationTable;
 import com.example.myapplication.R;
 import com.example.myapplication.messages.game.BoardState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.List;
 
 public class BoardUpdater {
 

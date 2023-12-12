@@ -1,17 +1,14 @@
-package com.example.myapplication;
+package com.example.myapplication.GUILogic;
 
 import android.util.TypedValue;
-import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-
+import com.example.myapplication.GUILogic.GameInformation;
 import com.example.myapplication.GameInformationClasses.Order;
-
-import org.w3c.dom.Text;
+import com.example.myapplication.GameboardViewModel;
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
