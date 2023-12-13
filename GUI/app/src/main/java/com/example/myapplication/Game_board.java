@@ -66,8 +66,11 @@ public class Game_board extends Fragment {
     private LastCardViewModel lastCardViewModel;
     private DiscardPileViewModel discardPileViewModel;
     //testwise
-    private int position = 0 ; // positions for the test figure to move - I know we dont get the change but the new position but that doesnt matter
-    private int move_count = 0;
+
+    private int counter = 0; //counter for test demo
+    private int position[] = new int[30]; // positions for the test figure to move
+    private int move_count = 0; //how many moves where made for test demo
+    private boolean gameOver = false; //is the game over for test demo
     private BoardUpdater boardUpdater;
     public Game_board() {
         // Required empty public constructor
@@ -138,12 +141,12 @@ public class Game_board extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(GameboardViewModel.class); //creating the ViewModel
 
 
-        /**DELETE AND DO WITH MESSAGE
+        /**FOR TEST
          */
-        ReturnLobbyConfig insertReturnLobbyConfig = new ReturnLobbyConfig(new Integer(6), new Integer(40), new Integer(10) , Arrays.asList(new Color(0, R.color.p1_color), new Color(1, R.color.p2_color), new Color(2, R.color.p3_color), new Color(3, R.color.p4_color), new Color(4, R.color.p5_color), new Color(5, R.color.p6_color)), new DrawCardFields(5, Arrays.asList(1, 4, 7, 10, 13)), new StartFields(6, Arrays.asList(0, 7, 14, 21, 28, 35)), new Integer(5), new PlayerOrder(OrderType.fixed, Arrays.asList(new Order(0, "OwO"), new Order(1, "UwU"), new Order(2, "AwA"), new Order(3, "QwQ"), new Order(4, "XwX"))),  Arrays.asList(new Observer(new Integer(1), "OwO")), new Integer(5), new Integer(5), new Integer(1), new Integer(15), new Integer(5));
+        ReturnLobbyConfig insertReturnLobbyConfig = new ReturnLobbyConfig(new Integer(6), new Integer(30), new Integer(5) , Arrays.asList(new Color(0, R.color.p1_color), new Color(1, R.color.p2_color), new Color(2, R.color.p3_color), new Color(3, R.color.p4_color), new Color(4, R.color.p5_color), new Color(5, R.color.p6_color)), new DrawCardFields(5, Arrays.asList(1, 4, 7, 10, 13)), new StartFields(6, Arrays.asList(0, 5, 10, 15, 20, 25)), new Integer(5), new PlayerOrder(OrderType.fixed, Arrays.asList(new Order(0, "OwO"), new Order(1, "UwU"), new Order(2, "AwA"), new Order(3, "QwQ"), new Order(4, "XwX"))),  Arrays.asList(new Observer(new Integer(1), "OwO")), new Integer(5), new Integer(5), new Integer(1), new Integer(15), new Integer(5));
         viewModel.setGameInformation(new GameInformation(insertReturnLobbyConfig));
-        /**DELETE AND DO WITH MESSAGE
-        */
+        /**FOR TEST
+         */
 
 
         RelativeLayout GameBoard = binding.gameBoardLayout; //getting the Layout for the GameBoard
@@ -174,39 +177,39 @@ public class Game_board extends Fragment {
         System.out.println("normale Felder: " + viewModel.getField_size().getValue());
 
         gameInformation = viewModel.getGameInformation().getValue(); //getting the GameInformation from the ViewModel (the information about the game is stored in here)
-                                                                        //need to get the Value because we want the actual information not the LiveData Object
-                //set number of fields for gameboard creation
+        //need to get the Value because we want the actual information not the LiveData Object
+        //set number of fields for gameboard creation
         field_size = gameInformation.getFieldsize();    //getting the fieldsize from the GameInformation
 
         //field_size = viewModel.getField_size().getValue();                        //old
-                //set number of players for gameboard creation
+        //set number of players for gameboard creation
         player_count = gameInformation.getPlayerCount();
         //player_count = viewModel.getPlayer_count().getValue();                    //old
 
-                //set figure Count for gameboard creation
+        //set figure Count for gameboard creation
         figure_count = gameInformation.getFiguresPerPlayer();
         //viewModel.getFigure_count().observe(getViewLifecycleOwner(), figures ->{  //old
         //    figure_count = figures;                                               //old
         //});                                                                       //old
         //figure_count = viewModel.getFigure_count().getValue()
-                //set position of the draw card fields for gameboard creation
+        //set position of the draw card fields for gameboard creation
         draw_fields = gameInformation.getDrawCardFields().getPositions();
         //draw_fields = new int[]{3, 5, 7, 8, 9};                                   //old (was for testing)
 
-                //set position of start fields for gameboard creation
+        //set position of start fields for gameboard creation
         start_positions = gameInformation.getStartFields().getPositions();
         //start_positions = new int[]{0, 2, 4};                                     //old testing
 
-                    //set colors of the start fields for gameboard creation
+        //set colors of the start fields for gameboard creation
         start_colors = gameInformation.getColors();
 
         Integer maxRounds = gameInformation.getMaximumTotalMoves();
         List<Integer> colors = new ArrayList<>();
-            //iterating trough colors to get the color value
+        //iterating trough colors to get the color value
         for (Color color : start_colors) {
             colors.add(color.getColor());           //getting the actual color value from the Color class
         }
-                    //creating the gameboardcreator that creates the gameboard
+        //creating the gameboardcreator that creates the gameboard
         Game_board_creator creator = new Game_board_creator(GameBoard, pxWidth, player_count, field_size, figure_count, colors, start_positions, draw_fields, maxRounds);
         creator.createFields(); //creating the fields
 
@@ -215,7 +218,7 @@ public class Game_board extends Fragment {
         playerInformationTable.BuildTable();
         viewModel.setPlayerInformationTable(playerInformationTable);
         viewModel.setLastPlayer(order.get(0).getClientId());
-                    //instanziating  the figure handler
+        //instanziating  the figure handler
         Figure_handler figure_handler = new Figure_handler(GameBoard, figure_count, player_count, colors, creator.getField_width(), creator.getHomefield_size(), pxWidth, playerInformationTable);
         figure_handler.create_figures(); //creating the figures
         //
@@ -283,36 +286,7 @@ public class Game_board extends Fragment {
         discardPileViewModel.getOutputString().observe(getViewLifecycleOwner(), output ->{
             binding.MatchHistoryText.setText(output);
         });
-        //NUR ZUM TESTEN für figuren movement
 
-        binding.moveFigure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Creating a List with DiscardItems for Testing
-                List<BoardState.DiscardItem> DiscardItems = new ArrayList<>(Arrays.asList(new BoardState.DiscardItem(0, BoardState.getCard12()), new BoardState.DiscardItem(1, BoardState.getCardCopy()), new BoardState.DiscardItem(2, BoardState.getCard3()), new BoardState.DiscardItem(3, BoardState.getCardMagnet())));
-                List<BoardState.Piece> pieces = new ArrayList<>();
-                BoardState boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, false, new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
-                if (position <gameInformation.getFieldsize()) {
-                    pieces.add(new BoardState.Piece(0, 0, position, false, 0));
-                    pieces.add(new BoardState.Piece(1, 0, null, true, 0));
-                    System.out.println("Name:" + viewModel.getPlayerName(0));
-                    boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, false, new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
-                } else if (gameInformation.getFiguresPerPlayer() + gameInformation.getFieldsize()> position) {
-                    pieces.add(new BoardState.Piece(0, 0, null, false, position - gameInformation.getFieldsize()));
-                    boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, false, new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
-
-                } else
-                {
-                    pieces.add(new BoardState.Piece(0, 0, null, false, position - gameInformation.getFieldsize()));
-                    boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, true, new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4)));
-                }
-
-                boardUpdater.UpdateBoard(boardState);
-                position+=2;
-                move_count++;
-            }
-
-        });
 
         binding.leaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -321,5 +295,71 @@ public class Game_board extends Fragment {
                         .navigate(R.id.action_game_board_layout_to_FirstFragment);
             }
         });
+
+
+
+
+
+        //NUR ZUM TESTEN für figuren movement
+        List<BoardState.Piece> pieces = new ArrayList<>();
+        List<BoardState.DiscardItem> DiscardItems = new ArrayList<>(Arrays.asList(new BoardState.DiscardItem(0, BoardState.getCard12()), new BoardState.DiscardItem(1, BoardState.getCardCopy()), new BoardState.DiscardItem(2, BoardState.getCard3()), new BoardState.DiscardItem(3, BoardState.getCardMagnet())));
+
+        for (int counter = 0 ; counter < 6; counter++)
+        {
+            for (int j = 0; j < 5; j ++) {
+                pieces.add(new BoardState.Piece(counter * 5 + j, counter, null, true, 0));
+                System.out.println("FigureId" +  (counter * 5+ j));
+                System.out.println("PlayerId" + counter);
+                position[counter * 5 + j] = start_positions.get(counter);
+            }
+        }
+        int[] inHousePosition = new int[]{1, 1, 1, 1, 1};
+        int[] winnerOrder  = new int[]{0, 1, 2, 3, 4, 5};
+        int[] randomNum = new int[]{0, 0, 0, 0, 0, 0};
+        binding.moveFigure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Creating a List with DiscardItems for Testing
+
+
+                for (int counter = 0 ; counter < 6; counter++) {
+                    System.out.println("RandomNum: " + randomNum);
+                    position[5* counter] += randomNum[counter];
+                    System.out.println("Position: " + position[0 + counter]);
+                    if (position[5*  counter] >field_size){
+                        pieces.set(counter * 5, new BoardState.Piece(counter * 5, counter, position[counter *5] - field_size, false, null));
+                    }
+                    if (position[5* counter]  > field_size + start_positions.get(counter))
+                    {
+                        if (position[5* counter]  > field_size + start_positions.get(counter) + figure_count)
+                        {
+                            gameOver = true;
+                            winnerOrder[counter] = winnerOrder[0];
+                            winnerOrder[0] = counter;
+                        }
+                        else {
+                            position[5* counter] = field_size + start_positions.get(counter);
+                        }
+                        pieces.set(counter * 5, new BoardState.Piece(counter * 5, counter, null, false, inHousePosition[counter]));
+                    }
+
+                    else {
+                        pieces.set(counter * 5, new BoardState.Piece(counter * 5, counter, position[counter *5], false, null));
+                    }
+
+                }
+                BoardState boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, gameOver, new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
+
+                for (int i = 0 ; i <= 5; i++
+                ) {
+                    randomNum[i] = (int) (Math.random() * 5);
+                }
+
+                boardUpdater.UpdateBoard(boardState);
+                move_count++;
+            }
+
+        });
+
     }
 }
