@@ -7,6 +7,16 @@
     tools:context=".WaitingScreen">
 
     <!-- TODO: Update blank fragment layout -->
+    <Button
+        android:id="@+id/continuebutton"
+        style="@style/gameBoardTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go to Game"
+        android:textColor="#F8F8F8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,16 +40,6 @@
             android:text="Back"
             android:textColor="#F17A0A " />
     </FrameLayout>
-
-    <Button
-        android:id="@+id/continuebutton"
-        style="@style/gameBoardTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Go to Game"
-        android:textColor="#F8F8F8"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <RelativeLayout
         android:id="@+id/loadingPanel"

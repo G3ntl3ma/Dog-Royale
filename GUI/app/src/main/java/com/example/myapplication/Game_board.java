@@ -22,6 +22,7 @@ import com.example.myapplication.GUILogic.Figure_handler;
 import com.example.myapplication.GUILogic.GameInformation;
 import com.example.myapplication.GUILogic.Game_board_creator;
 import com.example.myapplication.GUILogic.PlayerInformationTable;
+import com.example.myapplication.GUILogic.Timer;
 import com.example.myapplication.GameInformationClasses.Color;
 import com.example.myapplication.GameInformationClasses.DrawCardFields;
 import com.example.myapplication.GameInformationClasses.Observer;
@@ -71,6 +72,7 @@ public class Game_board extends Fragment {
     private int position[] = new int[30]; // positions for the test figure to move
     private int move_count = 0; //how many moves where made for test demo
     private boolean gameOver = false; //is the game over for test demo
+    private int round = 0;
     private BoardUpdater boardUpdater;
     public Game_board() {
         // Required empty public constructor
@@ -143,7 +145,7 @@ public class Game_board extends Fragment {
 
         /**FOR TEST
          */
-        ReturnLobbyConfig insertReturnLobbyConfig = new ReturnLobbyConfig(new Integer(6), new Integer(30), new Integer(5) , Arrays.asList(new Color(0, R.color.p1_color), new Color(1, R.color.p2_color), new Color(2, R.color.p3_color), new Color(3, R.color.p4_color), new Color(4, R.color.p5_color), new Color(5, R.color.p6_color)), new DrawCardFields(5, Arrays.asList(1, 4, 7, 10, 13)), new StartFields(6, Arrays.asList(0, 5, 10, 15, 20, 25)), new Integer(5), new PlayerOrder(OrderType.fixed, Arrays.asList(new Order(0, "OwO"), new Order(1, "UwU"), new Order(2, "AwA"), new Order(3, "QwQ"), new Order(4, "XwX"))),  Arrays.asList(new Observer(new Integer(1), "OwO")), new Integer(5), new Integer(5), new Integer(1), new Integer(15), new Integer(5));
+        ReturnLobbyConfig insertReturnLobbyConfig = new ReturnLobbyConfig(new Integer(6), new Integer(30), new Integer(5) , Arrays.asList(new Color(0, R.color.p1_color), new Color(1, R.color.p2_color), new Color(2, R.color.p3_color), new Color(3, R.color.p4_color), new Color(4, R.color.p5_color), new Color(5, R.color.p6_color)), new DrawCardFields(5, Arrays.asList(1, 4, 7, 10, 13)), new StartFields(6, Arrays.asList(0, 5, 10, 15, 20, 25)), new Integer(5), new PlayerOrder(OrderType.fixed, Arrays.asList(new Order(0, "Vaporeon"), new Order(1, "Flareon"), new Order(2, "Espeon"), new Order(3, "Glaceon"), new Order(4, "Leafon"), new Order(5, "Jolteon"))),  Arrays.asList(new Observer(new Integer(1), "OwO")), new Integer(5), new Integer(5), new Integer(1), new Integer(15), new Integer(150));
         viewModel.setGameInformation(new GameInformation(insertReturnLobbyConfig));
         /**FOR TEST
          */
@@ -277,6 +279,8 @@ public class Game_board extends Fragment {
             }
 
         });
+        Timer timer = new Timer(60_000);
+        timer.startTimer();
         //Set the Timer
         timerviewModel.getTime().observe(getViewLifecycleOwner(), time -> {
             binding.timerView.setText(time);
@@ -291,6 +295,7 @@ public class Game_board extends Fragment {
         binding.leaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                timer.pauseTimer();
                 NavHostFragment.findNavController(Game_board.this)
                         .navigate(R.id.action_game_board_layout_to_FirstFragment);
             }
@@ -313,47 +318,66 @@ public class Game_board extends Fragment {
                 position[counter * 5 + j] = start_positions.get(counter);
             }
         }
-        int[] inHousePosition = new int[]{1, 1, 1, 1, 1};
-        int[] winnerOrder  = new int[]{0, 1, 2, 3, 4, 5};
+        int[] inHousePosition = new int[]{1, 1, 1, 1, 1, 1};
+        Integer[] winnerOrder  = new Integer[]{0, 1, 2, 3, 4, 5};
         int[] randomNum = new int[]{0, 0, 0, 0, 0, 0};
         binding.moveFigure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Creating a List with DiscardItems for Testing
 
+                timer.resetTimer();
+                timer.startTimer();
 
-                for (int counter = 0 ; counter < 6; counter++) {
+
                     System.out.println("RandomNum: " + randomNum);
                     position[5* counter] += randomNum[counter];
                     System.out.println("Position: " + position[0 + counter]);
-                    if (position[5*  counter] >field_size){
-                        pieces.set(counter * 5, new BoardState.Piece(counter * 5, counter, position[counter *5] - field_size, false, null));
-                    }
-                    if (position[5* counter]  > field_size + start_positions.get(counter))
-                    {
-                        if (position[5* counter]  > field_size + start_positions.get(counter) + figure_count)
+
+                     if (position[5* counter]  > field_size + start_positions.get(counter))
+                        {
+                        System.out.println("This now");
+                        if (position[5* counter]  > field_size + start_positions.get(counter) + figure_count - 2)
                         {
                             gameOver = true;
                             winnerOrder[counter] = winnerOrder[0];
+                            System.out.println("winner should be" + counter);
                             winnerOrder[0] = counter;
                         }
                         else {
-                            position[5* counter] = field_size + start_positions.get(counter);
+                            System.out.println("so now it should go home" + (inHousePosition[counter] + randomNum[counter]));
+                            inHousePosition[counter] += randomNum[counter] - 1;
                         }
                         pieces.set(counter * 5, new BoardState.Piece(counter * 5, counter, null, false, inHousePosition[counter]));
+                    }
+                    else if (position[5*  counter] >field_size - 1){
+                        System.out.println("pieces set");
+                        System.out.println("piece" + counter +" set to " + (position[counter * 5 ] - field_size));
+                        pieces.set(counter * 5, new BoardState.Piece(counter * 5, counter, position[counter *5] - field_size, false, null));
+
                     }
 
                     else {
                         pieces.set(counter * 5, new BoardState.Piece(counter * 5, counter, position[counter *5], false, null));
                     }
 
-                }
-                BoardState boardState = new BoardState(pieces, DiscardItems, null, 0, move_count, 0, gameOver, new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3, 4, 5)));
 
-                for (int i = 0 ; i <= 5; i++
-                ) {
-                    randomNum[i] = (int) (Math.random() * 5);
-                }
+                BoardState boardState = new BoardState(pieces, DiscardItems, null, round, move_count, 0, gameOver,  Arrays.asList(winnerOrder) );
+
+                    if (counter <5)
+                    {
+                        counter++;
+                    }
+                    else {
+                        counter = 0;
+                        for (int i = 0 ; i <= 5; i++
+                        ) {
+                            randomNum[i] = (int) (Math.random() * 5 ) + 1;
+                            round++;
+
+                        }
+                    }
+
 
                 boardUpdater.UpdateBoard(boardState);
                 move_count++;

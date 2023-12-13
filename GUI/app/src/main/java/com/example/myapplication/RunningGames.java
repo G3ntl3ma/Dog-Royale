@@ -66,8 +66,7 @@ public class RunningGames extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Timer timer = new Timer(60_000);
-        timer.startTimer();
+
         LastCard lastCard = new LastCard();
         lastCard.setNewLastCard(CardType.MAGNET);
         lastCard.showLastCard(true);

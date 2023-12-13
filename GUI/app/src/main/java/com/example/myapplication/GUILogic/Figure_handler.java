@@ -109,9 +109,10 @@ public class Figure_handler {
 
     public void create_figures()
     {
+        int pieceId = 0; //id for piece
         for (int j = 0; j < player_count; j++) //for each player
         {
-            int pieceId = 0; //id for piece
+
             for (int i = 0; i < figure_count; i++)  //create figure_count figures
             {
                 Figure figure = new Figure(pieceId, j, screen_width,screen_width ,figure_size); //instanciating new figure
@@ -148,6 +149,7 @@ public class Figure_handler {
            if (position == null) //if the figure is in the house
            {
                         //getting the layoutparams of the homefield (containing the position)
+               System.out.println("Going to " + "homefield" + playernumber + "_" + inHousePosition);
                RelativeLayout.LayoutParams newpos = (RelativeLayout.LayoutParams) layout.findViewWithTag("homefield" + playernumber + "_" + inHousePosition).getLayoutParams();
                         //setting the margins of the figure to those of the new position (considering the size of the field and the figure since the figure doesnt neccessaily match the size of homefields atm)
                layoutParams.setMargins(newpos.leftMargin + newpos.width/2 - layoutParams.width/2, newpos.topMargin + newpos.width/2 - layoutParams.width/2, 0, 0);
