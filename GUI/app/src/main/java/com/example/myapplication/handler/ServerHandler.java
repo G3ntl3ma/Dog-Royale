@@ -61,12 +61,12 @@ public class ServerHandler extends Handler implements Runnable {
 
     public static synchronized ServerHandler getInstance(Socket socket) {
         if (instance == null) {
-            instance = new ServerHandler(socket);
+            instance = new ServerHandler();
         }
         return instance;}
-    public ServerHandler(Socket socket) {
+    public ServerHandler() {
         clientController = ClientController.getInstance();
-        this.serverSocket = socket;
+
 //        this.serverSocket = socket;
 //        PrintWriter writer;
 //        try {
@@ -82,7 +82,13 @@ public class ServerHandler extends Handler implements Runnable {
     @Override
     public void run() {
 
+        logger.info("run method is running");
+
         try {
+            Socket serverSsocket = new Socket("192.168.0.208", 8082);
+                logger.info("started client successfully");
+                this.serverSocket = serverSsocket;
+
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(serverSocket.getInputStream()));
             PrintWriter writer = new PrintWriter(
@@ -90,6 +96,7 @@ public class ServerHandler extends Handler implements Runnable {
 
             String request, response;
             while (true) {
+                logger.info("while is running");
 
                 if ((request = reader.readLine()) != null
                         && (response = handle(request)) != null) {
@@ -111,6 +118,7 @@ public class ServerHandler extends Handler implements Runnable {
         catch (IOException e) {
             logger.error("Error while trying to read the server message: " + e.getMessage());
         } finally {
+            logger.info("finally is caugth" );
             try {
                 serverSocket.close();
             } catch (IOException e) {

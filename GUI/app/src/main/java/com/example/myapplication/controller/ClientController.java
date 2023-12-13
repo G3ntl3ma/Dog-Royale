@@ -64,23 +64,11 @@ public class ClientController {
 
     }
     public void startClient(){
-        executor2.execute(new Runnable() {
+        ServerHandler serverHandler = new ServerHandler();
+        setServerHandler(serverHandler);
+        executor.execute(serverHandler);
+    }
 
-
-            @Override
-            public void run() {
-                try(Socket socket = new Socket("192.168.0.208", 8082)) {
-                    logger.info("started client successfully");
-                    ServerHandler serverHandler = new ServerHandler(socket);
-                    setServerHandler(serverHandler);
-                    serverHandler.run();
-                }catch (IOException e) {
-                    logger.error("Failed connection");
-                    // Handle exception
-                }
-
-            }
-        });}
 
 
     private void setServerHandler(ServerHandler serverHandler) {
@@ -88,37 +76,6 @@ public class ClientController {
     }
 
 
-//    private void initializeServerHandler(Socket socket) {
-//        this.serverHandler = ServerHandler.getInstance(socket);
-//
-//
-//
-//    }
-//
-//    private static class SocketInitializationTask extends AsyncTask<Void, Void, Socket> {
-//        @Override
-//        protected Socket doInBackground(Void... params) {
-//            try {
-//                String serverAddress = "192.168.0.208";
-//                int serverPort = 8082;
-//                return new Socket(serverAddress, serverPort);
-//            } catch (IOException e) {
-//                logger.error("Failed connection");
-//                // Handle exception
-//                return null;
-//            }
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Socket socket) {
-//            if (socket != null) {
-//                instance.initializeServerHandler(socket);
-//                ServerHandler serverHandler = ServerHandler.getInstance(socket);
-//                executor.execute(serverHandler);
-//
-//            }
-//        }
-//    }
 
     public void sendConnectToServerRequest(String username, StartScreen startScreen) throws HandlingException{
         ConnectToServer connectToServer = new ConnectToServer();
