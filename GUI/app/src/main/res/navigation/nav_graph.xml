@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.example.myapplication.FirstFragment"
+        android:name="com.example.DogRoyalClient.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/SpectateGames"
-        android:name="com.example.myapplication.SpectateGames"
+        android:name="com.example.DogRoyalClient.SpectateGames"
         android:label="Spectate running Games"
         tools:layout="@layout/fragment_spectate_games">
         <action
@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/StartingGames"
-        android:name="com.example.myapplication.StartingGames"
+        android:name="com.example.DogRoyalClient.StartingGames"
         android:label="Starting Games"
         tools:layout="@layout/fragment_starting_games" >
         <action
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/matchHistory"
-        android:name="com.example.myapplication.MatchHistory"
+        android:name="com.example.DogRoyalClient.MatchHistory"
         android:label="Match History"
         tools:layout="@layout/fragment_match_history">
         <action
@@ -62,7 +62,7 @@
     </fragment>
     <fragment
         android:id="@+id/game_board_layout"
-        android:name="com.example.myapplication.Game_board"
+        android:name="com.example.DogRoyalClient.Game_board"
         android:label="fragment_game_board"
         tools:layout="@layout/fragment_game_board" >
         <action
@@ -71,7 +71,7 @@
     </fragment>
     <fragment
         android:id="@+id/startScreen"
-        android:name="com.example.myapplication.StartScreen"
+        android:name="com.example.DogRoyalClient.StartScreen"
         android:label="fragment_start_screen"
         tools:layout="@layout/fragment_start_screen" >
         <action
@@ -80,7 +80,7 @@
     </fragment>
     <fragment
         android:id="@+id/waitingScreen"
-        android:name="com.example.myapplication.WaitingScreen"
+        android:name="com.example.DogRoyalClient.WaitingScreen"
         android:label="fragment_waiting_screen"
         tools:layout="@layout/fragment_waiting_screen" >
         <action
