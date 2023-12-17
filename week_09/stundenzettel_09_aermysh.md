@@ -10,7 +10,7 @@ gesamtarbeitszeit: 6,00h
 
 ## Projektmanagement
 - 1. Wöchentliches Meeting
-  - 2023-12-4 1,50h
+  - 2023-12-11 1,50h
 - Messe
     - 2023-12-13 2,50h
 
