@@ -2,7 +2,7 @@
 name: Bengiamin
 imt: kellerb
 gruppe: 1
-woche: 7
+woche: 8
 gesamtarbeitszeit: 42,30h
 ---
 
