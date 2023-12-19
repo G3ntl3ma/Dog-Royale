@@ -34,7 +34,7 @@ public class StartingGamesAdapter extends RecyclerView.Adapter<StartingGamesView
     @Override
     public StartingGamesViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        return new StartingGamesViewholder(LayoutInflater.from(context).inflate(R.layout.game_view, parent, false)).linkAdapter(this);
+        return new StartingGamesViewholder(LayoutInflater.from(context).inflate(R.layout.starting_game_view, parent, false)).linkAdapter(this);
     }
 
     public void onBindViewHolder(@NonNull StartingGamesViewholder holder, int position) {

@@ -25,7 +25,7 @@ public abstract class AbstractGameMessage {
         kick
     }
 
-    protected enum Card {
+    public enum Card {
         card2,
         card3,
         card5,

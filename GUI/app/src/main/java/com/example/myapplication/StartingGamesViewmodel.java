@@ -21,11 +21,11 @@ public class StartingGamesViewmodel extends ViewModel {
 
     public MutableLiveData<List<ReturnGameList.StartingGame>> getGamesList() {
        //UNCOMMENT FOR TESTING
-        /*List<ReturnGameList.StartingGame> games = new ArrayList<>();
+        List<ReturnGameList.StartingGame> games = new ArrayList<>();
         games.add(new ReturnGameList.StartingGame(1234, 6, 7));
         games.add(new ReturnGameList.StartingGame(5678, 3,4));
         games.add(new ReturnGameList.StartingGame(9876, 1,4));
-        this.gamesList.setValue(games); */
+        this.gamesList.setValue(games);
         return gamesList;
     }
 }

@@ -17,12 +17,13 @@ public class StartingGamesViewholder extends RecyclerView.ViewHolder{
     StartingGamesAdapter adapter;
 
     TextView gameID, players;
-    Button spectate_button;
+    Button spectate_button, join_button;
     public StartingGamesViewholder(@NonNull View itemView){
         super(itemView);
         gameID =  itemView.findViewById(R.id.gameID);
         players = itemView.findViewById(R.id.Players);
         spectate_button = itemView.findViewById(R.id.Spectate_Button);
+        join_button = itemView.findViewById(R.id.Join_Game_Button);
     }
 
     public StartingGamesViewholder linkAdapter(StartingGamesAdapter adapter){
