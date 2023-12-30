@@ -14,15 +14,17 @@ import org.junit.runners.JUnit4;
 public class Game_boardTest {
     @Test
     public void GameboardLifeCycle(){
+        //start Scenario
         FragmentScenario<Game_board> scenario = FragmentScenario.launchInContainer(Game_board.class);
+        //verify on CREATED zustand
         scenario.onFragment(fragment -> {
             assertTrue(fragment.getView() != null);
         });
+        //changed zustand to DESTROYED
         scenario.moveToState(Lifecycle.State.DESTROYED);
+        //verify on DESTROYED zustand
         scenario.onFragment(fragment -> {
             assertTrue(fragment.getView() == null);
         });
     }
-    @Test
-    
 }
