@@ -1,24 +1,42 @@
 package com.example.myapplication;
 
-import static org.junit.jupiter.api.Assertions.*;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.Observer;
 
-import androidx.lifecycle.MutableLiveData;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
-import org.junit.jupiter.api.Test;
+public class TimerviewModelTest {
+    //to make sure that it can in main thread immediately run
+    @Rule
+    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
+    //Mock a Observer to check that,ob we have recived the true TimeValue
+    @Mock
+    private Observer<String> observer;
 
-class TimerviewModelTest {
     private TimerviewModel timerviewModel;
-    private MutableLiveData<String> time;
 
-    @Test
-    void getTime() {
-        timerviewModel.setTime(String.valueOf(time));
-        assertEquals(time,timerviewModel.getTime());
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        timerviewModel = new TimerviewModel();
+        //use observer model
+        timerviewModel.getTime().observeForever(observer);
     }
 
     @Test
-    void setTime() {
-        timerviewModel.setTime(String.valueOf(time));
-        assertEquals(time,timerviewModel.getTime());
+    public void testSetTime() {
+        // Given
+        String testTime = "12:43";
+
+        // When
+        timerviewModel.setTime(testTime);
+
+        // Then
+        Mockito.verify(observer).onChanged(testTime);
     }
 }

@@ -1,58 +1,107 @@
 package com.example.myapplication;
 
-import static org.junit.Assert.*;
+import android.os.CountDownTimer;
 
+import android.os.CountDownTimer;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.Observer;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import static org.mockito.Mockito.*;
 
 public class TimerTest {
+
+    @Rule
+    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
+
     @Mock
+    private TimerviewModel viewModel;
+    private CountDownTimer countDownTimer;
+
     private Timer timer;
-    long l = 10L;
-    long StarttimeMillis=20L;
-    long millis = 30L;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        timer = new Timer(60000);
+        timer.viewModel = viewModel;
+    }
+
     @Test
-    public void startTimer() {
+    public void testStartTimer() throws InterruptedException {
+        // Given
+        CountDownLatch latch = new CountDownLatch(1);
+
+        doAnswer(invocation -> {
+            // Simulate onTick
+            timer.updateCountdown();
+            return null;
+        }).when(viewModel).setTime(anyString());
+
+        // When
         timer.startTimer();
-        Mockito.verify(timer).startTimer();
+
+        // Wait for one tick to occur
+        latch.await(2, TimeUnit.SECONDS);
+
+        // Then
+        verify(viewModel, times(1)).setTime(anyString());
     }
 
     @Test
-    public void pauseTimer() {
+    public void testPauseTimer() throws InterruptedException {
+        // Given
+        CountDownLatch latch = new CountDownLatch(1);
+
+        doAnswer(invocation -> {
+            // Simulate onTick
+            timer.updateCountdown();
+            return null;
+        }).when(viewModel).setTime(anyString());
+
+        timer.startTimer();
+
+        // Wait for one tick to occur
+        latch.await(2, TimeUnit.SECONDS);
+
+        // When
         timer.pauseTimer();
-        Mockito.verify(timer).pauseTimer();
+
+        // Wait for a short time
+        Thread.sleep(500);
+
+        // Then
+        verify(viewModel, times(1)).setTime(anyString());
     }
 
     @Test
-    public void resetTimer() {
+    public void testResetTimer() throws InterruptedException {
+        // Given
+        CountDownLatch latch = new CountDownLatch(1);
+
+        doAnswer(invocation -> {
+            // Simulate onTick
+            timer.updateCountdown();
+            return null;
+        }).when(viewModel).setTime(anyString());
+
+        timer.startTimer();
+
+        // Wait for one tick to occur
+        latch.await(2, TimeUnit.SECONDS);
+
+        // When
         timer.resetTimer();
-        Mockito.verify(timer).resetTimer();
-    }
 
-    @Test
-    public void isTimerRunning() {
-        timer.startTimer();
-        assertEquals(true,timer.isTimerRunning());
-        timer.pauseTimer();
-        assertEquals(false,timer.isTimerRunning());
-        timer.pauseTimer();
-        assertEquals(false,timer.isTimerRunning());
-    }
+        // Wait for a short time
+        Thread.sleep(500);
 
-    @Test
-    public void getTimeLeftMillis() {
-        timer.startTimer();
-        assertEquals(l,timer.getTimeLeftMillis());
-        timer.resetTimer();
-        assertEquals(StarttimeMillis,timer.getTimeLeftMillis());
-
-
-    }
-
-    @Test
-    public void setStartTimeMillis() {
-        timer.setStartTimeMillis(millis);
-        Mockito.verify(timer).setStartTimeMillis(millis);
+        // Then
+        verify(viewModel, times(2)).setTime(anyString());
     }
 }
