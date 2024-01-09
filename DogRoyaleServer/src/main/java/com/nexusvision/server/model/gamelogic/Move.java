@@ -99,6 +99,7 @@ public final class Move {
      */
     public void execute(Game game) {
         game.setDrawnCard(null);
+
         // System.out.println("cards num before " + this.player.cards.size());
         if (cardUsed != null) {
             player.getCardList().remove(cardUsed);
@@ -106,18 +107,15 @@ public final class Move {
         }
         // System.out.println("cards num after 1 " + this.player.cards.size());
         if (isSwapMove) {
-            assert to != null;
             Figure temp = to.getFigure();
             Player opponent = game.getPlayerList().get(to.getFigure().getOwnerId());
             //set figure of field
-            assert from != null;
             to.setFigure(from.getFigure());
             from.setFigure(temp);
 
             //set field of figures
             to.getFigure().setField(to);
             from.getFigure().setField(from);
-
 
             if (from.getType() == FieldType.DRAW) {
                 // System.out.println("player " + opponent.col + " draw card!");
@@ -149,7 +147,7 @@ public final class Move {
             player.getStartField().setFigure(figure); //get first figure not on field from player
             this.player.setFiguresInBank(player.getFiguresInBank() - 1);
 
-            game.occupied[player.getPlayerId()] = true;
+            game.occupied[player.getPlayerId()] = true; //unused
 
             //TODO assert figcol == playercol
             // System.out.println("figs in bank " + this.player.figuresInBank);
@@ -163,9 +161,9 @@ public final class Move {
                 to.getFigure().setOnBench(true);
             }
 
-            if (to.getType() == FieldType.HOUSE) {
-                player.setHouseOccupationIndex(to.getFieldId());
-            }
+            //if (to.getType() == FieldType.HOUSE) {
+             //   player.setHouseOccupationIndex(to.getFieldId());
+            //}
 
             assert from != null;
             if (to.getType() == FieldType.HOUSE && from.getType() != FieldType.HOUSE) {
@@ -197,7 +195,7 @@ public final class Move {
             }
         }
 
-        game.increaseMovesCounter();
+        game.increaseMovesCounter(1);
         // game.nextPlayer();
         // System.out.println("cards num after 2 " + this.player.cards.size());
     }

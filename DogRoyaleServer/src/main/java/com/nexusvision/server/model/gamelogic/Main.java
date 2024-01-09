@@ -86,7 +86,7 @@ public class Main {
                     ArrayList<Move> moves = new ArrayList<>();
                     Player curPlayer = game.getCurrentPlayer();
                     // System.out.println("gen moves for player " + curPlayer.col);
-                    curPlayer.generateMoves(game); //TODO this is the slowest function by far
+                    curPlayer.generateMoves(game); //
                     long endFunc = System.currentTimeMillis();
                     funcTime += (endFunc - startFunc);
                     // moves.get(0).printcard();

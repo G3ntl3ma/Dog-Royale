@@ -137,4 +137,12 @@ public final class Field {
     }
 
 
+    public void setNext(Field next) {
+        this.next = next;
+    }
+
+    public void setHouse(Field house) {
+        this.house = house;
+    }
+
 }

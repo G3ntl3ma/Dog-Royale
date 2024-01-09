@@ -71,8 +71,8 @@ public final class Game {
     /**
      * Increases the value of movesMade by 1
      */
-    public void increaseMovesCounter() {
-        this.movesMade++;
+    public void increaseMovesCounter(int arg) {
+        this.movesMade += arg;
     }
 
     /**
@@ -227,6 +227,8 @@ public final class Game {
         }
 
         int fieldCount = conf.length();
+
+        System.out.println("fieldCount"+fieldCount);
         this.mainFieldCount = fieldCount;
 
         int totalFieldCount = fieldCount + figuresPerPlayer * players; //playerCount
@@ -246,10 +248,10 @@ public final class Game {
             this.playerList.add(new Player(playerCol, figuresPerPlayer));
         }
         int seenStarts = 0;
-        for (int i = 0; i < fieldCount; i++) {
+        for (int i = 0; i < conf.length(); i++) {
             int prev = ((i - 1) + fieldCount) % fieldCount;
             int next = (i + 1) % fieldCount;
-
+            System.out.println("iter"+i);
             this.board[i].setNext(this.board[next]);
             this.board[i].setPrev(this.board[prev]);
             // this.board[i].settype(conf.charAt(i));
@@ -262,9 +264,7 @@ public final class Game {
                 int off = fieldCount;
                 this.playerList.get(seenStarts).setHouseFirstIndex(fieldCount);
                 for (int j = off; j < figuresPerPlayer + off; j++) {
-                    this.board[fieldCount] = new Field(fieldCount, FieldType.HOUSE);
-
-                    fieldCount++;
+                    this.board[fieldCount++] = new Field(fieldCount, FieldType.HOUSE);
                 }
                 for (int j = off; j < figuresPerPlayer - 1 + off; j++) {
                     this.board[j].setNext(this.board[j + 1]);
