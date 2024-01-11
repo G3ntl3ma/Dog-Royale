@@ -33,8 +33,8 @@ public final class Game {
     private int mainFieldCount;
     private int playerToStartColor;
     private int playerToMoveId;
-    private Card drawnCard;
-    private ArrayList<Card> discardedCardList;
+    private Card drawnCard; //TODO ??
+    private ArrayList<Card> discardedCardList; //IMPORTANT TODO ???
     private int movesMade;
     private int playersRemaining;
     private int round; //round counter

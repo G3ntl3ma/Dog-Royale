@@ -48,12 +48,6 @@ public class Main {
         for (int i = 0; i < conf.length(); i++) {
             if (conf.charAt(i) == 's') players++;
         }
-
-        int[] wins = new int[players];
-        for (int i = 0; i < players; i++) {
-            wins[i] = 0;
-        }
-
         int handCardCount = 10;
 
         long start = System.currentTimeMillis();
@@ -64,7 +58,7 @@ public class Main {
 
         int human = -1;
         Scanner reader = new Scanner(System.in);
-
+        int[] wins = new int[players];
         for (int _i = 0; _i < gamesToPlay; _i++) {
             Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
             game.initDeck();
@@ -83,13 +77,12 @@ public class Main {
                 while (!game.roundOver() && winner == null) {
                     long startFunc = System.currentTimeMillis();
 
-                    ArrayList<Move> moves = new ArrayList<>();
+                    ArrayList<Move> moves = new ArrayList<>(); //??
                     Player curPlayer = game.getCurrentPlayer();
                     // System.out.println("gen moves for player " + curPlayer.col);
                     curPlayer.generateMoves(game); //
                     long endFunc = System.currentTimeMillis();
                     funcTime += (endFunc - startFunc);
-                    // moves.get(0).printcard();
                     if (!moves.isEmpty()) {
                         if (curPlayer.getPlayerId() == human) {
                             game.printBoard();

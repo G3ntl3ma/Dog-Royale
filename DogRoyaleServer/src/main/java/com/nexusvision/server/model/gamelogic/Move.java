@@ -97,7 +97,17 @@ public final class Move {
      *
      * @param game An object representing the game
      */
-    public void execute(Game game) {
+    public UndoMove execute(Game game) {
+        Figure playerFigure = null; //TODO
+        Figure opponentFigure = null;
+        Card playerDrawnCard= null;
+        Card opponentDrawnCard= null;
+        Card lastCardOnPile = null;
+        if(game.getPile().size() != 0) {
+            lastCardOnPile= game.getPile().get(game.getPile().size() - 1); 
+        }
+        int LastMoveCountFigureMovedIntoHouse = this.getPlayer().getLastMoveCountFigureMovedIntoHouse();
+        
         game.setDrawnCard(null);
 
         // System.out.println("cards num before " + this.player.cards.size());
@@ -107,11 +117,12 @@ public final class Move {
         }
         // System.out.println("cards num after 1 " + this.player.cards.size());
         if (isSwapMove) {
-            Figure temp = to.getFigure();
+            opponentFigure = to.getFigure();
             Player opponent = game.getPlayerList().get(to.getFigure().getOwnerId());
             //set figure of field
-            to.setFigure(from.getFigure());
-            from.setFigure(temp);
+            playerFigure = from.getFigure();
+            to.setFigure(playerFigure);
+            from.setFigure(opponentFigure);
 
             //set field of figures
             to.getFigure().setField(to);
@@ -119,11 +130,13 @@ public final class Move {
 
             if (from.getType() == FieldType.DRAW) {
                 // System.out.println("player " + opponent.col + " draw card!");
+                opponentDrawnCard = game.getDeck().get(game.getDeck().size()-1);
                 opponent.draw(game);
             }
             //important order to ensure that the drawn card of the current player is set
             if (to.getType() == FieldType.DRAW) {
                 // System.out.println("player " + player.color + " draw card!");
+                playerDrawnCard = game.getDeck().get(game.getDeck().size()-1);
                 player.draw(game);
             }
 
@@ -131,20 +144,22 @@ public final class Move {
             //TODO assert figs in bank > 0
             // System.out.println("isStartMove move");
             // System.out.println("figs in bank before " + this.player.figuresInBank);
-            Figure figure = player.getFirstOnBench();
-            Field to = player.getStartField();
-            figure.setOnBench(false);
-            figure.setInHouse(false);
+            playerFigure = player.getFirstOnBench();
+            Field to = player.getStartField(); //TODO maybe set the to field somewhere else
+            playerFigure.setOnBench(false);
+            playerFigure.setInHouse(false);
 
             if (!to.isEmpty()) {
-                Player opponent = game.getPlayerList().get(to.getFigure().getOwnerId());
+                opponentFigure = to.getFigure();
+                Player opponent = game.getPlayerList().get(opponentFigure.getOwnerId());
                 opponent.setFiguresInBank(opponent.getFiguresInBank() + 1);
                 //set field of figure
                 to.getFigure().setOnBench(true);
             }
-
+            
             //set figure of field
-            player.getStartField().setFigure(figure); //get first figure not on field from player
+            // player.getStartField().setFigure(figure); //get first figure not on field from player
+            to.setFigure(playerFigure);
             this.player.setFiguresInBank(player.getFiguresInBank() - 1);
 
             game.occupied[player.getPlayerId()] = true; //unused
@@ -161,6 +176,7 @@ public final class Move {
                 to.getFigure().setOnBench(true);
             }
 
+            //unused
             //if (to.getType() == FieldType.HOUSE) {
              //   player.setHouseOccupationIndex(to.getFieldId());
             //}
@@ -173,17 +189,18 @@ public final class Move {
             }
 
             //moving out of house not possible but
-            if (to.getType() != FieldType.HOUSE && from.getType() == FieldType.HOUSE) {
-                player.setFiguresInHouse(player.getFiguresInHouse() - 1);
-                from.getFigure().setInHouse(false);
-            }
+            // if (to.getType() != FieldType.HOUSE && from.getType() == FieldType.HOUSE) {
+                // player.setFiguresInHouse(player.getFiguresInHouse() - 1);
+                // from.getFigure().setInHouse(false);
+            // }
 
-            // from.empty() = true;
-            to.setFigure(from.getFigure());
+            playerFigure = from.getFigure();
+            to.setFigure(playerFigure);
             from.setEmpty();
 
             if (to.getType() == FieldType.DRAW) {
                 // System.out.println("player " + player.color + " karte ziehen!");
+                playerDrawnCard = game.getDeck().get(game.getDeck().size()-1);
                 player.draw(game);
             }
 
@@ -198,6 +215,7 @@ public final class Move {
         game.increaseMovesCounter(1);
         // game.nextPlayer();
         // System.out.println("cards num after 2 " + this.player.cards.size());
+        return new UndoMove(this,playerFigure, opponentFigure,playerDrawnCard, opponentDrawnCard, lastCardOnPile, LastMoveCountFigureMovedIntoHouse);
     }
 
     /**

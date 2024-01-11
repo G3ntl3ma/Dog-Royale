@@ -160,6 +160,7 @@ public final class Player {
                 game.getCardService().getMoves(game, figure, moves, this);
             }
         }
+        System.out.println("size of mvoes array" + moves.size());
         return moves;
     }
 

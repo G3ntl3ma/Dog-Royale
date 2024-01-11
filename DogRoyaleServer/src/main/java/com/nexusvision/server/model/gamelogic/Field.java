@@ -126,7 +126,9 @@ public final class Field {
      */
     public void setFigure(Figure figure) {
         this.figure = figure;
-        figure.setField(this);
+        if (figure != null) {
+            figure.setField(this);
+        }
     }
 
     /**
