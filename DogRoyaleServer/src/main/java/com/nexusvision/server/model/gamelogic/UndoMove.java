@@ -61,7 +61,6 @@ public class UndoMove {
             game.getPile().remove(move.getCardUsed());
         }
 
-
         //TODO(?) field of figure
         //TODO rename figuresinbank function
 

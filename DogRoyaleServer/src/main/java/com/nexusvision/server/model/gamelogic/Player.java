@@ -36,7 +36,7 @@ public final class Player {
         this.playerId = playerId;
         this.lastMoveCountFigureMovedIntoHouse = 0;
         for (int i = 0; i < figureCount; i++) {
-            figureList.add(new Figure(playerId));
+            figureList.add(new Figure(playerId,i));
         }
     }
 
@@ -189,4 +189,20 @@ public final class Player {
         return moves;
     }
 
+    public int hash() { //compute a hah of things that can change in simulation
+
+        ArrayList<Integer> handCardValues = this.cardList.stream()
+            .map(card -> card.ordinal())
+            .sorted()
+            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        ArrayList<Integer> variables = new ArrayList<>(); 
+        variables.add(outThisRound ? 0 : 1);
+        variables.add(figuresInBank);
+        variables.add(figuresInHouse);
+        variables.add(lastMoveCountFigureMovedIntoHouse);
+        variables.add(handCardValues.hashCode());
+        return variables.hashCode();
+    }
+    
 }

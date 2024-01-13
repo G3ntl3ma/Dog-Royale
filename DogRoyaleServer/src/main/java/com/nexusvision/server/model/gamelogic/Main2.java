@@ -3,7 +3,10 @@ package com.nexusvision.server.model.gamelogic;
 import com.nexusvision.server.model.enums.Penalty;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * This class represents the Main, setups the game, iterates through a specified number of games,
@@ -43,12 +46,23 @@ public class Main2 {
         Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
         game.initDeck();
         game.distributeCards();
-        game.printBoard();
-        UndoMove undo = game.getRandomMove().execute(game);
-        game.printBoard();
-        undo.execute(game);
-        game.printBoard();
+        // game.printBoard();
+        System.out.println("game hash " + game.hash());
+
+        //TODO
+        //play game until over
+        //make list of hashes of each state
+        //undo all the moves and check hashes
+        //print how many hashes match out of game count
+        //if everything matches the undo move should be bugfree
         
+        Move move = game.getRandomMove();
+        if (move != null) {
+            UndoMove undo = move.execute(game);
+            System.out.println("game hash " + game.hash());
+            undo.execute(game);
+            System.out.println("game hash " + game.hash());
+        }
     }
 
 }

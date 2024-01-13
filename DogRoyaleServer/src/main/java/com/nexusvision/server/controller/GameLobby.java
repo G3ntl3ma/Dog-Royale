@@ -414,15 +414,15 @@ public class GameLobby {
                 selectedValue = move.getSelectedValue();
                 //selected figure could be on bench
                 if(move.isStartMove()) {
-                    pieceId = game.getCurrentPlayer().getFirstOnBench().getFigureId(this.game);
+                    pieceId = game.getCurrentPlayer().getFirstOnBench().getFigureId();
                 }
                 else {
-                    pieceId = move.getFrom().getFigure().getFigureId(this.game);
+                    pieceId = move.getFrom().getFigure().getFigureId();
 
                 }
                 isStarter = move.isStartMove();
                 if(move.isSwapMove()) {
-                    opponentPieceId = move.getTo().getFigure().getFigureId(this.game);
+                    opponentPieceId = move.getTo().getFigure().getFigureId();
                 }
                 else {
                     opponentPieceId = -1; //dont care

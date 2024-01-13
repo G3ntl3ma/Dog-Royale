@@ -9,6 +9,7 @@ import com.nexusvision.server.service.CardService;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -611,6 +612,51 @@ public final class Game {
 
     public ArrayList<Move> getMoves() {
         return this.getCurrentPlayer().generateMoves(this);
+    }
+
+    public int hash() {
+        //get hash of board
+        ArrayList<Integer> deckValues = this.deck.stream()
+            .map(card -> card.ordinal())
+            .sorted()
+            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        ArrayList<Integer> boardValues = Arrays.stream(this.board)
+            .map(field -> field.hash())
+            .sorted()
+            .collect(Collectors.toCollection(ArrayList::new));
+        
+        ArrayList<Integer> pileValues = this.pile.stream()
+            .map(card -> card.ordinal())
+            .sorted()
+            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+        
+        ArrayList<Integer> playerValues = this.playerList.stream()
+            .map(player -> player.hash())
+            .sorted()
+            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        ArrayList<Integer> variables = new ArrayList<>(); 
+        variables.add(mainFieldCount);
+        variables.add(playerToStartColor);
+        variables.add(playerToMoveId);
+        variables.add(movesMade);
+        variables.add(playersRemaining);
+        variables.add(round);
+        variables.add(firstMoveOfRound ? 0 : 1);
+        // if (drawnCard != null) {
+        //     variables.add(drawnCard.ordinal());
+        // }
+        // else {
+        //     variables.add(-1);
+        // }
+        variables.add(playerValues.hashCode());
+        variables.add(deckValues.hashCode());
+        variables.add(pileValues.hashCode());
+        variables.add(boardValues.hashCode());
+        // System.out.println("variables for hashing" + variables);
+
+        return variables.hashCode();
     }
 }
 
