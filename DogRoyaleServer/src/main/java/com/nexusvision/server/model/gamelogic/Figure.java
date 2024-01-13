@@ -19,11 +19,22 @@ public class Figure  {
         this.isInHouse = false;
         this.ownerId = ownerId;
     }
+    
+    public Figure(Field field, boolean isOnBench, boolean isInHouse, int ownerId) {
+        this.field = field;
+        this.isOnBench = isOnBench;
+        this.isInHouse = isInHouse;
+        this.ownerId = ownerId;
+    }
 
     public int getFigureId(Game game) {
         for(int figureId = 0; figureId < game.getPlayerList().get(ownerId).getFigureList().size(); figureId++) {
             if(game.getPlayerList().get(ownerId).getFigureList().get(figureId) == this) return figureId;
         }
         return -1;
+    }
+
+    public Figure copy() {
+        return new Figure(this.field, this.isOnBench, this.isInHouse, this.ownerId);
     }
 }

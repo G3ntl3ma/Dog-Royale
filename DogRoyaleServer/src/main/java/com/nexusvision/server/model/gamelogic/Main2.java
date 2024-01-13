@@ -43,10 +43,8 @@ public class Main2 {
         Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
         game.initDeck();
         game.distributeCards();
-        Player curPlayer = game.getCurrentPlayer();
-        ArrayList<Move> moves = curPlayer.generateMoves(game); //
         game.printBoard();
-        UndoMove undo = moves.get(0).execute(game);
+        UndoMove undo = game.getRandomMove().execute(game);
         game.printBoard();
         undo.execute(game);
         game.printBoard();

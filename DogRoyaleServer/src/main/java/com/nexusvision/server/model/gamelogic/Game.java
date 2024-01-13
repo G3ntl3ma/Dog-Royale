@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+
 /**
  * This class represents the game and manages Player, Cards, Moves and more
  *
@@ -26,17 +27,17 @@ public final class Game {
     // private final int maximumGameDuration; //in gamelobby class
     private final Penalty consequencesForInvalidMove;
     boolean[] occupied; //unused
-    private ArrayList<Player> playerList;
+    private ArrayList<Player> playerList; 
     private Field[] board;
     private ArrayList<Card> deck;
     private ArrayList<Card> pile;
     private int mainFieldCount;
     private int playerToStartColor;
     private int playerToMoveId;
-    private Card drawnCard; //TODO ??
-    private ArrayList<Card> discardedCardList; //IMPORTANT TODO ???
+    private Card drawnCard; // for server communication
+    private ArrayList<Card> discardedCardList; // for server communication
     private int movesMade;
-    private int playersRemaining;
+    private int playersRemaining; 
     private int round; //round counter
     private boolean firstMoveOfRound;
     private int[] startIndexes; //indeces of startFields, unused
@@ -67,6 +68,57 @@ public final class Game {
         this.cardService = new CardService(null);
         init(conf);
     }
+
+    //for saving the gamestate
+    public Game( int figuresPerPlayer, int initialCardsPerPlayer, int maximumTotalMoves, Penalty consequencesForInvalidMove, ArrayList<Player> playerList, Field[] board, ArrayList<Card> deck, ArrayList<Card> pile, int mainFieldCount, int playerToStartColor, int playerToMoveId, Card drawnCard, int movesMade, int playersRemaining, int round, boolean firstMoveOfRound, int[] startIndexes) {
+        this.figuresPerPlayer = figuresPerPlayer;
+        this.initialCardsPerPlayer = initialCardsPerPlayer;
+        this.maximumTotalMoves = maximumTotalMoves;
+        this.consequencesForInvalidMove = consequencesForInvalidMove;
+        this.playerList = playerList; 
+        this.board = board;
+        this.deck = deck;
+        this.pile = pile;
+        this.mainFieldCount = mainFieldCount;
+        this.playerToStartColor = playerToStartColor;
+        this.playerToMoveId = playerToMoveId;
+        this.movesMade = movesMade;
+        this.playersRemaining = playersRemaining; 
+        this.round = round;
+        this.firstMoveOfRound = firstMoveOfRound;
+    }
+
+    //ok this is probably too much work
+    //public Game copy() {
+        // //question how do i save the board and figures
+        // //gamestate restorer object
+        
+        // //game
+        // //private ArrayList<Player> playerList; //save cardlist per player
+        
+
+        
+        // //player to bac up
+        // //make new player objects
+        // for(Player player : this.playerList) {
+        //     //private ArrayList<Card> cardList = new ArrayList<>(); //must
+        //     ArrayList<Card> cardListCopy = new ArrayList<>(player.getCardList());
+        //     //private ArrayList<Figure> figureList = new ArrayList<>(); //completely new generated figures
+        //     //TODO make new figures
+        //     for(Figure figure : player.figureList) {
+        //         Figure figureCopy = figure.copy();
+        //     }
+        //     //TODO assign to new players
+        // }
+        // //private int lastMoveCountFigureMovedIntoHouse; 
+        // //private boolean outThisRound = false;
+
+        
+        // //private Field[] board; //completely new fields
+        // //private ArrayList<Card> deck;//only references
+        // //private ArrayList<Card> pile;//only references
+        // return new Game(figuresPerPlayer, initialCardsPerPlayer, maximumTotalMoves, consequencesForInvalidMove, playerList, board, dec,, pile, mainFieldCount, playerToStartColor, playerToMoveId, drawnCard, movesMade, playersRemaining, round, firstMoveOfRound, startIndexes);
+    //}
 
     /**
      * Increases the value of movesMade by 1
@@ -251,7 +303,7 @@ public final class Game {
         for (int i = 0; i < conf.length(); i++) {
             int prev = ((i - 1) + fieldCount) % fieldCount;
             int next = (i + 1) % fieldCount;
-            System.out.println("iter"+i);
+            // System.out.println("iter"+i);
             this.board[i].setNext(this.board[next]);
             this.board[i].setPrev(this.board[prev]);
             // this.board[i].settype(conf.charAt(i));
@@ -557,5 +609,8 @@ public final class Game {
         return moves.get(0);
     }
 
+    public ArrayList<Move> getMoves() {
+        return this.getCurrentPlayer().generateMoves(this);
+    }
 }
 

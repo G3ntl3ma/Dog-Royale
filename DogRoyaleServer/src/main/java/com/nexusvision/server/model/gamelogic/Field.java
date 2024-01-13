@@ -17,7 +17,7 @@ public final class Field {
     private Figure figure;
     private Field next;
     private Field house;
-    private Field prev;  //TODO rename to set
+    private Field prev; 
 
     public Field(int fieldId, FieldType type) {
         this.fieldId = fieldId;

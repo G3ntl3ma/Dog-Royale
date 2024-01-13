@@ -40,6 +40,31 @@ public final class Player {
         }
     }
 
+    public Player(int playerId,  boolean excluded,  boolean outThisRound,  ArrayList<Figure> figureList,  ArrayList<Card> cardList,  Field startField,  int houseFirstIndex,  int figuresInBank,  int figuresInHouse,  int lastMoveCountFigureMovedIntoHouse,  int houseOccupationIndex ) {
+        this.playerId=playerId;
+        this.excluded=excluded;
+        this.outThisRound=outThisRound;
+        this.figureList=figureList;
+        this.cardList=cardList;
+        this.startField=startField;
+        this.houseFirstIndex=houseFirstIndex;
+        this.figuresInBank=figuresInBank;
+        this.figuresInHouse=figuresInHouse;
+        this.lastMoveCountFigureMovedIntoHouse=lastMoveCountFigureMovedIntoHouse;
+        this.houseOccupationIndex=houseOccupationIndex;
+    }
+
+    // public Player copy() {
+        // ArrayList<Figure> figureList = this.figureList.copy();
+        //for figure in figure list copy the figure and put in array
+        // ArrayList<Card> cardList = this.cardList.copy();
+        //for card in card list copy the figure and put in array
+        
+        // Field startField = this.startField.copy();
+        
+        // return new Player(this.playerId,  this.excluded,  this.outThisRound,  figureList, cardList,  startField,  this.houseFirstIndex,  this.figuresInBank,  this.figuresInHouse,  this.lastMoveCountFigureMovedIntoHouse,  this.houseOccupationIndex );
+    // }
+
     /**
      * Gets the first figure in the bank and returns it
      *
