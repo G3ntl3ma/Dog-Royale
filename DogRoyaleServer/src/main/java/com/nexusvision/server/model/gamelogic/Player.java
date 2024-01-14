@@ -185,7 +185,7 @@ public final class Player {
                 game.getCardService().getMoves(game, figure, moves, this);
             }
         }
-        System.out.println("size of moves array" + moves.size());
+        // System.out.println("size of moves array" + moves.size());
         return moves;
     }
 

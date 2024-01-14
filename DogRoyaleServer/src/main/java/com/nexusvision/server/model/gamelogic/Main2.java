@@ -32,59 +32,54 @@ public class Main2 {
         }
         int handCardCount = 10;
 
-        Stack<Integer> hashstack = new Stack<>();
-        Stack<UndoMove> movestack = new Stack<>();
         Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
         game.initDeck();
         game.distributeCards();
-        System.out.println("game hash " + game.hash());
+        ArrayList<Integer> oldhash = game.hash();
 
-        //TODO
-        //play game until over
-        //make list of hashes of each state
-        //undo all the moves and check hashes
-        //print how many hashes match out of game count
-        //if everything matches the undo move should be bugfree
-
+        SaveState savestate = new SaveState(game);
+        
         //first move can be null
         Integer winner = null;
         ArrayList<Integer> winners = new ArrayList<>();
         int round = 0;
         while (winner == null) {
-            System.out.println("round " + round);
             if (round != 0) {
                 game.reshuffle();
                 game.reInit();
             }
             game.distributeCards();
-            
+
             while (!game.roundOver() && winner == null) {
-                Move move = game.getRandomMove();
-                if (move != null) {
-                    UndoMove undo = move.execute(game);
-                    hashstack.add(game.hash());
-                    movestack.add(undo);
+                Player curPlayer = game.getCurrentPlayer();
+                // System.out.println("gen moves for player " + curPlayer.getPlayerId());
+                ArrayList<Move> moves = curPlayer.generateMoves(game); //
+                // System.out.println("moves size " + moves.size());
+                // System.out.println("available moves");
+                for (Move move : moves) {
+                    move.printMove();
                 }
+                if (!moves.isEmpty()) {
+                    // System.out.println("moves not empty");
+                    Move move = moves.get(0);
+                    move.printMove();
+                    UndoMove undo = move.execute(game);
+                } else {
+                    // System.out.println("has no moves so out this round");
+                    curPlayer.setOutThisRound();
+                }
+                // game.printBoard();
                 if (game.checkGameOver()) {
                     winners = game.getWinnerOrder();
                     winner = winners.get(0);
                 }
             }
-        }
-
+            round++;
+        }//end of game
         System.out.println("simulated the game");
-        
-        int movesmade = movestack.size();
-        int correct = 0;
-        while(movestack.size() > 0) {
-            UndoMove undo = movestack.pop();
-            int hash = hashstack.pop();
-            undo.execute(game);
-            if(hash == game.hash()) {
-                correct++;
-            }
-        }
-        System.out.println("movesmade " + movesmade + " correct " + correct);
+
+        savestate.loadState(game);
+        System.out.println("game hash " + game.hash() + " old hash " + oldhash);
     }
 
 }

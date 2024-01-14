@@ -614,7 +614,7 @@ public final class Game {
         return this.getCurrentPlayer().generateMoves(this);
     }
 
-    public int hash() {
+    public ArrayList<Integer> hash() {
         //get hash of board
         ArrayList<Integer> deckValues = this.deck.stream()
             .map(card -> card.ordinal())
@@ -656,7 +656,7 @@ public final class Game {
         variables.add(boardValues.hashCode());
         // System.out.println("variables for hashing" + variables);
 
-        return variables.hashCode();
+        return variables;
     }
 }
 

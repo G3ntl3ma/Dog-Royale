@@ -24,7 +24,6 @@ public class UndoMove {
     }
 
     public void execute(Game game) {
-        //TODO undo the move
         //TODO set field of figure
         Field to = move.getTo(); //this can be null
         Field from = move.getFrom(); //this can be null
