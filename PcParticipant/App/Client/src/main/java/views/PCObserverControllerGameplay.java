@@ -124,7 +124,6 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     private Label lblMoveCount;
     @FXML
     private Button btnOpenInfoWindow;
-    
     @FXML
     private ScrollBar handcards;
 
