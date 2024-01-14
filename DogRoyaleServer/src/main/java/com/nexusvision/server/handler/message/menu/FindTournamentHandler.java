@@ -1,5 +1,7 @@
 package com.nexusvision.server.handler.message.menu;
 
+import com.nexusvision.server.common.ChannelType;
+import com.nexusvision.server.controller.MessageBroker;
 import com.nexusvision.server.handler.Handler;
 import com.nexusvision.server.handler.message.MessageHandler;
 import com.nexusvision.server.model.messages.menu.FindTournament;
@@ -13,7 +15,7 @@ import java.util.ArrayList;
 public class FindTournamentHandler extends MessageHandler<FindTournament> {
 
     @Override
-    protected String performHandle(FindTournament message, int clientID) {
+    protected void performHandle(FindTournament message, int clientID) {
 
         ReturnFindTournament returnFindTournament = new ReturnFindTournament();
         returnFindTournament.setType(TypeMenue.returnFindTournament.getOrdinal());
@@ -22,6 +24,7 @@ public class FindTournamentHandler extends MessageHandler<FindTournament> {
         returnFindTournament.setTournamentStarting(new ArrayList<>());
         returnFindTournament.setTournamentInProgress(new ArrayList<>());
 
-        return gson.toJson(returnFindTournament);
+        String response = gson.toJson(returnFindTournament);
+        MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientID, response);
     }
 }

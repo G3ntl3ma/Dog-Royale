@@ -22,11 +22,10 @@ public class ReturnLobbyConfigHandler extends MessageHandler<ReturnLobbyConfig> 
      * performs validation checks, and sets up error handling.
      *
      * @param message An Instance of the <code>ReturnLobbyConfig</code> representing a client's request for technical data
-     * @param clientID An Integer representing the Id of the requesting client
-     * @return sea //TODO Placeholder
+     * @param clientID An Integer representing the Id of the requesting client TODO Placeholder
      */
     @Override
-    protected String performHandle(ReturnLobbyConfig message, int clientID) {
+    protected void performHandle(ReturnLobbyConfig message, int clientID) {
 
         ServerController serverController = ServerController.getInstance();
 
@@ -125,7 +124,7 @@ public class ReturnLobbyConfigHandler extends MessageHandler<ReturnLobbyConfig> 
                 //if specified clientIDs dont exist
                 if (!serverController.clientIdRegistered(clientId)) {
                     error.setMessage("configuring game failed: clientId not registered");
-                    return gson.toJson(error);
+                    // return gson.toJson(error);
                 }
                 // TODO: REWRITE
 //                if (serverController.getObserver(clientId)) {
@@ -147,7 +146,7 @@ public class ReturnLobbyConfigHandler extends MessageHandler<ReturnLobbyConfig> 
                 int clientId = observers.get(i).getClientId();
                 if (!serverController.clientIdRegistered(clientId)) {
                     error.setMessage("configuring game failed: clientId not registered");
-                    return gson.toJson(error);
+                    // return gson.toJson(error);
                 }
                 // TODO: REWRITE
 //                if (serverController.getObserver(clientId)) {
@@ -169,7 +168,7 @@ public class ReturnLobbyConfigHandler extends MessageHandler<ReturnLobbyConfig> 
                 int clID = colors.get(i).getClientId();
                 if (!serverController.clientIdRegistered(clID)) {
                     error.setMessage("configuring game failed: clientId not registered");
-                    return gson.toJson(error);
+                    // return gson.toJson(error);
                 }
                 // TODO: REWRITE
 //                if (serverController.getObserver(clID)) {
@@ -207,15 +206,13 @@ public class ReturnLobbyConfigHandler extends MessageHandler<ReturnLobbyConfig> 
 
         if (errorFound) {
             error.setMessage("configuring game failed: " + String.join(", ", errors) + " not specified");
-            return gson.toJson(error);
+            // return gson.toJson(error);
         }
-
+        // TODO: Implement
         // TODO: REWRITE
 //        int gameID = serverController.createNewLobby(playerOrderList, observerIDs, playerColorList);
 //        serverController.setConfiguration(gameID, playerCount, fieldSize, figuresPerPlayer,  drawCardFields.getPositions(),
 //                startFields.getPositions(), initialCardsPerPlayer, thinkTimePerMove,
 //        consequencesForInvalidMove, maximumGameDuration, maximumTotalMoves);
-
-        return "sea";
     }
 }

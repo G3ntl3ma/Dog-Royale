@@ -10,12 +10,10 @@ import com.nexusvision.server.model.messages.game.TypeGame;
 public class LeaveObsHandler extends MessageHandler<LeaveObs> {
 
     @Override
-    protected String performHandle(LeaveObs message, int clientId) {
+    protected void performHandle(LeaveObs message, int clientId) {
         ServerController serverController = ServerController.getInstance();
         GameLobby gameLobby = serverController.getGameOfPlayer(clientId);
 
         gameLobby.removeObserver(clientId);
-
-        return null;
     }
 }

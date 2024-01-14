@@ -6,9 +6,12 @@ package com.nexusvision.server.model.messages.menu;
  * @author felixwr
  */
 public enum TypeMenue {
+    leaveObs,
+    leavePlayer,
+    disconnect,
+
     connectToServer,
     connectedToServer,
-    disconnect,
     requestGameList,
     returnGameList,
     joinGameAsParticipant,
@@ -21,8 +24,8 @@ public enum TypeMenue {
     requestTournamentInfo,
     returnTournamentInfo,
     returnLobbyConfig,
-    error ,
-    requestTechData ,
+    error,
+    requestTechData,
     returnTechData;
 
     /**

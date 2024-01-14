@@ -1,6 +1,8 @@
 package com.nexusvision.server.handler.message.menu;
 
+import com.nexusvision.server.common.ChannelType;
 import com.nexusvision.server.controller.GameLobby;
+import com.nexusvision.server.controller.MessageBroker;
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.HandlingException;
 import com.nexusvision.server.handler.message.MessageHandler;
@@ -25,10 +27,9 @@ public class RequestGameListHandler extends MessageHandler<RequestGameList> {
      *
      * @param message An Instance of the <code>RequestGameList</code> representing a client's request for a list of games
      * @param clientId An Integer representing the Id of the requesting client
-     * @return A JSON String representing the response to the client
      */
     @Override
-    protected String performHandle(RequestGameList message, int clientId) throws HandlingException {
+    protected void performHandle(RequestGameList message, int clientId) throws HandlingException {
         verifyClientID(clientId, message.getClientID());
         ServerController serverController = ServerController.getInstance();
 
@@ -69,7 +70,8 @@ public class RequestGameListHandler extends MessageHandler<RequestGameList> {
         returnGameList.setRunningGames(runningGameList);
         returnGameList.setFinishedGames(finishedGameList);
 
-        return gson.toJson(returnGameList);
+        String response = gson.toJson(returnGameList);
+        MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientId, response);
     }
 }
 

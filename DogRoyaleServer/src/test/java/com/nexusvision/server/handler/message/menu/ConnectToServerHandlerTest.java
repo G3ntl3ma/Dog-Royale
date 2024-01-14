@@ -16,6 +16,9 @@ import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author felixwr
+ */
 public class ConnectToServerHandlerTest extends HandlerTest {
 
     @Test

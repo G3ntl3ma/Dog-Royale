@@ -1,6 +1,8 @@
 package com.nexusvision.server.handler.message.menu;
 
 import com.nexusvision.config.AppConfig;
+import com.nexusvision.server.common.ChannelType;
+import com.nexusvision.server.controller.MessageBroker;
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.HandlingException;
 import com.nexusvision.server.handler.message.MessageHandler;
@@ -24,10 +26,9 @@ public class RequestTechDataHandler extends MessageHandler<RequestTechData> {
      *
      * @param message An Instance of the <code>RequestTechData</code> representing a client's request for technical data
      * @param clientId An Integer representing the Id of the requesting client
-     * @return A JSON String representing the response to the client
      */
     @Override
-    protected String performHandle(RequestTechData message, int clientId) throws HandlingException {
+    protected void performHandle(RequestTechData message, int clientId) throws HandlingException {
 
         ServerController serverController = ServerController.getInstance();
         AppConfig config = AppConfig.getInstance();
@@ -38,7 +39,8 @@ public class RequestTechDataHandler extends MessageHandler<RequestTechData> {
         returnTechData.setSupportedProtocol(config.getProperty("supportedProtocol"));
         returnTechData.setEmbeddedExtensions(config.getPropertyIntList("embeddedExtensions"));
 
-        return gson.toJson(returnTechData);
+        String response = gson.toJson(returnTechData);
+        MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientId, response);
     }
 }
 

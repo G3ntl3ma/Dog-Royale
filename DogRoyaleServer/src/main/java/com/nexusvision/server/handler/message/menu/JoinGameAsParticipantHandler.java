@@ -1,6 +1,8 @@
 package com.nexusvision.server.handler.message.menu;
 
+import com.nexusvision.server.common.ChannelType;
 import com.nexusvision.server.controller.GameLobby;
+import com.nexusvision.server.controller.MessageBroker;
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.Handler;
 import com.nexusvision.server.handler.HandlingException;
@@ -26,10 +28,9 @@ public class JoinGameAsParticipantHandler extends MessageHandler<JoinGameAsParti
      *
      * @param message An Instance of the <code>JoinGameAsParticipant</code> representing a client's request to join a game as a participant
      * @param clientId An Integer representing the Id of the requesting client
-     * @return A JSON String representing the response to the client
      */
     @Override
-    protected String performHandle(JoinGameAsParticipant message, int clientId) throws HandlingException {
+    protected void performHandle(JoinGameAsParticipant message, int clientId) throws HandlingException {
 
         verifyClientID(clientId, message.getClientId());
         ServerController serverController = ServerController.getInstance();
@@ -41,6 +42,7 @@ public class JoinGameAsParticipantHandler extends MessageHandler<JoinGameAsParti
         connectedToGame.setType(TypeMenue.connectedToGame.getOrdinal());
         connectedToGame.setSuccess(true);
 
-        return gson.toJson(connectedToGame);
+        String response = gson.toJson(connectedToGame); // TODO: Should maybe return null
+        MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientId, response);
     }
 }

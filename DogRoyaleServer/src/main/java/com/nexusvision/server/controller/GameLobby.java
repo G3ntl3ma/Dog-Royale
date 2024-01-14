@@ -2,6 +2,8 @@ package com.nexusvision.server.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nexusvision.server.common.ChannelType;
+import com.nexusvision.server.common.Publisher;
 import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.Colors;
 import com.nexusvision.server.model.enums.GameState;
@@ -45,6 +47,9 @@ public class GameLobby {
     private final BoardStateService boardStateService;
     private final PlayerService playerService;
 
+    private final Publisher lobbyPublisher;
+    private final MessageBroker messageBroker;
+
     private ScheduledExecutorService scheduler;
     private ScheduledFuture<?> liveTimerTask;
     private ScheduledFuture<?> turnTimerTask;
@@ -85,6 +90,10 @@ public class GameLobby {
         this.serverController = ServerController.getInstance();
         this.boardStateService = new BoardStateService();
         this.playerService = new PlayerService();
+
+        this.lobbyPublisher = new Publisher(ChannelType.LOBBY, id);
+        this.messageBroker = MessageBroker.getInstance();
+
         this.scheduler = Executors.newScheduledThreadPool(2);
     }
 
@@ -132,9 +141,9 @@ public class GameLobby {
             liveTimer.setLiveTime(gameDuration * 1000);
             String liveTimerMessage = gson.toJson(liveTimer, LiveTimer.class);
             if ((liveTimerSendCount = liveTimerSendCount % 5) == 0) {
-                sendToAllClients(liveTimerMessage);
+                lobbyPublisher.publish(liveTimerMessage);
             } else {
-                serverController.sendToClient(getClientToMoveId(), liveTimerMessage);
+                messageBroker.sendMessage(ChannelType.SINGLE, getClientToMoveId(), liveTimerMessage);
             }
             liveTimerSendCount++;
         }
@@ -160,9 +169,9 @@ public class GameLobby {
             turnTimer.setTurnTime(turnTime * 1000);
             String turnTimerMessage = gson.toJson(turnTimer, TurnTimer.class);
             if ((turnTimerSendCount = turnTimerSendCount % 5) == 0) {
-                sendToAllClients(turnTimerMessage);
+                lobbyPublisher.publish(turnTimerMessage);
             } else {
-                serverController.sendToClient(getClientToMoveId(), turnTimerMessage);
+                messageBroker.sendMessage(ChannelType.SINGLE, getClientToMoveId(), turnTimerMessage);
             }
             turnTimerSendCount++;
         }
@@ -264,27 +273,27 @@ public class GameLobby {
     /**
      * Adds an observer to the lobby
      *
-     * @param clientId The client Id of the observer being added
+     * @param clientId The client id of the observer being added
      */
     public void addObserver(int clientId) {
         observerList.add(clientId);
+        messageBroker.registerSubscriber(clientId, id);
 
         ConnectedToGame connectedToGame = new ConnectedToGame();
         connectedToGame.setType(TypeMenue.connectedToGame.getOrdinal());
         connectedToGame.setSuccess(true);
-        serverController.sendToClient(clientId, gson.toJson(connectedToGame));
+        messageBroker.sendMessage(ChannelType.SINGLE, clientId, gson.toJson(connectedToGame));
 
         JoinObs joinObs = new JoinObs();
         joinObs.setType(TypeGame.joinObs.getOrdinal());
         joinObs.setCountObs(observerList.size());
-        sendToAllClients(gson.toJson(joinObs));
-
-        // If game startet already send him boardState
+        lobbyPublisher.publish(gson.toJson(joinObs));
+        // If game started already send him boardState
         gson.toJson(connectedToGame);
         if (gameState == GameState.IN_PROGRESS) {
             BoardState boardState = boardStateService.generateBoardState(game, playerOrderList);
             String boardStateMessage = gson.toJson(boardState);
-            sendToAllClients(boardStateMessage);
+            lobbyPublisher.publish(boardStateMessage);
         }
     }
 
@@ -295,11 +304,12 @@ public class GameLobby {
      */
     public void removeObserver(int clientId) {
         observerList.remove(clientId);
+        messageBroker.unregisterSubscriber(clientId, id);
 
         JoinObs joinObs = new JoinObs();
         joinObs.setType(TypeGame.joinObs.getOrdinal());
         joinObs.setCountObs(observerList.size());
-        sendToAllClients(gson.toJson(joinObs));
+        lobbyPublisher.publish(gson.toJson(joinObs));
     }
 
     /**
@@ -312,8 +322,10 @@ public class GameLobby {
         playerOrderList.add(clientId);
         playerColorMap.put(clientId, color);
         // TODO: What if more players get added than maxPlayerCount allows? How to add with nickname?
+        messageBroker.registerSubscriber(clientId, id);
         if (playerOrderList.size() == maxPlayerCount) {
             gameState = GameState.IN_PROGRESS; // TODO: Ausrichter decides when game gets started
+            // TODO: Also for starting you need to use the runGame method
         }
     }
 
@@ -339,12 +351,13 @@ public class GameLobby {
         }
 
         playerColorMap.remove(clientId);
+        messageBroker.unregisterSubscriber(clientId, id);
 
         Kick kick = new Kick();
         kick.setType(TypeGame.kick.getOrdinal());
         kick.setClientId(clientId);
         kick.setReason("Player decided to leave");
-        sendToAllClients(gson.toJson(kick));
+        lobbyPublisher.publish(gson.toJson(kick));
 
         if (playerOrderList.isEmpty()) {
             finishGame();
@@ -353,15 +366,6 @@ public class GameLobby {
 
     public Colors getColorOfPlayer(int clientId) { //return colortype
         return this.playerColorMap.get(clientId);
-    }
-
-    public void sendToAllClients(String message) {
-        ArrayList<Integer> clientList = new ArrayList<>();
-        clientList.addAll(playerOrderList);
-        clientList.addAll(observerList);
-        for (int client : clientList) {
-            serverController.sendToClient(client, message);
-        }
     }
 
     /**
@@ -386,13 +390,16 @@ public class GameLobby {
         gameState = GameState.IN_PROGRESS;
         BoardState boardState = boardStateService.generateBoardState(game, playerOrderList);
         String boardStateMessage = gson.toJson(boardState);
-        sendToAllClients(boardStateMessage);
-        startLiveTimer();
+        boolean successful = serverController.startGameForLobby(this);
+        if (successful) { // TODO: Might be dumb because some client handlers might have changed states but some not
+            lobbyPublisher.publish(boardStateMessage);
+            startLiveTimer();
+        }
         // if simulate game make random move every 3 seconds or so
     }
 
     private void randomMoveMatch() {
-        for(int i = 0; i < maxPlayerCount; i++) {
+        for (int i = 0; i < maxPlayerCount; i++) {
             //clientId = playerId
             playerOrderList.add(i);
             playerColorMap.put(i, Colors.values()[i]);
@@ -413,18 +420,16 @@ public class GameLobby {
                 card = move.getCardUsed();
                 selectedValue = move.getSelectedValue();
                 //selected figure could be on bench
-                if(move.isStartMove()) {
+                if (move.isStartMove()) {
                     pieceId = game.getCurrentPlayer().getFirstOnBench().getFigureId(this.game);
-                }
-                else {
+                } else {
                     pieceId = move.getFrom().getFigure().getFigureId(this.game);
 
                 }
                 isStarter = move.isStartMove();
-                if(move.isSwapMove()) {
+                if (move.isSwapMove()) {
                     opponentPieceId = move.getTo().getFigure().getFigureId(this.game);
-                }
-                else {
+                } else {
                     opponentPieceId = -1; //dont care
                 }
 
@@ -444,12 +449,12 @@ public class GameLobby {
 
             String moveValidMessage = gson.toJson(moveValid, MoveValid.class);
 
-            sendToAllClients(moveValidMessage);
+            lobbyPublisher.publish(moveValidMessage);
 
-            cleanUpAfterMove(fakeClientId,  true);
+            cleanUpAfterMove(fakeClientId, true);
 
             try {
-                Thread.sleep(thinkTimePerMove* 1000L /2);
+                Thread.sleep(thinkTimePerMove * 1000L / 2);
             } catch (InterruptedException e) {
                 log.error("Sleeping thread got interrupted: " + e.getMessage());
             }
@@ -463,7 +468,7 @@ public class GameLobby {
         isPaused = false;
         Unfreeze unfreeze = new Unfreeze();
         unfreeze.setType(TypeGame.unfreeze.getOrdinal());
-        sendToAllClients(gson.toJson(unfreeze));
+        lobbyPublisher.publish(gson.toJson(unfreeze));
     }
 
     /**
@@ -473,7 +478,7 @@ public class GameLobby {
         isPaused = true;
         Freeze freeze = new Freeze();
         freeze.setType(TypeGame.freeze.getOrdinal());
-        sendToAllClients(gson.toJson(freeze));
+        lobbyPublisher.publish(gson.toJson(freeze));
     }
 
     //success boolean
@@ -506,12 +511,7 @@ public class GameLobby {
         moveValid.setValidMove(isValidMove);
         String moveValidMessage = gson.toJson(moveValid, MoveValid.class);
 
-        ArrayList<Integer> clientList = new ArrayList<>();
-        clientList.addAll(playerOrderList);
-        clientList.addAll(observerList);
-        for (int client : clientList) {
-            serverController.sendToClient(client, moveValidMessage);
-        }
+        lobbyPublisher.publish(moveValidMessage);
 
         cleanUpAfterMove(clientId, isValidMove);
     }
@@ -533,13 +533,13 @@ public class GameLobby {
             kick.setType(TypeGame.kick.getOrdinal());
             kick.setClientId(clientId);
             kick.setReason("illegal move");
-            sendToAllClients(gson.toJson(kick));
+            lobbyPublisher.publish(gson.toJson(kick));
         }
 
         BoardState boardState = boardStateService.generateBoardState(game, playerOrderList);
         String boardStateMessage = gson.toJson(boardState);
 
-        sendToAllClients(boardStateMessage);
+        lobbyPublisher.publish(boardStateMessage);
 
         if (!game.nextPlayer()) { // maybe round is over or maybe game is over
             if (game.checkGameOver()) {
@@ -563,7 +563,7 @@ public class GameLobby {
         Cancel cancel = new Cancel();
         cancel.setType(TypeGame.cancel.getOrdinal());
         cancel.setWinnerOrder(game.getWinnerOrder());
-        sendToAllClients(gson.toJson(cancel));
+        lobbyPublisher.publish(gson.toJson(cancel));
     }
 
     private void removeFromRound(int clientId, Player player) {
@@ -579,16 +579,17 @@ public class GameLobby {
 
         game.discardHandCards();
         game.excludeFromRound(player);
-        serverController.sendToClient(clientId, drawCardsMessage);
+        messageBroker.sendMessage(ChannelType.SINGLE, clientId, drawCardsMessage);
 
         UpdateDrawCardsService updateDrawCardsService = new UpdateDrawCardsService();
         UpdateDrawCards updateDrawCards = updateDrawCardsService.generateClientWithNoCards(clientId);
         String updateDrawCardsMessage = gson.toJson(updateDrawCards, UpdateDrawCards.class);
 
+        // TODO: Only one player gets removed from the list? DEFINITELY CHECK THIS
         ArrayList<Integer> clientListReduced = new ArrayList<Integer>(clientList);
         clientListReduced.remove(Integer.valueOf(player.getPlayerId()));
         for (int client : clientListReduced) {
-            serverController.sendToClient(client, updateDrawCardsMessage);
+            messageBroker.sendMessage(ChannelType.SINGLE, clientId, updateDrawCardsMessage);
         }
     }
 
@@ -606,7 +607,7 @@ public class GameLobby {
             Player player = playerService.getPlayer(playerId, game);
             drawCards.setDrawnCards(player.getCardListInteger());
             String drawCardsMessage = gson.toJson(drawCards, DrawCards.class);
-            serverController.sendToClient(playerClientId, drawCardsMessage);
+            messageBroker.sendMessage(ChannelType.SINGLE, playerClientId, drawCardsMessage);
 
             UpdateDrawCards.HandCard handCard = new UpdateDrawCards.HandCard();
             handCard.setClientId(playerClientId);
@@ -617,7 +618,7 @@ public class GameLobby {
         updateDrawCards.setType(TypeGame.updateDrawCards.getOrdinal());
         updateDrawCards.setHandCards(handCards);
         String updateDrawCardsMessage = gson.toJson(updateDrawCards, UpdateDrawCards.class);
-        sendToAllClients(updateDrawCardsMessage);
+        lobbyPublisher.publish(updateDrawCardsMessage);
     }
 
     /**

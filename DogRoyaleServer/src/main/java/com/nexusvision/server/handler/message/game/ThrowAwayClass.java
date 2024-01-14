@@ -1,6 +1,8 @@
 package com.nexusvision.server.handler.message.game;
 
+import com.nexusvision.server.common.ChannelType;
 import com.nexusvision.server.controller.GameLobby;
+import com.nexusvision.server.controller.MessageBroker;
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.message.MessageHandler;
 import com.nexusvision.server.model.enums.Card;
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 //TODO move this code to where it belongs
 public class ThrowAwayClass extends MessageHandler<Move> {
     @Override
-    protected String performHandle(Move message, int clientID) {
+    protected void performHandle(Move message, int clientID) {
         ServerController serverController = ServerController.getInstance();
         GameLobby gameLobby = serverController.getGameOfPlayer(clientID);
         Game game = gameLobby.getGame();
@@ -34,6 +36,7 @@ public class ThrowAwayClass extends MessageHandler<Move> {
         drawCards.setType(TypeGame.drawCards.getOrdinal());
         drawCards.setDroppedCards(new ArrayList<>());
         drawCards.setDrawnCards(_drawnCards);
-        return gson.toJson(drawCards);
+        String response = gson.toJson(drawCards);
+        MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientID, response);
     }
 }

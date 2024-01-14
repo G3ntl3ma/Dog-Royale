@@ -18,6 +18,9 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.fail;
 
+/**
+ * @author felixwr
+ */
 public class JoinGameAsObserverHandlerTest extends HandlerTest {
 
     @Test
@@ -38,19 +41,25 @@ public class JoinGameAsObserverHandlerTest extends HandlerTest {
         request.setGameId(lobbyID1);
         request.setClientId(clientID);
 
+        String response = null;
         try {
-            String response = handler.handle(request, clientID);
-
-            try  {
-                ConnectedToGame connectedToGame = gson.fromJson(response, ConnectedToGame.class);
-                assertNotNull(connectedToGame.getType());
-                assertEquals(connectedToGame.getType(), TypeMenue.connectedToGame.getOrdinal());
-                assertTrue(connectedToGame.isSuccess());
-            } catch (JsonSyntaxException e) {
-                fail("Response string has wrong format: " + e.getMessage());
-            }
+            response = handler.handle(request, clientID);
         } catch (HandlingException e) {
             fail("Handling exception thrown during test: " + e.getMessage());
         }
+
+        assertNotNull(response);
+
+        ConnectedToGame connectedToGame = null;
+        try {
+            connectedToGame = gson.fromJson(response, ConnectedToGame.class);
+        } catch (JsonSyntaxException e) {
+            fail("Response string has wrong format: " + e.getMessage());
+        }
+
+        assertNotNull(connectedToGame);
+        assertNotNull(connectedToGame.getType());
+        assertEquals(connectedToGame.getType(), TypeMenue.connectedToGame.getOrdinal());
+        assertTrue(connectedToGame.isSuccess());
     }
 }

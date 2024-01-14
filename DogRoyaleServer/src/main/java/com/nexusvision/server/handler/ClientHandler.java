@@ -1,6 +1,8 @@
 package com.nexusvision.server.handler;
 
 import com.google.gson.*;
+import com.nexusvision.server.common.Subscriber;
+import com.nexusvision.server.controller.MessageBroker;
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.message.game.LeaveObsHandler;
 import com.nexusvision.server.handler.message.game.LeavePlayerHandler;
@@ -9,6 +11,7 @@ import com.nexusvision.server.handler.message.game.ResponseHandler;
 import com.nexusvision.server.handler.message.menu.*;
 import com.nexusvision.server.model.messages.game.*;
 import com.nexusvision.server.model.messages.menu.*;
+import com.nexusvision.server.model.messages.menu.Error;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,12 +29,11 @@ import java.net.Socket;
  * @author felixwr
  */
 @Log4j2
-public class ClientHandler extends Handler implements Runnable {
+public class ClientHandler extends Handler implements Runnable, Subscriber {
 
     private final Socket clientSocket;
-    private final ServerController serverController;
     private final int clientID;
-    private final PrintWriter broadcaster;
+    private final PrintWriter messageSender;
 
     private State expectedState = State.CONNECT_TO_SERVER;
 
@@ -39,10 +41,9 @@ public class ClientHandler extends Handler implements Runnable {
      * Constructor for <code>ClientHandler</code>
      *
      * @param clientSocket An instance representing the socket connection to a client
-     * @param clientID     An integer representing the Id for the client associated with this ClientHandler
+     * @param clientID     An integer representing the id for the client associated with this ClientHandler
      */
     public ClientHandler(Socket clientSocket, int clientID) {
-        serverController = ServerController.getInstance();
         this.clientSocket = clientSocket;
         this.clientID = clientID;
         //this might block because iirc you need a buffered reader first, not sure
@@ -52,7 +53,8 @@ public class ClientHandler extends Handler implements Runnable {
         } catch (Exception e) {
             writer = null;
         }
-        broadcaster = writer;
+        messageSender = writer;
+        MessageBroker.getInstance().addIdentifier(clientID, this);
     }
 
     /**
@@ -68,10 +70,8 @@ public class ClientHandler extends Handler implements Runnable {
 
             String request, response;
             while (true) {
-                if ((request = reader.readLine()) != null
-                        && (response = handle(request)) != null) {
-                    writer.println(response);
-                    writer.flush();
+                if ((request = reader.readLine()) != null) {
+                    handle(request);
                 }
             }
         } catch (IOException e) {
@@ -79,6 +79,7 @@ public class ClientHandler extends Handler implements Runnable {
         } finally {
             try {
                 clientSocket.close();
+                MessageBroker.getInstance().deleteSubscriber(this);
             } catch (IOException e) {
                 log.error("Error while trying to close the connection: " + e.getMessage());
             }
@@ -86,11 +87,14 @@ public class ClientHandler extends Handler implements Runnable {
     }
 
     /**
-     * Writes the specified message to the broadcaster
+     * Sends <code>message</code> back to the client
+     *
+     * @param message The message
      */
-    public void broadcast(String message) {
-        this.broadcaster.write(message);
-        this.broadcaster.flush();
+    @Override
+    public synchronized void sendMessage(String message) {
+        messageSender.write(message);
+        messageSender.flush();
     }
 
     /**
@@ -123,41 +127,41 @@ public class ClientHandler extends Handler implements Runnable {
      * Responsible for processing and handling a client request
      *
      * @param request A String representing the request received from the client
-     * @return A String representing a response to the client's request
      */
-    private String handle(String request) {
+    private void handle(String request) {
         try {
             JsonObject jsonRequest = JsonParser.parseString(request).getAsJsonObject();
             if (!isTypeInt(jsonRequest)) {
-                return handleError("Received no valid type");
+                handleError("Received no valid type");
+                return;
             }
             int type = jsonRequest.get("type").getAsInt();
             if (type == TypeMenue.connectToServer.getOrdinal()) {
-                return handleConnectToServer(request);
+                handleConnectToServer(request);
             } else if (type == TypeMenue.requestGameList.getOrdinal()
                     || type == TypeMenue.findTournament.getOrdinal()) {
-                return handleRequestGameListAndFindTournament(request, type);
+                handleRequestGameListAndFindTournament(request, type);
             } else if (type == TypeMenue.joinGameAsObserver.getOrdinal()) {
-                return handleJoinGameAsObserver(request);
+                handleJoinGameAsObserver(request);
             } else if (type == TypeMenue.joinGameAsParticipant.getOrdinal()) {
-                return handleJoinGameAsParticipant(request);
+                handleJoinGameAsParticipant(request);
             } else if (type == TypeMenue.requestTechData.getOrdinal()) {
-                return handleRequestTechData(request);
+                handleRequestTechData(request);
             } else if (type == TypeGame.response.getOrdinal()) {
-                return handleResponse(request);
+                handleResponse(request);
             } else if (type == TypeGame.leaveObs.getOrdinal()) {
-                return handleLeaveObs(request);
+                handleLeaveObs(request);
             } else if (type == TypeGame.leavePlayer.getOrdinal()) {
-                return handleLeavePlayer(request);
+                handleLeavePlayer(request);
             }
             // TODO: Register for tournament, request tournament info
             else {
-                return handleError("The request has no valid type");
+                handleError("The request has no valid type");
             }
         } catch (JsonSyntaxException e) {
-            return handleError("The request is not in json format", e);
+            handleError("The request is not in json format", e);
         } catch (HandlingException e) {
-            return handleError("Failed to handle the request", e.getType(), e);
+            handleError("Failed to handle the request", e.getType(), e);
         }
     }
 
@@ -165,21 +169,21 @@ public class ClientHandler extends Handler implements Runnable {
      * Responsible for handling requests of type <code>connectToServer</code>
      *
      * @param request A String representing the request received from the client
-     * @return A String representing a response to the client's <code>connectToServer</code> request
+     * @throws HandlingException If anything goes wrong while handling the message
      */
-    private String handleConnectToServer(String request) throws HandlingException {
+    private void handleConnectToServer(String request) throws HandlingException {
         if (expectedState != State.CONNECT_TO_SERVER) {
-            return handleError("Received wrong type, didn't expect connectToServer");
+            handleError("Received wrong type, didn't expect connectToServer");
+            return;
         }
         log.info("Trying to connect client " + clientID);
         try {
             ConnectToServer connectToServer = gson.fromJson(request, ConnectToServer.class);
-            String response = new ConnectToServerHandler().handle(connectToServer, clientID);
+            new ConnectToServerHandler().handle(connectToServer, clientID);
             expectedState = State.REQUEST_GAME_LIST_AND_FIND_TOURNAMENT;
             log.info("Client " + clientID + " connected successfully");
-            return response;
         } catch (JsonSyntaxException e) {
-            return handleError("Wrong message format from type connectToServer",
+            handleError("Wrong message format from type connectToServer",
                     TypeMenue.connectToServer.getOrdinal(), e);
         }
     }
@@ -189,29 +193,35 @@ public class ClientHandler extends Handler implements Runnable {
      *
      * @param request A String representing the request received from the client
      * @param type An Integer representing the type of the request
-     * @return A String representing a response to the client's <code>requestGameList</code> request or <code>findTournament</code> request
+     * @throws HandlingException If anything goes wrong while handling the message
      */
-    private String handleRequestGameListAndFindTournament(String request, int type) throws HandlingException {
+    private void handleRequestGameListAndFindTournament(String request, int type) throws HandlingException {
         switch (expectedState) {
             case REQUEST_GAME_LIST_AND_FIND_TOURNAMENT:
                 if (type == TypeMenue.requestGameList.getOrdinal()) {
-                    return handleRequestGameList(request, State.FIND_TOURNAMENT);
+                    handleRequestGameList(request, State.FIND_TOURNAMENT);
+                } else {
+                    handleFindTournament(request, State.REQUEST_GAME_LIST);
                 }
-                return handleFindTournament(request, State.REQUEST_GAME_LIST);
+                break;
             case REQUEST_GAME_LIST:
                 if (type != TypeMenue.requestGameList.getOrdinal()) {
-                    return handleError("Received requestTournamentInfo but expected requestGameList",
+                    handleError("Received requestTournamentInfo but expected requestGameList",
                             TypeMenue.findTournament.getOrdinal());
+                    return;
                 }
-                return handleRequestGameList(request, State.REQUEST_JOIN);
+                handleRequestGameList(request, State.REQUEST_JOIN);
+                break;
             case FIND_TOURNAMENT:
                 if (type != TypeMenue.findTournament.getOrdinal()) {
-                    return handleError("Received requestGameList but expected findTournament",
+                    handleError("Received requestGameList but expected findTournament",
                             TypeMenue.requestGameList.getOrdinal());
+                    return;
                 }
-                return handleFindTournament(request, State.REQUEST_JOIN);
+                handleFindTournament(request, State.REQUEST_JOIN);
+                break;
             default:
-                return handleError("Received wrong type, expected requestGameList or findTournament");
+                handleError("Received wrong type, expected requestGameList or findTournament");
         }
     }
 
@@ -220,18 +230,17 @@ public class ClientHandler extends Handler implements Runnable {
      *
      * @param request A String representing the request received from the client
      * @param nextState An object representing the next expected state after successfully handling the current request
-     * @return A String representing a response to the client's <code>requestGameList</code> request
+     * @throws HandlingException If anything goes wrong while handling the message
      */
-    private String handleRequestGameList(String request, State nextState) throws HandlingException {
+    private void handleRequestGameList(String request, State nextState) throws HandlingException {
         log.info("Trying to handle game list request");
         try {
             RequestGameList requestGameList = gson.fromJson(request, RequestGameList.class);
-            String response = new RequestGameListHandler().handle(requestGameList, clientID);
+            new RequestGameListHandler().handle(requestGameList, clientID);
             expectedState = nextState;
             log.info("Game list request was successful");
-            return response;
         } catch (JsonSyntaxException e) {
-            return handleError("Wrong message format from type requestGameList",
+            handleError("Wrong message format from type requestGameList",
                     TypeMenue.requestGameList.getOrdinal(), e);
         }
     }
@@ -241,18 +250,17 @@ public class ClientHandler extends Handler implements Runnable {
      *
      * @param request A String representing the request received from the client
      * @param nextState An object representing the next expected state after successfully handling the current request
-     * @return A String representing a response to the client's <code>findTournament</code> request
+     * @throws HandlingException If anything goes wrong while handling the message
      */
-    private String handleFindTournament(String request, State nextState) throws HandlingException {
+    private void handleFindTournament(String request, State nextState) throws HandlingException {
         log.info("Trying to handle tournament info request");
         try {
             FindTournament findTournament = gson.fromJson(request, FindTournament.class);
-            String response = new FindTournamentHandler().handle(findTournament, clientID);
+            new FindTournamentHandler().handle(findTournament, clientID);
             expectedState = nextState;
             log.info("Find tournament request was successful");
-            return response;
         } catch (JsonSyntaxException e) {
-            return handleError("Wrong message format from type findTournament",
+            handleError("Wrong message format from type findTournament",
                     TypeMenue.findTournament.getOrdinal(), e);
         }
     }
@@ -261,21 +269,21 @@ public class ClientHandler extends Handler implements Runnable {
      * Responsible for handling requests of type <code>joinGameAsObserver</code>
      *
      * @param request A String representing the request received from the client
-     * @return A String representing a response to the client's <code>joinGameAsObserver</code> request
+     * @throws HandlingException If anything goes wrong while handling the message
      */
-    private String handleJoinGameAsObserver(String request) throws HandlingException {
+    private void handleJoinGameAsObserver(String request) throws HandlingException {
         if (expectedState != State.REQUEST_JOIN) {
-            return handleError("Received wrong type, didn't expect joinGameAsObserver");
+            handleError("Received wrong type, didn't expect joinGameAsObserver");
+            return;
         }
         log.info("Trying to handle join game as observer request");
         try {
             JoinGameAsObserver joinGameAsObserver = gson.fromJson(request, JoinGameAsObserver.class);
-            String response = new JoinGameAsObserverHandler().handle(joinGameAsObserver, clientID);
+            new JoinGameAsObserverHandler().handle(joinGameAsObserver, clientID);
             expectedState = State.WAITING_FOR_GAME_START;
             log.info("Join game as observer was successful");
-            return response;
         } catch (JsonSyntaxException e) {
-            return handleError("Wrong message format from type joinGameAsObserver",
+            handleError("Wrong message format from type joinGameAsObserver",
                     TypeMenue.joinGameAsObserver.getOrdinal(), e);
         }
     }
@@ -284,21 +292,20 @@ public class ClientHandler extends Handler implements Runnable {
      * Responsible for handling requests of type <code>joinGameAsParticipant</code>
      *
      * @param request A String representing the request received from the client
-     * @return A String representing a response to the client's <code>joinGameAsParticipant</code> request
+     * @throws HandlingException If anything goes wrong while handling the message
      */
-    private String handleJoinGameAsParticipant(String request) throws HandlingException {
+    private void handleJoinGameAsParticipant(String request) throws HandlingException {
         if (expectedState != State.REQUEST_JOIN) {
-            return handleError("Received wrong type, didn't expect joinGameAsParticipant");
+            handleError("Received wrong type, didn't expect joinGameAsParticipant");
         }
         log.info("Trying to handle join game as participant request");
         try {
             JoinGameAsParticipant joinGameAsParticipant = gson.fromJson(request, JoinGameAsParticipant.class);
-            String response = new JoinGameAsParticipantHandler().handle(joinGameAsParticipant, clientID);
+            new JoinGameAsParticipantHandler().handle(joinGameAsParticipant, clientID);
             expectedState = State.WAITING_FOR_GAME_START;
             log.info("Join game as participant was successful");
-            return response;
         } catch (JsonSyntaxException e) {
-            return handleError("Wrong message format from type joinGameAsParticipant",
+            handleError("Wrong message format from type joinGameAsParticipant",
                     TypeMenue.joinGameAsParticipant.getOrdinal(), e);
         }
     }
@@ -307,17 +314,16 @@ public class ClientHandler extends Handler implements Runnable {
      * Responsible for handling requests of type <code>requestTechData</code>
      *
      * @param request A String representing the request received from the client
-     * @return A String representing a response to the client's <code>requestTechData</code> request
+     * @throws HandlingException If anything goes wrong while handling the message
      */
-    private String handleRequestTechData(String request) throws HandlingException {
+    private void handleRequestTechData(String request) throws HandlingException {
         log.info("Trying to handle tech data request");
         try {
             RequestTechData requestTechData = gson.fromJson(request, RequestTechData.class);
-            String response = new RequestTechDataHandler().handle(requestTechData, clientID);
+            new RequestTechDataHandler().handle(requestTechData, clientID);
             log.info("Request tech data was successful");
-            return response;
         } catch (JsonSyntaxException e) {
-            return handleError("Wrong message format from type requestTechData",
+            handleError("Wrong message format from type requestTechData",
                     TypeMenue.requestTechData.getOrdinal(), e);
         }
     }
@@ -326,19 +332,19 @@ public class ClientHandler extends Handler implements Runnable {
      * Responsible for handling requests of type <code>response</code>
      *
      * @param request A String representing the request received from the client
-     * @return A String representing a response to the client's <code>response</code> message
      * @throws HandlingException If anything goes wrong while handling the message
      */
-    private String handleResponse(String request) throws HandlingException {
+    private void handleResponse(String request) throws HandlingException {
         if (expectedState != State.NO_MOVE && expectedState != State.WAITING_FOR_MOVE) {
-            return handleError("Didn't expect message of type response", TypeGame.response.getOrdinal());
+            handleError("Didn't expect message of type response", TypeGame.response.getOrdinal());
+            return;
         }
         log.info("Received response of client " + clientID);
         try {
             Response response = gson.fromJson(request, Response.class);
-            return new ResponseHandler().handle(response, clientID);
+            new ResponseHandler().handle(response, clientID);
         } catch (JsonSyntaxException e) {
-            return handleError("Wrong message format from type response",
+            handleError("Wrong message format from type response",
                     TypeMenue.requestTechData.getOrdinal(), e);
         }
     }
@@ -347,19 +353,19 @@ public class ClientHandler extends Handler implements Runnable {
      * Responsible for handling requests of type <code>move</code>
      *
      * @param request A String representing the request received from the client
-     * @return A String representing a response to the client's <code>move</code> message
      * @throws HandlingException If anything goes wrong while handling the message
      */
-    private String handleMove(String request) throws HandlingException {
+    private void handleMove(String request) throws HandlingException {
         if (expectedState != State.WAITING_FOR_MOVE) {
-            return handleError("Didn't expect message of type move", TypeGame.move.getOrdinal());
+            handleError("Didn't expect message of type move", TypeGame.move.getOrdinal());
+            return;
         }
         log.info("Handling move of client " + clientID);
         try {
             Move move = gson.fromJson(request, Move.class);
-            return new MoveHandler().handle(move, clientID);
+            new MoveHandler().handle(move, clientID);
         } catch (JsonSyntaxException e) {
-            return handleError("Wrong message format from type move",
+            handleError("Wrong message format from type move",
                     TypeGame.move.getOrdinal(), e);
         }
     }
@@ -368,21 +374,21 @@ public class ClientHandler extends Handler implements Runnable {
      * Responsible for handling requests of type <code>leaveObs</code>
      *
      * @param request A String representing the request received from the client
-     * @return A String representing a response to the client's <code>leaveObs</code> message
      * @throws HandlingException If anything goes wrong while handling the message
      */
-    private String handleLeaveObs(String request) throws HandlingException {
+    private void handleLeaveObs(String request) throws HandlingException {
         if (expectedState != State.NO_MOVE
                 && expectedState != State.WAITING_FOR_MOVE
                 && expectedState != State.WAITING_FOR_GAME_START) {
-            return handleError("Received wrong type, didn't expect leaveObs");
+            handleError("Received wrong type, didn't expect leaveObs");
+            return;
         }
         log.info("Trying to handle leave observer request");
         try {
             LeaveObs leaveObs = gson.fromJson(request, LeaveObs.class);
-            return new LeaveObsHandler().handle(leaveObs, clientID);
+            new LeaveObsHandler().handle(leaveObs, clientID);
         } catch (JsonSyntaxException e) {
-            return handleError("Wrong message format from type leaveObs",
+            handleError("Wrong message format from type leaveObs",
                     TypeGame.leaveObs.getOrdinal(), e);
         }
     }
@@ -391,23 +397,85 @@ public class ClientHandler extends Handler implements Runnable {
      * Responsible for handling requests of type <code>leavePlayer</code>
      *
      * @param request A String representing the request received from the client
-     * @return A String representing a response to the client's <code>leavePlayer</code> message
      * @throws HandlingException If anything goes wrong while handling the message
      */
-    private String handleLeavePlayer(String request) throws HandlingException {
+    private void handleLeavePlayer(String request) throws HandlingException {
         if (expectedState != State.NO_MOVE
                 && expectedState != State.WAITING_FOR_MOVE
                 && expectedState != State.WAITING_FOR_GAME_START) {
-            return handleError("Received wrong type, didn't expect leavePlayer");
+            handleError("Received wrong type, didn't expect leavePlayer");
+            return;
         }
         log.info("Trying to handle leave player request");
         try {
             LeavePlayer leavePlayer = gson.fromJson(request, LeavePlayer.class);
-            return new LeavePlayerHandler().handle(leavePlayer, clientID);
+            new LeavePlayerHandler().handle(leavePlayer, clientID);
         } catch (JsonSyntaxException e) {
-            return handleError("Wrong message format from type leavePlayer",
+            handleError("Wrong message format from type leavePlayer",
                     TypeGame.leavePlayer.getOrdinal(), e);
         }
+    }
+
+    /**
+     * Handles errors
+     *
+     * @param errorMessage A String describing the nature of the error that occurred
+     */
+    protected void handleError(String errorMessage) {
+        log.error(errorMessage);
+        Error error = new Error();
+        error.setType(TypeMenue.error.getOrdinal());
+        error.setMessage(errorMessage);
+        String response = gson.toJson(error, Error.class);
+        sendMessage(response);
+    }
+
+    /**
+     * Handles errors
+     *
+     * @param errorMessage A String describing the nature of the error that occurred
+     * @param type An Integer representing the type of the error
+     */
+    protected void handleError(String errorMessage, int type) {
+        log.error(errorMessage);
+        Error error = new Error();
+        error.setType(TypeMenue.error.getOrdinal());
+        error.setType(type);
+        error.setMessage(errorMessage);
+        String response = gson.toJson(error, Error.class);
+        sendMessage(response);
+    }
+
+    /**
+     * Handles errors
+     *
+     * @param errorMessage A String describing the nature of the error that occurred
+     * @param e An instance of the Exception class representing the exception or error that occurred
+     */
+    private void handleError(String errorMessage, Exception e) {
+        log.error(errorMessage + ": " + e.getMessage());
+        Error error = new Error();
+        error.setType(TypeMenue.error.getOrdinal());
+        error.setMessage(errorMessage);
+        String response = gson.toJson(error, Error.class);
+        sendMessage(response);
+    }
+
+    /**
+     * Handles errors
+     *
+     * @param errorMessage A String describing the nature of the error that occurred
+     * @param type An Integer representing the type of the error
+     * @param e An instance of the Exception class representing the exception or error that occurred
+     */
+    private void handleError(String errorMessage, int type, Exception e) {
+        log.error(errorMessage + ": " + e.getMessage());
+        Error error = new Error();
+        error.setType(TypeMenue.error.getOrdinal());
+        error.setType(type);
+        error.setMessage(errorMessage);
+        String response = gson.toJson(error, Error.class);
+        sendMessage(response);
     }
 
     /**

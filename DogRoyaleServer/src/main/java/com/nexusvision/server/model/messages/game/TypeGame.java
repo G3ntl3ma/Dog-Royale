@@ -11,6 +11,8 @@ public enum TypeGame {
     joinObs,
     leaveObs,
     leavePlayer,
+    disconnect,
+
     boardState,
     move,
     moveValid,
@@ -20,7 +22,9 @@ public enum TypeGame {
     unfreeze,
     drawCards,
     updateDrawCards,
-    kick;
+    kick,
+    requestScores,
+    returnScores;
 
     /**
      * Maps the correct ordinal value by taking care of the shift

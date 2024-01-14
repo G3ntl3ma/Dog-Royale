@@ -9,12 +9,10 @@ import com.nexusvision.server.model.messages.game.LeavePlayer;
 public class LeavePlayerHandler extends MessageHandler<LeavePlayer> {
 
     @Override
-    protected String performHandle(LeavePlayer message, int clientID) throws HandlingException {
+    protected void performHandle(LeavePlayer message, int clientID) throws HandlingException {
         ServerController serverController = ServerController.getInstance();
         GameLobby lobby = serverController.getGameOfPlayer(clientID);
 
         lobby.removePlayer(clientID);
-
-        return null;
     }
 }

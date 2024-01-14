@@ -104,35 +104,6 @@ public class ServerController {
         return gameLobbys;
     }
 
-//    /**
-//     * Sends a message to all members of a game lobby
-//     *
-//     * @param lobby An Object representing the lobby to which the message should be sent
-//     * @param message A String representing the message to be broadcasted to all players in the lobby
-//     */
-//    public void sendToAllLobbyMembers(GameLobby lobby, String message) {
-//        ArrayList<Integer> clientList = new ArrayList<>(lobby.getPlayerOrderList());
-//        clientList.addAll(lobby.getObserverList());
-//        for (int clientId : clientList) {
-//            sendToClient(clientId, message);
-//        }
-//    }
-
-    /**
-     * Sends a message to the specified clientId
-     *
-     * @param clientId The clientId which will receive the message
-     * @param message The message to be sent
-     */
-    public void sendToClient(int clientId, String message) {
-        ClientHandler handler = handlerMap.get(clientId);
-        try {
-            handler.broadcast(message);
-        } catch (Exception e) {
-            log.error("Error while trying to send a message to " + clientId);
-        }
-    }
-
     /**
      * Notifies the client handler that he needs to wait for a move
      *
@@ -151,17 +122,13 @@ public class ServerController {
      * @param boardStateMessage The boardStateMessage that is being used to start the game for the clients
      * @return true if successful
      */
-    public boolean startGameForLobby(GameLobby lobby, String boardStateMessage) {
+    public boolean startGameForLobby(GameLobby lobby) {
         boolean isSuccessful = true;
         for (int clientId : lobby.getPlayerOrderList()) {
             ClientHandler handler = handlerMap.get(clientId);
             isSuccessful = isSuccessful && handler.startGame();
         }
-        if (!isSuccessful) {
-            return false;
-        }
-        lobby.sendToAllClients(boardStateMessage);
-        return true;
+        return isSuccessful;
     }
 
     /**

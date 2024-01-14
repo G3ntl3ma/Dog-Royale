@@ -25,14 +25,12 @@ public class JoinGameAsObserverHandler extends MessageHandler<JoinGameAsObserver
      * @return A JSON String representing the response to the client
      */
     @Override
-    protected String performHandle(JoinGameAsObserver message, int clientId) throws HandlingException {
+    protected void performHandle(JoinGameAsObserver message, int clientId) throws HandlingException {
 
         verifyClientID(clientId, message.getClientId());
         ServerController serverController = ServerController.getInstance();
 
         GameLobby lobby = serverController.getLobbyById(message.getGameId());
         lobby.addObserver(message.getClientId());
-
-        return null;
     }
 }

@@ -17,18 +17,19 @@ import java.util.ArrayList;
 //TODO move this code to where it belongs
 public class ResponseReceivedMoveHandler extends MessageHandler<Response> {
     @Override
-    protected String performHandle(Response message, int clientID) {
-        ServerController serverController = ServerController.getInstance();
-        GameLobby gameLobby = serverController.getGameOfPlayer(clientID);
-        Game game = gameLobby.getGame();
-        DrawCards drawCards = new DrawCards();
-        ArrayList<Integer> _droppedCards = new ArrayList<>();
-        for(Card card : game.getDiscardedCardList()) {
-            _droppedCards.add(card.ordinal());
-        }
-        drawCards.setType(TypeGame.drawCards.getOrdinal());
-        drawCards.setDroppedCards(_droppedCards);
-        drawCards.setDrawnCards(new ArrayList<>());
-        return gson.toJson(drawCards);
+    protected void performHandle(Response message, int clientID) {
+        // TODO: Implement
+//        ServerController serverController = ServerController.getInstance();
+//        GameLobby gameLobby = serverController.getGameOfPlayer(clientID);
+//        Game game = gameLobby.getGame();
+//        DrawCards drawCards = new DrawCards();
+//        ArrayList<Integer> _droppedCards = new ArrayList<>();
+//        for(Card card : game.getDiscardedCardList()) {
+//            _droppedCards.add(card.ordinal());
+//        }
+//        drawCards.setType(TypeGame.drawCards.getOrdinal());
+//        drawCards.setDroppedCards(_droppedCards);
+//        drawCards.setDrawnCards(new ArrayList<>());
+//        return gson.toJson(drawCards);
     }
 }

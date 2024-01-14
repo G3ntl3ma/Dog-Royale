@@ -2,6 +2,7 @@ package com.nexusvision.server.handler.message.game;
 
 import com.nexusvision.server.controller.GameLobby;
 import com.nexusvision.server.controller.ServerController;
+import com.nexusvision.server.handler.HandlingException;
 import com.nexusvision.server.handler.message.MessageHandler;
 import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.GameState;
@@ -25,21 +26,19 @@ public class MoveHandler extends MessageHandler<Move> {
      *
      * @param message  An Object representing a <code>Move</code> including details whether the move is a skip, the card used, the selected value ect.
      * @param clientId An Integer representing the id of the requesting client
-     * @return An errormessage if an error occurs or null
      */
     @Override
-    protected String performHandle(Move message, int clientId) {
+    protected void performHandle(Move message, int clientId) throws HandlingException {
         ServerController serverController = ServerController.getInstance();
         GameLobby gameLobby = serverController.getGameOfPlayer(clientId); //find game corresponding to clientId
 
-        //try move only if game running and not paused
+        //try the move only if game running and not paused
         if (gameLobby.getGameState() != GameState.IN_PROGRESS || gameLobby.isPaused()) {
-            return handleError("Game is either not in progress or paused", TypeGame.move.getOrdinal());
+            throw new HandlingException("Game is either not in progress or paused",
+                    TypeGame.move.getOrdinal());
         }
 
         gameLobby.tryMove(clientId, message.isSkip(), message.getCard().ordinal(), message.getSelectedValue(), message.getPieceId(),
                 message.isStarter(), message.getOpponentPieceId());
-
-        return null;
     }
 }

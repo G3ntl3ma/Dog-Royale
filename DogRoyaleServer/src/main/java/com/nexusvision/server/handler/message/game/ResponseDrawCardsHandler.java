@@ -12,25 +12,26 @@ import java.util.ArrayList;
 //3.5
 public class ResponseDrawCardsHandler extends MessageHandler<Response> {
     @Override
-    protected String performHandle(Response message, int clientID) {
+    protected void performHandle(Response message, int clientID) {
         //update draw card
-        ServerController serverController = ServerController.getInstance();
-        GameLobby gameLobby = serverController.getGameOfPlayer(clientID);
-        Game game = gameLobby.getGame();
-
-        ArrayList<UpdateDrawCards.HandCard> _handCards = new ArrayList<>();
-        ArrayList<Integer> clientIds = gameLobby.getPlayerOrderList();
-        for (int playerId = 0; playerId < clientIds.size(); playerId++) {
-            int clientId = clientIds.get(playerId);
-            int count = game.getPlayerList().get(playerId).getCardList().size();
-            UpdateDrawCards.HandCard _handCard = new UpdateDrawCards.HandCard();
-            _handCard.setClientId(clientId);
-            _handCard.setCount(count);
-            _handCards.add(_handCard);
-        }
-        UpdateDrawCards updateDrawCards = new UpdateDrawCards();
-        updateDrawCards.setHandCards(_handCards);
-        return gson.toJson(updateDrawCards);
+        // TODO: Implement
+//        ServerController serverController = ServerController.getInstance();
+//        GameLobby gameLobby = serverController.getGameOfPlayer(clientID);
+//        Game game = gameLobby.getGame();
+//
+//        ArrayList<UpdateDrawCards.HandCard> _handCards = new ArrayList<>();
+//        ArrayList<Integer> clientIds = gameLobby.getPlayerOrderList();
+//        for (int playerId = 0; playerId < clientIds.size(); playerId++) {
+//            int clientId = clientIds.get(playerId);
+//            int count = game.getPlayerList().get(playerId).getCardList().size();
+//            UpdateDrawCards.HandCard _handCard = new UpdateDrawCards.HandCard();
+//            _handCard.setClientId(clientId);
+//            _handCard.setCount(count);
+//            _handCards.add(_handCard);
+//        }
+//        UpdateDrawCards updateDrawCards = new UpdateDrawCards();
+//        updateDrawCards.setHandCards(_handCards);
+//        return gson.toJson(updateDrawCards);
 
     }
 }

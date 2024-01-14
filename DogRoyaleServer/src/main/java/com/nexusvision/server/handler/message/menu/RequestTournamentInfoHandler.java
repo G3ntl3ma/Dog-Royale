@@ -1,6 +1,7 @@
 package com.nexusvision.server.handler.message.menu;
 
 import com.nexusvision.server.handler.Handler;
+import com.nexusvision.server.handler.HandlingException;
 import com.nexusvision.server.handler.message.MessageHandler;
 import com.nexusvision.server.model.messages.menu.Error;
 import com.nexusvision.server.model.messages.menu.RequestTournamentInfo;
@@ -12,17 +13,16 @@ import lombok.Data;
 public class RequestTournamentInfoHandler extends MessageHandler<RequestTournamentInfo> {
 
     @Override
-    protected String performHandle(RequestTournamentInfo message, int clientID) {
+    protected void performHandle(RequestTournamentInfo message, int clientID) throws HandlingException {
 
         if (false) {
-            return handleError("TournamentInfo request failed",
+            throw new HandlingException("TournamentInfo request failed",
                     TypeMenue.requestTournamentInfo.getOrdinal());
         }
 
         ReturnTournamentInfo returnTournamentInfo = new ReturnTournamentInfo();
         returnTournamentInfo.setType(TypeMenue.requestTournamentInfo.getOrdinal());
         returnTournamentInfo.getTournamentInfo();
-
-        return gson.toJson(returnTournamentInfo);
+        // TODO: Implement
     }
 }

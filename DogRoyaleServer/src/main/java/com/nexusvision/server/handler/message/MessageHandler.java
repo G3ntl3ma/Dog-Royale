@@ -15,11 +15,10 @@ public abstract class MessageHandler<M extends AbstractMessage> extends Handler 
      *
      * @param message The deserialized json string that's getting processed
      * @param clientID The clientID specified for the request
-     * @return The response as a json string
      */
-    public final String handle(M message, int clientID) throws HandlingException {
+    public final void handle(M message, int clientID) throws HandlingException {
         try {
-            return performHandle(message, clientID);
+            performHandle(message, clientID);
         } catch (HandlingException e) {
             throw e;
         } catch (Exception e) {
@@ -33,9 +32,8 @@ public abstract class MessageHandler<M extends AbstractMessage> extends Handler 
      *
      * @param message The deserialized json string that's getting processed
      * @param clientID The clientID specified for the request
-     * @return The response as a json string
      */
-    protected abstract String performHandle(M message, int clientID) throws HandlingException;
+    protected abstract void performHandle(M message, int clientID) throws HandlingException;
 
     /**
      * Compares <code>expectedID</code> and <code>actualID</code> and throws a <code>HandlingException</code>
