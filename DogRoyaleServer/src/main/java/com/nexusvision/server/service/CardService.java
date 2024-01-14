@@ -183,7 +183,7 @@ public class CardService {
                 if (figure.isOnBench()
                         && (player.getStartField().isEmpty()
                         || player.getStartField().getFigure().getOwnerId() != figure.getOwnerId())) {
-                    moves.add(new Move(player, this.emulatedType));
+                    moves.add(new Move(player, this.usedType));
                 } else if (!figure.isOnBench()) {
                     addStepMove(moves, 13, figure, game, player, false);
                 }
@@ -192,7 +192,7 @@ public class CardService {
                 if (figure.isOnBench()
                         && (player.getStartField().isEmpty()
                         || player.getStartField().getFigure().getOwnerId() != figure.getOwnerId())) {
-                    moves.add(new Move(player, this.emulatedType));
+                    moves.add(new Move(player, this.usedType));
                 } else if (!figure.isOnBench()) {
                     addStepMove(moves, 1, figure, game, player, false);
                     addStepMove(moves, 11, figure, game, player, false);

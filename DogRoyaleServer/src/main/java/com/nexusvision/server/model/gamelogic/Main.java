@@ -53,7 +53,7 @@ public class Main {
         long start = System.currentTimeMillis();
         long funcTime = 0;
 
-        int gamesToPlay = 1;
+        int gamesToPlay = 100;
         int totalMoves = 0;
 
         int human = -1;
