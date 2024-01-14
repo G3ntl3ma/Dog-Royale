@@ -170,7 +170,7 @@ public final class Player {
 //            seenCardTypes[i] = false;
 //        }
         // System.out.println("this player color " + this.color);
-        for (Card card : cardList) {
+        for (Card card : this.cardList) {
             game.getCardService().setType(card);
             // System.out.println("card " + i + ": " + this.cards.get(i).typ);
             if (seenCardTypes[card.ordinal()]) continue;
@@ -185,7 +185,7 @@ public final class Player {
                 game.getCardService().getMoves(game, figure, moves, this);
             }
         }
-        System.out.println("size of mvoes array" + moves.size());
+        System.out.println("size of moves array" + moves.size());
         return moves;
     }
 

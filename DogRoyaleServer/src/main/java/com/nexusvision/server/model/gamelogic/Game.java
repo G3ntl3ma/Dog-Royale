@@ -222,7 +222,7 @@ public final class Game {
         for (int i = 0; i < mainFieldCount; i++) {
             // Field f = this.board.get(i);
             Field f = board[i];
-            System.out.print(f.getType() + "-");
+            System.out.print(f.getType().toString().charAt(0) + "-");
         }
         System.out.println();
         for (int i = 0; i < mainFieldCount; i++) {
@@ -302,8 +302,8 @@ public final class Game {
         }
         int seenStarts = 0;
         for (int i = 0; i < conf.length(); i++) {
-            int prev = ((i - 1) + fieldCount) % fieldCount;
-            int next = (i + 1) % fieldCount;
+            int prev = ((i - 1) + conf.length()) % conf.length();
+            int next = (i + 1) % conf.length();
             // System.out.println("iter"+i);
             this.board[i].setNext(this.board[next]);
             this.board[i].setPrev(this.board[prev]);

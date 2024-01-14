@@ -98,6 +98,14 @@ public final class Move {
      * @param game An object representing the game
      */
     public UndoMove execute(Game game) {
+        System.out.println("player " + this.player.getPlayerId() + " execute the following card: " + this.cardUsed);
+        boolean hascard = this.player.getCardList().contains(this.cardUsed);
+        System.out.println(hascard);
+        if(!hascard) {
+            System.out.println("player doesnt hold the card he is trying to play");
+            System.exit(42);
+        }
+
         Figure playerFigure = null; //TODO
         Figure opponentFigure = null;
         Card playerDrawnCard= null;

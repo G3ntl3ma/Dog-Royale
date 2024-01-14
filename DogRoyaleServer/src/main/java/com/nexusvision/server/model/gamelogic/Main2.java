@@ -2,11 +2,7 @@ package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.Penalty;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * This class represents the Main, setups the game, iterates through a specified number of games,
@@ -36,17 +32,11 @@ public class Main2 {
         }
         int handCardCount = 10;
 
-        long start = System.currentTimeMillis();
-        long funcTime = 0;
-
-        int gamesToPlay = 10000;
-        int totalMoves = 0;
-
-        int human = -1;
+        Stack<Integer> hashstack = new Stack<>();
+        Stack<UndoMove> movestack = new Stack<>();
         Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
         game.initDeck();
         game.distributeCards();
-        // game.printBoard();
         System.out.println("game hash " + game.hash());
 
         //TODO
@@ -55,14 +45,46 @@ public class Main2 {
         //undo all the moves and check hashes
         //print how many hashes match out of game count
         //if everything matches the undo move should be bugfree
-        
-        Move move = game.getRandomMove();
-        if (move != null) {
-            UndoMove undo = move.execute(game);
-            System.out.println("game hash " + game.hash());
-            undo.execute(game);
-            System.out.println("game hash " + game.hash());
+
+        //first move can be null
+        Integer winner = null;
+        ArrayList<Integer> winners = new ArrayList<>();
+        int round = 0;
+        while (winner == null) {
+            System.out.println("round " + round);
+            if (round != 0) {
+                game.reshuffle();
+                game.reInit();
+            }
+            game.distributeCards();
+            
+            while (!game.roundOver() && winner == null) {
+                Move move = game.getRandomMove();
+                if (move != null) {
+                    UndoMove undo = move.execute(game);
+                    hashstack.add(game.hash());
+                    movestack.add(undo);
+                }
+                if (game.checkGameOver()) {
+                    winners = game.getWinnerOrder();
+                    winner = winners.get(0);
+                }
+            }
         }
+
+        System.out.println("simulated the game");
+        
+        int movesmade = movestack.size();
+        int correct = 0;
+        while(movestack.size() > 0) {
+            UndoMove undo = movestack.pop();
+            int hash = hashstack.pop();
+            undo.execute(game);
+            if(hash == game.hash()) {
+                correct++;
+            }
+        }
+        System.out.println("movesmade " + movesmade + " correct " + correct);
     }
 
 }
