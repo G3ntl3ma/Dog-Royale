@@ -1,9 +1,9 @@
 ---
-name: <Voller Name>
-imt: <IMT Kürzel>
-gruppe: <Gruppen Nummer als Zahl>
-woche: <Semesterwoche als Zahl>
-gesamtarbeitszeit: <Arbeitszeit dieser Woche in Stunden>
+name: Luca Timo Eisen
+imt: leisen
+gruppe: 1
+woche: 12
+gesamtarbeitszeit: 5,00h
 ---
 
 <!--
@@ -25,28 +25,10 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 
 # Stundenzettel des Softwaretechnikpraktikums WS 2022/23
 
-## Projektmanagement
 
 ## Werkzeuge
+- JavaFx lernen
+  - 2024-01-02 2,00h
+  - 2024-01-04 2,30h
+  - 2024-01-05 0,30h
 
-## Dokumentation
-
-## Sprint Planning
-
-## Backlog
-
-## Präsentation
-
-## Öffentlichkeitsarbeit
-
-## Implementierung
-
-## Qualitätsmanagement
-
-## Implementierung
-
-## Dokumentation
-
-## Projektmanagement
-
-## Qualitätsmanagement
