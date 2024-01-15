@@ -8,12 +8,12 @@ import lombok.Data;
 
 @Data
 public class Node {
-    ArrayList<Node> children;
-    Node parent;
-    int visits;
-    int value;
-    Boolean haschildren;
-    Move move;
+    private ArrayList<Node> children;
+    private Node parent;
+    private int visits;
+    private int value;
+    private Boolean haschildren;
+    private Move move;
     
     public Node(Move move, Node parent) {
         this.move = move;
