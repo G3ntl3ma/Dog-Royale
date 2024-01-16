@@ -21,6 +21,7 @@ public class Figure  {
         this.isOnBench = true;
         this.isInHouse = false;
         this.ownerId = ownerId;
+        this.figureId = figureId;
     }
     
     public Figure(Field field, boolean isOnBench, boolean isInHouse, int ownerId) {
@@ -30,16 +31,15 @@ public class Figure  {
         this.ownerId = ownerId;
     }
 
-    // public int getFigureId(Game game) {
-        // for(int figureId = 0; figureId < game.getPlayerList().get(ownerId).getFigureList().size(); figureId++) {
-            // if(game.getPlayerList().get(ownerId).getFigureList().get(figureId) == this) return figureId;
-        // }
-        // return -1;
-    // }
-
-    // public Figure copy() {
-        // return new Figure(this.field, this.isOnBench, this.isInHouse, this.ownerId);
-    // }
+    public void print() {
+        System.out.println("figure print: id: " + this.figureId + " isOnBench " + this.isOnBench + " isInHouse " + this.isInHouse + " ownerId :" + this.ownerId);
+        if (this.field != null) {
+            System.out.println("field " + this.field.getFieldId());
+        }
+        else {
+            System.out.println("field: null");
+        }
+    }
 
     public int hash() {
         ArrayList<Integer> variables = new ArrayList<>();

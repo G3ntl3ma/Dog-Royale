@@ -13,20 +13,34 @@ import java.util.stream.Collectors;
 
 @Data
 public final class SaveState {
+    public final class FigureState {
+        private Field field;
+        private boolean isOnBench;
+        private boolean isInHouse;
+        
+        public FigureState(Figure figure) {
+            this.field = figure.getField();
+            this.isOnBench = figure.isOnBench();
+            this.isInHouse = figure.isInHouse();
+        }
+
+        public void loadField(Figure figure) {
+            figure.setField(this.field);
+            figure.setOnBench(this.isOnBench);
+            figure.setInHouse(this.isInHouse);
+        }
+    }
+    
     public final class FieldState {
         private int fieldId;
         private FieldType type;
         private Figure figure;
         
         public FieldState(Field field) {
-            //this.fieldId = field.getFieldId(); //doesnt change
-            //this.type = field.getType();
             this.figure = field.getFigure();
         }
 
         public void loadField(Field field) {
-            //field.setFieldId(this.fieldId); //
-            //field.setType(this.type);
             field.setFigure(this.figure);
         }
     }
@@ -37,6 +51,7 @@ public final class SaveState {
         private int figuresInHouse;
         private int lastMoveCountFigureMovedIntoHouse;
         private ArrayList<Card> cardList;
+        private ArrayList<FigureState> figureList;
 
         public PlayerState(Player player) {
             this.outThisRound = player.isOutThisRound();
@@ -44,6 +59,10 @@ public final class SaveState {
             this.figuresInHouse = player.getFiguresInHouse();
             this.lastMoveCountFigureMovedIntoHouse = player.getLastMoveCountFigureMovedIntoHouse();
             this.cardList = new ArrayList<>(player.getCardList());
+            this.figureList = new ArrayList<>();
+            for(Figure figure : player.getFigureList()) {
+                figureList.add(new FigureState(figure));
+            }
         }
 
         public void loadPlayer(Player player) {
@@ -52,6 +71,12 @@ public final class SaveState {
             player.setFiguresInHouse(this.figuresInHouse);
             player.setLastMoveCountFigureMovedIntoHouse(this.lastMoveCountFigureMovedIntoHouse);
             player.setCardList(new ArrayList<>(this.cardList));
+            assert player.getFigureList().size() == this.figureList.size() : "FigureLists are not same size";
+            for (int i = 0; i < player.getFigureList().size(); i++) {
+                FigureState figureState = this.figureList.get(i);
+                Figure figure = player.getFigureList().get(i);
+                figureState.loadField(figure);
+            }
         }
     }
     
@@ -69,7 +94,7 @@ public final class SaveState {
     private ArrayList<Card> pile;
 
     public SaveState(Game game) {
-        this.mainFieldCount = game.getMainFieldCount();
+        // this.mainFieldCount = game.getMainFieldCount();
         this.playerToStartColor = game.getPlayerToStartColor();
         this.playerToMoveId = game.getPlayerToMoveId();
         this.movesMade = game.getMovesMade();
@@ -93,7 +118,7 @@ public final class SaveState {
     }        
 
     public void loadState(Game game){
-        game.setMainFieldCount(this.mainFieldCount);
+        // game.setMainFieldCount(this.mainFieldCount);
         game.setPlayerToStartColor(this.playerToStartColor);
         game.setPlayerToMoveId(this.playerToMoveId);
         game.setMovesMade(this.movesMade);

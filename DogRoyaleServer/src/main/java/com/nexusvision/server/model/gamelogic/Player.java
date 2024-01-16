@@ -36,7 +36,7 @@ public final class Player {
         this.playerId = playerId;
         this.lastMoveCountFigureMovedIntoHouse = 0;
         for (int i = 0; i < figureCount; i++) {
-            figureList.add(new Figure(playerId,i));
+            figureList.add(new Figure(playerId, i));
         }
     }
 
@@ -103,6 +103,14 @@ public final class Player {
         System.out.print(" cards ");
         this.printCards();
         System.out.println("");
+        for(Figure figure : this.figureList) {
+            if (figure != null) {
+                figure.print();
+            }
+            else {
+                System.out.println("null field");
+            }
+        }
     }
 
     /**
@@ -172,7 +180,7 @@ public final class Player {
         // System.out.println("this player color " + this.color);
         for (Card card : this.cardList) {
             game.getCardService().setType(card);
-            // System.out.println("card " + i + ": " + this.cards.get(i).typ);
+            // System.out.println("card " + card);
             if (seenCardTypes[card.ordinal()]) continue;
             seenCardTypes[card.ordinal()] = true;
             for (Figure figure : figureList) {

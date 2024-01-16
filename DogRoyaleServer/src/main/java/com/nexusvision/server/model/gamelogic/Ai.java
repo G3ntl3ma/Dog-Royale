@@ -70,7 +70,7 @@ public class Ai {
                 iterchild.incVisits();
                 iterchild.addValue(value);
                 // visits.append(iterchild.visits);
-                iterchild = iterchild.parent;
+                iterchild = iterchild.getParent();
             }
 
             //undo, needs to be compared to loading the root nodes state in terms of speed
