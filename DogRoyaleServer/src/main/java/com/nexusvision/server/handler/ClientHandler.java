@@ -65,8 +65,6 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
         try {
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(clientSocket.getInputStream()));
-            PrintWriter writer = new PrintWriter(
-                    clientSocket.getOutputStream(), false);
 
             String request, response;
             while (true) {

@@ -2,6 +2,8 @@ package com.nexusvision.server.handler.message.menu;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.nexusvision.server.common.MessageListener;
+import com.nexusvision.server.controller.MessageBroker;
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.HandlerTest;
 import com.nexusvision.server.handler.HandlingException;
@@ -19,13 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author felixwr
  */
-public class ConnectToServerHandlerTest extends HandlerTest {
+class ConnectToServerHandlerTest extends HandlerTest {
 
     @Test
-    public void testHandle() {
+    void testHandle() {
         ConnectToServerHandler handler = new ConnectToServerHandler();
-        ServerController serverController = ServerController.getInstance();
-        int clientID = serverController.createNewClient();
 
         ConnectToServer request = new ConnectToServer();
         request.setType(TypeMenue.connectToServer.getOrdinal());
@@ -33,14 +33,15 @@ public class ConnectToServerHandlerTest extends HandlerTest {
         request.setIsObserver(true);
 
         try {
-            String response = handler.handle(request, clientID);
+            handler.handle(request, clientId);
+            String response = messageListener.getLastMessage();
 
             try {
                 ConnectedToServer connectedToServer = gson.fromJson(response, ConnectedToServer.class);
                 assertNotNull(connectedToServer.getType());
                 assertNotNull(connectedToServer.getClientId()); // In case type gets changed later
                 assertEquals(connectedToServer.getType(), TypeMenue.connectedToServer.getOrdinal());
-                assertEquals(connectedToServer.getClientId(), clientID);
+                assertEquals(connectedToServer.getClientId(), clientId);
             } catch (JsonSyntaxException e) {
                 fail("Response string has wrong format: " + e.getMessage());
             }

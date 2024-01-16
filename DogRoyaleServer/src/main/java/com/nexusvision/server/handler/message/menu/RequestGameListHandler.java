@@ -30,7 +30,7 @@ public class RequestGameListHandler extends MessageHandler<RequestGameList> {
      */
     @Override
     protected void performHandle(RequestGameList message, int clientId) throws HandlingException {
-        verifyClientID(clientId, message.getClientID());
+        verifyClientID(clientId, message.getClientId());
         ServerController serverController = ServerController.getInstance();
 
         ArrayList<GameLobby> startingLobbyList = serverController.getStateGames(message.getGameCountStarting(), GameState.STARTING);

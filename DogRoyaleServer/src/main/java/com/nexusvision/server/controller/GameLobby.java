@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  * @author dgehse, felixwr
  */
 @Log4j2
-@Data
+@Data // TODO: Nicht alles Data?
 public class GameLobby {
 
     protected static final Gson gson = new GsonBuilder()

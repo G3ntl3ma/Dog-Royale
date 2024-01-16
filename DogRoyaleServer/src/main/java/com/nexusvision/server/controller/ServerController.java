@@ -119,7 +119,6 @@ public class ServerController {
      * Starts the game for all clients of the specified lobby
      *
      * @param lobby The lobby whose clients should get their game started
-     * @param boardStateMessage The boardStateMessage that is being used to start the game for the clients
      * @return true if successful
      */
     public boolean startGameForLobby(GameLobby lobby) {
