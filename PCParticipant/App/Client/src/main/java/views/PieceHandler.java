@@ -15,7 +15,7 @@ public class PieceHandler {
         this.board = board;
         this.houseBoard = houseBoard;
         numTotalPieces = board.numPieces * board.numPlayers;
-        piecePositions = new int[numTotalPieces];
+        piecePositions = new int[numTotalPieces];  //Saves Pieces Positions - mtwardy commented
         pieceInHouse = new boolean[numTotalPieces];
         pieceInField = new boolean[numTotalPieces];
         whosePiece = new int[numTotalPieces];

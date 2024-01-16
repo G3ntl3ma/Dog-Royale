@@ -191,6 +191,9 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     private TranslateTransition currentTranslate = new TranslateTransition();
     private boolean cardSelected = false;
 
+    private Piece currentPiece = new Piece();
+
+
     TranslateTransition translate = new TranslateTransition();
     TranslateTransition translateBoard = new TranslateTransition();
 
@@ -210,6 +213,12 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         board = new Board(fieldSize, numPlayers, numPieces);
         houseBoard = new HouseBoard(numPlayers, numPieces);
         pieceHandler = new PieceHandler(board, houseBoard);
+        pieceHandler.whosePiece[0] = 1; /////////////////TEST DELETE
+        pieceHandler.whosePiece[1] = 2; /////////////////TEST DELETE
+        pieceHandler.piecePositions[0] = 2; ///////////////////////TEST DELETE
+        pieceHandler.piecePositions[1] = 4; ///////////////////////TEST DELETE
+        pieceHandler.movePiece(0, 0, true); /////////////TEST DELETE
+        pieceHandler.movePiece(2, 1, true); /////////////TEST DELETE
 
         houseBoard.calculateHouseCoordinates(pieceHandler); // recalculate, now that we have the pieceHandler
 
@@ -534,20 +543,20 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
                     return 13;
                 }
             }
-                if(ordinalValue == 9){
-                    if(selectedValue == 11){
-                        return 11;
-                    }
-                    else {
-                        return 1;
-                    }
+            if(ordinalValue == 9){
+                if(selectedValue == 11){
+                    return 11;
                 }
-                    if(ordinalValue == 10){
-                        return selectedValue;
-                    }
-                    if(ordinalValue == 11){
-                        return selectedValue;
-                    }
+                else {
+                    return 1;
+                }
+            }
+            if(ordinalValue == 10){
+                return selectedValue;
+            }
+            if(ordinalValue == 11){
+                return selectedValue;
+            }
             return cardValues[ordinalValue];
         } else {
             return 0;
@@ -782,7 +791,9 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     public void handleKick(KickDto kick) {
 
     }
-
+    /**
+     * Image Views for the hand cards
+     */
     public class Cards2 extends ImageView {
 
         private Card card;
@@ -802,12 +813,16 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
             this.fitWidthProperty().set(128);
             this.pickOnBoundsProperty().set(true);
             this.preserveRatioProperty().set(true);
+            try {
+                System.out.println(currentPiece.getCurrentPieceIndex());
+            }
+            catch (Exception e){
+                System.out.println("No current piece");
+            }
 
-
-
-
+            //if Card is clicked
             this.setOnMouseClicked(event -> {
-
+                //Animation for selecting a new card (and no animation still running)
                 if(currentTranslate.getStatus() != Animation.Status.RUNNING && currentCard != this) {
                     previousCard = currentCard;
                     previousTranslate.setNode(previousCard);

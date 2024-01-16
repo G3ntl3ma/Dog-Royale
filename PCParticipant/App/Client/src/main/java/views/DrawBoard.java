@@ -68,15 +68,13 @@ public class DrawBoard {
         paneBoard.getChildren().add(new Circle(pos[0] + (double) radiusField / 2, pos[1], 1, Color.BLACK));
         paneBoard.getChildren().add(new Circle(pos[0] - (double) radiusField / 2, pos[1], 1, Color.BLACK));
     }
-    private void drawPiece(Pane paneBoard, int[] pos, int playerIndex) {
+    private void drawPiece(Pane paneBoard, int[] pos, int playerIndex, int piece, boolean onBoard) {
         drawCircle(paneBoard, pos, Color.BLACK);
         //this.getClass().getResource("style.css").toExternalForm()
         String path = playerImagePath(playerIndex);
-        ImageView im = new ImageView(new Image(path));//PCObserverControllerGameplay.class.getResource(path).toString()
-        im.setPreserveRatio(true);
-        im.setFitWidth(3*radiusField);
-        im.setX(pos[0] - 1.5*radiusField);
-        im.setY(pos[1] - 2*radiusField);
+        Piece im = new Piece(new Image(path), piece, onBoard, playerIndex, paneBoard, radiusField, pos);//PCObserverControllerGameplay.class.getResource(path).toString()
+
+
         paneBoard.getChildren().add(im);
     }
     private void drawCard(Pane paneBoard, int[] pos) {
@@ -138,10 +136,10 @@ public class DrawBoard {
             int pos = pieceHandler.piecePositions[piece];
             if (pieceHandler.pieceInHouse[piece]) {
                 if (pos < board.numHouses) {
-                    drawPiece(paneBoard, board.houseCoordinates[player][pos], player);
+                    drawPiece(paneBoard, board.houseCoordinates[player][pos], player, pos, true); /////check if this is house on board or not
                 }
             } else if (pieceHandler.pieceInField[piece]) {
-                drawPiece(paneBoard, board.fieldCoordinates[pos], player);
+                drawPiece(paneBoard, board.fieldCoordinates[pos], player, piece, true);
             }
         }
     }
@@ -173,7 +171,7 @@ public class DrawBoard {
                 if (pieceHandler.pieceInHouse[piece]) {
                     int player = pieceHandler.whosePiece[piece];
                     int pos = pieceHandler.piecePositions[piece];
-                    drawPiece(paneBoard, houseBoard.houseCoordinates[player][pos], player);
+                    drawPiece(paneBoard, houseBoard.houseCoordinates[player][pos], player, piece, false);
                 }
             }
         }
