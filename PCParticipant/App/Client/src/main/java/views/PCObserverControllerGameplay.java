@@ -182,23 +182,25 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
     //mtwardy
     @FXML
+    private ScrollPane cardsScrollPane;
+    @FXML
     private HBox handCards;
 
-    private Cards2 currentCard;
-    private Cards2 previousCard;
+    public HBox getHandCards() {
+        return handCards;
+    }
 
-    private TranslateTransition previousTranslate = new TranslateTransition();
-    private TranslateTransition currentTranslate = new TranslateTransition();
-    private boolean cardSelected = false;
+    public Pane getPaneBoardView()
+    {
+        return paneBoardView;
+    }
+    public Piece currentPiece = new Piece();
+    private CardHandler cardHandler = new CardHandler(this);
 
-    private Piece currentPiece = new Piece();
+    public ImageView getDiscardPile() {
+        return ivDiscardPile;
+    }
 
-
-    TranslateTransition translate = new TranslateTransition();
-    TranslateTransition translateBoard = new TranslateTransition();
-
-    ScaleTransition scaleTransition = new ScaleTransition();
-    ScaleTransition scaleTransitionBoard = new ScaleTransition();
 ////////////////////////////////////////////////////////////////////////////
 
     public void setClient(Client client){
@@ -243,6 +245,10 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
         handleRotate(0);
 
+        //mtwardy
+        //bind width of handCards to basically window width
+        handCards.prefWidthProperty().bind(cardsScrollPane.widthProperty());
+        //
     }
 
     // functionality for "Haus anzeigen" button
@@ -361,7 +367,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         resetView();
     }
 
-    /** TO DELETE ////////////////////////////////////////////////////////////////////
+    /** TODO: DELETE ////////////////////////////////////////////////////////////////////
      * TestButton to draw a card on the handCards pane
      * @param event the event that triggered the method
      */
@@ -376,9 +382,9 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      */
     public void drawCard(Card card)
     {
-        Cards2 cards = new Cards2(card, 1);
+        cardHandler.addCard(card);
 
-        //handCards.getChildren().add(new ImageView(new Image("file:src/main/resources/card_default.png"))); //  why does this not work?
+        //handCards.getChildren().add(new ImageView(new Image("file:src/main/resources/card_default.png"))); //  why does this not work? //TODO: DELETE
         //        handCards.getChildren().add(new ImageView(new Image(getClass().getResource("/card_default.png").toString()))); //but this
     }
 
@@ -791,112 +797,5 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     public void handleKick(KickDto kick) {
 
     }
-    /**
-     * Image Views for the hand cards
-     */
-    public class Cards2 extends ImageView {
 
-        private Card card;
-
-        private Image image;
-        private int numberInHand;
-
-
-        public Cards2(Card card, int numberInHand) {
-            this.card = card;
-            this.image = new Image( getClass().getResource("/" + card.getCardPath() + ".png" ).toString());
-            this.numberInHand = numberInHand;
-
-
-            this.setImage(image);
-            this.fitHeightProperty().set(152);
-            this.fitWidthProperty().set(128);
-            this.pickOnBoundsProperty().set(true);
-            this.preserveRatioProperty().set(true);
-            try {
-                System.out.println(currentPiece.getCurrentPieceIndex());
-            }
-            catch (Exception e){
-                System.out.println("No current piece");
-            }
-
-            //if Card is clicked
-            this.setOnMouseClicked(event -> {
-                //Animation for selecting a new card (and no animation still running)
-                if(currentTranslate.getStatus() != Animation.Status.RUNNING && currentCard != this) {
-                    previousCard = currentCard;
-                    previousTranslate.setNode(previousCard);
-                    previousTranslate.setByY(42);
-                    previousTranslate.play();
-
-                    currentCard = this;
-                    currentTranslate.setNode(this);
-                    currentTranslate.setByY(-42);
-                    currentTranslate.play();
-                }
-                else if(currentCard == this){
-
-                    if (!cardSelected) {
-                        System.out.println(this.localToScene(0, 0));
-                        translate.setNode(this);
-                        translate.setByY(-this.localToScene(0, 0).getY());
-
-
-                        scaleTransition.setNode(this);
-                        scaleTransition.setByY(paneBoardView.getHeight() / 2 / this.getFitHeight());
-                        scaleTransition.setByX(paneBoardView.getHeight() / 2 / this.getFitHeight() * (this.getFitWidth() / this.getFitHeight()));
-
-                        Cards2 cards2 = new Cards2(currentCard.getCard(), 1);
-                        handCards.getChildren().remove(cards2);
-                        paneBoardView.getChildren().add(cards2);
-                        paneBoardView.getLocalToSceneTransform();
-                        cards2.setTranslateX(this.localToScene(0, 0).getX() - paneBoardView.localToScene(0, 0).getX());
-                        cards2.setTranslateY(this.localToScene(0, 0).getY() - paneBoardView.localToScene(0, 0).getY());
-
-
-
-                        translateBoard.setNode(cards2);
-                        translateBoard.setByY(-this.localToScene(0, 0).getY() + paneBoardView.localToScene(0, 0).getY() + this.getFitHeight() * (paneBoardView.getHeight() / 2 / this.getFitHeight() * (this.getFitWidth() / this.getFitHeight())));
-
-
-                        scaleTransitionBoard.setNode(cards2);
-                        scaleTransitionBoard.setByY(paneBoardView.getHeight() / 2 / this.getFitHeight());
-                        scaleTransitionBoard.setByX(paneBoardView.getHeight() / 2 / this.getFitHeight() * (this.getFitWidth() / this.getFitHeight()));
-                        scaleTransition.play();
-                        translate.play();
-                        scaleTransitionBoard.play();
-                        translateBoard.play();
-                        System.out.println(cards2.getFitHeight() + " " + paneBoardView.getHeight());
-                        cardSelected = true;
-                        currentCard = cards2;
-                    }
-                    else
-                    {
-                        translateBoard.setRate(-1);
-                        translateBoard.play();
-                        scaleTransitionBoard.setRate(-1);
-                        scaleTransitionBoard.play();
-                        translate.setRate(-1);
-                        translate.play();
-                        scaleTransition.setRate(-1);
-                        scaleTransition.play();
-                        cardSelected = false;
-                    }
-                }
-            });
-            handCards.getChildren().add(this);
-        }
-
-
-
-        public Card getCard() { return this.card;}
-
-        public int getNumberInHand() {
-            return this.numberInHand;
-        }
-
-        public void setNumberInHand(int numberInHand) {
-            this.numberInHand = numberInHand;
-        }
-    }
 }

@@ -9,7 +9,7 @@ import javafx.scene.layout.Pane;
  * Class for the pieces
  * author: mtwardy
  */
-public class Piece extends ImageView {
+public class Piece extends ImageView {      //TODO: make only selectable for the current player / ur own Client ID
     int pieceIndex;
     boolean onboard;
     int playerIndex;

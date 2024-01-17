@@ -68,12 +68,12 @@ public class DrawBoard {
         paneBoard.getChildren().add(new Circle(pos[0] + (double) radiusField / 2, pos[1], 1, Color.BLACK));
         paneBoard.getChildren().add(new Circle(pos[0] - (double) radiusField / 2, pos[1], 1, Color.BLACK));
     }
+
+    //mtwardy method modified -added the Piece class and parameters and adjusted to changes
     private void drawPiece(Pane paneBoard, int[] pos, int playerIndex, int piece, boolean onBoard) {
         drawCircle(paneBoard, pos, Color.BLACK);
-        //this.getClass().getResource("style.css").toExternalForm()
         String path = playerImagePath(playerIndex);
         Piece im = new Piece(new Image(path), piece, onBoard, playerIndex, paneBoard, radiusField, pos);//PCObserverControllerGameplay.class.getResource(path).toString()
-
 
         paneBoard.getChildren().add(im);
     }
