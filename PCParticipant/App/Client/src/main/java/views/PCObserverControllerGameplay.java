@@ -185,6 +185,8 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     private ScrollPane cardsScrollPane;
     @FXML
     private HBox handCards;
+    @FXML
+    private StackPane discardStackPane;
 
     public HBox getHandCards() {
         return handCards;
@@ -194,12 +196,19 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     {
         return paneBoardView;
     }
+
     public Piece currentPiece = new Piece();
     private CardHandler cardHandler = new CardHandler(this);
 
     public ImageView getDiscardPile() {
         return ivDiscardPile;
     }
+
+    public StackPane getDiscardPane()
+    {
+        return discardStackPane;
+    }
+
 
 ////////////////////////////////////////////////////////////////////////////
 

@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPaneWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.PCObserverControllerGameplay">
+<BorderPane fx:id="borderPaneWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.PCObserverControllerGameplay">
    <left>
       <GridPane fx:id="playerShowcase" prefHeight="425.0" prefWidth="211.0" BorderPane.alignment="CENTER">
          <columnConstraints>
@@ -292,7 +304,8 @@
             <ProgressBar fx:id="pbTime" maxWidth="1.7976931348623157E308" prefHeight="22.0" prefWidth="880.0" progress="0.45" style="-fx-accent: #2ac0f2;">
                <VBox.margin>
                   <Insets left="8.0" right="8.0" />
-               </VBox.margin></ProgressBar>
+               </VBox.margin>
+            </ProgressBar>
          </children>
       </VBox>
    </bottom>
@@ -341,14 +354,18 @@
                   <Label fx:id="lbLiveTimer" text="00:00" />
                </children>
             </HBox>
-            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+            <VBox alignment="TOP_CENTER" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="103.0" prefWidth="184.0" GridPane.columnIndex="1">
                <children>
                   <Label text="Ablagestapel:" />
-                  <ImageView fx:id="ivDiscardPile" fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../card_default.png" />
-                     </image>
-                  </ImageView>
+                  <StackPane fx:id="discardStackPane" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="210.0" prefWidth="184.0">
+                     <children>
+                        <ImageView fx:id="ivDiscardPile" fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+                           <image>
+                              <Image url="@../card_default.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </StackPane>
                </children>
             </VBox>
          </children>
