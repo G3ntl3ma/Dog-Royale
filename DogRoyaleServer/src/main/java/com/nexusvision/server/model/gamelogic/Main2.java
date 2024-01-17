@@ -24,7 +24,7 @@ public class Main2 {
         //s = start field, n = normal field, k = draw (k)carn
         String conf = "snnnnknnnnsnnnnknnnnsnnnnknnnn";
         int figureCount = 4;
-        int maxMoves = 10000000;
+        int maxMoves = 100000;
 
         int players = 0;
         for (int i = 0; i < conf.length(); i++) {
@@ -37,9 +37,9 @@ public class Main2 {
         game.distributeCards();
         ArrayList<Integer> oldhash = game.hash();
         SaveState savestate = new SaveState(game);
-        Ai ai = new Ai(100);
+        Ai ai = new Ai(1000);
         int[] winCounter = new int[players];                       
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             System.out.println("Main2 simulate game " + i);
             game.printBoard();
             //first move can be null
@@ -60,9 +60,11 @@ public class Main2 {
                     System.out.println("moves size " + moves.size());
                     if (!moves.isEmpty()) {
                         // System.out.println("moves not empty");
-                        // Move move = moves.get(0);
-                        Move move = ai.getMove(game);
-                        System.out.println("ai generated move");
+                        Move move = moves.get(0);
+                        if(curPlayer.getPlayerId() == 0) {
+                            System.out.println("ai generated move");
+                            move = ai.getMove(game);
+                        }
                         move.printMove();
                         UndoMove undo = move.execute(game);
                     } else {
@@ -98,6 +100,5 @@ public class Main2 {
         for (int i = 0; i < players; i++) {
             System.out.println("player " + i + ": " + winCounter[i] + " wins");
         }
-        
     }
 }
