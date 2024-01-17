@@ -32,12 +32,12 @@ public class Figure  {
     }
 
     public void print() {
-        System.out.println("figure print: id: " + this.figureId + " isOnBench " + this.isOnBench + " isInHouse " + this.isInHouse + " ownerId :" + this.ownerId);
+        System.out.print("figure print: id: " + this.figureId + " isOnBench " + this.isOnBench + " isInHouse " + this.isInHouse + " ownerId :" + this.ownerId);
         if (this.field != null) {
-            System.out.println("field " + this.field.getFieldId());
+            System.out.println(" field " + this.field.getFieldId());
         }
         else {
-            System.out.println("field: null");
+            System.out.println(" field: null");
         }
     }
 

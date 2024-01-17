@@ -160,6 +160,7 @@ public final class Game {
     public void printBoard() {
         System.out.println("BOARD=================");
         System.out.println("player to move " + playerToMoveId);
+        System.out.println("players remaining " + playersRemaining);
         for (Player p : playerList) {
             p.printInfo();
             p.printHouse();
@@ -298,14 +299,17 @@ public final class Game {
         firstMoveOfRound = false;
         int count = 0;
         if (playersRemaining == 0) return false;
+        System.out.println("playersremaining " + playersRemaining);
         //get next player who is not out yet if there is anyone
         do {
             playerToMoveId = (playerToMoveId + 1) % playerList.size();
             if (count >= playerList.size()) {
-                return false;
+                System.out.println("BUG: UNREACHABLE");
+                System.exit(423);
+                return false; //unreachable
             }
             count++;
-        } while (getCurrentPlayer().isExcluded() || getCurrentPlayer().isOutThisRound());
+        } while (getCurrentPlayer().isExcluded() || getCurrentPlayer().isOutThisRound()); //TODO check if excluded is not buggy
 
         return true;
     }
@@ -380,12 +384,21 @@ public final class Game {
     public boolean checkGameOver() {
         for (Player player : playerList) {
             if (player.getFiguresInHouse() == figuresPerPlayer) {
+                System.out.println("game over: full house");
                 return true;
             }
         }
 
-        if (movesMade >= maximumTotalMoves) return true;
-        return !this.nextPlayer();
+        if (movesMade >= maximumTotalMoves) {
+            System.out.println("game over: maximumtotalmoves reached");
+            return true;
+        }
+        return false;
+        // boolean noNext = !this.nextPlayer();
+        // if (noNext) {
+        //     System.out.println("game over: no next player");
+        // }
+        // return noNext;
     }
 
     // Eventuell nicht nötig, da man sowieso erst einmal checken muss ob das Spiel zuende ist bevor man
@@ -501,6 +514,7 @@ public final class Game {
      */
     public void excludeFromRound(Player player) { //return cards??
         playersRemaining--;
+        player.setOutThisRound(true);
         discardHandCards(); //of current player
         // this.nextPlayer();
     }
@@ -610,7 +624,7 @@ public final class Game {
 
     public void makeMove(Move move) {
         if (move == null) {
-            getCurrentPlayer().setOutThisRound();
+            excludeFromRound(getCurrentPlayer());
             return;
         }
         move.execute(this);

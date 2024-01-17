@@ -37,11 +37,10 @@ public class Main2 {
         game.distributeCards();
         ArrayList<Integer> oldhash = game.hash();
         SaveState savestate = new SaveState(game);
-        Ai ai = new Ai(1000);
+        Ai ai = new Ai(20000);
         int[] winCounter = new int[players];                       
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1; i++) {
             System.out.println("Main2 simulate game " + i);
-            game.printBoard();
             //first move can be null
             Integer winner = null;
             ArrayList<Integer> winners;
@@ -58,28 +57,26 @@ public class Main2 {
                     System.out.println("gen moves for player " + curPlayer.getPlayerId());
                     ArrayList<Move> moves = curPlayer.generateMoves(game); //
                     System.out.println("moves size " + moves.size());
-                    if (!moves.isEmpty()) {
-                        // System.out.println("moves not empty");
-                        Move move = moves.get(0);
-                        if(curPlayer.getPlayerId() == 0) {
-                            System.out.println("ai generated move");
-                            move = ai.getMove(game);
-                        }
-                        move.printMove();
-                        UndoMove undo = move.execute(game);
-                    } else {
-                        System.out.println("has no moves so out this round");
-                        curPlayer.setOutThisRound();
+                    Move move = game.getRandomMove();
+                    if(curPlayer.getPlayerId() > 10) {
+                        System.out.println("ai generated move");
+                        move = ai.getMove(game);
                     }
-                    if (game.checkGameOver()) {
+                    if (move != null) {
+                        move.printMove();
+                    }
+                    game.makeMove(move);
+                    game.printBoard();
+                    if (game.checkGameOver()) { //problem 
                         winners = game.getWinnerOrder();
                         winner = winners.get(0);
                     }
                 }
+
                 round++;
             }//end of game
-            // System.out.println("simulated the game");
             winCounter[winner]++;
+            System.out.println("simulated the game, winner: " + winner);
             savestate.loadState(game);
             ArrayList<Integer> newhash = game.hash();
             boolean same = true;

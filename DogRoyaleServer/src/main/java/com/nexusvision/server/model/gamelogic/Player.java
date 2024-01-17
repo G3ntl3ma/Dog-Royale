@@ -99,7 +99,7 @@ public final class Player {
      * Prints information player, figures in bank, figures in house and the cards
      */
     public void printInfo() {
-        System.out.print("player " + this.playerId + " figBank " + this.figuresInBank + " figs in house " + this.figuresInHouse);
+        System.out.print("player " + this.playerId + " figBank " + this.figuresInBank + " figs in house " + this.figuresInHouse + " out this round " + this.outThisRound);
         System.out.print(" cards ");
         this.printCards();
         System.out.println("");
