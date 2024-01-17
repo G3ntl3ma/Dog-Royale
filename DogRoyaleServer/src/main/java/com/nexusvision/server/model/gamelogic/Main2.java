@@ -38,8 +38,8 @@ public class Main2 {
         ArrayList<Integer> oldhash = game.hash();
         SaveState savestate = new SaveState(game);
         Ai ai = new Ai(100);
-                       
-        for (int i = 0; i < 1; i++) {
+        int[] winCounter = new int[players];                       
+        for (int i = 0; i < 1000; i++) {
             System.out.println("Main2 simulate game " + i);
             game.printBoard();
             //first move can be null
@@ -77,7 +77,7 @@ public class Main2 {
                 round++;
             }//end of game
             // System.out.println("simulated the game");
-
+            winCounter[winner]++;
             savestate.loadState(game);
             ArrayList<Integer> newhash = game.hash();
             boolean same = true;
@@ -94,6 +94,9 @@ public class Main2 {
                 System.out.println("hash same: game hash " + newhash + " old hash " + oldhash);                
             }
             
+        }
+        for (int i = 0; i < players; i++) {
+            System.out.println("player " + i + ": " + winCounter[i] + " wins");
         }
         
     }

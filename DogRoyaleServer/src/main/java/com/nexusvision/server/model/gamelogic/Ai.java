@@ -29,13 +29,6 @@ public class Ai {
             Integer winner = null;
             ArrayList<Integer> winnerOrder = null;
             while (true) {
-                if (game.checkGameOver()) {
-                    winnerOrder = game.getWinnerOrder();
-                    int rank = winnerOrder.indexOf(currentPlayer.getPlayerId());
-                    value = -rank;
-                    winner = winnerOrder.get(0);
-                    break;
-                }
                 bestchild = null;
                 float bestutc = -Float.MAX_VALUE;
                 currentnode.expand(game);
@@ -58,9 +51,21 @@ public class Ai {
                 //TODO
                 //if bestchild is null the game is not over but currentplayer is out
                 //nodes can have children where move is null (representing the player is out)
+                //execute zero move function for main
+                //checkgameover can skip to a player who has 0 valid moves
+                //just dont do anything in execute in this case
                 Move move = bestchild.getMove();
-                move.execute(game);
+                // move.execute(game);
+                game.makeMove(move);
                 if (currentnode.getVisits() == 0) {
+                    break;
+                }
+                
+                if (game.checkGameOver()) {
+                    winnerOrder = game.getWinnerOrder();
+                    int rank = winnerOrder.indexOf(currentPlayer.getPlayerId());
+                    value = -rank;
+                    winner = winnerOrder.get(0);
                     break;
                 }
             }
@@ -75,12 +80,13 @@ public class Ai {
                     Player curPlayer = game.getCurrentPlayer();
                     Move move = game.getRandomMove();
                     // System.out.println("sand");
-                    if (move != null) {
-                        // move.printMove();
-                        move.execute(game);
-                    } else {
-                        curPlayer.setOutThisRound();
-                    }
+                    game.makeMove(move);
+                    // if (move != null) {
+                    //     // move.printMove();
+                    //     move.execute(game);
+                    // } else {
+                    //     curPlayer.setOutThisRound();
+                    // }
                     // System.out.println("whicht");
                                         
                     if (game.checkGameOver()) {
@@ -104,7 +110,7 @@ public class Ai {
                 iterchild = iterchild.getParent();
             }
 
-            System.out.println("ai load the state");
+            // System.out.println("ai load the state");
             savestate.loadState(game);
         }
         

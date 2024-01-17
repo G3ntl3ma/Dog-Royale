@@ -608,5 +608,13 @@ public final class Game {
         return variables;
     }
 
+    public void makeMove(Move move) {
+        if (move == null) {
+            getCurrentPlayer().setOutThisRound();
+            return;
+        }
+        move.execute(this);
+    }
+
 }
 

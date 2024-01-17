@@ -24,6 +24,7 @@ public class Node {
     }
 
     public void expand(Game game) {
+        //assert game not over
         if (this.haschildren == true) {
             // System.out.println("already expanded");
             return;
@@ -33,6 +34,9 @@ public class Node {
         this.children = new ArrayList<>();
         for (Move move : moves) {
             this.children.add(new Node(move, this));
+        }
+        if (moves.size() == 0) {//if there are no legal moves
+            this.children.add(new Node(null, this));
         }
         // System.out.println("expanded with " + this.children.size());
     }
