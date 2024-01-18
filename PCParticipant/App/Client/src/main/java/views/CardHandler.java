@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.transform.Translate;
 
 public class CardHandler {
 
@@ -112,8 +113,10 @@ public class CardHandler {
 
             //creating new Card that will be layed on the board
             HandCard cards2 = new HandCard(currentCard.getCard(), 1);
+            cards2.setFitWidth(64);
+            cards2.setFitHeight(84);
             cards2.setOnMouseClicked(event1 -> {
-            }); //removing the event so it can't be clicked again
+            }); //removed the click-event so it can't be clicked again
             pcOCG.getPaneBoardView().getChildren().add(cards2); //adding the card to the board
             pcOCG.getPaneBoardView().getLocalToSceneTransform();
             cards2.setTranslateX(this.localToScene(0, 0).getX() - pcOCG.getPaneBoardView().localToScene(0, 0).getX());
@@ -140,34 +143,55 @@ public class CardHandler {
             toDiscardPileS.setNode(cards2);
             toDiscardPileS.setByX(-pcOCG.getPaneBoardView().getHeight() / 2 / this.getFitHeight());
             toDiscardPileS.setByY(-pcOCG.getPaneBoardView().getHeight() / 2 / this.getFitHeight());
+
             toDiscardPileS.setOnFinished(event -> {
+                HandCard discardCard = new HandCard(currentCard.getCard(), 1);
+                pcOCG.getDiscardPane().getChildren().add(discardCard);
+                discardCard.setFitHeight(cards2.getFitHeight());
+                discardCard.setFitWidth(cards2.getFitWidth());
+                discardCard.setScaleX(toDiscardPileS.getByX() * (1-scaleTransitionBoard.getByX()));
+                discardCard.setScaleY(toDiscardPileS.getByY() * (1-scaleTransitionBoard.getByY()));
+                discardCard.setPreserveRatio(true);
+                discardCard.setTranslateX(cards2.localToScene(0,0).getX() - pcOCG.getDiscardPane().localToScene(0, 0).getX());
+                discardCard.setTranslateY(cards2.localToScene(0,0).getY() - pcOCG.getDiscardPile().localToScene(0, 0).getY());
+
+                System.out.println("balbla" + cards2.getScaleY());
+
+
                 ScaleTransition andAnotherOne = new ScaleTransition();
                 andAnotherOne.setNode(cards2);
                 andAnotherOne.setByX(-1 + pcOCG.getDiscardPile().getFitHeight() / cards2.getFitHeight());
                 andAnotherOne.setByY(-1 + pcOCG.getDiscardPile().getFitHeight() / cards2.getFitHeight());
                 System.out.println(pcOCG.getDiscardPile().getFitWidth() / cards2.getFitWidth());
-                //andAnotherOne.play();
+
+                //TranslateTransition andAnotherTranslate = new TranslateTransition();
+                //andAnotherTranslate.setNode(cards2);
+                //andAnotherTranslate.setByX(andAnotherOne.getByX() * cards2.getFitWidth() / 2);
+                //andAnotherTranslate.setByY(andAnotherOne.getByY() * cards2.getFitHeight() / 2);
+                //andAnotherTranslate.play();
 
                 //the cloned Card that is played that will be layed on the discard pile
-                HandCard discardCard = new HandCard(currentCard.getCard(), 1);
-                //pcOCG.getDiscardPane().getChildren().add(discardCard);
-                discardCard.setFitHeight(cards2.getFitHeight());
-                discardCard.setFitWidth(cards2.getFitWidth());
-                discardCard.setScaleX(cards2.getScaleX());
-                discardCard.setScaleY(cards2.getScaleY());
-                discardCard.setPreserveRatio(true);
-                discardCard.setX(cards2.localToScene(0,0).getX() - pcOCG.getDiscardPile().localToScene(0,0).getX());
-                discardCard.setY(cards2.localToScene(0,0).getY() - pcOCG.getDiscardPile().localToScene(0,0).getY());
 
+                discardCard.setPreserveRatio(true);
+                discardCard.setTranslateX(cards2.localToScene(0,0).getX() - pcOCG.getDiscardPane().localToScene(0, 0).getX());
+                discardCard.setTranslateY(cards2.localToScene(0,0).getY() - pcOCG.getDiscardPile().localToScene(0, 0).getY());
+                System.out.println(cards2.localToScene(0,0).getY() - pcOCG.getDiscardPile().localToScene(0,0).getY());
                 TranslateTransition toDiscardPile2 = new TranslateTransition();
                 toDiscardPile2.setNode(discardCard);
-                toDiscardPile2.setToX(pcOCG.getDiscardPile().getX());
-                toDiscardPile2.setToY(pcOCG.getDiscardPile().getY());
+                double newY = cards2.localToScene(0,0).getY() - discardCard.getY()  ;
+                //toDiscardPile2.setToX(-discardCard.getFitWidth() * andAnotherOne.getByX()/2);
+                toDiscardPile2.setToY(discardCard.getFitHeight() * andAnotherOne.getByY()/2);
+                System.out.println("moving by" + (pcOCG.getDiscardPile().localToParent(0,0).getY() - discardCard.localToParent(0,0).getY()));
+                System.out.println(pcOCG.getDiscardPile().localToScene(0, 0).getY());
+                System.out.println(newY);
 
+
+                //andAnotherOne.play();
                 ScaleTransition toDiscardPileS2 = new ScaleTransition();
                 toDiscardPileS2.setNode(discardCard);
                 toDiscardPileS2.setByX(andAnotherOne.getByX());
                 toDiscardPileS2.setByY(andAnotherOne.getByY());
+
 
                 //toDiscardPile2.play();
                 //toDiscardPileS2.play();
