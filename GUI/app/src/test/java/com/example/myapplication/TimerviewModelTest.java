@@ -30,7 +30,7 @@ public class TimerviewModelTest {
 
     @Test
     public void testSetTime() {
-        // Given
+        // give a Entity
         String testTime = "12:43";
 
         // When
