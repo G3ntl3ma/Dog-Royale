@@ -102,7 +102,11 @@ public final class Move {
         boolean hascard = this.player.getCardList().contains(this.cardUsed);
         // System.out.println(hascard);
         if(!hascard) {
-            System.out.println("player doesnt hold the card he is trying to play");
+            System.out.println("player " + this.player + " doesnt hold the card he is trying to play " + this.cardUsed);
+            for(Card card : player.getCardList()) {
+                System.out.print(card + " ");
+            }
+            System.out.println("");
             System.exit(42);
         }
 

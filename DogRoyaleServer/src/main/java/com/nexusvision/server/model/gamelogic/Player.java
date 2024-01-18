@@ -171,6 +171,10 @@ public final class Player {
      * @return An ArrayList storing the represented moves
      */
     public ArrayList<Move> generateMoves(Game game) {
+        System.out.print("generating moves for a player "+ this.playerId + " with the follwing handcards");        
+        for(Card card : this.getCardList()) {
+            System.out.print(card + " ");
+        }
         ArrayList<Move> moves = new ArrayList<>();
         boolean[] seenCardTypes = new boolean[Card.values().length];
         boolean seenBenchFigure = false;

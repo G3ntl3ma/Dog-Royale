@@ -221,7 +221,7 @@ public class CardService {
      * Prints the type of the card
      */
     public void printTyp() {
-        System.out.println(this.usedType);
+        System.out.println("usedType " + this.usedType + "emulatedType " + this.emulatedType);
     }
 
     /**
@@ -250,56 +250,5 @@ public class CardService {
         }
 
     }
-
-    //slower and buggy
-    // private void addStepMovenew(ArrayList<Move> moves, int argsteps, Figure figure, Game game, Player player, boolean range) {
-    // if(range) {
-    // for (int i = 1; i <= argsteps; i++) {
-    // if(!addStepMovehelp(moves, i, figure, game, player)) return;
-    // }
-    // }
-    // else {
-    // addStepMovehelp(moves, argsteps, figure, game, player);
-    // }
-    // }
-    //
-    //for all start fields between from and to check if occupied
-    // private boolean addStepMovehelp(ArrayList<Move> moves, int argsteps, Figure figure, Game game, Player player) {
-    // int toinx = (argsteps + figure.field.val) % game.mainFieldCount;
-    // int origtoinx = toinx;
-    // int frominx = figure.field.val;
-    // boolean intohouse = false;
-
-    // only check if figure is not in house because not possible to move out anyway (?)
-    // if( figure.field.type!= 'h') {
-    // check if path is blocked by startfigure
-    // for (int i = 0; i < game.players.size(); i++) {
-    // if startField is between from and to
-    // if( (game.startinxs[i] <= origtoinx && game.startinxs[i] > frominx)
-    // || (game.startinxs[i] <= frominx && game.startinxs[i] > origtoinx )) {
-    // if(game.occupied[i]) return false;
-    // if actually moves into own house
-    // if(game.startinxs[i] > frominx && game.startinxs[i] < toinx) {
-    // toinx += player.houseinx - player.startField.val;
-    // intohouse = true;
-    // }
-    // }
-
-    // }
-    // }
-    // if number too big for house
-    // if (player.houseinx + game.figureCount > toinx) {
-    // return false;
-    // }
-
-    // if path is blocked by figure in house
-    // if (intohouse) {
-    // if(toinx >= player.houseoccinx) return false;
-    // }
-
-    // moves.add(new Move(player ,game.board[frominx] , game.board[toinx], false, this));
-    // return true;
-    // }
-
 
 }

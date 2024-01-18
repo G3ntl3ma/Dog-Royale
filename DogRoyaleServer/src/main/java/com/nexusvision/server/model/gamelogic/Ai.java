@@ -18,9 +18,10 @@ public class Ai {
         Player currentPlayer = game.getCurrentPlayer();
         SaveState savestate = new SaveState(game);
         System.out.println("getting move from ai");
+        ArrayList<Integer> oldhash = game.hash();
         
         for (int i = 0; i < this.numberOfSimulations; ++i) {
-            // System.out.println("ai simulation " + i);
+            System.out.println("ai simulation " + i);
             Node currentnode = root;
             // System.out.println("visits root node: " + currentnode.getVisits());
             Node bestchild = currentnode;
@@ -34,7 +35,7 @@ public class Ai {
                 currentnode.expand(game);
                 float utc = bestutc;
                 ArrayList<Node> children = currentnode.getChildren();
-                // System.out.println("num of children " + children.size());
+                System.out.println("num of children " + children.size());
                 for (Node child : children) {
                     utc = child.getutc();
                     // System.out.println("utc " + utc + "bestutc " + bestutc);
@@ -46,21 +47,13 @@ public class Ai {
                         }
                     }
                 }
-
                 currentnode = bestchild;
-                //TODO
-                //if bestchild is null the game is not over but currentplayer is out
-                //nodes can have children where move is null (representing the player is out)
-                //execute zero move function for main
-                //checkgameover can skip to a player who has 0 valid moves
-                //just dont do anything in execute in this case
                 Move move = bestchild.getMove();
-                // move.execute(game);
                 game.makeMove(move);
+                game.nextPlayer();
                 if (currentnode.getVisits() == 0) {
                     break;
                 }
-                
                 if (game.checkGameOver()) {
                     winnerOrder = game.getWinnerOrder();
                     int rank = winnerOrder.indexOf(currentPlayer.getPlayerId());
@@ -68,33 +61,31 @@ public class Ai {
                     winner = winnerOrder.get(0);
                     break;
                 }
+                if (game.roundOver()) {
+                    game.reshuffle();
+                    game.reInit();
+                    game.distributeCards();
+                }
             }
-            // System.out.println("simulate the game");
+            System.out.println("simulate the game");
             //simulate the game
             while (winner == null) {
-                game.reshuffle();
-                game.reInit();
-                game.distributeCards();
-                
-                while (!game.roundOver() && winner == null) {
-                    Player curPlayer = game.getCurrentPlayer();
-                    Move move = game.getRandomMove();
-                    // System.out.println("sand");
-                    game.makeMove(move);
-                    // if (move != null) {
-                    //     // move.printMove();
-                    //     move.execute(game);
-                    // } else {
-                    //     curPlayer.setOutThisRound();
-                    // }
-                    // System.out.println("whicht");
-                                        
-                    if (game.checkGameOver()) {
-                        winnerOrder = game.getWinnerOrder();
-                        winner = winnerOrder.get(0);
-                    }
+                game.printBoard();
+                Move move = game.getRandomMove();
+                if(move != null) {
+                    move.printMove();
                 }
-                // round++;
+                game.makeMove(move);
+                if (game.checkGameOver()) {
+                    winnerOrder = game.getWinnerOrder();
+                    winner = winnerOrder.get(0);
+                }
+                game.nextPlayer();
+                if (game.roundOver()) {    
+                    game.reshuffle();
+                    game.reInit();
+                    game.distributeCards();
+                }
             }//end of game
             
             int rank = winnerOrder.indexOf(currentPlayer.getPlayerId());
@@ -112,9 +103,19 @@ public class Ai {
 
             // System.out.println("ai load the state");
             savestate.loadState(game);
+            ArrayList<Integer> newhash = game.hash();
+            for(int k = 0; k < newhash.size(); k++) {
+                if ((int)newhash.get(k) != (int) oldhash.get(k)) {
+                    System.out.println("hash not same in ai");
+                    System.exit(234);
+                }
+            }
+            
+            // game.shuffleUnknown(currentPlayer);
         }
         
         //choose child node of root node with highest val
+        savestate.loadState(game);
         int avgval = -Integer.MAX_VALUE;
         Move bestmove = null;
         for (Node child : root.getChildren()) {

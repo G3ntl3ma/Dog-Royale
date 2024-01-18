@@ -32,70 +32,56 @@ public class Main2 {
         }
         int handCardCount = 10;
         //TODO assert that field of figure is figure of field
-        Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
-        game.initDeck();
-        game.distributeCards();
-        ArrayList<Integer> oldhash = game.hash();
-        SaveState savestate = new SaveState(game);
-        Ai ai = new Ai(20000);
-        int[] winCounter = new int[players];                       
-        for (int i = 0; i < 1; i++) {
+
+        //BUG replaying the same game over and over...
+        
+        // ArrayList<Integer> oldhash = game.hash();
+        // SaveState savestate = new SaveState(game);
+        Ai ai = new Ai(100);
+        int[] winCounter = new int[players];
+        ArrayList<Integer>  winHistory = new ArrayList<>();                        
+        for (int i = 0; i < 1000; i++) {
             System.out.println("Main2 simulate game " + i);
+            Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
+            game.initDeck();
+            game.distributeCards();
             //first move can be null
             Integer winner = null;
             ArrayList<Integer> winners;
             int round = 0;
             while (winner == null) {
-                if (round != 0) {
+                //get move
+                Move move = game.getRandomMove();
+                if(game.getCurrentPlayer().getPlayerId() == -1) {
+                    // System.out.println("ai generated move");
+                    move = ai.getMove(game);
+                }
+                if (move != null) {
+                    // move.printMove();
+                }
+                
+                game.makeMove(move);
+                // game.printBoard();
+                if (game.checkGameOver()) {
+                    winners = game.getWinnerOrder();
+                    winner = winners.get(0);
+                }
+                game.nextPlayer();
+                if (game.roundOver()) {
                     game.reshuffle();
                     game.reInit();
+                    game.distributeCards();
+                    round++;
                 }
-                game.distributeCards();
-
-                while (!game.roundOver() && winner == null) {
-                    Player curPlayer = game.getCurrentPlayer();
-                    System.out.println("gen moves for player " + curPlayer.getPlayerId());
-                    ArrayList<Move> moves = curPlayer.generateMoves(game); //
-                    System.out.println("moves size " + moves.size());
-                    Move move = game.getRandomMove();
-                    if(curPlayer.getPlayerId() > 10) {
-                        System.out.println("ai generated move");
-                        move = ai.getMove(game);
-                    }
-                    if (move != null) {
-                        move.printMove();
-                    }
-                    game.makeMove(move);
-                    game.printBoard();
-                    if (game.checkGameOver()) { //problem 
-                        winners = game.getWinnerOrder();
-                        winner = winners.get(0);
-                    }
-                }
-
-                round++;
             }//end of game
             winCounter[winner]++;
+            winHistory.add(winner);
             System.out.println("simulated the game, winner: " + winner);
-            savestate.loadState(game);
-            ArrayList<Integer> newhash = game.hash();
-            boolean same = true;
-            for (int j = 0; j < oldhash.size(); j++) {
-                if((int)newhash.get(j) != (int)oldhash.get(j)) {
-                    System.out.println(j + ":" + (int)newhash.get(j) + "!=" + (int)oldhash.get(j));
-                    System.out.println("hash not same: game hash " + newhash + " old hash " + oldhash);
-                    same = false;
-                    System.exit(45);
-                    break;
-                }
-            }
-            if (same) {
-                System.out.println("hash same: game hash " + newhash + " old hash " + oldhash);                
-            }
             
         }
         for (int i = 0; i < players; i++) {
             System.out.println("player " + i + ": " + winCounter[i] + " wins");
         }
+        System.out.println("winhistory" + winHistory);
     }
 }

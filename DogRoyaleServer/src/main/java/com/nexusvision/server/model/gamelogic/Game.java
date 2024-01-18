@@ -92,6 +92,18 @@ public final class Game {
         Collections.shuffle(deck);
         // System.out.println("reshuffle done deck size " + this.deck.size() + " pile size " + this.pile.size());
     }
+    
+    /**
+     * shuffle all variables that are unknown to the player
+     */
+    public void shuffleUnknown(Player player) {
+        Collections.shuffle(deck);
+        for(Player opponent : this.playerList) {
+            if(opponent != player) {
+                // Collections.shuffle(opponent.getCardList());
+            }
+        }
+    }
 
     /**
      * Proper initialization for the next round considering excluded players and the starting player
@@ -299,7 +311,7 @@ public final class Game {
         firstMoveOfRound = false;
         int count = 0;
         if (playersRemaining == 0) return false;
-        System.out.println("playersremaining " + playersRemaining);
+        // System.out.println("playersremaining " + playersRemaining);
         //get next player who is not out yet if there is anyone
         do {
             playerToMoveId = (playerToMoveId + 1) % playerList.size();
@@ -384,13 +396,13 @@ public final class Game {
     public boolean checkGameOver() {
         for (Player player : playerList) {
             if (player.getFiguresInHouse() == figuresPerPlayer) {
-                System.out.println("game over: full house");
+                // System.out.println("game over: full house");
                 return true;
             }
         }
 
         if (movesMade >= maximumTotalMoves) {
-            System.out.println("game over: maximumtotalmoves reached");
+            // System.out.println("game over: maximumtotalmoves reached");
             return true;
         }
         return false;
