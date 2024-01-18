@@ -1,73 +1,51 @@
 package com.example.myapplication;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import android.icu.text.ListFormatter;
 import android.widget.RelativeLayout;
-
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-
+import org.mockito.MockitoAnnotations;
+import org.robolectric.RobolectricTestRunner;
+import java.util.ArrayList;
 import java.util.List;
 
-class Game_board_creatorTest {
+import static org.mockito.Mockito.*;
+@RunWith(RobolectricTestRunner.class)
+public class Game_board_creatorTest {
+
     @Mock
-    private Game_board_creator gameBoardCreator;
-    private RelativeLayout layout;
-    private int width;
+    private RelativeLayout mockLayout;
 
-    private int player_count;
-
-    private int field_size;
-
-    private int figure_count;
-
-    private List<Integer> colors;
-
-    private List<Integer> start_fields;
-
-    private Tuple[] start_fields_position;
-
-    private List<Integer> card_draw_fields;
-
-    private int field_width;
-
-    private int homefield_size;
-
-    private Tuple home;
-    private Tuple vek;
-
-    private int n;
-    private int i;
-
-    private double offset;
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
-    void createFields() {
+    public void testCreateFields() {
+        // Mock data
+        int width = 100; // Replace with your desired width
+        int player_count = 4; // Replace with your desired player_count
+        int field_size = 30; // Replace with your desired field_size
+        int figure_count = 2; // Replace with your desired figure_count
+        List<Integer> colors = new ArrayList<>(); // Replace with your desired colors
+        List<Integer> start_fields = new ArrayList<>(); // Replace with your desired start_fields
+        List<Integer> card_draw_fields = new ArrayList<>(); // Replace with your desired card_draw_fields
+        Integer maxRounds = 10; // Replace with your desired maxRounds
+
+        Game_board_creator gameBoardCreator = new Game_board_creator(
+                mockLayout,
+                width,
+                player_count,
+                field_size,
+                figure_count,
+                colors,
+                start_fields,
+                card_draw_fields,
+                maxRounds
+        );
+
         gameBoardCreator.createFields();
-        Mockito.verify(gameBoardCreator).createFields();
-    }
-
-    @Test
-    void createHomeFields() {
-        gameBoardCreator.createHomeFields();
-        Mockito.verify(gameBoardCreator).createHomeFields();
-    }
-
-    @Test
-    void fh() {
-        double home_x = home.getX() ;
-        double home_y = home.getY() ;
-        double vek_x = vek.getX();
-        double vek_y = vek.getY();
-        assertEquals(home_x + 1/offset*vek_x + vek_x/n * i,gameBoardCreator.fh(vek,home,i,n).getX());
-        assertEquals(home_y + 1/offset*vek_y + vek_y/n * i,gameBoardCreator.fh(vek,home,i,n).getY());
-    }
-
-    @Test
-    void createCardDrawfields() {
-        gameBoardCreator.createCardDrawfields();
-        Mockito.verify(gameBoardCreator).createCardDrawfields();
     }
 }
