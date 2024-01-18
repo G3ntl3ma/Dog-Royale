@@ -14,6 +14,8 @@ public class Node {
     private int value;
     private Boolean haschildren;
     private Move move;
+    private Integer hashcode = null;
+    private ArrayList<Integer> hash = null; //TODO if hashcodes different print the hash that was passed and this hash
     
     public Node(Move move, Node parent) {
         this.move = move;
@@ -23,10 +25,24 @@ public class Node {
         this.haschildren = false;
     }
 
+    public void setHash(int hash) {
+        if (hashcode == null) {
+            this.hashcode = hash;
+        }
+        else if (hashcode != hash){
+            System.out.println("hashcode inconsistent");
+            System.exit(4232);
+        }
+    }
+
     public void expand(Game game) {
         //assert game not over
         if (this.haschildren == true) {
-            // System.out.println("already expanded");
+            ArrayList<Move> moves = game.getMoves();
+            if(moves.size() != children.size()) {
+                System.out.println("NODE inconsistent");
+                System.exit(264);
+            }
             return;
         }
         this.haschildren = true;

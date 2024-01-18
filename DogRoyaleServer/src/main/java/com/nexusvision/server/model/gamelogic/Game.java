@@ -446,6 +446,14 @@ public final class Game {
      * @return A Boolean, when true the round is over
      */
     public boolean roundOver() {
+        int playersRemaining2 = 0;
+        for(Player player : this.playerList) {
+            if (!player.isOutThisRound()) playersRemaining2++;
+        }
+        if(playersRemaining2 != playersRemaining){
+            System.out.println("inkonsistent gamestate playersremaining");
+            System.exit(235);
+        }
         return playersRemaining == 0;
     }
 
@@ -525,6 +533,10 @@ public final class Game {
      * @param player An object representing the player to exclude from the round
      */
     public void excludeFromRound(Player player) { //return cards??
+        if (player.isOutThisRound() == true) {
+            System.out.println("error trying to exclude a player who is already out");
+            System.exit(40);
+        }
         playersRemaining--;
         player.setOutThisRound(true);
         discardHandCards(); //of current player
@@ -537,6 +549,10 @@ public final class Game {
      * @param player An object representing the player to exclude from the game
      */
     public void excludeFromGame(Player player) {
+        if (player.isOutThisRound() == true) {
+            System.out.println("error trying to exclude a player from game who is already out");
+            System.exit(41);
+        }
         player.setExclude();
         this.playersRemaining--;
         this.discardHandCards();
@@ -636,9 +652,11 @@ public final class Game {
 
     public void makeMove(Move move) {
         if (move == null) {
+            System.out.println("exclude");
             excludeFromRound(getCurrentPlayer());
             return;
         }
+        System.out.println("EXECUTE");
         move.execute(this);
     }
 

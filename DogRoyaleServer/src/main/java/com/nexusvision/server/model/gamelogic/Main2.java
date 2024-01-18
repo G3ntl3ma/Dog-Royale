@@ -37,10 +37,10 @@ public class Main2 {
         
         // ArrayList<Integer> oldhash = game.hash();
         // SaveState savestate = new SaveState(game);
-        Ai ai = new Ai(100);
+        Ai ai = new Ai(10);
         int[] winCounter = new int[players];
         ArrayList<Integer>  winHistory = new ArrayList<>();                        
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1; i++) {
             System.out.println("Main2 simulate game " + i);
             Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
             game.initDeck();
@@ -52,7 +52,7 @@ public class Main2 {
             while (winner == null) {
                 //get move
                 Move move = game.getRandomMove();
-                if(game.getCurrentPlayer().getPlayerId() == -1) {
+                if(game.getCurrentPlayer().getPlayerId() == 0) {
                     // System.out.println("ai generated move");
                     move = ai.getMove(game);
                 }

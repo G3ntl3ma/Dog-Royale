@@ -3,7 +3,6 @@ package com.nexusvision.server.model.gamelogic;
 import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.FieldType;
 
-import java.util.Stack;
 import java.util.ArrayList;
 
 public class Ai {
@@ -19,7 +18,7 @@ public class Ai {
         SaveState savestate = new SaveState(game);
         System.out.println("getting move from ai");
         ArrayList<Integer> oldhash = game.hash();
-        
+        //TODO assert same hash
         for (int i = 0; i < this.numberOfSimulations; ++i) {
             System.out.println("ai simulation " + i);
             Node currentnode = root;
@@ -32,6 +31,7 @@ public class Ai {
             while (true) {
                 bestchild = null;
                 float bestutc = -Float.MAX_VALUE;
+                currentnode.setHash(game.hash().hashCode());
                 currentnode.expand(game);
                 float utc = bestutc;
                 ArrayList<Node> children = currentnode.getChildren();
@@ -48,12 +48,12 @@ public class Ai {
                     }
                 }
                 currentnode = bestchild;
-                Move move = bestchild.getMove();
+                Move move = currentnode.getMove();
+                System.out.println("child makemove");
                 game.makeMove(move);
+                currentnode.setHash(game.hash().hashCode());
+                System.out.println("set nextPlayer");
                 game.nextPlayer();
-                if (currentnode.getVisits() == 0) {
-                    break;
-                }
                 if (game.checkGameOver()) {
                     winnerOrder = game.getWinnerOrder();
                     int rank = winnerOrder.indexOf(currentPlayer.getPlayerId());
@@ -66,26 +66,38 @@ public class Ai {
                     game.reInit();
                     game.distributeCards();
                 }
+                if (currentnode.getVisits() == 0) {
+                    break;
+                }
+                System.out.println("after the 3 checks");
+                                
             }
             System.out.println("simulate the game");
             //simulate the game
+            int simulations = 0;
             while (winner == null) {
-                game.printBoard();
+                System.out.println("simulations " + simulations);
+                // game.printBoard();
                 Move move = game.getRandomMove();
                 if(move != null) {
                     move.printMove();
                 }
+                else {
+                    System.out.println("null move");
+                }
+                System.out.println("rollout makemove");
                 game.makeMove(move);
+                game.nextPlayer();
                 if (game.checkGameOver()) {
                     winnerOrder = game.getWinnerOrder();
                     winner = winnerOrder.get(0);
                 }
-                game.nextPlayer();
                 if (game.roundOver()) {    
                     game.reshuffle();
                     game.reInit();
                     game.distributeCards();
                 }
+                simulations++;
             }//end of game
             
             int rank = winnerOrder.indexOf(currentPlayer.getPlayerId());

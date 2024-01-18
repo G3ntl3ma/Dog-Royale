@@ -175,6 +175,7 @@ public final class Player {
         for(Card card : this.getCardList()) {
             System.out.print(card + " ");
         }
+        System.out.println("");
         ArrayList<Move> moves = new ArrayList<>();
         boolean[] seenCardTypes = new boolean[Card.values().length];
         boolean seenBenchFigure = false;
@@ -202,7 +203,6 @@ public final class Player {
     }
 
     public int hash() { //compute a hah of things that can change in simulation
-
         ArrayList<Integer> handCardValues = this.cardList.stream()
             .map(card -> card.ordinal())
             .sorted()
