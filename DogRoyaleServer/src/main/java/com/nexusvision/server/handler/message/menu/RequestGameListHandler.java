@@ -60,7 +60,7 @@ public class RequestGameListHandler extends MessageHandler<RequestGameList> {
         for (GameLobby lobby : finishedLobbyList) {
             ReturnGameList.Game game = new ReturnGameList.Game();
             game.setGameId(lobby.getId());
-            game.setWinnerPlayerId(lobby.getGame().getWinnerOrder().get(0));
+            game.setWinnerPlayerId(lobby.getWinnerPlayerId());
             finishedGameList.add(game);
         }
 

@@ -45,9 +45,9 @@ public class LobbyExtension implements BeforeAllCallback {
 
         // TODO: Game needs to be set as well!!! (null currently)
 
-        lobby1.setGameState(GameState.IN_PROGRESS);
-        lobby2.setGameState(GameState.FINISHED);
-        lobby3.setGameState(GameState.IN_PROGRESS);
-        lobby4.setGameState(GameState.IN_PROGRESS);
+//        lobby1.setGameState(GameState.IN_PROGRESS); // TODO: This shouldn't even be possible
+//        lobby2.setGameState(GameState.FINISHED);
+//        lobby3.setGameState(GameState.IN_PROGRESS);
+//        lobby4.setGameState(GameState.IN_PROGRESS);
     }
 }

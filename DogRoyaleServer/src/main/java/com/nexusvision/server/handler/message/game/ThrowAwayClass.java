@@ -20,23 +20,23 @@ import java.util.ArrayList;
 public class ThrowAwayClass extends MessageHandler<Move> {
     @Override
     protected void performHandle(Move message, int clientID) {
-        ServerController serverController = ServerController.getInstance();
-        GameLobby gameLobby = serverController.getGameOfPlayer(clientID);
-        Game game = gameLobby.getGame();
-        ArrayList<Integer> _drawnCards = new ArrayList<>();
-        for(int playerId = 0; playerId < gameLobby.getPlayerOrderList().size(); playerId++) {
-            if(clientID == gameLobby.getPlayerOrderList().get(playerId)) {
-                for(Card card : game.getPlayerList().get(playerId).getCardList()) {
-                    _drawnCards.add(card.ordinal());
-                }
-            }
-        }
-
-        DrawCards drawCards = new DrawCards();
-        drawCards.setType(TypeGame.drawCards.getOrdinal());
-        drawCards.setDroppedCards(new ArrayList<>());
-        drawCards.setDrawnCards(_drawnCards);
-        String response = gson.toJson(drawCards);
-        MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientID, response);
+//        ServerController serverController = ServerController.getInstance();
+//        GameLobby gameLobby = serverController.getGameOfPlayer(clientID);
+//        Game game = gameLobby.getGame();
+//        ArrayList<Integer> _drawnCards = new ArrayList<>();
+//        for(int playerId = 0; playerId < gameLobby.getPlayerOrderList().size(); playerId++) {
+//            if(clientID == gameLobby.getPlayerOrderList().get(playerId)) {
+//                for(Card card : game.getPlayerList().get(playerId).getCardList()) {
+//                    _drawnCards.add(card.ordinal());
+//                }
+//            }
+//        }
+//
+//        DrawCards drawCards = new DrawCards();
+//        drawCards.setType(TypeGame.drawCards.getOrdinal());
+//        drawCards.setDroppedCards(new ArrayList<>());
+//        drawCards.setDrawnCards(_drawnCards);
+//        String response = gson.toJson(drawCards);
+//        MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientID, response);
     }
 }

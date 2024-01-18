@@ -18,7 +18,7 @@ import com.nexusvision.server.service.BoardStateService;
 import com.nexusvision.server.service.PlayerService;
 import com.nexusvision.server.service.UpdateDrawCardsService;
 import com.nexusvision.utils.NewLineAppendingSerializer;
-import lombok.Data;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.ArrayList;
@@ -35,13 +35,13 @@ import java.util.concurrent.TimeUnit;
  * @author dgehse, felixwr
  */
 @Log4j2
-@Data // TODO: Nicht alles Data?
 public class GameLobby {
 
     protected static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
             .create();
 
+    @Getter
     private final int id;
     private final ServerController serverController;
     private final BoardStateService boardStateService;
@@ -61,9 +61,12 @@ public class GameLobby {
     private int turnTimerSendCount;
 
     private Game game;
+    @Getter
     private GameState gameState;
+    @Getter
     private boolean isPaused;
 
+    @Getter
     private int maxPlayerCount;
 
     private ArrayList<Integer> playerOrderList;
@@ -191,6 +194,10 @@ public class GameLobby {
         tryMove(0, true, 0, 0, 0, false, 0);
     }
 
+    public Integer getWinnerPlayerId() {
+        return game.getWinnerOrder().get(0);
+    }
+
     private Integer getClientId(int playerId) {
         return playerOrderList.get(playerId);
     }
@@ -233,7 +240,7 @@ public class GameLobby {
         return false;
     }
 
-    public int getPlayerId(int clientId) {
+    private int getPlayerId(int clientId) {
         return playerOrderList.indexOf(clientId);
     }
 
@@ -300,7 +307,7 @@ public class GameLobby {
     /**
      * Removes an observer from the lobby
      *
-     * @param clientId The client Id of the observer being removed
+     * @param clientId The client id of the observer being removed
      */
     public void removeObserver(int clientId) {
         observerList.remove(clientId);
@@ -391,7 +398,7 @@ public class GameLobby {
         BoardState boardState = boardStateService.generateBoardState(game, playerOrderList);
         String boardStateMessage = gson.toJson(boardState);
         boolean successful = serverController.startGameForLobby(this);
-        if (successful) { // TODO: Might be dumb because some client handlers might have changed states but some not
+        if (successful) { // TODO: Check this, might be dumb because some client handlers might have changed states but some not
             lobbyPublisher.publish(boardStateMessage);
             startLiveTimer();
         }
@@ -589,7 +596,7 @@ public class GameLobby {
         ArrayList<Integer> clientListReduced = new ArrayList<Integer>(clientList);
         clientListReduced.remove(Integer.valueOf(player.getPlayerId()));
         for (int client : clientListReduced) {
-            messageBroker.sendMessage(ChannelType.SINGLE, clientId, updateDrawCardsMessage);
+            messageBroker.sendMessage(ChannelType.SINGLE, client, updateDrawCardsMessage);
         }
     }
 
