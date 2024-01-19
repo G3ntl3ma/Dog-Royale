@@ -106,7 +106,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         });
     }
 
-    /** //////////////////////////////////////////////////////////////////////////////////////TODO DELETE THIS METHOD
+    /** //////////////////////////////////////////////////////////////////////////////////////TODO DELETE THIS METHOD after testing without server
      * This method is used to fake a gameplay for testing purposes
      * @param event
      * @throws IOException
@@ -132,7 +132,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
             controller.stop();
         });
     }
-    //////////////////////////////////////////////////////////////////////////////////////////TODO DELETE fakeGameplay METHOD
+    //////////////////////////////////////////////////////////////////////////////////////////TODO DELETE fakeGameplay Method after testing manually till here
 
     public void requestGameList(){
         client.sendMessage(new RequestGameListDto(client.getClientID(), 100,100,100).toJson());

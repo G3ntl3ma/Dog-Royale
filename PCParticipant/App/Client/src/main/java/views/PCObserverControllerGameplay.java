@@ -218,7 +218,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL url, ResourceBundle resourceBundle) { //TODO: Delete testing data
 
         // init board
         board = new Board(fieldSize, numPlayers, numPieces);
@@ -226,10 +226,13 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         pieceHandler = new PieceHandler(board, houseBoard);
         pieceHandler.whosePiece[0] = 1; /////////////////TEST DELETE
         pieceHandler.whosePiece[1] = 2; /////////////////TEST DELETE
+        pieceHandler.whosePiece[2] = 3; /////////////////TEST DELETE
         pieceHandler.piecePositions[0] = 2; ///////////////////////TEST DELETE
         pieceHandler.piecePositions[1] = 4; ///////////////////////TEST DELETE
+        pieceHandler.piecePositions[2] = 6; ///////////////////////TEST DELETE
         pieceHandler.movePiece(0, 0, true); /////////////TEST DELETE
         pieceHandler.movePiece(2, 1, true); /////////////TEST DELETE
+        pieceHandler.movePiece(3, 2, true); /////////////TEST DELETE
 
         houseBoard.calculateHouseCoordinates(pieceHandler); // recalculate, now that we have the pieceHandler
 
@@ -376,11 +379,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         resetView();
     }
 
-    /** TODO: DELETE ////////////////////////////////////////////////////////////////////
+    /** TODO: DELETE  after testing manually////////////////////////////////////////////////////////////////////
      * TestButton to draw a card on the handCards pane
      * @param event the event that triggered the method
      */
-    @FXML
+    @FXML // if u want to try a different card change the X in Card.cardX to one in look under Common/src/main/java/Enums/Card.java
     public void btnaddCard(ActionEvent event) {
         drawCard(Card.card8);
     }
@@ -392,9 +395,6 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     public void drawCard(Card card)
     {
         cardHandler.addCard(card);
-
-        //handCards.getChildren().add(new ImageView(new Image("file:src/main/resources/card_default.png"))); //  why does this not work? //TODO: DELETE
-        //        handCards.getChildren().add(new ImageView(new Image(getClass().getResource("/card_default.png").toString()))); //but this
     }
 
     private void zoomView(double zoomFactor){

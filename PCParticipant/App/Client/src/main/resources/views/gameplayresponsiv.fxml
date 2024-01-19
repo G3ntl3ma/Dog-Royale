@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPaneWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.PCObserverControllerGameplay">
+<BorderPane fx:id="borderPaneWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.PCObserverControllerGameplay">
    <left>
       <GridPane fx:id="playerShowcase" prefHeight="425.0" prefWidth="211.0" BorderPane.alignment="CENTER">
          <columnConstraints>
@@ -356,7 +356,7 @@
             <VBox alignment="TOP_CENTER" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="103.0" prefWidth="184.0" GridPane.columnIndex="1">
                <children>
                   <Label text="Ablagestapel:" />
-                  <Pane fx:id="discardPane" minHeight="-Infinity" prefHeight="181.0" prefWidth="184.0">
+                  <Pane fx:id="discardPane" prefHeight="86.0" prefWidth="184.0">
                      <children>
                         <ImageView fx:id="ivDiscardPile" fitHeight="84.0" fitWidth="64.0" layoutX="60.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                            <image>

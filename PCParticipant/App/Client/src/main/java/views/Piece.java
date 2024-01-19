@@ -9,13 +9,16 @@ import javafx.scene.layout.Pane;
  * Class for the pieces
  * author: mtwardy
  */
-public class Piece extends ImageView {      //TODO: make only selectable for the current player / ur own Client ID
+public class Piece extends ImageView {      //TODO: make only selectable for the current player / ur own Client ID (PieceHandler has something like int[] whosePiece) - easier to test with server
     int pieceIndex;
     boolean onboard;
     int playerIndex;
     Pane paneBoard;
     ImageView shine;
-    static Piece currentPiece; //Saves the selected Piece hier
+    ImageView redShine;
+    static Piece selectedEnemyPiece; //Saves the attacked Piece
+    static boolean selectEnemyPiece = false;
+    static Piece currentPiece; //Saves the selected Piece
 
     /**
      * Constructor for Piece
@@ -52,7 +55,7 @@ public class Piece extends ImageView {      //TODO: make only selectable for the
         return pieceIndex;
     }
 
-    public int getCurrentPieceIndex() {
+    public static int getCurrentPieceIndex() {
         return currentPiece.getPieceIndex();
     }
     public Piece getCurrentPiece() {
@@ -69,14 +72,35 @@ public class Piece extends ImageView {      //TODO: make only selectable for the
      */
     private void select(int radiusField)
     {
-        if (currentPiece != this) {
+        if (currentPiece != this && !selectEnemyPiece || currentPiece == null) {
             makeShiny(radiusField);
             currentPiece = this;
         }
-        else {
-            currentPiece = null;
-            paneBoard.getChildren().remove(shine);
+        else if (!selectEnemyPiece) {
+            deselect();
         }
+        else if (selectedEnemyPiece != this && currentPiece != this){
+
+            this.makeShinyRed(radiusField);
+            selectedEnemyPiece = this;
+        }
+        else if (currentPiece != this){
+            selectedEnemyPiece = null;
+            this.removeRedShine();
+        }
+        else
+        {
+            deselect();
+        }
+    }
+
+    /**
+     * deselects the piece
+     */
+    public void deselect() {
+        currentPiece = null;
+        this.removeShine();
+
     }
 
     /**
@@ -99,9 +123,35 @@ public class Piece extends ImageView {      //TODO: make only selectable for the
         }
     }
 
+    private void makeShinyRed(int radiusField) {
+        redShine = new ImageView(new Image("/pawnShineRed.png"));
+        redShine.setPreserveRatio(true);
+        redShine.setX(this.getX() + 1);
+        redShine.setY(this.getY());
+        redShine.setFitWidth(3*radiusField);
+        redShine.setBlendMode(BlendMode.LIGHTEN);
+        paneBoard.getChildren().add(redShine);
+        paneBoard.getChildren().remove(this);
+        paneBoard.getChildren().add(this);
+        if (selectedEnemyPiece != null)
+        {
+            selectedEnemyPiece.removeRedShine();
+        }
+    }
+
+
+
     //removes the shine from the piece (removes the "selected look")
     public void removeShine()
     {
         paneBoard.getChildren().remove(shine);
+    }
+    public void removeRedShine()
+    {
+        paneBoard.getChildren().remove(redShine);
+    }
+
+    public static void setSelectEnemyPiece(boolean selectEnemyPiece) {
+        Piece.selectEnemyPiece = selectEnemyPiece;
     }
 }
