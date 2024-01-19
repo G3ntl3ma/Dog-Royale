@@ -1,5 +1,6 @@
 package Dtos;
 
+import Enums.Card;
 import Enums.TypeGame;
 import com.google.gson.Gson;
 
@@ -7,13 +8,13 @@ public class MoveDto extends Dto {
 
     public final int type = TypeGame.move.ordinal() + 200;
     private boolean skip;
-    private int card;
+    private Card card;
     private int selectedValue;
     private int pieceId;
     private boolean isStarter;
     private int opponentPieceId;
 
-    public MoveDto(boolean skip, int card, int selectedValue, int pieceId, boolean isStarter, int opponentPieceId) {
+    public MoveDto(boolean skip, Card card, int selectedValue, int pieceId, boolean isStarter, int opponentPieceId) {
         this.skip = skip;
         this.card = card;
         this.selectedValue = selectedValue;
@@ -39,11 +40,11 @@ public class MoveDto extends Dto {
         this.skip = skip;
     }
 
-    public int getCard() {
+    public Card getCard() {
         return card;
     }
 
-    public void setCard(int card) {
+    public void setCard(Card card) {
         this.card = card;
     }
 
