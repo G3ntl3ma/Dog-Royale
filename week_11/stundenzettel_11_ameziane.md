@@ -11,6 +11,5 @@ gesamtarbeitszeit: 6,00h
 
 
 ## Kommunikation zwischen Server und Client
-
-    - 2023-12-21 4,00h
-    - 2023-12-24 2,00h
+- 2024-01-03 4,00h
+- 2024-01-04 2,00h
