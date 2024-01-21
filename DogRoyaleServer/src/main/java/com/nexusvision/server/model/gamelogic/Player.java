@@ -36,9 +36,34 @@ public final class Player {
         this.playerId = playerId;
         this.lastMoveCountFigureMovedIntoHouse = 0;
         for (int i = 0; i < figureCount; i++) {
-            figureList.add(new Figure(playerId));
+            figureList.add(new Figure(playerId, i));
         }
     }
+
+    public Player(int playerId,  boolean excluded,  boolean outThisRound,  ArrayList<Figure> figureList,  ArrayList<Card> cardList,  Field startField,  int houseFirstIndex,  int figuresInBank,  int figuresInHouse,  int lastMoveCountFigureMovedIntoHouse,  int houseOccupationIndex ) {
+        this.playerId=playerId;
+        this.excluded=excluded;
+        this.outThisRound=outThisRound;
+        this.figureList=figureList;
+        this.cardList=cardList;
+        this.startField=startField;
+        this.houseFirstIndex=houseFirstIndex;
+        this.figuresInBank=figuresInBank;
+        this.figuresInHouse=figuresInHouse;
+        this.lastMoveCountFigureMovedIntoHouse=lastMoveCountFigureMovedIntoHouse;
+        this.houseOccupationIndex=houseOccupationIndex;
+    }
+
+    // public Player copy() {
+        // ArrayList<Figure> figureList = this.figureList.copy();
+        //for figure in figure list copy the figure and put in array
+        // ArrayList<Card> cardList = this.cardList.copy();
+        //for card in card list copy the figure and put in array
+        
+        // Field startField = this.startField.copy();
+        
+        // return new Player(this.playerId,  this.excluded,  this.outThisRound,  figureList, cardList,  startField,  this.houseFirstIndex,  this.figuresInBank,  this.figuresInHouse,  this.lastMoveCountFigureMovedIntoHouse,  this.houseOccupationIndex );
+    // }
 
     /**
      * Gets the first figure in the bank and returns it
@@ -74,10 +99,18 @@ public final class Player {
      * Prints information player, figures in bank, figures in house and the cards
      */
     public void printInfo() {
-        System.out.print("player " + this.playerId + " figBank " + this.figuresInBank + " figs in house " + this.figuresInHouse);
+        System.out.print("player " + this.playerId + " figBank " + this.figuresInBank + " figs in house " + this.figuresInHouse + " out this round " + this.outThisRound);
         System.out.print(" cards ");
         this.printCards();
         System.out.println("");
+        for(Figure figure : this.figureList) {
+            if (figure != null) {
+                figure.print();
+            }
+            else {
+                System.out.println("null field");
+            }
+        }
     }
 
     /**
@@ -138,6 +171,11 @@ public final class Player {
      * @return An ArrayList storing the represented moves
      */
     public ArrayList<Move> generateMoves(Game game) {
+        System.out.print("generating moves for a player "+ this.playerId + " with the follwing handcards");        
+        for(Card card : this.getCardList()) {
+            System.out.print(card + " ");
+        }
+        System.out.println("");
         ArrayList<Move> moves = new ArrayList<>();
         boolean[] seenCardTypes = new boolean[Card.values().length];
         boolean seenBenchFigure = false;
@@ -145,9 +183,9 @@ public final class Player {
 //            seenCardTypes[i] = false;
 //        }
         // System.out.println("this player color " + this.color);
-        for (Card card : cardList) {
+        for (Card card : this.cardList) {
             game.getCardService().setType(card);
-            // System.out.println("card " + i + ": " + this.cards.get(i).typ);
+            // System.out.println("card " + card);
             if (seenCardTypes[card.ordinal()]) continue;
             seenCardTypes[card.ordinal()] = true;
             for (Figure figure : figureList) {
@@ -160,6 +198,23 @@ public final class Player {
                 game.getCardService().getMoves(game, figure, moves, this);
             }
         }
+        // System.out.println("size of moves array" + moves.size());
         return moves;
     }
+
+    public int hash() { //compute a hah of things that can change in simulation
+        ArrayList<Integer> handCardValues = this.cardList.stream()
+            .map(card -> card.ordinal())
+            .sorted()
+            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        ArrayList<Integer> variables = new ArrayList<>(); 
+        variables.add(outThisRound ? 0 : 1);
+        variables.add(figuresInBank);
+        variables.add(figuresInHouse);
+        variables.add(lastMoveCountFigureMovedIntoHouse);
+        variables.add(handCardValues.hashCode());
+        return variables.hashCode();
+    }
+    
 }

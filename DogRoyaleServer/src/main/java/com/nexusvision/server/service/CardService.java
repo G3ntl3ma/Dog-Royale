@@ -14,10 +14,17 @@ import java.util.ArrayList;
  */
 @Data
 public class CardService {
-    private Card type;
+    private Card emulatedType;
+    private Card usedType;
 
     public CardService(Card type) {
-        this.type = type;
+        this.emulatedType = type;
+        this.usedType = type;
+    }
+
+    public void setType(Card type) {
+        this.emulatedType = type;
+        this.usedType = type;
     }
 
     /**
@@ -55,7 +62,7 @@ public class CardService {
             }
         }
 
-        if (range || steps == 0) moves.add(new Move(player, figure.getField(), to, false, this.type));
+        if (range || steps == 0) moves.add(new Move(player, figure.getField(), to, false, this.usedType));
 
         while (steps != 0) {
             // System.out.println(steps);
@@ -80,7 +87,7 @@ public class CardService {
                 }
             }
             if (range || steps == 0) {
-                moves.add(new Move(player, figure.getField(), to, false, this.type));
+                moves.add(new Move(player, figure.getField(), to, false, this.usedType));
             }
         }
     }
@@ -101,15 +108,15 @@ public class CardService {
         Figure figure = player.getFigureList().get(pieceId);
         Figure oppfigure = player.getFigureList().get(opponentPieceId);
         ArrayList<Move> moves = new ArrayList<>();
-        switch (this.type) {
+        switch (this.emulatedType) {
             case swapCard:
-                moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this.type));
+                moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this.usedType));
                 break;
             case startCard1:
                 /*fallthrough*/
             case startCard2:
                 if (isStarter) {
-                    moves.add(new Move(player, this.type));
+                    moves.add(new Move(player, this.usedType));
                     break;
                 }
                 //else fallthrough
@@ -137,7 +144,7 @@ public class CardService {
     //move generator for card
     public void getMoves(Game game, Figure figure, ArrayList<Move> moves, Player player) { //target figure
         Field to;
-        switch (this.type) {
+        switch (this.emulatedType) {
             case swapCard:
                 if (figure.isOnBench() || figure.isInHouse()) break;
                 for (int i = 0; i < game.getPlayerList().size(); i++) {
@@ -146,7 +153,7 @@ public class CardService {
                     for (int j = 0; j < opponent.getFigureList().size(); j++) {
                         Figure oppfigure = opponent.getFigureList().get(j);
                         if (!oppfigure.isOnBench() && !oppfigure.isInHouse() && oppfigure.getField().getType() != FieldType.START) {
-                            moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this.type));
+                            moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this.usedType));
                         }
                     }
                 }
@@ -160,7 +167,7 @@ public class CardService {
                     next = next.getNext();
                 }
                 if (figure.getField() != to) { //move that does nothing allowed???
-                    moves.add(new Move(player, figure.getField(), to, false, this.type));
+                    moves.add(new Move(player, figure.getField(), to, false, this.usedType));
                 }
                 break;
             case oneToSeven:
@@ -176,7 +183,7 @@ public class CardService {
                 if (figure.isOnBench()
                         && (player.getStartField().isEmpty()
                         || player.getStartField().getFigure().getOwnerId() != figure.getOwnerId())) {
-                    moves.add(new Move(player, this.type));
+                    moves.add(new Move(player, this.usedType));
                 } else if (!figure.isOnBench()) {
                     addStepMove(moves, 13, figure, game, player, false);
                 }
@@ -185,7 +192,7 @@ public class CardService {
                 if (figure.isOnBench()
                         && (player.getStartField().isEmpty()
                         || player.getStartField().getFigure().getOwnerId() != figure.getOwnerId())) {
-                    moves.add(new Move(player, this.type));
+                    moves.add(new Move(player, this.usedType));
                 } else if (!figure.isOnBench()) {
                     addStepMove(moves, 1, figure, game, player, false);
                     addStepMove(moves, 11, figure, game, player, false);
@@ -197,9 +204,8 @@ public class CardService {
                     Card lastcard = game.getPile().get(game.getPile().size() - 1);
                     if (lastcard != Card.copyCard) {
                         // lastCard.getMoves(game, figure, moves);//bug, sets wrong usedCard
-                        this.type = lastcard;
+                        this.emulatedType = lastcard;
                         this.getMoves(game, figure, moves, player);
-                        this.type = Card.copyCard; //hacky
                         break;
                     }
                 }
@@ -215,14 +221,14 @@ public class CardService {
      * Prints the type of the card
      */
     public void printTyp() {
-        System.out.println(this.type);
+        System.out.println("usedType " + this.usedType + "emulatedType " + this.emulatedType);
     }
 
     /**
      * Gets the Ordinal of the card
      */
     public int getOrdinal() {
-        switch (this.type) {
+        switch (this.usedType) {
             case card2:
                 return 2;
             case card3:
@@ -244,56 +250,5 @@ public class CardService {
         }
 
     }
-
-    //slower and buggy
-    // private void addStepMovenew(ArrayList<Move> moves, int argsteps, Figure figure, Game game, Player player, boolean range) {
-    // if(range) {
-    // for (int i = 1; i <= argsteps; i++) {
-    // if(!addStepMovehelp(moves, i, figure, game, player)) return;
-    // }
-    // }
-    // else {
-    // addStepMovehelp(moves, argsteps, figure, game, player);
-    // }
-    // }
-    //
-    //for all start fields between from and to check if occupied
-    // private boolean addStepMovehelp(ArrayList<Move> moves, int argsteps, Figure figure, Game game, Player player) {
-    // int toinx = (argsteps + figure.field.val) % game.mainFieldCount;
-    // int origtoinx = toinx;
-    // int frominx = figure.field.val;
-    // boolean intohouse = false;
-
-    // only check if figure is not in house because not possible to move out anyway (?)
-    // if( figure.field.type!= 'h') {
-    // check if path is blocked by startfigure
-    // for (int i = 0; i < game.players.size(); i++) {
-    // if startField is between from and to
-    // if( (game.startinxs[i] <= origtoinx && game.startinxs[i] > frominx)
-    // || (game.startinxs[i] <= frominx && game.startinxs[i] > origtoinx )) {
-    // if(game.occupied[i]) return false;
-    // if actually moves into own house
-    // if(game.startinxs[i] > frominx && game.startinxs[i] < toinx) {
-    // toinx += player.houseinx - player.startField.val;
-    // intohouse = true;
-    // }
-    // }
-
-    // }
-    // }
-    // if number too big for house
-    // if (player.houseinx + game.figureCount > toinx) {
-    // return false;
-    // }
-
-    // if path is blocked by figure in house
-    // if (intohouse) {
-    // if(toinx >= player.houseoccinx) return false;
-    // }
-
-    // moves.add(new Move(player ,game.board[frominx] , game.board[toinx], false, this));
-    // return true;
-    // }
-
 
 }

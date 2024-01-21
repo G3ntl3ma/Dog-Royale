@@ -48,23 +48,17 @@ public class Main {
         for (int i = 0; i < conf.length(); i++) {
             if (conf.charAt(i) == 's') players++;
         }
-
-        int[] wins = new int[players];
-        for (int i = 0; i < players; i++) {
-            wins[i] = 0;
-        }
-
         int handCardCount = 10;
 
         long start = System.currentTimeMillis();
         long funcTime = 0;
 
-        int gamesToPlay = 10000;
+        int gamesToPlay = 100;
         int totalMoves = 0;
 
         int human = -1;
         Scanner reader = new Scanner(System.in);
-
+        int[] wins = new int[players];
         for (int _i = 0; _i < gamesToPlay; _i++) {
             Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
             game.initDeck();
@@ -83,14 +77,18 @@ public class Main {
                 while (!game.roundOver() && winner == null) {
                     long startFunc = System.currentTimeMillis();
 
-                    ArrayList<Move> moves = new ArrayList<>();
                     Player curPlayer = game.getCurrentPlayer();
-                    // System.out.println("gen moves for player " + curPlayer.col);
-                    curPlayer.generateMoves(game); //TODO this is the slowest function by far
+                    System.out.println("gen moves for player " + curPlayer.getPlayerId());
+                    ArrayList<Move> moves = curPlayer.generateMoves(game); //
                     long endFunc = System.currentTimeMillis();
                     funcTime += (endFunc - startFunc);
-                    // moves.get(0).printcard();
+                    System.out.println("moves size " + moves.size());
+                    System.out.println("available moves");
+                    for (Move move : moves) {
+                        move.printMove();
+                    }
                     if (!moves.isEmpty()) {
+                        System.out.println("moves not empty");
                         if (curPlayer.getPlayerId() == human) {
                             game.printBoard();
                             ArrayList<Move> humanMoves = new ArrayList<>();
@@ -109,18 +107,20 @@ public class Main {
                             humanMoves.get(moveInx).printMove();
                             humanMoves.get(moveInx).execute(game);
                         } else { //computer move
-                            moves.get(0).execute(game);
+                            Move move = moves.get(0);
+                            move.printMove();
+                            move.execute(game);
                         }
                     } else {
+                        System.out.println("has no moves so out this round");
                         curPlayer.setOutThisRound();
                     }
-                    // game.printBoard();
+                    game.printBoard();
                     if (game.checkGameOver()) {
                         winners = game.getWinnerOrder();
                         winner = winners.get(0);
                     }
                     totalMoves++;
-                    if (totalMoves >= maxMoves) break;
                 }
                 if (totalMoves >= maxMoves) break;
                 // System.out.println("end of round " + round);

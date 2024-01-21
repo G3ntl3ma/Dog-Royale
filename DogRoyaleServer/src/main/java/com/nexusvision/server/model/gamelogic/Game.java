@@ -9,8 +9,10 @@ import com.nexusvision.server.service.CardService;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
+
 
 /**
  * This class represents the game and manages Player, Cards, Moves and more
@@ -26,17 +28,17 @@ public final class Game {
     // private final int maximumGameDuration; //in GameLobby class
 //    private final Penalty consequencesForInvalidMove;
     boolean[] occupied; //unused
-    private ArrayList<Player> playerList;
+    private ArrayList<Player> playerList; 
     private Field[] board;
     private ArrayList<Card> deck;
     private ArrayList<Card> pile;
     private int mainFieldCount;
     private int playerToStartColor;
     private int playerToMoveId;
-    private Card drawnCard;
-    private ArrayList<Card> discardedCardList;
+    private Card drawnCard; // for server communication
+    private ArrayList<Card> discardedCardList; // for server communication
     private int movesMade;
-    private int playersRemaining;
+    private int playersRemaining; 
     private int round; //round counter
     private boolean firstMoveOfRound;
     private int[] startIndexes; //indexes of startFields, unused
@@ -71,8 +73,8 @@ public final class Game {
     /**
      * Increases the value of movesMade by 1
      */
-    public void increaseMovesCounter() {
-        this.movesMade++;
+    public void increaseMovesCounter(int arg) {
+        this.movesMade += arg;
     }
 
     /**
@@ -89,6 +91,18 @@ public final class Game {
         pile = new ArrayList<>();
         Collections.shuffle(deck);
         // System.out.println("reshuffle done deck size " + this.deck.size() + " pile size " + this.pile.size());
+    }
+    
+    /**
+     * shuffle all variables that are unknown to the player
+     */
+    public void shuffleUnknown(Player player) {
+        Collections.shuffle(deck);
+        for(Player opponent : this.playerList) {
+            if(opponent != player) {
+                // Collections.shuffle(opponent.getCardList());
+            }
+        }
     }
 
     /**
@@ -158,6 +172,7 @@ public final class Game {
     public void printBoard() {
         System.out.println("BOARD=================");
         System.out.println("player to move " + playerToMoveId);
+        System.out.println("players remaining " + playersRemaining);
         for (Player p : playerList) {
             p.printInfo();
             p.printHouse();
@@ -169,7 +184,7 @@ public final class Game {
         for (int i = 0; i < mainFieldCount; i++) {
             // Field f = this.board.get(i);
             Field f = board[i];
-            System.out.print(f.getType() + "-");
+            System.out.print(f.getType().toString().charAt(0) + "-");
         }
         System.out.println();
         for (int i = 0; i < mainFieldCount; i++) {
@@ -227,6 +242,8 @@ public final class Game {
         }
 
         int fieldCount = conf.length();
+
+        System.out.println("fieldCount"+fieldCount);
         this.mainFieldCount = fieldCount;
 
         int totalFieldCount = fieldCount + figuresPerPlayer * players; //playerCount
@@ -246,10 +263,10 @@ public final class Game {
             this.playerList.add(new Player(playerCol, figuresPerPlayer));
         }
         int seenStarts = 0;
-        for (int i = 0; i < fieldCount; i++) {
-            int prev = ((i - 1) + fieldCount) % fieldCount;
-            int next = (i + 1) % fieldCount;
-
+        for (int i = 0; i < conf.length(); i++) {
+            int prev = ((i - 1) + conf.length()) % conf.length();
+            int next = (i + 1) % conf.length();
+            // System.out.println("iter"+i);
             this.board[i].setNext(this.board[next]);
             this.board[i].setPrev(this.board[prev]);
             // this.board[i].settype(conf.charAt(i));
@@ -262,9 +279,7 @@ public final class Game {
                 int off = fieldCount;
                 this.playerList.get(seenStarts).setHouseFirstIndex(fieldCount);
                 for (int j = off; j < figuresPerPlayer + off; j++) {
-                    this.board[fieldCount] = new Field(fieldCount, FieldType.HOUSE);
-
-                    fieldCount++;
+                    this.board[fieldCount++] = new Field(fieldCount, FieldType.HOUSE);
                 }
                 for (int j = off; j < figuresPerPlayer - 1 + off; j++) {
                     this.board[j].setNext(this.board[j + 1]);
@@ -296,14 +311,17 @@ public final class Game {
         firstMoveOfRound = false;
         int count = 0;
         if (playersRemaining == 0) return false;
+        // System.out.println("playersremaining " + playersRemaining);
         //get next player who is not out yet if there is anyone
         do {
             playerToMoveId = (playerToMoveId + 1) % playerList.size();
             if (count >= playerList.size()) {
-                return false;
+                System.out.println("BUG: UNREACHABLE");
+                System.exit(423);
+                return false; //unreachable
             }
             count++;
-        } while (getCurrentPlayer().isExcluded() || getCurrentPlayer().isOutThisRound());
+        } while (getCurrentPlayer().isExcluded() || getCurrentPlayer().isOutThisRound()); //TODO check if excluded is not buggy
 
         return true;
     }
@@ -378,12 +396,21 @@ public final class Game {
     public boolean checkGameOver() {
         for (Player player : playerList) {
             if (player.getFiguresInHouse() == figuresPerPlayer) {
+                // System.out.println("game over: full house");
                 return true;
             }
         }
 
-        if (movesMade >= maximumTotalMoves) return true;
-        return !this.nextPlayer();
+        if (movesMade >= maximumTotalMoves) {
+            // System.out.println("game over: maximumtotalmoves reached");
+            return true;
+        }
+        return false;
+        // boolean noNext = !this.nextPlayer();
+        // if (noNext) {
+        //     System.out.println("game over: no next player");
+        // }
+        // return noNext;
     }
 
     // Eventuell nicht nötig, da man sowieso erst einmal checken muss ob das Spiel zuende ist bevor man
@@ -419,6 +446,14 @@ public final class Game {
      * @return A Boolean, when true the round is over
      */
     public boolean roundOver() {
+        int playersRemaining2 = 0;
+        for(Player player : this.playerList) {
+            if (!player.isOutThisRound()) playersRemaining2++;
+        }
+        if(playersRemaining2 != playersRemaining){
+            System.out.println("inkonsistent gamestate playersremaining");
+            System.exit(235);
+        }
         return playersRemaining == 0;
     }
 
@@ -498,7 +533,12 @@ public final class Game {
      * @param player An object representing the player to exclude from the round
      */
     public void excludeFromRound(Player player) { //return cards??
+        if (player.isOutThisRound() == true) {
+            System.out.println("error trying to exclude a player who is already out");
+            System.exit(40);
+        }
         playersRemaining--;
+        player.setOutThisRound(true);
         discardHandCards(); //of current player
         // this.nextPlayer();
     }
@@ -509,6 +549,10 @@ public final class Game {
      * @param player An object representing the player to exclude from the game
      */
     public void excludeFromGame(Player player) {
+        if (player.isOutThisRound() == true) {
+            System.out.println("error trying to exclude a player from game who is already out");
+            System.exit(41);
+        }
         player.setExclude();
         this.playersRemaining--;
         this.discardHandCards();
@@ -555,6 +599,65 @@ public final class Game {
         ArrayList<Move> moves = getCurrentPlayer().generateMoves(this);
         if (moves.isEmpty()) return null;
         return moves.get(0);
+    }
+
+    public ArrayList<Move> getMoves() {
+        return this.getCurrentPlayer().generateMoves(this);
+    }
+
+    public ArrayList<Integer> hash() {
+        //get hash of board
+        ArrayList<Integer> deckValues = this.deck.stream()
+            .map(card -> card.ordinal())
+            .sorted()
+            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        ArrayList<Integer> boardValues = Arrays.stream(this.board)
+            .map(field -> field.hash())
+            .sorted()
+            .collect(Collectors.toCollection(ArrayList::new));
+        
+        ArrayList<Integer> pileValues = this.pile.stream()
+            .map(card -> card.ordinal())
+            .sorted()
+            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+        
+        ArrayList<Integer> playerValues = this.playerList.stream()
+            .map(player -> player.hash())
+            .sorted()
+            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        ArrayList<Integer> variables = new ArrayList<>(); 
+        variables.add(mainFieldCount);
+        variables.add(playerToStartColor);
+        variables.add(playerToMoveId);
+        variables.add(movesMade);
+        variables.add(playersRemaining);
+        variables.add(round);
+        variables.add(firstMoveOfRound ? 0 : 1);
+        // if (drawnCard != null) {
+        //     variables.add(drawnCard.ordinal());
+        // }
+        // else {
+        //     variables.add(-1);
+        // }
+        variables.add(playerValues.hashCode());
+        variables.add(deckValues.hashCode());
+        variables.add(pileValues.hashCode());
+        variables.add(boardValues.hashCode());
+        // System.out.println("variables for hashing" + variables);
+
+        return variables;
+    }
+
+    public void makeMove(Move move) {
+        if (move == null) {
+            System.out.println("exclude");
+            excludeFromRound(getCurrentPlayer());
+            return;
+        }
+        System.out.println("EXECUTE");
+        move.execute(this);
     }
 
 }

@@ -3,6 +3,8 @@ package com.nexusvision.server.model.gamelogic;
 import com.nexusvision.server.model.enums.FieldType;
 import lombok.Data;
 
+import java.util.ArrayList;
+
 /**
  * Creates a Field object
  *
@@ -17,7 +19,7 @@ public final class Field {
     private Figure figure;
     private Field next;
     private Field house;
-    private Field prev;  //TODO rename to set
+    private Field prev; 
 
     public Field(int fieldId, FieldType type) {
         this.fieldId = fieldId;
@@ -126,7 +128,9 @@ public final class Field {
      */
     public void setFigure(Figure figure) {
         this.figure = figure;
-        figure.setField(this);
+        if (figure != null) {
+            figure.setField(this);
+        }
     }
 
     /**
@@ -136,5 +140,26 @@ public final class Field {
         this.figure = null;
     }
 
+
+    public void setNext(Field next) {
+        this.next = next;
+    }
+
+    public void setHouse(Field house) {
+        this.house = house;
+    }
+
+    public int hash() {
+        ArrayList<Integer> variables = new ArrayList<>();
+        variables.add(fieldId);
+        variables.add(type.ordinal());
+        if (figure != null) {
+            variables.add(figure.getFigureId());
+        }
+        else {
+            variables.add(-1);
+        }
+        return variables.hashCode();
+    }
 
 }
