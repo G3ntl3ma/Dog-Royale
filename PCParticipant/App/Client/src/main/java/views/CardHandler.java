@@ -81,11 +81,50 @@ public class CardHandler {
 
                     switch(this.card) //TODO: make this so it´s right for every card
                     {
-                        case magnetCard:
-                            Piece.setSelectEnemyPiece(true);
+                        case startCard1:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case startCard2:
+                            Piece.setSelectEnemyPiece(false);
                             break;
                         case swapCard:
                             Piece.setSelectEnemyPiece(true);
+                            break;
+                        case magnetCard:
+                            Piece.setSelectEnemyPiece(true);
+                            break;
+                        case plusMinus4:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case oneToSeven:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case copyCard:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card2:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card3:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card5:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card6:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card8:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card9:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card10:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card12:
+                            Piece.setSelectEnemyPiece(false);
                             break;
                         default:
                             Piece.setSelectEnemyPiece(false);
