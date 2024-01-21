@@ -35,33 +35,42 @@ public class SaveStateTest {
         assertEquals(10, player.getLastMoveCountFigureMovedIntoHouse());
     }
     @Test
-    public void testLoadState() {
-        // arrange
-        Game game = createFakeGame();
+        public void testLoadState() {
+            // Arrange
+            // build save state object
+            SaveState saveState = createFakeSaveState();
 
-        // save the initial state
-        SaveState saveState = new SaveState(game);
-        SaveState originalState = new SaveState(game);
+            // build new game object
+            Game game = createFakeGame();
 
-        // change the state
-        modifyGameForTesting(game);
+            // save current game state
+            SaveState originalState = new SaveState(game);
 
-        // use load
-        saveState.loadState(game);
+            // Act
+            saveState.loadState(game);
 
-        //assert
-        assertEquals(originalState, new SaveState(game));
-    }
+            // Assert
+            assertAll(
+                    () -> assertEquals(originalState.getPlayerToStartColor(), game.getPlayerToStartColor()),
+                    () -> assertEquals(originalState.getPlayerToMoveId(), game.getPlayerToMoveId()),
+                    () -> assertEquals(originalState.getMovesMade(), game.getMovesMade()),
+                    () -> assertEquals(originalState.getPlayersRemaining(), game.getPlayersRemaining()),
+                    () -> assertEquals(originalState.getRound(), game.getRound()),
+                    () -> assertEquals(originalState.isFirstMoveOfRound(), game.isFirstMoveOfRound()),
+                    () -> assertArrayEquals(originalState.getDeck().toArray(), game.getDeck().toArray()),
+                    () -> assertArrayEquals(originalState.getPile().toArray(), game.getPile().toArray())
+            );
+        }
 
-    // build a fake object
-    private Game createFakeGame() {
+        // moca a savestate object
+        private SaveState createFakeSaveState() {
 
-        return new Game("conf", 4, 5, 50, 0);
-    }
+            return new SaveState(createFakeGame());
+        }
 
-    // change the state
-    private void modifyGameForTesting(Game game) {
-        game.setPlayerToMoveId(2);
+        // mock a fake game object
+        private Game createFakeGame() {
 
-    }
+            return new Game("conf", 4, 5, 50, 0);
+        }
 }

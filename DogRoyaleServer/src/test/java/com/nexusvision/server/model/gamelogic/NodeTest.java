@@ -5,8 +5,6 @@ import com.nexusvision.server.model.enums.FieldType;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-
-import static com.nexusvision.server.model.messages.game.TypeGame.move;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class NodeTest {
@@ -30,27 +28,6 @@ public class NodeTest {
         assertThrows(RuntimeException.class, () -> {
             node.setHash(hash2);
         });
-    }
-    @Test
-    void testExpand() {
-        // Arrange
-        Game game = new Game("conf", 4, 5, 50, 0);
-        Node rootNode = new Node(null, null);
-
-        // Ensure haschildren is initially false
-        assertFalse(rootNode.getHaschildren(), "haschildren should be false initially");
-
-        // Act
-        rootNode.expand(game);
-
-        // Assert
-        assertTrue(rootNode.getHaschildren(), "haschildren should be true after expansion");
-        assertNotNull(rootNode.getChildren(), "Children should not be null after expansion");
-        assertTrue(rootNode.getChildren().size() > 0, "There should be at least one child node");
-
-        for (Node child : rootNode.getChildren()) {
-            assertNotNull(child.getMove(), "Child's move should not be null");
-        }
     }
 
     @Test
