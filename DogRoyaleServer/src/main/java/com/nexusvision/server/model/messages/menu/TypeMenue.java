@@ -6,6 +6,7 @@ package com.nexusvision.server.model.messages.menu;
  * @author felixwr
  */
 public enum TypeMenue {
+
     leaveObs,
     leavePlayer,
     disconnect,

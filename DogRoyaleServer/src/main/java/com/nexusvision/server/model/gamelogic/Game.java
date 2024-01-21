@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
  * @author dgehse
  */
 
-@Data
+@Data // TODO: Should this really be @Data??
 public final class Game {
-    private final int figuresPerPlayer;
-    private final int initialCardsPerPlayer;
-    private final int maximumTotalMoves;
-    // private final int maximumGameDuration; //in gamelobby class
-    private final Penalty consequencesForInvalidMove;
+//    private final int figuresPerPlayer;
+//    private final int initialCardsPerPlayer;
+//    private final int maximumTotalMoves;
+    // private final int maximumGameDuration; //in GameLobby class
+//    private final Penalty consequencesForInvalidMove;
     boolean[] occupied; //unused
     private ArrayList<Player> playerList;
     private Field[] board;
@@ -39,7 +39,7 @@ public final class Game {
     private int playersRemaining;
     private int round; //round counter
     private boolean firstMoveOfRound;
-    private int[] startIndexes; //indeces of startFields, unused
+    private int[] startIndexes; //indexes of startFields, unused
 
     private CardService cardService;
 

@@ -1,6 +1,5 @@
 package com.nexusvision.server.handler.message.menu;
 
-import com.nexusvision.server.handler.Handler;
 import com.nexusvision.server.handler.message.MessageHandler;
 import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
@@ -158,7 +157,7 @@ public class ReturnLobbyConfigHandler extends MessageHandler<ReturnLobbyConfig> 
             }
         }
 
-        List<ReturnLobbyConfig.Color> colors = message.getColors();
+        List<ReturnLobbyConfig.Color> colors = message.getColorMappings();
         if (colors == null) {
             errors.add("colors");
             errorFound = true;

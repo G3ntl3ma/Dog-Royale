@@ -44,7 +44,7 @@ public class RequestGameListHandler extends MessageHandler<RequestGameList> {
         for (GameLobby lobby : startingLobbyList) {
             ReturnGameList.Game game = new ReturnGameList.Game();
             game.setGameId(lobby.getId());
-            game.setCurrentPlayerCount(lobby.getCurrentPlayerCount());
+            game.setCurrentPlayerCount(lobby.getCurrentPlayerCount()); // TODO: Use lobbyConfig here...
             game.setMaxPlayerCount(lobby.getMaxPlayerCount());
             startingGameList.add(game);
         }

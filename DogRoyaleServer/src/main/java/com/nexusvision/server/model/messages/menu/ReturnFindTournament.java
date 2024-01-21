@@ -2,6 +2,7 @@ package com.nexusvision.server.model.messages.menu;
 
 
 import com.nexusvision.server.model.messages.AbstractMessage;
+import com.nexusvision.server.model.utils.WinnerOrderElement;
 import lombok.Data;
 
 import java.util.List;
@@ -37,13 +38,8 @@ public class ReturnFindTournament extends AbstractMessage {
     @Data
     public static class TournamentFinish{
         private int tournamentId;
-        private List<Winnerorder> winnerOrder;
+        private List<WinnerOrderElement> winnerOrder;
 
-        @Data
-        public static class Winnerorder{
-            private int playerId;
-            private String name;
-        }
         //TODO Variable fertigstellen
     }
 }

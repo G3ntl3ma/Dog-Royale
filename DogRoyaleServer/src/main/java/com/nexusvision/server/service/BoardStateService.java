@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class BoardStateService {
 
-    public BoardState generateBoardState(Game game, ArrayList<Integer> playerOrderList) {
+    public BoardState generateBoardState(Game game, ArrayList<Integer> playerOrderList) { // TODO: What about random order?
         BoardState boardState = new BoardState();
         boardState.setType(TypeGame.boardState.getOrdinal());
 

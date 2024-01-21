@@ -20,7 +20,7 @@ public class LobbyExtension implements BeforeAllCallback {
         HashMap<Integer, Colors> playerColorMap = new HashMap<>();
         ArrayList<Integer> observerList = new ArrayList<>();
 
-        playerOrderList.add(3);
+        playerOrderList.add(3); // 3 is the clientID
         playerOrderList.add(2);
         playerOrderList.add(4);
         playerOrderList.add(1);
