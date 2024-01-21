@@ -660,5 +660,13 @@ public final class Game {
         move.execute(this);
     }
 
+    public void setCurrentPlayer(Player player) {
+        int index = playerList.indexOf(player);
+        if (index != -1) {
+            playerToMoveId = index;
+        } else {
+            System.err.println("Error: Player not found in playerList");
+        }
+    }
 }
 

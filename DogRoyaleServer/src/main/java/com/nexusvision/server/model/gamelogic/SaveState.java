@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Data
 public final class SaveState {
-    public final class FigureState {
+    public static final class FigureState {
         private Field field;
         private boolean isOnBench;
         private boolean isInHouse;
@@ -31,7 +31,7 @@ public final class SaveState {
         }
     }
     
-    public final class FieldState {
+    public static final class FieldState {
         private int fieldId;
         private FieldType type;
         private Figure figure;
@@ -45,7 +45,7 @@ public final class SaveState {
         }
     }
 
-    public final class PlayerState {
+    public static final class PlayerState {
         private boolean outThisRound;
         private int figuresInBank;
         private int figuresInHouse;
