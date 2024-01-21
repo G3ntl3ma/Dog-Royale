@@ -3,11 +3,13 @@ package views;
 import Enums.Card;
 import javafx.animation.*;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Translate;
+import javafx.stage.Stage;
 
 /**
  * made to handle ur handcards
@@ -142,7 +144,13 @@ public class CardHandler {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Figur auswählen");
                     alert.setHeaderText("Es wurde keine Figur ausgewählt");
-                    alert.setContentText("Bitte wähle eine Figur aus, um diese Karte zu spielen.");
+
+                    Image icon = new Image("icon.png");
+                    DialogPane dialog = alert.getDialogPane();
+                    dialog.getStylesheets().add(this.getClass().getResource("style.css").toExternalForm());
+                    dialog.getStyleClass().add("dialog");
+                    Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    stage.getIcons().add(icon);
 
                     alert.show();
                 }

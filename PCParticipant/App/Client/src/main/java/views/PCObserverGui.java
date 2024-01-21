@@ -1,8 +1,12 @@
 package views;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -25,10 +29,30 @@ public class PCObserverGui extends Application {
         stage.setMinWidth(400);
         stage.setMinHeight(480);
         stage.show();
+
+        stage.setOnCloseRequest(event -> exit(stage));
     }
 
     public static void main (String[]args){
             launch();
         }
+
+     //Method gets called when pressing the X in the top right Corner
+    public void exit(Stage stage){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Exit");
+        alert.setHeaderText("Anwendung schließen?");
+
+        Image icon = new Image("icon.png");
+        DialogPane dialog = alert.getDialogPane();
+        dialog.getStylesheets().add(this.getClass().getResource("style.css").toExternalForm());
+        dialog.getStyleClass().add("dialog");
+        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+        alertStage.getIcons().add(icon);
+
+        if(alert.showAndWait().get() == ButtonType.OK){
+            stage.close();
+        }
+    }
 }
 
