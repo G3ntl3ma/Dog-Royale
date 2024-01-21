@@ -2,6 +2,7 @@ package views;
 
 import Enums.Card;
 import javafx.animation.*;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -79,7 +80,7 @@ public class CardHandler {
                     currentTranslate.setByY(-42);
                     currentTranslate.play();
 
-                    switch(this.card) //TODO: make this so it´s right for every card
+                    switch(this.card)
                     {
                         case startCard1:
                             Piece.setSelectEnemyPiece(false);
@@ -137,8 +138,13 @@ public class CardHandler {
                     Piece.setSelectEnemyPiece(false);
                 }
                 else {
-                    //TODO: make no Piece selected warning or something
-                    System.out.println("please select a piece");
+                    //Show a warning to the Player that no Figure has been selected
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Figur auswählen");
+                    alert.setHeaderText("Es wurde keine Figur ausgewählt");
+                    alert.setContentText("Bitte wähle eine Figur aus, um diese Karte zu spielen.");
+
+                    alert.show();
                 }
             });
             pcOCG.getHandCards().getChildren().add(this);
