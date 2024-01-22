@@ -2,8 +2,8 @@
 name: Bengiamin
 imt: kellerb
 gruppe: 1
-woche: 9
-gesamtarbeitszeit: 8,45h
+woche: 14
+gesamtarbeitszeit: 23.3h
 ---
 
 # Stundenzettel des Softwaretechnikpraktikums WS 2023/24
@@ -11,18 +11,15 @@ gesamtarbeitszeit: 8,45h
 
 ## Projektmanagement
 - Meetings und Aufgabenverteilung
-  - 2023-12-11 1,30h
-  - 2023-12-14 0,15h
+  - 2024-01-15 1,30h
   
 
-## Messe
+## Webseite
 
-- Präsentation
-  - 2023-12-13 3,30h
-
-- Vorbereitung
-  - 2023-12-12 3,00h
-  - 2023-12-12 0,30h
+- React
+  - 2024-01-17 4h
+  - 2024-01-21 10h
+  - 2024-01-22 8h
 
 
 
