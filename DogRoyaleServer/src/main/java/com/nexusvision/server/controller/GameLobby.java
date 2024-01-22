@@ -7,7 +7,6 @@ import com.nexusvision.server.common.Publisher;
 import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.Colors;
 import com.nexusvision.server.model.enums.GameState;
-import com.nexusvision.server.model.enums.Penalty;
 import com.nexusvision.server.model.gamelogic.Game;
 import com.nexusvision.server.model.gamelogic.LobbyConfig;
 import com.nexusvision.server.model.gamelogic.Move;
@@ -18,7 +17,7 @@ import com.nexusvision.server.model.messages.menu.Error;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
 import com.nexusvision.server.model.utils.*;
 import com.nexusvision.server.service.BoardStateService;
-import com.nexusvision.server.service.PlayerService;
+import com.nexusvision.server.service.KickService;
 import com.nexusvision.server.service.UpdateDrawCardsService;
 import com.nexusvision.utils.NewLineAppendingSerializer;
 import lombok.Getter;
@@ -47,37 +46,34 @@ public class GameLobby {
     private final int id;
     private final ServerController serverController;
     private final BoardStateService boardStateService;
-    private final PlayerService playerService;
+    private final KickService kickService;
 
     private final Publisher lobbyPublisher;
     private final MessageBroker messageBroker;
 
-//    @Getter
-//    private final ArrayList<Integer> playerOrderList;
-//    private final HashMap<Integer, Colors> playerColorMap;
-//    private final ArrayList<Integer> observerList;
-
     private final ScheduledExecutorService scheduler;
     private ScheduledFuture<?> liveTimerTask;
     private ScheduledFuture<?> turnTimerTask;
-    private int gameDuration; // TODO: Populate properly
+    private int gameDuration; // TODO: Populate properly when starting
     private int turnTime;
     private int liveTimerSendCount;
     private int turnTimerSendCount;
 
-    private Game game;
+    private Game game; // TODO: Populate
     @Getter
     private GameState gameState;
     @Getter
     private boolean isPaused;
 
     @Getter
-    private LobbyConfig lobbyConfig;
+    private final LobbyConfig lobbyConfig;
 
     private ArrayList<Integer> receivedResponseList = new ArrayList<>();
 
     /**
      * Creates a GameLobby with the given id
+     *
+     * @param id The id to create the lobby with
      */
     public GameLobby(int id) {
         this.id = id;
@@ -86,7 +82,7 @@ public class GameLobby {
         this.isPaused = false;
         this.serverController = ServerController.getInstance();
         this.boardStateService = new BoardStateService();
-        this.playerService = new PlayerService();
+        this.kickService = new KickService();
 
         this.lobbyPublisher = new Publisher(ChannelType.LOBBY, id);
         this.messageBroker = MessageBroker.getInstance();
@@ -185,19 +181,15 @@ public class GameLobby {
                 turnTime--;
             }
         }
+        skipMove();
+    }
+
+    private void skipMove() {
         tryMove(0, true, 0, 0, 0, false, 0);
     }
 
     public Integer getWinnerPlayerId() {
         return game.getWinnerOrder().get(0);
-    }
-
-    private Integer getClientId(int playerId) {
-        return lobbyConfig.getPlayerOrder().getOrder().get(playerId).getClientId();
-    }
-
-    private Integer getClientToMoveId() {
-        return getClientId(game.getPlayerToMoveId());
     }
 
     /**
@@ -234,17 +226,8 @@ public class GameLobby {
         return false;
     }
 
-    private int getPlayerId(int clientId) {
-        return lobbyConfig.getPlayerOrder().find(clientId);
-    }
-
     //check if playerOrderList + observerList is subset of received responses
 
-    /**
-     * Checks whether responses have been received from every player and observer in the game lobby
-     *
-     * @return A Boolean indicating if responses from every player and observer have been received or not
-     */
 //    public boolean receivedFromEveryone() {
 //        for (int idToFind : playerOrderList) {
 //            //check if this id is in the list of responses
@@ -270,7 +253,6 @@ public class GameLobby {
 //        }
 //        return true;
 //    }
-
     /**
      * Adds an observer to the lobby
      *
@@ -298,7 +280,6 @@ public class GameLobby {
             lobbyPublisher.publish(boardStateMessage);
         }
     }
-
     /**
      * Removes an observer from the lobby
      *
@@ -352,26 +333,20 @@ public class GameLobby {
     public void removePlayer(int clientId) {
         int playerOrderIndex = getPlayerId(clientId);
         switch (gameState) {
-            case STARTING: // TODO: Removing the player from playerList might be needed
-                Player player = game.getPlayerList().get(playerOrderIndex);
-                game.removePlayerFromBoard(player);
-                game.excludeFromGame(player);
+            case STARTING:
                 lobbyConfig.removePlayerByOrderIndex(playerOrderIndex);
+                kickService.kick(lobbyConfig, clientId, id);
                 break;
             case IN_PROGRESS:
+                Player player = game.getPlayerList().get(playerOrderIndex);
+                game.removePlayerFromBoard(player);
+                game.excludeFromGame(player); // performs kick of KickService inside
                 lobbyConfig.removePlayerByOrderIndex(playerOrderIndex);
                 break;
+            case FINISHED:
+                return;
         }
         // TODO: Again - there might be more to remove
-        lobbyConfig.removeColor(clientId);
-        messageBroker.unregisterSubscriber(clientId, id);
-
-        Kick kick = new Kick();
-        kick.setType(TypeGame.kick.getOrdinal());
-        kick.setClientId(clientId);
-        kick.setReason("Player decided to leave");
-        lobbyPublisher.publish(gson.toJson(kick));
-
         if (lobbyConfig.getPlayerOrder().getOrder().isEmpty()) {
             finishGame();
         }
@@ -394,6 +369,239 @@ public class GameLobby {
         // if simulate game make random move every 3 seconds or so
     }
 
+    /**
+     * Unpauses the game
+     */
+    public void unpauseGame() {
+        isPaused = false;
+        Unfreeze unfreeze = new Unfreeze();
+        unfreeze.setType(TypeGame.unfreeze.getOrdinal());
+        lobbyPublisher.publish(gson.toJson(unfreeze));
+    }
+
+    /**
+     * Pause the game
+     */
+    public void pauseGame() {
+        isPaused = true;
+        Freeze freeze = new Freeze();
+        freeze.setType(TypeGame.freeze.getOrdinal());
+        lobbyPublisher.publish(gson.toJson(freeze));
+    }
+
+    /**
+     * Attempts to make a move, also handling illegal moves with consequences.
+     * Cleaning up by communicating with the <code>ServerController</code> and
+     * sending notifications to all lobby members about the move's validity.
+     *
+     * @param clientId        The client id that is trying this move
+     * @param skip            A Boolean indicating whether to skip the move or not
+     * @param card            An Integer representing the card used for the move
+     * @param selectedValue   An Integer representing a selected value for the move
+     * @param pieceId         An Integer representing the ID of the figure involved in the move
+     * @param isStarter       A Boolean indicating if the move is a starter move
+     * @param opponentPieceId An Integer representing the ID of the opponents figure
+     */
+    public synchronized void tryMove(int clientId, boolean skip, int card, int selectedValue,
+                        int pieceId, boolean isStarter, Integer opponentPieceId) {
+        stopTurnTimer();
+        boolean isValidMove = game.tryMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
+        MoveValid moveValid = new MoveValid();
+        moveValid.setType(TypeGame.moveValid.getOrdinal());
+        moveValid.setSkip(skip);
+        moveValid.setCard(card);
+        moveValid.setSelectedValue(selectedValue);
+        moveValid.setPieceId(pieceId);
+        moveValid.setStarter(isStarter);
+        moveValid.setOpponentPieceId(opponentPieceId);
+        moveValid.setValidMove(isValidMove);
+        String moveValidMessage = gson.toJson(moveValid, MoveValid.class);
+
+        lobbyPublisher.publish(moveValidMessage);
+
+        cleanUpAfterMove(clientId, isValidMove);
+    }
+    /**
+     * Clean up game after performing a move
+     *
+     * @param clientId The client id that performed the move
+     */
+    private void cleanUpAfterMove(int clientId, boolean wasValidMove) {
+        Player player = game.getCurrentPlayer();
+        if (wasValidMove && player.generateMoves(game).isEmpty()) { // If player has no possible moves
+            removeFromRound(clientId, player);
+        } else if (!wasValidMove) {
+            switch (lobbyConfig.getConsequencesForInvalidMove()) {
+                case kickFromGame:
+                    removePlayer(clientId); // remove clientId from the arraylist in the lobby
+                    Kick kick = new Kick();
+                    kick.setType(TypeGame.kick.getOrdinal());
+                    kick.setClientId(clientId);
+                    kick.setReason("illegal move");
+                    lobbyPublisher.publish(gson.toJson(kick));
+                    break;
+                case excludeFromRound:
+                    removeFromRound(clientId, player);
+                    break;
+            }
+        }
+
+        BoardState boardState = boardStateService.generateBoardState(game, lobbyConfig.getPlayerOrder());
+        String boardStateMessage = gson.toJson(boardState);
+
+        lobbyPublisher.publish(boardStateMessage);
+
+        if (!game.nextPlayer()) { // maybe round is over or maybe game is over
+            if (game.checkGameOver()) {
+                finishGame();
+                return;
+            } else {
+                game.reInit();
+                setupNewRound();
+            }
+        }
+        int nextMoveClientId = getClientToMoveId();
+        if (!serverController.setWaitingForMove(nextMoveClientId)) {
+            throw new RuntimeException("Failed to keep up consistency because setting up next move failed");
+        }
+        startTurnTimer();
+    }
+    /**
+     * Can be used internally or by Ausrichter to cancel/finish the game
+     */
+    public void finishGame() {
+        gameState = GameState.FINISHED;
+        stopLiveTimer();
+        Cancel cancel = new Cancel();
+        cancel.setType(TypeGame.cancel.getOrdinal());
+        cancel.setWinnerOrder(game.getWinnerOrder());
+        lobbyPublisher.publish(gson.toJson(cancel));
+    }
+    private synchronized void removeFromRound(int clientId, Player player) {
+        DrawCards drawCards = new DrawCards();
+        drawCards.setType(TypeGame.drawCards.getOrdinal());
+        drawCards.setDroppedCards(player.getCardListInteger());
+        drawCards.setDrawnCards(new ArrayList<>());
+        String drawCardsMessage = gson.toJson(drawCards, DrawCards.class);
+
+        game.discardHandCards();
+        game.excludeFromRound(player);
+        messageBroker.sendMessage(ChannelType.SINGLE, clientId, drawCardsMessage);
+
+        UpdateDrawCardsService updateDrawCardsService = new UpdateDrawCardsService();
+        UpdateDrawCards updateDrawCards = updateDrawCardsService.generateClientWithNoCards(clientId);
+        String updateDrawCardsMessage = gson.toJson(updateDrawCards, UpdateDrawCards.class);
+
+        // TODO: Only one player gets removed from the list? DEFINITELY CHECK THIS
+        messageBroker.unregisterSubscriber(clientId, id);
+        lobbyPublisher.publish(updateDrawCardsMessage); // TODO: Check: Observer will also receive this message...
+        messageBroker.registerSubscriber(clientId, id);
+    }
+
+    /**
+     * Sets up everything to begin a new round except for the init
+     */
+    private void setupNewRound() {
+        game.distributeCards();
+        DrawCards drawCards = new DrawCards();
+        drawCards.setType(TypeGame.drawCards.getOrdinal());
+        drawCards.setDroppedCards(new ArrayList<>());
+        ArrayList<UpdateDrawCards.HandCard> handCards = new ArrayList<>();
+        List<PlayerElement> order = lobbyConfig.getPlayerOrder().getOrder();
+        for (int playerOrderIndex = 0; playerOrderIndex < order.size(); playerOrderIndex++) {
+            int playerClientId = order.get(playerOrderIndex).getClientId();
+            if (playerClientId == -1) continue;
+            Player player = game.getPlayerList().get(playerOrderIndex);;
+            drawCards.setDrawnCards(player.getCardListInteger());
+            String drawCardsMessage = gson.toJson(drawCards, DrawCards.class);
+            messageBroker.sendMessage(ChannelType.SINGLE, playerClientId, drawCardsMessage);
+
+            UpdateDrawCards.HandCard handCard = new UpdateDrawCards.HandCard();
+            handCard.setClientId(playerClientId);
+            handCard.setCount(player.getCardList().size());
+            handCards.add(handCard);
+        }
+        UpdateDrawCards updateDrawCards = new UpdateDrawCards();
+        updateDrawCards.setType(TypeGame.updateDrawCards.getOrdinal());
+        updateDrawCards.setHandCards(handCards);
+        String updateDrawCardsMessage = gson.toJson(updateDrawCards, UpdateDrawCards.class);
+        lobbyPublisher.publish(updateDrawCardsMessage);
+    }
+
+    /**
+     * Sets the configuration parameters for a game
+     *
+     * @param gameName                   The game name
+     * @param maxPlayerCount             An Integer representing the number of maximum players in the game
+     * @param fieldSize                  An Integer representing the size of the game field
+     * @param figuresPerPlayer           An Integer representing the number of figures each player has
+     * @param colorMap                   A mapping from colors to clientIds
+     * @param drawCardFields             A List of Integers representing the position of the draw fields in the game
+     * @param startFields                A List of Integers representing the positions of start fields on the game board
+     * @param initialCardsPerPlayer      An Integer representing the initial number of cards each player receives
+     * @param thinkTimePerMove           An Integer representing the maximum time a player has to make a move
+     * @param visualizationTimePerMove   The time provided to visualize the move
+     * @param consequencesForInvalidMove An Integer representing the consequences for an invalid move
+     * @param maximumGameDuration        An Integer representing the maximum duration of a game
+     * @param maximumTotalMoves          An Integer representing the maximum total number of moves allowed in the game
+     */
+    public void setConfiguration(String gameName,
+                                 int maxPlayerCount,
+                                 int fieldSize,
+                                 int figuresPerPlayer,
+                                 List<ColorMapping> colorMap,
+                                 DrawCardFields drawCardFields,
+                                 StartFields startFields,
+                                 int initialCardsPerPlayer,
+                                 int thinkTimePerMove,
+                                 int visualizationTimePerMove,
+                                 int consequencesForInvalidMove,
+                                 int maximumGameDuration,
+                                 int maximumTotalMoves) {
+        lobbyConfig.importLobbyConfig(
+                gameName,
+                maxPlayerCount,
+                fieldSize,
+                figuresPerPlayer,
+                colorMap,
+                drawCardFields,
+                startFields,
+                initialCardsPerPlayer,
+                thinkTimePerMove,
+                visualizationTimePerMove,
+                consequencesForInvalidMove,
+                maximumGameDuration,
+                maximumTotalMoves);
+
+//        this.game = new Game(fieldStringBuild.toString(), figuresPerPlayer, initialCardsPerPlayer, maxTotalMoves, consequencesForInvalidMove);
+    }
+
+    /**
+     * Checks whether responses have been received from every player and observer in the game lobby
+     *
+     * @return A Boolean indicating if responses from every player and observer have been received or not
+     */
+    private int getPlayerId(int clientId) {
+        return lobbyConfig.getPlayerOrder().find(clientId);
+    }
+
+    private Integer getClientId(int playerId) {
+        return lobbyConfig.getPlayerOrder().getOrder().get(playerId).getClientId();
+    }
+
+    private Integer getClientToMoveId() {
+        return getClientId(game.getPlayerToMoveId());
+    }
+
+    private void sendError(int clientId, String errorMessage) {
+        log.error(errorMessage);
+        Error error = new Error();
+        error.setType(TypeMenue.error.getOrdinal());
+        error.setMessage(errorMessage);
+        String response = gson.toJson(error, Error.class);
+        messageBroker.sendMessage(ChannelType.SINGLE, clientId, response);
+    }
+
     private void randomMoveMatch() {
         for (int i = 0; i < lobbyConfig.getMaxPlayerCount(); i++) {
             //clientId = playerId
@@ -409,7 +617,7 @@ public class GameLobby {
             int pieceId = 0;
             boolean isStarter = false;
             int opponentPieceId = 0;
-            int fakeClientId = game.getCurrentPlayer().getPlayerId();
+            int fakeClientId = 1; // game.getCurrentPlayer().getPlayerId(); TODO: I uncommented because playerId doesn't exist anymore
 
             if (move != null) {
                 skip = false;
@@ -452,246 +660,10 @@ public class GameLobby {
             cleanUpAfterMove(fakeClientId, true);
 
             try {
-                Thread.sleep(thinkTimePerMove * 1000L / 2);
+                Thread.sleep(lobbyConfig.getThinkTimePerMove() * 1000L / 2);
             } catch (InterruptedException e) {
                 log.error("Sleeping thread got interrupted: " + e.getMessage());
             }
         }
-    }
-
-    /**
-     * Unpauses the game
-     */
-    public void unpauseGame() {
-        isPaused = false;
-        Unfreeze unfreeze = new Unfreeze();
-        unfreeze.setType(TypeGame.unfreeze.getOrdinal());
-        lobbyPublisher.publish(gson.toJson(unfreeze));
-    }
-
-    /**
-     * Pause the game
-     */
-    public void pauseGame() {
-        isPaused = true;
-        Freeze freeze = new Freeze();
-        freeze.setType(TypeGame.freeze.getOrdinal());
-        lobbyPublisher.publish(gson.toJson(freeze));
-    }
-
-
-    //success boolean
-    /**
-     * Attempts to make a move, also handling illegal moves with consequences.
-     * Cleaning up by communicating with the <code>ServerController</code> and
-     * sending notifications to all lobby members about the move's validity.
-     *
-     * @param clientId        The client id that is trying this move
-     * @param skip            A Boolean indicating whether to skip the move or not
-     * @param card            An Integer representing the card used for the move
-     * @param selectedValue   An Integer representing a selected value for the move
-     * @param pieceId         An Integer representing the ID of the figure involved in the move
-     * @param isStarter       A Boolean indicating if the move is a starter move
-     * @param opponentPieceId An Integer representing the ID of the opponents figure
-     */
-    public synchronized void tryMove(int clientId, boolean skip, int card, int selectedValue,
-                        int pieceId, boolean isStarter, Integer opponentPieceId) {
-        stopTurnTimer();
-        boolean isValidMove = game.tryMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
-        MoveValid moveValid = new MoveValid();
-        moveValid.setType(TypeGame.moveValid.getOrdinal());
-        moveValid.setSkip(skip);
-        moveValid.setCard(card);
-        moveValid.setSelectedValue(selectedValue);
-        moveValid.setPieceId(pieceId);
-        moveValid.setStarter(isStarter);
-        moveValid.setOpponentPieceId(opponentPieceId);
-        moveValid.setValidMove(isValidMove);
-        String moveValidMessage = gson.toJson(moveValid, MoveValid.class);
-
-        lobbyPublisher.publish(moveValidMessage);
-
-        cleanUpAfterMove(clientId, isValidMove);
-    }
-
-    /**
-     * Clean up game after performing a move
-     *
-     * @param clientId The client id that performed the move
-     */
-    private void cleanUpAfterMove(int clientId, boolean wasValidMove) {
-        Player player = game.getCurrentPlayer();
-        if (wasValidMove && player.generateMoves(game).isEmpty()) { // If player has no possible moves
-            removeFromRound(clientId, player);
-        } else if (!wasValidMove && lobbyConfig.getConsequencesForInvalidMove() == Penalty.excludeFromRound.ordinal()) {
-            removeFromRound(clientId, player);
-        } else if (!wasValidMove && lobbyConfig.getConsequencesForInvalidMove() == Penalty.kickFromGame.ordinal()) { //3.14 send kick message to everyone
-            removePlayer(clientId); // remove clientId from the arraylist in the lobby
-            Kick kick = new Kick();
-            kick.setType(TypeGame.kick.getOrdinal());
-            kick.setClientId(clientId);
-            kick.setReason("illegal move");
-            lobbyPublisher.publish(gson.toJson(kick));
-        }
-
-        BoardState boardState = boardStateService.generateBoardState(game, lobbyConfig.getPlayerOrder());
-        String boardStateMessage = gson.toJson(boardState);
-
-        lobbyPublisher.publish(boardStateMessage);
-
-        if (!game.nextPlayer()) { // maybe round is over or maybe game is over
-            if (game.checkGameOver()) {
-                finishGame();
-                return;
-            } else {
-                game.reInit();
-                setupNewRound();
-            }
-        }
-        int nextMoveClientId = getClientToMoveId();
-        if (!serverController.setWaitingForMove(nextMoveClientId)) {
-            throw new RuntimeException("Failed to keep up consistency because setting up next move failed");
-        }
-        startTurnTimer();
-    }
-
-    /**
-     * Can be used internally or by Ausrichter to cancel/finish the game
-     */
-    public void finishGame() {
-        gameState = GameState.FINISHED;
-        stopLiveTimer();
-        Cancel cancel = new Cancel();
-        cancel.setType(TypeGame.cancel.getOrdinal());
-        cancel.setWinnerOrder(game.getWinnerOrder());
-        lobbyPublisher.publish(gson.toJson(cancel));
-    }
-
-    private synchronized void removeFromRound(int clientId, Player player) {
-        DrawCards drawCards = new DrawCards();
-        drawCards.setType(TypeGame.drawCards.getOrdinal());
-        drawCards.setDroppedCards(player.getCardListInteger());
-        drawCards.setDrawnCards(new ArrayList<>());
-        String drawCardsMessage = gson.toJson(drawCards, DrawCards.class);
-
-        game.discardHandCards();
-        game.excludeFromRound(player);
-        messageBroker.sendMessage(ChannelType.SINGLE, clientId, drawCardsMessage);
-
-        UpdateDrawCardsService updateDrawCardsService = new UpdateDrawCardsService();
-        UpdateDrawCards updateDrawCards = updateDrawCardsService.generateClientWithNoCards(clientId);
-        String updateDrawCardsMessage = gson.toJson(updateDrawCards, UpdateDrawCards.class);
-
-        // TODO: Only one player gets removed from the list? DEFINITELY CHECK THIS
-        messageBroker.unregisterSubscriber(clientId, id);
-        lobbyPublisher.publish(updateDrawCardsMessage);
-        messageBroker.registerSubscriber(clientId, id);
-    }
-
-    /**
-     * Sets up everything to begin a new round except for the init
-     */
-    private void setupNewRound() {
-        game.distributeCards();
-        DrawCards drawCards = new DrawCards();
-        drawCards.setType(TypeGame.drawCards.getOrdinal());
-        drawCards.setDroppedCards(new ArrayList<>());
-        ArrayList<UpdateDrawCards.HandCard> handCards = new ArrayList<>();
-        List<PlayerOrder.OrderElement> order = lobbyConfig.getPlayerOrder().getOrder();
-        for (int playerOrderIndex = 0; playerOrderIndex < order.size(); playerOrderIndex++) {
-            int playerClientId = order.get(playerOrderIndex).getClientId();
-            if (playerClientId == -1) continue;
-            Player player = game.getPlayerList().get(playerOrderIndex);;
-            drawCards.setDrawnCards(player.getCardListInteger());
-            String drawCardsMessage = gson.toJson(drawCards, DrawCards.class);
-            messageBroker.sendMessage(ChannelType.SINGLE, playerClientId, drawCardsMessage);
-
-            UpdateDrawCards.HandCard handCard = new UpdateDrawCards.HandCard();
-            handCard.setClientId(playerClientId);
-            handCard.setCount(player.getCardList().size());
-            handCards.add(handCard);
-        }
-        UpdateDrawCards updateDrawCards = new UpdateDrawCards();
-        updateDrawCards.setType(TypeGame.updateDrawCards.getOrdinal());
-        updateDrawCards.setHandCards(handCards);
-        String updateDrawCardsMessage = gson.toJson(updateDrawCards, UpdateDrawCards.class);
-        lobbyPublisher.publish(updateDrawCardsMessage);
-    }
-
-    /**
-     * Sets the configuration parameters for a game
-     *
-     * @param playerCount                An Integer representing the number of players in the game
-     * @param fieldSize                  An Integer representing the size of the gamefield
-     * @param figuresPerPlayer           An Integer representing the number of figures each player has
-     * @param drawCardFields             A List of Integers representing the position of the drawfields in the game
-     * @param startFields                A List of Integers representing the positions of start fields on the game board
-     * @param initialCardsPerPlayer      An Integer representing the initial number of cards each player recieves
-     * @param thinkingTimePerMove        An Integer representing the maximum time a player has to make a move
-     * @param consequencesForInvalidMove An Integer representing the consequences for an invalid move
-     * @param maxGameDuration            An Integer representing the maximum duration of a game
-     * @param maxTotalMoves              An Integer representing the maximum total number of moves allowed in the game
-     */
-    //success boolean
-    public boolean setConfiguration(String gameName,
-                                    int maxPlayerCount,
-                                    int fieldSize,
-                                    int figuresPerPlayer,
-                                    List<ColorMapping> colorMap,
-                                    DrawCardFields drawCardFields,
-                                    StartFields startFields,
-                                    int initialCardsPerPlayer,
-                                    int thinkTimePerMove,
-                                    int visualizationTimePerMove,
-                                    int consequencesForInvalidMove,
-                                    int maximumGameDuration,
-                                    int maximumTotalMoves) {
-        lobbyConfig.importLobbyConfig(
-                gameName,
-                maxPlayerCount,
-                fieldSize,
-                figuresPerPlayer,
-                colorMap,
-                drawCardFields,
-                startFields,
-                initialCardsPerPlayer,
-                thinkTimePerMove,
-                visualizationTimePerMove,
-                consequencesForInvalidMove,
-                maximumGameDuration,
-                maximumTotalMoves
-                );
-        //constructing a string that can be parsed by the game
-//        StringBuilder fieldStringBuild = new StringBuilder();
-//        fieldStringBuild.append("n".repeat(Math.max(0, fieldSize)));
-//
-//        for (int i = 0; i < startFields.size(); i++) {
-//            fieldStringBuild.setCharAt(i, 's');
-//        }
-//
-//        for (int i = 0; i < drawCardFields.size(); i++) {
-//            fieldStringBuild.setCharAt(i, 'k');
-//        }
-//
-//        String fieldString = fieldStringBuild.toString();
-
-//        if (playerCount == getCurrentPlayerCount()) {
-//            gameState = GameState.IN_PROGRESS;
-//            isPaused = true;
-//        }
-
-//        this.game = new Game(fieldStringBuild.toString(), figuresPerPlayer, initialCardsPerPlayer, maxTotalMoves, consequencesForInvalidMove);
-
-        return true; // TODO: only true?
-    }
-
-
-    private void sendError(int clientId, String errorMessage) {
-        log.error(errorMessage);
-        Error error = new Error();
-        error.setType(TypeMenue.error.getOrdinal());
-        error.setMessage(errorMessage);
-        String response = gson.toJson(error, Error.class);
-        messageBroker.sendMessage(ChannelType.SINGLE, clientId, response);
     }
 }

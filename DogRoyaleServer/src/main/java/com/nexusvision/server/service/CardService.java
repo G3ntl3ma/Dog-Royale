@@ -31,25 +31,25 @@ public class CardService {
      * The method adds possible moves for a given Figure to an ArrayList of Move objects.
      *
      * @param moves    An ArrayList where the method adds possible moves
-     * @param argsteps An integer representing the number of steps the figure can move
+     * @param argSteps An integer representing the number of steps the figure can move
      * @param figure   An object representing the game piece to be moved
-     * @param game     An object representing the gamestate
+     * @param game     An object representing the game state
      * @param player   An object representing the player to whom the figure belongs
      * @param range    A boolean flag indicating whether the move should be within the movement range or not
      */
     //TODO improve efficiency and readability
     //TODO need to add moves where the player can move over startField without moving into house
-    private void addStepMove(ArrayList<Move> moves, int argsteps, Figure figure, Game game, Player player, boolean range) {
+    private void addStepMove(ArrayList<Move> moves, int argSteps, Figure figure, Game game, Player player, boolean range) {
         //check if current field startField (check if can move into house)
-        // System.out.println("argsteps " + argsteps);
-        boolean neg = argsteps < 0;
+        // System.out.println("argSteps " + argSteps);
+        boolean neg = argSteps < 0;
         Field to;
         int steps;
         if (neg) {
-            steps = argsteps + 1;
+            steps = argSteps + 1;
             to = figure.getField().getPrev();
         } else {
-            steps = argsteps - 1;
+            steps = argSteps - 1;
             to = figure.getField().getNext();
         }
         if (to == null) return;

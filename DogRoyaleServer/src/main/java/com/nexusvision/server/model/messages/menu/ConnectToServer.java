@@ -11,5 +11,5 @@ import lombok.Data;
 @Data
 public class ConnectToServer extends AbstractMessage {
     private String name;
-    private Boolean isObserver = null;
+    private boolean isObserver;
 }

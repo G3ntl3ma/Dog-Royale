@@ -33,9 +33,9 @@ public class RequestGameListHandler extends MessageHandler<RequestGameList> {
         verifyClientID(clientId, message.getClientId());
         ServerController serverController = ServerController.getInstance();
 
-        ArrayList<GameLobby> startingLobbyList = serverController.getStateGames(message.getGameCountStarting(), GameState.STARTING);
-        ArrayList<GameLobby> runningLobbyList = serverController.getStateGames(message.getGameCountInProgress(), GameState.IN_PROGRESS);
-        ArrayList<GameLobby> finishedLobbyList = serverController.getStateGames(message.getGameCountFinished(), GameState.FINISHED);
+        ArrayList<GameLobby> startingLobbyList = serverController.getStateGames(message.getGamesUpcomingCount(), GameState.STARTING);
+        ArrayList<GameLobby> runningLobbyList = serverController.getStateGames(message.getGamesRunningCount(), GameState.IN_PROGRESS);
+        ArrayList<GameLobby> finishedLobbyList = serverController.getStateGames(message.getGamesFinishedCount(), GameState.FINISHED);
 
         ArrayList<ReturnGameList.Game> startingGameList = new ArrayList<>();
         ArrayList<ReturnGameList.Game> runningGameList = new ArrayList<>();
@@ -66,9 +66,9 @@ public class RequestGameListHandler extends MessageHandler<RequestGameList> {
 
         ReturnGameList returnGameList = new ReturnGameList();
         returnGameList.setType(TypeMenue.returnGameList.getOrdinal());
-        returnGameList.setStartingGames(startingGameList);
-        returnGameList.setRunningGames(runningGameList);
-        returnGameList.setFinishedGames(finishedGameList);
+        returnGameList.setGamesUpcoming(startingGameList);
+        returnGameList.setGamesRunning(runningGameList);
+        returnGameList.setGamesFinished(finishedGameList);
 
         String response = gson.toJson(returnGameList);
         MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientId, response);

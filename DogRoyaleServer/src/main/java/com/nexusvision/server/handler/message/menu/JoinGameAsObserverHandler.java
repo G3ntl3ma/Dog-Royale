@@ -11,7 +11,7 @@ import com.nexusvision.server.model.messages.menu.TypeMenue;
 /**
  * Handles a <code>JoinGameAsObserver</code> request
  *
- * @author felixwr, aermysh
+ * @author felixwr
  */
 public class JoinGameAsObserverHandler extends MessageHandler<JoinGameAsObserver> {
 
@@ -21,8 +21,7 @@ public class JoinGameAsObserverHandler extends MessageHandler<JoinGameAsObserver
      * creates a success response and returns the response
      *
      * @param message An Instance of the <code>JoinGameAsObserver</code> representing a client's request to join a game as an observer
-     * @param clientId An Integer representing the Id of the requesting client
-     * @return A JSON String representing the response to the client
+     * @param clientId An Integer representing the id of the requesting client
      */
     @Override
     protected void performHandle(JoinGameAsObserver message, int clientId) throws HandlingException {

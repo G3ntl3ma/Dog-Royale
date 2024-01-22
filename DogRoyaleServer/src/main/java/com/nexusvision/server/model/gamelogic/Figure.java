@@ -14,13 +14,11 @@ public class Figure  {
     private Field field;
     private boolean isOnBench; //ignore field if isInBank
     private boolean isInHouse; //cant be swapped for example
-    private int ownerId; //owner id
     private int figureId;
 
-    public Figure(int ownerId, int figureId) {
+    public Figure(int figureId) {
         this.isOnBench = true;
         this.isInHouse = false;
-        this.ownerId = ownerId;
         this.figureId = figureId;
     }
     
@@ -28,18 +26,17 @@ public class Figure  {
         this.field = field;
         this.isOnBench = isOnBench;
         this.isInHouse = isInHouse;
-        this.ownerId = ownerId;
     }
 
-    public void print() {
-        System.out.print("figure print: id: " + this.figureId + " isOnBench " + this.isOnBench + " isInHouse " + this.isInHouse + " ownerId :" + this.ownerId);
-        if (this.field != null) {
-            System.out.println(" field " + this.field.getFieldId());
-        }
-        else {
-            System.out.println(" field: null");
-        }
-    }
+//    public void print() {
+//        System.out.print("figure print: id: " + this.figureId + " isOnBench " + this.isOnBench + " isInHouse " + this.isInHouse + " ownerId :" + this.ownerId);
+//        if (this.field != null) {
+//            System.out.println(" field " + this.field.getFieldId());
+//        }
+//        else {
+//            System.out.println(" field: null");
+//        }
+//    }
 
     public int hash() {
         ArrayList<Integer> variables = new ArrayList<>();

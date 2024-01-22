@@ -6,12 +6,12 @@ import lombok.Data;
 /**
  * Requests tournaments
  *
- * @author kellerb
+ * @author felixwr
  */
 @Data
-public class FindTournament extends AbstractMessage {
+public class RequestTournamentList extends AbstractMessage {
     private int clientId;
-    private int tournamentStarting;
-    private int tournamentInProgress;
-    private int tournamentFinished;
+    private int tournamentsUpcomingCount;
+    private int tournamentsRunningCount;
+    private int tournamentsFinishedCount;
 }

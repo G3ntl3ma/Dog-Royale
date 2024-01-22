@@ -11,8 +11,8 @@ import lombok.Data;
  */
 @Data
 public class RequestGameList extends AbstractMessage {
-    private Integer clientId;
-    private Integer gameCountStarting;
-    private Integer gameCountInProgress;
-    private Integer gameCountFinished;
+    private int clientId;
+    private int gamesUpcomingCount;
+    private int gamesRunningCount;
+    private int gamesFinishedCount;
 }

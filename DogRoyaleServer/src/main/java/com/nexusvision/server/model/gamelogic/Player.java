@@ -1,6 +1,7 @@
 package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.Card;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -13,8 +14,6 @@ import java.util.ArrayList;
 @Data
 public final class Player {
 
-    private final int playerId;
-    private boolean excluded = false;
     private boolean outThisRound = false;
     private ArrayList<Figure> figureList = new ArrayList<>();
     private ArrayList<Card> cardList = new ArrayList<>();
@@ -26,35 +25,19 @@ public final class Player {
     private int houseOccupationIndex; //index of housefield that with last figure TODO unused
 
     /**
-     * Constructor for the Player
+     * Constructor for the TournamentPlayer
      *
-     * @param playerId    An Integer representing the playerId of the player
      * @param figureCount An Integer representing the amount of figures a player has
      */
-    public Player(int playerId, int figureCount) {
+    public Player(int figureCount) {
         this.figuresInBank = figureCount;
-        this.playerId = playerId;
         this.lastMoveCountFigureMovedIntoHouse = 0;
         for (int i = 0; i < figureCount; i++) {
-            figureList.add(new Figure(playerId, i));
+            figureList.add(new Figure(i));
         }
     }
 
-    public Player(int playerId,  boolean excluded,  boolean outThisRound,  ArrayList<Figure> figureList,  ArrayList<Card> cardList,  Field startField,  int houseFirstIndex,  int figuresInBank,  int figuresInHouse,  int lastMoveCountFigureMovedIntoHouse,  int houseOccupationIndex ) {
-        this.playerId=playerId;
-        this.excluded=excluded;
-        this.outThisRound=outThisRound;
-        this.figureList=figureList;
-        this.cardList=cardList;
-        this.startField=startField;
-        this.houseFirstIndex=houseFirstIndex;
-        this.figuresInBank=figuresInBank;
-        this.figuresInHouse=figuresInHouse;
-        this.lastMoveCountFigureMovedIntoHouse=lastMoveCountFigureMovedIntoHouse;
-        this.houseOccupationIndex=houseOccupationIndex;
-    }
-
-    // public Player copy() {
+    // public TournamentPlayer copy() {
         // ArrayList<Figure> figureList = this.figureList.copy();
         //for figure in figure list copy the figure and put in array
         // ArrayList<Card> cardList = this.cardList.copy();
@@ -62,7 +45,7 @@ public final class Player {
         
         // Field startField = this.startField.copy();
         
-        // return new Player(this.playerId,  this.excluded,  this.outThisRound,  figureList, cardList,  startField,  this.houseFirstIndex,  this.figuresInBank,  this.figuresInHouse,  this.lastMoveCountFigureMovedIntoHouse,  this.houseOccupationIndex );
+        // return new TournamentPlayer(this.playerId,  this.excluded,  this.outThisRound,  figureList, cardList,  startField,  this.houseFirstIndex,  this.figuresInBank,  this.figuresInHouse,  this.lastMoveCountFigureMovedIntoHouse,  this.houseOccupationIndex );
     // }
 
     /**
@@ -98,34 +81,34 @@ public final class Player {
     /**
      * Prints information player, figures in bank, figures in house and the cards
      */
-    public void printInfo() {
-        System.out.print("player " + this.playerId + " figBank " + this.figuresInBank + " figs in house " + this.figuresInHouse + " out this round " + this.outThisRound);
-        System.out.print(" cards ");
-        this.printCards();
-        System.out.println("");
-        for(Figure figure : this.figureList) {
-            if (figure != null) {
-                figure.print();
-            }
-            else {
-                System.out.println("null field");
-            }
-        }
-    }
+//    public void printInfo() {
+//        System.out.print("player " + this.playerId + " figBank " + this.figuresInBank + " figs in house " + this.figuresInHouse + " out this round " + this.outThisRound);
+//        System.out.print(" cards ");
+//        this.printCards();
+//        System.out.println("");
+//        for(Figure figure : this.figureList) {
+//            if (figure != null) {
+//                figure.print();
+//            }
+//            else {
+//                System.out.println("null field");
+//            }
+//        }
+//    }
 
     /**
      * Prints information about all the figures in every house
      */
-    public void printHouse() {
-        Field house = this.startField.getHouse();
-        System.out.print("house: ");
-        while (house != null) {
-            if (!house.isEmpty()) System.out.print(house.getFigure().getOwnerId() + "-");
-            else System.out.print("_" + "-");
-            house = house.getNext();
-        }
-        System.out.println("");
-    }
+//    public void printHouse() {
+//        Field house = this.startField.getHouse();
+//        System.out.print("house: ");
+//        while (house != null) {
+//            if (!house.isEmpty()) System.out.print(house.getFigure().getOwnerId() + "-");
+//            else System.out.print("_" + "-");
+//            house = house.getNext();
+//        }
+//        System.out.println("");
+//    }
 
     /**
      * Draw a card from the deck, shuffle if empty
@@ -151,13 +134,6 @@ public final class Player {
     }
 
     /**
-     * Marks the player as excluded from the game
-     */
-    public void setExclude() {
-        this.excluded = true;
-    }
-
-    /**
      * Marks the player as excluded from the round
      */
     public void setOutThisRound() {
@@ -171,7 +147,7 @@ public final class Player {
      * @return An ArrayList storing the represented moves
      */
     public ArrayList<Move> generateMoves(Game game) {
-        System.out.print("generating moves for a player "+ this.playerId + " with the follwing handcards");        
+//        System.out.print("generating moves for a player "+ this.playerId + " with the follwing handcards");
         for(Card card : this.getCardList()) {
             System.out.print(card + " ");
         }

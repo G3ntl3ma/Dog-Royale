@@ -7,6 +7,7 @@ import lombok.Data;
  */
 @Data
 public class WinnerOrderElement {
-    private int playerId;
+    private int clientId;
     private String name;
+    private int points;
 }

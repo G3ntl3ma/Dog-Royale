@@ -4,9 +4,10 @@ package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.FieldType;
-import com.nexusvision.server.model.enums.Penalty;
 import com.nexusvision.server.service.CardService;
+import com.nexusvision.server.service.KickService;
 import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,20 +16,25 @@ import java.util.stream.Collectors;
 
 
 /**
- * This class represents the game and manages Player, Cards, Moves and more
+ * This class represents the game and manages TournamentPlayer, Cards, Moves and more
  *
  * @author dgehse
  */
 
+@Log4j2
 @Data // TODO: Should this really be @Data??
 public final class Game {
-//    private final int figuresPerPlayer;
+
+    //    private final int figuresPerPlayer;
 //    private final int initialCardsPerPlayer;
 //    private final int maximumTotalMoves;
     // private final int maximumGameDuration; //in GameLobby class
 //    private final Penalty consequencesForInvalidMove;
-    boolean[] occupied; //unused
-    private ArrayList<Player> playerList; 
+    private final LobbyConfig lobbyConfig;
+    private final int lobbyId;
+
+    private boolean[] occupied; //unused
+    private ArrayList<Player> playerList;
     private Field[] board;
     private ArrayList<Card> deck;
     private ArrayList<Card> pile;
@@ -38,36 +44,50 @@ public final class Game {
     private Card drawnCard; // for server communication
     private ArrayList<Card> discardedCardList; // for server communication
     private int movesMade;
-    private int playersRemaining; 
+    private int playersRemaining;
     private int round; //round counter
     private boolean firstMoveOfRound;
     private int[] startIndexes; //indexes of startFields, unused
 
     private CardService cardService;
+    private KickService kickService;
 
     /**
      * The constructor initializes games
      *
-     * @param conf                       A String holding information about the board and players
-     * @param figuresPerPlayer           An Integer representing the number of figures in the game
-     * @param initialCardsPerPlayer      An Integer representing the initial number of cards each player should have in their hand
-     * @param maximumTotalMoves          An integer representing the maximum number of moves allowed this game
-     * @param consequencesForInvalidMove An object representing the consequences for illegal moves
+     * @param lobbyConfig The lobby config
+     * @param lobbyId The lobbyId
      */
-    public Game(String conf, int figuresPerPlayer, int initialCardsPerPlayer, int maximumTotalMoves, int consequencesForInvalidMove) {
+    public Game(LobbyConfig lobbyConfig, int lobbyId) {
+        this.lobbyConfig = lobbyConfig;
+        this.lobbyId = lobbyId;
         this.playerList = new ArrayList<>();
         this.deck = new ArrayList<>();
         this.pile = new ArrayList<>();
         this.playerToMoveId = 0; // TODO: Should this really be the first player? Check please
         this.playerToStartColor = 0;
         this.movesMade = 0;
-        this.maximumTotalMoves = maximumTotalMoves;
-        this.figuresPerPlayer = figuresPerPlayer;
-        this.initialCardsPerPlayer = initialCardsPerPlayer;
         this.round = 0;
-        this.consequencesForInvalidMove = Penalty.values()[consequencesForInvalidMove];
         this.cardService = new CardService(null);
+        this.kickService = new KickService();
+        //constructing a string that can be parsed by the game
+        String conf = buildConf();
         init(conf);
+    }
+
+    private String buildConf() {
+        StringBuilder fieldStringBuild = new StringBuilder();
+        fieldStringBuild.append("n".repeat(Math.max(0, lobbyConfig.getFieldSize())));
+
+        for (int i = 0; i < lobbyConfig.getStartFields().getPositions().size(); i++) {
+            fieldStringBuild.setCharAt(i, 's');
+        }
+
+        for (int i = 0; i < lobbyConfig.getDrawCardFields().getPositions().size(); i++) {
+            fieldStringBuild.setCharAt(i, 'k');
+        }
+
+        return fieldStringBuild.toString();
     }
 
     /**
@@ -92,14 +112,14 @@ public final class Game {
         Collections.shuffle(deck);
         // System.out.println("reshuffle done deck size " + this.deck.size() + " pile size " + this.pile.size());
     }
-    
+
     /**
      * shuffle all variables that are unknown to the player
      */
-    public void shuffleUnknown(Player player) {
+    public void shuffleUnknown(Player player) { // TODO: Check this method
         Collections.shuffle(deck);
-        for(Player opponent : this.playerList) {
-            if(opponent != player) {
+        for (Player opponent : this.playerList) {
+            if (opponent != player) {
                 // Collections.shuffle(opponent.getCardList());
             }
         }
@@ -110,24 +130,12 @@ public final class Game {
      */
     public void reInit() { //for next round
         //assert not everyone is excluded
-        this.playersRemaining = 0;
         for (Player player : playerList) {
             player.setOutThisRound(false);
-            if (!player.isExcluded()) {
-                playersRemaining++;
-            }
         }
         int excludedCount = 0;
-        do {
-            playerToStartColor = (playerToStartColor + 1) % playerList.size();
-            if (excludedCount >= playerList.size()) {
-                //game over
-                break;
-            }
-            excludedCount++;
-        } while (!playerList.get(playerToStartColor).isExcluded());
-
-        playerToMoveId = playerToStartColor;
+        // TODO: What if game over
+        playerToMoveId = (playerToStartColor + 1) % playerList.size(); // TODO: Check if this is correct
         round++;
         // System.out.println(this.round);
     }
@@ -158,7 +166,7 @@ public final class Game {
      * Distribute Cards to the players
      */
     public void distributeCards() {
-        for (int i = 0; i < initialCardsPerPlayer; i++) {
+        for (int i = 0; i < lobbyConfig.getInitialCardsPerPlayer(); i++) {
             for (Player player : playerList) {
                 player.draw(this);
             }
@@ -169,33 +177,33 @@ public final class Game {
     /**
      * Print the current state of the game
      */
-    public void printBoard() {
-        System.out.println("BOARD=================");
-        System.out.println("player to move " + playerToMoveId);
-        System.out.println("players remaining " + playersRemaining);
-        for (Player p : playerList) {
-            p.printInfo();
-            p.printHouse();
-        }
-        for (int i = 0; i < this.mainFieldCount; i++) {
-            System.out.print(i + "-");
-        }
-        System.out.println();
-        for (int i = 0; i < mainFieldCount; i++) {
-            // Field f = this.board.get(i);
-            Field f = board[i];
-            System.out.print(f.getType().toString().charAt(0) + "-");
-        }
-        System.out.println();
-        for (int i = 0; i < mainFieldCount; i++) {
-            Field f = this.board[i];
-            if (!f.isEmpty()) System.out.print(f.getFigure().getOwnerId() + "-");
-            else System.out.print("_" + "-");
-        }
-        System.out.println();
-        printTotalCards();
-        System.out.println("===================");
-    }
+//    public void printBoard() { // TODO: Fix prints
+//        System.out.println("BOARD=================");
+//        System.out.println("player to move " + playerToMoveId);
+//        System.out.println("players remaining " + playersRemaining);
+//        for (TournamentPlayer p : playerList) {
+//            p.printInfo();
+//            p.printHouse();
+//        }
+//        for (int i = 0; i < this.mainFieldCount; i++) {
+//            System.out.print(i + "-");
+//        }
+//        System.out.println();
+//        for (int i = 0; i < mainFieldCount; i++) {
+//            // Field f = this.board.get(i);
+//            Field f = board[i];
+//            System.out.print(f.getType().toString().charAt(0) + "-");
+//        }
+//        System.out.println();
+//        for (int i = 0; i < mainFieldCount; i++) {
+//            Field f = this.board[i];
+//            if (!f.isEmpty()) System.out.print(f.getFigure().getOwnerId() + "-");
+//            else System.out.print("_" + "-");
+//        }
+//        System.out.println();
+//        printTotalCards();
+//        System.out.println("===================");
+//    }
 
     /**
      * Set up the initial deck, defining types and quantities of the cards
@@ -225,12 +233,12 @@ public final class Game {
         }
 
         // Collections.shuffle(this.deck, new Random(666)); //deterministic seed
-        Collections.shuffle(this.deck); //undeterministic
+        Collections.shuffle(this.deck); // not deterministic
     }
 
     /**
-     * Set up the initial game state, Count the numbers of players,
-     * initialize board, Create fields and players,
+     * Set up the initial game state, count the numbers of players,
+     * initialize board, create fields and players,
      * connect fields and set up player starting positions and set house fields
      *
      * @param conf A String holding information about the board and players
@@ -243,10 +251,10 @@ public final class Game {
 
         int fieldCount = conf.length();
 
-        System.out.println("fieldCount"+fieldCount);
+        System.out.println("fieldCount" + fieldCount);
         this.mainFieldCount = fieldCount;
 
-        int totalFieldCount = fieldCount + figuresPerPlayer * players; //playerCount
+        int totalFieldCount = fieldCount + lobbyConfig.getFiguresPerPlayer() * players; //playerCount
         this.board = new Field[totalFieldCount];
 
         this.startIndexes = new int[players];
@@ -258,9 +266,9 @@ public final class Game {
             this.board[i] = new Field(i, conf.charAt(i));
         }
 
-        //add players Player
+        //add players TournamentPlayer
         for (int playerCol = 0; playerCol < players; playerCol++) {
-            this.playerList.add(new Player(playerCol, figuresPerPlayer));
+            this.playerList.add(new Player(lobbyConfig.getFiguresPerPlayer()));
         }
         int seenStarts = 0;
         for (int i = 0; i < conf.length(); i++) {
@@ -278,16 +286,16 @@ public final class Game {
                 this.playerList.get(seenStarts).setStartField(this.board[i]); //init starts
                 int off = fieldCount;
                 this.playerList.get(seenStarts).setHouseFirstIndex(fieldCount);
-                for (int j = off; j < figuresPerPlayer + off; j++) {
+                for (int j = off; j < lobbyConfig.getFiguresPerPlayer() + off; j++) {
                     this.board[fieldCount++] = new Field(fieldCount, FieldType.HOUSE);
                 }
-                for (int j = off; j < figuresPerPlayer - 1 + off; j++) {
+                for (int j = off; j < lobbyConfig.getFiguresPerPlayer() - 1 + off; j++) {
                     this.board[j].setNext(this.board[j + 1]);
-                    // this.board[j+1].setPrev(this.board[j]); //house fields dont have prev field
+                    // this.board[j+1].setPrev(this.board[j]); //house fields don't have prev field
                 }
                 seenStarts++;
                 this.board[i].setHouse(this.board[off]);
-                // this.board[off].setPrev(this.board[i]); //house fields dont have prev field
+                // this.board[off].setPrev(this.board[i]); //house fields don't have prev field
             }
         }
         this.playersRemaining = this.playerList.size();
@@ -311,7 +319,7 @@ public final class Game {
         firstMoveOfRound = false;
         int count = 0;
         if (playersRemaining == 0) return false;
-        // System.out.println("playersremaining " + playersRemaining);
+        // System.out.println("playersRemaining " + playersRemaining);
         //get next player who is not out yet if there is anyone
         do {
             playerToMoveId = (playerToMoveId + 1) % playerList.size();
@@ -321,7 +329,7 @@ public final class Game {
                 return false; //unreachable
             }
             count++;
-        } while (getCurrentPlayer().isExcluded() || getCurrentPlayer().isOutThisRound()); //TODO check if excluded is not buggy
+        } while (getCurrentPlayer().isOutThisRound());
 
         return true;
     }
@@ -385,7 +393,7 @@ public final class Game {
                 playerWinOrder.add(player);
             }
         }
-        return (ArrayList<Integer>) playerWinOrder.stream().map(Player::getPlayerId).collect(Collectors.toList());
+        return null; // (ArrayList<Integer>) playerWinOrder.stream().map(TournamentPlayer::getPlayerId).collect(Collectors.toList()); // TODO: This doesn't work
     }
 
     /**
@@ -395,13 +403,13 @@ public final class Game {
      */
     public boolean checkGameOver() {
         for (Player player : playerList) {
-            if (player.getFiguresInHouse() == figuresPerPlayer) {
+            if (player.getFiguresInHouse() == lobbyConfig.getFiguresPerPlayer()) {
                 // System.out.println("game over: full house");
                 return true;
             }
         }
 
-        if (movesMade >= maximumTotalMoves) {
+        if (movesMade >= lobbyConfig.getMaximumTotalMoves()) {
             // System.out.println("game over: maximumtotalmoves reached");
             return true;
         }
@@ -413,10 +421,10 @@ public final class Game {
         // return noNext;
     }
 
-    // Eventuell nicht nötig, da man sowieso erst einmal checken muss ob das Spiel zuende ist bevor man
+    // Eventuell nicht nötig, da man sowieso erst einmal checken muss, ob das Spiel zu Ende ist bevor man
     // sich winner holen möchte
-//    public ArrayList<Player> getWinners() {
-//        ArrayList<Player> playerWinOrder;
+//    public ArrayList<TournamentPlayer> getWinners() {
+//        ArrayList<TournamentPlayer> playerWinOrder;
 //
 //        if (checkGameOver()) {
 //            playerWinOrder = getWinnerOrder();
@@ -447,11 +455,11 @@ public final class Game {
      */
     public boolean roundOver() {
         int playersRemaining2 = 0;
-        for(Player player : this.playerList) {
+        for (Player player : this.playerList) {
             if (!player.isOutThisRound()) playersRemaining2++;
         }
-        if(playersRemaining2 != playersRemaining){
-            System.out.println("inkonsistent gamestate playersremaining");
+        if (playersRemaining2 != playersRemaining) {
+            System.out.println("inkonsistent gamestate playersremaining"); // TODO: Why is this German?!?!
             System.exit(235);
         }
         return playersRemaining == 0;
@@ -533,7 +541,7 @@ public final class Game {
      * @param player An object representing the player to exclude from the round
      */
     public void excludeFromRound(Player player) { //return cards??
-        if (player.isOutThisRound() == true) {
+        if (player.isOutThisRound()) {
             System.out.println("error trying to exclude a player who is already out");
             System.exit(40);
         }
@@ -549,26 +557,33 @@ public final class Game {
      * @param player An object representing the player to exclude from the game
      */
     public void excludeFromGame(Player player) {
-        if (player.isOutThisRound() == true) {
-            System.out.println("error trying to exclude a player from game who is already out");
+        if (player.isOutThisRound()) {
+            log.error("error trying to exclude a player from game who is already out");
             System.exit(41);
         }
-        player.setExclude();
+        kickService.kick(lobbyConfig, getClientIdFromPlayer(player), lobbyId);
+        playerList.remove(player);
+
         this.playersRemaining--;
         this.discardHandCards();
-        //TODO throw away cards
+        //TODO Send message to throw away cards
+    }
+
+    private Integer getClientIdFromPlayer(Player player) {
+        return lobbyConfig.getPlayerOrder().getOrder().get(playerList.indexOf(player)).getClientId();
     }
 
     /**
      * Handles illegal move and applies penalties
      */
     public void handleIllegalMove() {
-        if (consequencesForInvalidMove == Penalty.kickFromGame) {
-            excludeFromGame(this.getCurrentPlayer());
-        } else if (consequencesForInvalidMove == Penalty.excludeFromRound) {
-            excludeFromRound(this.getCurrentPlayer());
-        } else {
-            //unreachable
+        switch (lobbyConfig.getConsequencesForInvalidMove()) {
+            case kickFromGame:
+                excludeFromGame(this.getCurrentPlayer());
+                break;
+            case excludeFromRound:
+                excludeFromRound(this.getCurrentPlayer());
+                break;
         }
     }
 
@@ -608,26 +623,26 @@ public final class Game {
     public ArrayList<Integer> hash() {
         //get hash of board
         ArrayList<Integer> deckValues = this.deck.stream()
-            .map(card -> card.ordinal())
-            .sorted()
-            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+                .map(card -> card.ordinal())
+                .sorted()
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 
         ArrayList<Integer> boardValues = Arrays.stream(this.board)
-            .map(field -> field.hash())
-            .sorted()
-            .collect(Collectors.toCollection(ArrayList::new));
-        
-        ArrayList<Integer> pileValues = this.pile.stream()
-            .map(card -> card.ordinal())
-            .sorted()
-            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-        
-        ArrayList<Integer> playerValues = this.playerList.stream()
-            .map(player -> player.hash())
-            .sorted()
-            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+                .map(field -> field.hash())
+                .sorted()
+                .collect(Collectors.toCollection(ArrayList::new));
 
-        ArrayList<Integer> variables = new ArrayList<>(); 
+        ArrayList<Integer> pileValues = this.pile.stream()
+                .map(card -> card.ordinal())
+                .sorted()
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        ArrayList<Integer> playerValues = this.playerList.stream()
+                .map(player -> player.hash())
+                .sorted()
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        ArrayList<Integer> variables = new ArrayList<>();
         variables.add(mainFieldCount);
         variables.add(playerToStartColor);
         variables.add(playerToMoveId);

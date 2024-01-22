@@ -2,29 +2,26 @@ package com.nexusvision.server.handler.message.menu;
 
 import com.nexusvision.server.common.ChannelType;
 import com.nexusvision.server.controller.MessageBroker;
-import com.nexusvision.server.handler.Handler;
 import com.nexusvision.server.handler.message.MessageHandler;
-import com.nexusvision.server.model.messages.menu.FindTournament;
-import com.nexusvision.server.model.messages.menu.ReturnFindTournament;
-import com.nexusvision.server.model.messages.menu.Error;
+import com.nexusvision.server.model.messages.menu.RequestTournamentList;
+import com.nexusvision.server.model.messages.menu.ReturnTournamentList;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
-import lombok.Data;
 
 import java.util.ArrayList;
 
-public class FindTournamentHandler extends MessageHandler<FindTournament> {
+public class FindTournamentHandler extends MessageHandler<RequestTournamentList> {
 
     @Override
-    protected void performHandle(FindTournament message, int clientID) {
+    protected void performHandle(RequestTournamentList message, int clientID) {
 
-        ReturnFindTournament returnFindTournament = new ReturnFindTournament();
-        returnFindTournament.setType(TypeMenue.returnFindTournament.getOrdinal());
-        returnFindTournament.setClientId(clientID);
-        returnFindTournament.setTournamentFinished(new ArrayList<>()); // TODO: Implement tournaments
-        returnFindTournament.setTournamentStarting(new ArrayList<>());
-        returnFindTournament.setTournamentInProgress(new ArrayList<>());
+        ReturnTournamentList returnTournamentList = new ReturnTournamentList();
+        returnTournamentList.setType(TypeMenue.returnTournamentList.getOrdinal());
+        returnTournamentList.setClientId(clientID);
+        returnTournamentList.setTournamentsFinished(new ArrayList<>()); // TODO: Implement tournaments
+        returnTournamentList.setTournamentsUpcoming(new ArrayList<>());
+        returnTournamentList.setTournamentsRunning(new ArrayList<>());
 
-        String response = gson.toJson(returnFindTournament);
+        String response = gson.toJson(returnTournamentList);
         MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientID, response);
     }
 }

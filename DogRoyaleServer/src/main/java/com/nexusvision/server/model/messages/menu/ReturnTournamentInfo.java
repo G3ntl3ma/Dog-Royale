@@ -8,59 +8,44 @@ import java.util.List;
 /**
  * Server returns tournament information
  *
- * @author kellerb
+ * @author felixwr
  */
 @Data
 public class ReturnTournamentInfo extends AbstractMessage {
-    //TODO implement variables
     private List<TournamentInfo> tournamentInfo;
 
     @Data
     public static class TournamentInfo{
         private int tournamentId;
-        private List<CurrentGame> currentGame;
-        private List<UpcomingGames> upcomingGames;
-        private List<CompletedGames> completedGames;
-        private List<CurrentRankings> currentRankings;
+        private RunningGame gameRunning;
+        private List<UpcomingGames> gamesUpcoming;
+        private List<FinishedGames> gamesFinished;
+        private List<TournamentPlayer> currentRankings;
 
         @Data
-        public static class CurrentGame{
+        public static class RunningGame {
             private int gameId;
             private int playerCount;
             private int maxPlayerCount;
             private int currentRound;
-            private List<Player> players;
-
-            @Data
-            public static class Player{
-                private int clientId;
-                private String name;
-                private int points;
-            }
+            private List<TournamentPlayer> players;
         }
 
         @Data
         public static class UpcomingGames{
             private int gameId;
-            private int startInGames;
-            private List<Player> players;
-
-            @Data
-            public static class Player{
-                private int clientId;
-                private String name;
-                private int points;
-            }
+            private List<TournamentPlayer> players;
         }
 
         @Data
-        public static class CompletedGames{
+        public static class FinishedGames {
             private int gameId;
-            private int winnerPlayerId;
+            private boolean wasCanceled;
+            private List<TournamentPlayer> winnerOrder;
         }
 
         @Data
-        public static class CurrentRankings{
+        public static class TournamentPlayer {
             private int clientId;
             private String name;
             private int points;

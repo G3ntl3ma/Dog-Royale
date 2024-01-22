@@ -8,5 +8,5 @@ import lombok.Data;
 @Data
 public abstract class AbstractMessage {
 
-    protected Integer type;
+    protected int type;
 }

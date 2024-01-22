@@ -5,7 +5,7 @@ import com.nexusvision.server.model.gamelogic.Player;
 
 public class PlayerService {
 
-//    public Player getPlayer(int playerOrderIndex, Game game) {
+//    public TournamentPlayer getPlayer(int playerOrderIndex, Game game) {
 //        return game.getPlayerList().get(playerOrderIndex);
 //    }
 }

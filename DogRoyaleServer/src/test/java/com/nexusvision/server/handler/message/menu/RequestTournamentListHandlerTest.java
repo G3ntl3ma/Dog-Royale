@@ -1,9 +1,6 @@
 package com.nexusvision.server.handler.message.menu;
 
-import com.nexusvision.server.model.messages.menu.FindTournament;
-import com.nexusvision.server.model.messages.menu.ReturnFindTournament;
-import com.nexusvision.server.model.messages.menu.TypeMenue;
-import net.bytebuddy.jar.asm.Handle;
+import com.nexusvision.server.model.messages.menu.RequestTournamentList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,12 +9,10 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-public class FindTournamentHandlerTest {
+public class RequestTournamentListHandlerTest {
 
     @Mock
-    private FindTournament findTournament;
+    private RequestTournamentList requestTournamentList;
 
     @InjectMocks
     private FindTournamentHandler findTournamentHandler;
@@ -30,18 +25,18 @@ public class FindTournamentHandlerTest {
     @Test
     public void testHandle() {
         // mocking every input for tournaments as 0
-        when(findTournament.getTournamentStarting()).thenReturn(0);
-        when(findTournament.getTournamentFinished()).thenReturn(0);
-        when(findTournament.getTournamentInProgress()).thenReturn(0);
+        when(requestTournamentList.getTournamentsUpcomingCount()).thenReturn(0);
+        when(requestTournamentList.getTournamentsFinishedCount()).thenReturn(0);
+        when(requestTournamentList.getTournamentsRunningCount()).thenReturn(0);
 
         //copy the result of handlerError for zero tournaments
         String expectedResult = "{\"dataId\":0,\"message\":\"Failed to find tournament (no tournaments)\",\"type\":108}";
 
         int mockClientID = 123;
-        when(findTournament.getClientId()).thenReturn(mockClientID);
+        when(requestTournamentList.getClientId()).thenReturn(mockClientID);
 
         // Call the method being tested TODO: Catch exception here
-        // String result = findTournamentHandler.handle(findTournament, mockClientID);
+        // String result = findTournamentHandler.handle(requestTournamentList, mockClientID);
 
         // Verify the result TODO: change
         //assertEquals(expectedResult, result);
@@ -59,7 +54,7 @@ public class FindTournamentHandlerTest {
             String result = findTournamentHandler.handle(mockFindTournament, 456);
 
 
-            ReturnFindTournament expectedReturnFindTournament = new ReturnFindTournament();
+            ReturnTournamentList expectedReturnFindTournament = new ReturnTournamentList();
             expectedReturnFindTournament.setType(TypeMenue.returnFindTournament);
             expectedReturnFindTournament.setClientId(456);
             expectedReturnFindTournament.setTournamentFinished(Collections.emptyList()); // Replace with expected list

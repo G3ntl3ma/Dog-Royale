@@ -3,7 +3,6 @@ package com.nexusvision.server.handler;
 import com.google.gson.*;
 import com.nexusvision.server.common.Subscriber;
 import com.nexusvision.server.controller.MessageBroker;
-import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.message.game.LeaveObsHandler;
 import com.nexusvision.server.handler.message.game.LeavePlayerHandler;
 import com.nexusvision.server.handler.message.game.MoveHandler;
@@ -13,8 +12,6 @@ import com.nexusvision.server.model.messages.game.*;
 import com.nexusvision.server.model.messages.menu.*;
 import com.nexusvision.server.model.messages.menu.Error;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -137,11 +134,11 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
             if (type == TypeMenue.connectToServer.getOrdinal()) {
                 handleConnectToServer(request);
             } else if (type == TypeMenue.requestGameList.getOrdinal()
-                    || type == TypeMenue.findTournament.getOrdinal()) {
+                    || type == TypeMenue.requestTournamentList.getOrdinal()) {
                 handleRequestGameListAndFindTournament(request, type);
             } else if (type == TypeMenue.joinGameAsObserver.getOrdinal()) {
                 handleJoinGameAsObserver(request);
-            } else if (type == TypeMenue.joinGameAsParticipant.getOrdinal()) {
+            } else if (type == TypeMenue.joinGameAsPlayer.getOrdinal()) {
                 handleJoinGameAsParticipant(request);
             } else if (type == TypeMenue.requestTechData.getOrdinal()) {
                 handleRequestTechData(request);
@@ -205,13 +202,13 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
             case REQUEST_GAME_LIST:
                 if (type != TypeMenue.requestGameList.getOrdinal()) {
                     handleError("Received requestTournamentInfo but expected requestGameList",
-                            TypeMenue.findTournament.getOrdinal());
+                            TypeMenue.requestTournamentList.getOrdinal());
                     return;
                 }
                 handleRequestGameList(request, State.REQUEST_JOIN);
                 break;
             case FIND_TOURNAMENT:
-                if (type != TypeMenue.findTournament.getOrdinal()) {
+                if (type != TypeMenue.requestTournamentList.getOrdinal()) {
                     handleError("Received requestGameList but expected findTournament",
                             TypeMenue.requestGameList.getOrdinal());
                     return;
@@ -253,13 +250,13 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
     private void handleFindTournament(String request, State nextState) throws HandlingException {
         log.info("Trying to handle tournament info request");
         try {
-            FindTournament findTournament = gson.fromJson(request, FindTournament.class);
-            new FindTournamentHandler().handle(findTournament, clientID);
+            RequestTournamentList requestTournamentList = gson.fromJson(request, RequestTournamentList.class);
+            new FindTournamentHandler().handle(requestTournamentList, clientID);
             expectedState = nextState;
             log.info("Find tournament request was successful");
         } catch (JsonSyntaxException e) {
             handleError("Wrong message format from type findTournament",
-                    TypeMenue.findTournament.getOrdinal(), e);
+                    TypeMenue.requestTournamentList.getOrdinal(), e);
         }
     }
 
@@ -298,13 +295,13 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
         }
         log.info("Trying to handle join game as participant request");
         try {
-            JoinGameAsParticipant joinGameAsParticipant = gson.fromJson(request, JoinGameAsParticipant.class);
-            new JoinGameAsParticipantHandler().handle(joinGameAsParticipant, clientID);
+            JoinGameAsPlayer joinGameAsPlayer = gson.fromJson(request, JoinGameAsPlayer.class);
+            new JoinGameAsParticipantHandler().handle(joinGameAsPlayer, clientID);
             expectedState = State.WAITING_FOR_GAME_START;
             log.info("Join game as participant was successful");
         } catch (JsonSyntaxException e) {
             handleError("Wrong message format from type joinGameAsParticipant",
-                    TypeMenue.joinGameAsParticipant.getOrdinal(), e);
+                    TypeMenue.joinGameAsPlayer.getOrdinal(), e);
         }
     }
 

@@ -11,5 +11,4 @@ import lombok.Data;
 @Data
 public class ConnectedToGame extends AbstractMessage {
     private boolean success;
-
 }

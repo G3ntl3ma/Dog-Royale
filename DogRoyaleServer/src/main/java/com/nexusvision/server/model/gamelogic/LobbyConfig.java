@@ -1,6 +1,7 @@
 package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.Colors;
+import com.nexusvision.server.model.enums.Penalty;
 import com.nexusvision.server.model.utils.*;
 import lombok.Getter;
 
@@ -28,7 +29,7 @@ public class LobbyConfig {
     private final List<ObserverElement> observerList;
     private int thinkTimePerMove;
     private int visualizationTimePerMove;
-    private int consequencesForInvalidMove;
+    private Penalty consequencesForInvalidMove;
     private int maximumGameDuration;
     private int maximumTotalMoves;
 
@@ -81,7 +82,7 @@ public class LobbyConfig {
         this.initialCardsPerPlayer = initialCardsPerPlayer;
         this.thinkTimePerMove = thinkTimePerMove;
         this.visualizationTimePerMove = visualizationTimePerMove;
-        this.consequencesForInvalidMove = consequencesForInvalidMove;
+        this.consequencesForInvalidMove = Penalty.values()[consequencesForInvalidMove];
         this.maximumGameDuration = maximumGameDuration;
         this.maximumTotalMoves = maximumTotalMoves;
     }
@@ -109,11 +110,11 @@ public class LobbyConfig {
      * or player is added already
      */
     public synchronized boolean addPlayer(String name, int clientId) {
-        List<PlayerOrder.OrderElement> orderList = playerOrder.getOrder();
+        List<PlayerElement> orderList = playerOrder.getOrder();
         if (playerOrder.find(clientId) != -1 || orderList.size() == maxPlayerCount || orderList.size() == 6) {
             return false;
         }
-        PlayerOrder.OrderElement player = new PlayerOrder.OrderElement();
+        PlayerElement player = new PlayerElement();
         player.setName(name);
         player.setClientId(clientId);
         orderList.add(player);

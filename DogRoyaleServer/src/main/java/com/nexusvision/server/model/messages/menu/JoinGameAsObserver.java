@@ -10,6 +10,6 @@ import lombok.Data;
  */
 @Data
 public class JoinGameAsObserver extends AbstractMessage {
-    private Integer gameId;
-    private Integer clientId;
+    private int gameId;
+    private int clientId;
 }

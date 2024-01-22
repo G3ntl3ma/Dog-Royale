@@ -1,6 +1,5 @@
 package com.nexusvision.server.model.enums;
-public enum Penalty
-{
+public enum Penalty {
     excludeFromRound ,
-    kickFromGame
+    kickFromGame;
 }

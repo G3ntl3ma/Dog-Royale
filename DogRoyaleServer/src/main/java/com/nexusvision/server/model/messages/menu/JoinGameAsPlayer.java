@@ -7,11 +7,11 @@ import lombok.Data;
 /**
  * Joins the game as participant
  *
- * @author kellerb
+ * @author felixwr
  */
 @Data
-public class JoinGameAsParticipant extends AbstractMessage {
-    private Integer gameId;
-    private Integer clientId;
+public class JoinGameAsPlayer extends AbstractMessage {
+    private int gameId;
+    private int clientId;
     private String playerName;
 }

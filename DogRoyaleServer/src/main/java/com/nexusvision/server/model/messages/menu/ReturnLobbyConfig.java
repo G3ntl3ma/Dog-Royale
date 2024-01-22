@@ -1,9 +1,12 @@
 package com.nexusvision.server.model.messages.menu;
 
+import com.nexusvision.server.model.enums.Colors;
+import com.nexusvision.server.model.enums.Penalty;
 import com.nexusvision.server.model.utils.*;
 import com.nexusvision.server.model.messages.AbstractMessage;
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -14,19 +17,20 @@ import java.util.List;
 @Data
 public class ReturnLobbyConfig extends AbstractMessage {
 
-    private Integer playerCount;
-    private Integer fieldsize; // named like this in the interface document
-    private Integer figuresPerPlayer;
-    private List<ColorMapping> Colors; // named like this in the interface document
+    private String gameName;
+    private int maxPlayerCount;
+    private int fieldsize;
+    private int figuresPerPlayer;
+    private List<ColorMapping> Colors;
     private DrawCardFields drawCardFields;
     private StartFields startFields;
-    private Integer initialCardsPerPlayer;
+    private int initialCardsPerPlayer;
     private PlayerOrder playerOrder;
     private List<WinnerOrderElement> winnerOrder;
     private List<ObserverElement> observer;
-    private Integer thinkTimePerMove;
-    private Integer visualizationTimePerMove;
-    private Integer consequencesForInvalidMove;
-    private Integer maximumGameDuration;
-    private Integer maximumTotalMoves;
+    private int thinkTimePerMove;
+    private int visualizationTimePerMove;
+    private int consequencesForInvalidMove;
+    private int maximumGameDuration;
+    private int maximumTotalMoves;
 }

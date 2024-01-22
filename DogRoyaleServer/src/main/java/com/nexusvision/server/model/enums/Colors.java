@@ -6,5 +6,5 @@ public enum Colors {
     farbe3,
     farbe4,
     farbe5,
-    farbe6,
+    farbe6;
 }
