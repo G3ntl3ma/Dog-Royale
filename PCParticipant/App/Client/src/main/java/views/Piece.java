@@ -13,9 +13,9 @@ public class Piece extends ImageView {      //TODO: make only selectable for the
     int pieceIndex;
     boolean onboard;
     int playerIndex;
-    Pane paneBoard;
+    static Pane paneBoard;
     ImageView shine;
-    ImageView redShine;
+    static ImageView redShine;
     static Piece selectedEnemyPiece; //Saves the attacked Piece
     static boolean selectEnemyPiece = false;
     static Piece currentPiece; //Saves the selected Piece
@@ -94,6 +94,15 @@ public class Piece extends ImageView {      //TODO: make only selectable for the
         }
     }
 
+    /**deselects the enemy piece
+     *
+     */
+    public static void deselectEnemyPiece()
+    {
+        selectedEnemyPiece = null;
+        removeRedShine();
+    }
+
     /**
      * deselects the piece
      */
@@ -146,12 +155,17 @@ public class Piece extends ImageView {      //TODO: make only selectable for the
     {
         paneBoard.getChildren().remove(shine);
     }
-    public void removeRedShine()
+    public static void removeRedShine()
     {
         paneBoard.getChildren().remove(redShine);
     }
 
     public static void setSelectEnemyPiece(boolean selectEnemyPiece) {
+
         Piece.selectEnemyPiece = selectEnemyPiece;
+        if (!selectEnemyPiece)
+        {
+            deselectEnemyPiece();
+        }
     }
 }

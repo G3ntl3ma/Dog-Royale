@@ -287,7 +287,6 @@ public class CardHandler {
             //Playing the transitions
             parallelTransition.play();
         }
-
         public Card getCard() { return this.card;}
 
 
