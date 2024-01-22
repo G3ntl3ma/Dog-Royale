@@ -10,7 +10,7 @@ gesamtarbeitszeit: 1,30h
 
 ## Projektmanagement
 - Meeting
-  -2024-01-22 0,30h
+  - 2024-01-22 0,30h
 
 
 ## Werkzeuge
@@ -18,7 +18,7 @@ gesamtarbeitszeit: 1,30h
 
 ## Dokumentation
 - Abschlussdokument
-  -2024-01-22 1,00h
+  - 2024-01-22 1,00h
 
 ## Sprint Planning
 
