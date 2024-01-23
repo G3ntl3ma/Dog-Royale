@@ -1,11 +1,13 @@
 package Dtos.CustomClasses;
 
+import java.util.ArrayList;
+
 public class Field {
     // Field class for drawCardFields and startFields in TypeMenue.returnLobbyConfig
     private int count;
-    private int[] positions;
+    private ArrayList<Integer> positions;
 
-    public Field(int count, int[] positions) {
+    public Field(int count, ArrayList<Integer> positions) {
         this.count = count;
         this.positions = positions;
     }
@@ -18,11 +20,11 @@ public class Field {
         this.count = count;
     }
 
-    public int[] getPositions() {
+    public ArrayList<Integer> getPositions() {
         return positions;
     }
 
-    public void setPositions(int[] positions) {
+    public void setPositions(ArrayList<Integer> positions) {
         this.positions = positions;
     }
 }
