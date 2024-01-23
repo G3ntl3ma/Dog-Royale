@@ -18,6 +18,7 @@ public final class Move {
     private final boolean isStartMove; //ignore from field just put a fig on isStartMove
     private final Player player;
     private final Card cardUsed;
+    private final Figure playerFigure;
 
     /**
      * Constructor for the Move
@@ -35,16 +36,26 @@ public final class Move {
         this.isSwapMove = isSwapMove;
         this.isStartMove = false;
         this.cardUsed = cardUsed;
+        if(from != null) {
+            this.playerFigure = from.getFigure();
+        }
+        else {
+            this.playerFigure = player.getFirstOnBench();
+        }
     }
 
     public int getSelectedValue() {
         //formula
         //(startfieldofplayervalue + tofieldvalue - firsthousefieldinx) - currentfieldvalue
+        if (isStartMove){
+            return -1;
+        }
         if(to.getType() == FieldType.HOUSE && from.getType() != FieldType.HOUSE) {
             int toValue = player.getStartField().getFieldId() + to.getFieldId() - player.getHouseFirstIndex();
             int fromvalue = from.getFieldId();
             return toValue - fromvalue;
         }
+
         else {
             return to.getFieldId() - from.getFieldId();
         }
@@ -62,8 +73,14 @@ public final class Move {
         this.isStartMove = true;
         this.cardUsed = cardUsed;
         this.from = null;
-        this.to = null;
+        this.to = player.getStartField();
         this.isSwapMove = false;
+        if(from != null) {
+            this.playerFigure = from.getFigure();
+        }
+        else {
+            this.playerFigure = player.getFirstOnBench();
+        }
     }
 
     /**
@@ -110,16 +127,16 @@ public final class Move {
             System.exit(42);
         }
 
-        Figure playerFigure = null; //TODO
+        // Figure playerFigure = null; //TODO
         Figure opponentFigure = null;
         Card playerDrawnCard= null;
         Card opponentDrawnCard= null;
         Card lastCardOnPile = null;
         if(game.getPile().size() != 0) {
-            lastCardOnPile= game.getPile().get(game.getPile().size() - 1); 
+            lastCardOnPile= game.getPile().get(game.getPile().size() - 1);
         }
         int LastMoveCountFigureMovedIntoHouse = this.getPlayer().getLastMoveCountFigureMovedIntoHouse();
-        
+
         game.setDrawnCard(null);
 
         // System.out.println("cards num before " + this.player.cards.size());
@@ -132,7 +149,7 @@ public final class Move {
             opponentFigure = to.getFigure();
             Player opponent = game.getPlayerList().get(to.getFigure().getOwnerId());
             //set figure of field
-            playerFigure = from.getFigure();
+            // playerFigure = from.getFigure();
             to.setFigure(playerFigure);
             from.setFigure(opponentFigure);
 
@@ -156,7 +173,7 @@ public final class Move {
             //TODO assert figs in bank > 0
             // System.out.println("isStartMove move");
             // System.out.println("figs in bank before " + this.player.figuresInBank);
-            playerFigure = player.getFirstOnBench();
+            // playerFigure = player.getFirstOnBench();
             Field to = player.getStartField(); //TODO maybe set the to field somewhere else
             playerFigure.setOnBench(false);
             playerFigure.setInHouse(false);
@@ -168,7 +185,7 @@ public final class Move {
                 //set field of figure
                 to.getFigure().setOnBench(true);
             }
-            
+
             //set figure of field
             // player.getStartField().setFigure(figure); //get first figure not on field from player
             to.setFigure(playerFigure);
@@ -190,7 +207,7 @@ public final class Move {
 
             //unused
             //if (to.getType() == FieldType.HOUSE) {
-             //   player.setHouseOccupationIndex(to.getFieldId());
+            //   player.setHouseOccupationIndex(to.getFieldId());
             //}
 
             assert from != null;
@@ -202,11 +219,11 @@ public final class Move {
 
             //moving out of house not possible but
             // if (to.getType() != FieldType.HOUSE && from.getType() == FieldType.HOUSE) {
-                // player.setFiguresInHouse(player.getFiguresInHouse() - 1);
-                // from.getFigure().setInHouse(false);
+            // player.setFiguresInHouse(player.getFiguresInHouse() - 1);
+            // from.getFigure().setInHouse(false);
             // }
 
-            playerFigure = from.getFigure();
+            // playerFigure = from.getFigure();
             to.setFigure(playerFigure);
             from.setEmpty();
 

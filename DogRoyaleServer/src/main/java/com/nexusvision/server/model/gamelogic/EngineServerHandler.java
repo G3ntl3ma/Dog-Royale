@@ -6,36 +6,40 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.Penalty;
-import com.nexusvision.server.model.messages.game.BoardState;
-import com.nexusvision.server.model.messages.game.MoveValid;
-import com.nexusvision.server.model.messages.game.TypeGame;
+import com.nexusvision.server.model.messages.game.*;
 import com.nexusvision.server.model.messages.menu.ConnectToServer;
 import com.nexusvision.server.model.messages.menu.ConnectedToServer;
+import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
+import com.google.gson.Gson;
+import com.google.gson.*;
+import com.nexusvision.utils.NewLineAppendingSerializer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.Collections;
+import java.util.*;
 
 public class EngineServerHandler{
     //know own cards by keeping track of all 3.4 messages
     private ArrayList<Card> handcards = new ArrayList<>();
     private int clientId;
+    private int playerId;
     // private int playerId; //TODO set
     private HashMap<Integer, Integer> handCardCounts = new HashMap<>(); //clientId key //TODO fix clientid vs playerid
     private Game game;
     private HashMap<Integer,Integer> clientIdToPlayerId = new HashMap<>();
-
+    protected static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
+            .create();
 
     public EngineServerHandler() {
         
     }
+
+    //TODO discard pile is not in order i think
     
     public void run(String SERVER_ADDRESS, int PORT) {
         try {        
@@ -47,14 +51,19 @@ public class EngineServerHandler{
             String request, response;
             //send 2.3 (join game with name and isobs bool = false)
             ConnectToServer connectToServer = new ConnectToServer();
-            connectToServer.setType();
-            connectToServer.setName("mike oxlong");
-            writer.println(connectToServer.toString());
+            connectToServer.setType(TypeMenue.connectToServer.getOrdinal()+3); //TODO fix ordinals
+            connectToServer.setName("mikeoxlong");
+            connectToServer.setIsObserver(false);
+            String tosend = gson.toJson(connectToServer).toString();
+            System.out.println("trying to send " + tosend);
+            writer.println(tosend);
+            writer.flush();
             //receive 2.4 (receive own clienitid)
-            request = reader.readLine();
-            //read own clientid
-            ConnectedToServer connectedToServer = gson.fromJson(request, ConnectedToServer.class);
-            this.clientId = connectedToServer.getClientId();
+            // request = reader.readLine();
+            // read own clientid
+            // ConnectedToServer connectedToServer = gson.fromJson(request, ConnectedToServer.class);
+            // this.clientId = connectedToServer.getClientId();
+
             while (true) {
                 if ((request = reader.readLine()) != null
                     && (response = handle(request)) != null) {
@@ -73,15 +82,16 @@ public class EngineServerHandler{
         try {
             JsonObject jsonRequest = JsonParser.parseString(request).getAsJsonObject();
             int type = jsonRequest.get("type").getAsInt();
-            if (type == TypeMenue.connectedToServer.getOrdinal()) {
+            System.out.println("type " + type);
+            if (type == TypeMenue.connectedToServer.getOrdinal()+3) {
                 handleReceiveClientId(jsonRequest); //2.4
-            } else if (type == TypeGame.updateDrawCards.getOrdinal()) {
-                handleSynchronizeCardCounts(jsonRequest); //3.5
-            } else if (type == TypeMenue.returnLobbyConfig.getOrdinal()) {
+            } else if (type == 116) { // TypeMenue.returnLobbyConfig.getOrdinal()+3) {
                 handleLobbyConfig(jsonRequest); //2.12
-            } else if (type == TypeGame.drawCards.getOrdinal()) {
-                handleManageHandCards(jsonRequest); //3.4
-            } else if (type == TypeGame.boardState.getOrdinal()) {
+            } else if (type == 214) { //TypeGame.updateDrawCards.getOrdinal()+3) {
+                handleSynchronizeCardCounts(jsonRequest); //3.5 
+            } else if (type == 213) { //TypeGame.drawCards.getOrdinal()+3) {
+                handleManageHandCards(jsonRequest); //3.4 
+            } else if (type == 206) { //TypeGame.boardState.getOrdinal()+3) {
                 return handleLoadBoardJson(jsonRequest); //3.3
             }
         } catch (JsonSyntaxException e) {
@@ -92,85 +102,97 @@ public class EngineServerHandler{
     
     //use lobby config to configure the game //dont respond
     private void handleLobbyConfig(JsonObject jsonObject) { //2.12
-        //TODO get playerorder
+        //TODO ordertype
         // ReturnLobbyConfig.PlayerOrder
+        //TODO yeah im converting it back to a string eventhough i could have passed it directly
+        System.out.println("handle lobby config");
+        ReturnLobbyConfig lobbyConfig = gson.fromJson(jsonObject.toString(), ReturnLobbyConfig.class);
         
-        //jsonObject.getAsJsonObject("playerOrder").get("type");
+        System.out.println(lobbyConfig.getFiguresPerPlayer()+ "-" + lobbyConfig.getInitialCardsPerPlayer()+ "-" + lobbyConfig.getMaximumTotalMoves()+ "-" + lobbyConfig.getConsequencesForInvalidMove());
         
-        JsonArray playerOrder = jsonObject.getAsJsonObject("playerOrder").getAsJsonArray("order");
-        //...
+        List<ReturnLobbyConfig.PlayerOrder.Order> playerOrder = lobbyConfig.getPlayerOrder().getOrder();
+        
         for (int i = 0; i < playerOrder.size(); i++) {
-            int playerId = playerOrder.get(i).getAsJsonObject().get("clientId").getAsInt();
+            int playerId = playerOrder.get(i).getClientId();
             clientIdToPlayerId.put(i, playerId);
         }
+        System.out.println("clientidtoplayerid " + clientIdToPlayerId);
         
-        int figuresPerPlayer = jsonObject.get("figuresPerPlayer").getAsInt();
-        int initialCardsPerPlayer = jsonObject.get("initialCardsPerPlayer").getAsInt();
-
-        int maximumTotalMoves = jsonObject.get("maximumTotalMoves").getAsInt();
-        int consequencesForInvalidMove = jsonObject.get("consequencesForInvalidMove").getAsInt();
-        
-        JsonArray startFields = jsonObject.getAsJsonObject("startFields").getAsJsonArray("positions");
-        JsonArray drawCardFields = jsonObject.getAsJsonObject("drawCardFields").getAsJsonArray("positions");
+        List<Integer> startFieldsPositions = lobbyConfig.getStartFields().getPositions();
+        List<Integer> drawCardFieldsPositions = lobbyConfig.getDrawCardFields().getPositions();
         
         StringBuilder fieldStringBuild = new StringBuilder();
-        fieldStringBuild.append("n".repeat(Math.max(0, startFields.size())));
-
-        for (int i = 0; i < startFields.size(); i++) {
-            fieldStringBuild.setCharAt(i, 's');
+        fieldStringBuild.append("n".repeat(Math.max(0, lobbyConfig.getFieldsize())));
+        // 
+        for (int i = 0; i < startFieldsPositions.size(); i++) {
+            System.out.println("startfield" + i + "=" + startFieldsPositions.get(i));
+            fieldStringBuild.setCharAt(startFieldsPositions.get(i), 's');
         }
-
-        for (int i = 0; i < drawCardFields.size(); i++) {
-            fieldStringBuild.setCharAt(i, 'k');
+        // 
+        for (int i = 0; i < drawCardFieldsPositions.size(); i++) {
+            System.out.println("drawfield" + i + "=" + drawCardFieldsPositions.get(i));
+            fieldStringBuild.setCharAt(drawCardFieldsPositions.get(i), 'k');
         }
+        String boardString = fieldStringBuild.toString();
+        System.out.println("boardString " + boardString);
 
-        this.game = new Game(fieldStringBuild.toString(), figuresPerPlayer, initialCardsPerPlayer, maximumTotalMoves, consequencesForInvalidMove);
+        this.game = new Game(boardString, lobbyConfig.getFiguresPerPlayer(), lobbyConfig.getInitialCardsPerPlayer(), lobbyConfig.getMaximumTotalMoves(), lobbyConfig.getConsequencesForInvalidMove());
+        game.initDeck();
+        game.distributeCards();
+        this.game.printBoard();
     }
     
     private void handleReceiveClientId(JsonObject jsonObject) { //2.4
         this.clientId = jsonObject.get("clientId").getAsInt();
+        System.out.println("my client id " + this.clientId);
     }
 
     //
     public void handleSynchronizeCardCounts(JsonObject jsonObject) { //3.5
-        JsonArray _handCards = jsonObject.getAsJsonArray("handCards");
-        for (int i = 0; i < _handCards.size(); i++) {
-            JsonObject handcard = _handCards.get(i).getAsJsonObject();
-            int clientId = handcard.get("clientId").getAsInt();
-            int count = jsonObject.get("count").getAsString();
+        UpdateDrawCards updateDrawCards = gson.fromJson(jsonObject.toString(), UpdateDrawCards.class);
+        List<UpdateDrawCards.HandCard> handCards = updateDrawCards.getHandCards();
+        for (UpdateDrawCards.HandCard handcard : handCards) {
+            int clientId = handcard.getClientId();
+            int count = handcard.getCount();
             handCardCounts.put(clientId, count);
         }
+        System.out.println("handCardCounts " + handCardCounts); //check
     }
     
     public void handleManageHandCards(JsonObject jsonObject) { //3.4
-        JsonArray droppedInts = jsonObject.getAsJsonArray("droppedCards");
-        JsonArray drawnInts = jsonObject.getAsJsonArray("drawnCards");
+        DrawCards drawCards = gson.fromJson(jsonObject.toString(), DrawCards.class);
+        List<Integer> droppedInts = drawCards.getDroppedCards();
+        List<Integer> drawnInts = drawCards.getDrawnCards();
 
         // Process dropped cards
-        for (int i = 0; i < droppedInts.size(); i++) {
-            int dropped = droppedInts.get(i).getAsInt();
-            handcards.add(Card.values()[dropped]);
+        for (int dropped : droppedInts) {
+            handcards.remove(Card.values()[dropped]);
         }
         // Process drawn cards
-        for (int i = 0; i < drawnInts.size(); i++) {
-            int drawn = drawnInts.get(i).getAsInt();
-            handcards.remove(Card.values()[drawn]);
+        for (int drawn : drawnInts) {
+            handcards.add(Card.values()[drawn]);
         }
+        System.out.println("handcards " + handcards);
     }
 
     public String handleLoadBoardJson(JsonObject jsonObject) { //3.3
         //TODO this should be done with the class
-        String request = jsonObject.toString();
-        BoardState boardState = gson.fromJson(request, BoardState.class);
-        
-        if(boardState.getGameOver() || boardState.getWasCanceled()) {
+        System.out.println("handle load board");
+        BoardState boardState = gson.fromJson(jsonObject.toString(), BoardState.class);
+        System.out.println("game over bool=" + boardState.isGameOver());
+        if(boardState.isGameOver()) { 
             System.out.println("game over");
             System.exit(666);
         }
-        // int myClientId = jsonObject.get("clientId").getAsInt();
         ////if its our turn make move
-        if (boardState.getNextPlayer() != this.clientId) return "";
-        game.setPlayerToMoveId(boardState.getNextPlayer);
+        //TODO uncomment
+        // if (boardState.getNextPlayer() != this.clientId) {
+        //     System.out.println("dont load the state because its not our turn");
+        //     return null;
+        // }
+        
+        System.out.println("my turn");
+        game.setPlayerToMoveId(boardState.getNextPlayer());
         
         //TODO parse field
         //set piece stuff
@@ -179,9 +201,7 @@ public class EngineServerHandler{
             field.setFigure(null);
         }
         
-        JsonArray _pieces = jsonObject.getAsJsonArray("pieces");
-        // List<Piece> pieces;
-        for (BoardState.Piece piece : boardState.getPieces().size()) {
+        for (BoardState.Piece piece : boardState.getPieces()) {
             //set piece in game to this
             int clientId = piece.getClientId();
             // int playerId = clientIdToPlayerId.get(clientId); //TODO ???
@@ -191,7 +211,7 @@ public class EngineServerHandler{
             //variables to set
             boolean isOnBench = piece.isOnBench();
             figure.setOnBench(isOnBench);
-            game.setMoveCount(boardState.getMoveCount());
+            game.setMovesMade(boardState.getMoveCount());
             if(isOnBench) {
                 figure.setField(null);
                 figure.setInHouse(false);
@@ -229,16 +249,16 @@ public class EngineServerHandler{
                 player.setCardList(new ArrayList<Card>());
             }
         }
-        
-        //TODO set last played card
+
+        System.out.println("put all unknwonn vars into an arraylist");
         //put all unknown vars into an arraylist
         //distribute stuffs
         //handcardCounts
-        Integer lastPlayedCardInx = gameState.getLastPlayedCard();
+        Integer lastPlayedCardInx = boardState.getLastPlayedCard();
         Card lastPlayedCard = Card.values()[lastPlayedCardInx]; 
         ArrayList<Card> unknownCardPool = new ArrayList<>();
         for (int i = 0; i < game.getPlayerList().size(); i++) {
-            if(i != playerId) {
+            if(i != clientId) {
                 unknownCardPool.addAll(game.getPlayerList().get(i).getCardList());
             }
         }
@@ -253,10 +273,9 @@ public class EngineServerHandler{
         int currentId = 0;
 
         //pile cards are known discardPile
-        JsonArray _discardPile = jsonObject.get("discardPile").getAsJsonArray();
-        int pilesize = gameState.getDiscardPile().size();
+        int pilesize = boardState.getDiscardPile().size();
         for (int i = 0; i < pilesize; i++) {
-            int cardix = gameState.getDiscardPile()..get(pilesize - i).getCard();
+            int cardix = boardState.getDiscardPile().get(pilesize - i - 1).getCard();
             Card card = Card.values()[cardix];
             unknownCardPool.remove(card);
             game.getPile().add(card);
@@ -275,24 +294,35 @@ public class EngineServerHandler{
                 currentId++;
             }
         }
-        // game.getPile().add(lastPlayedCard);
-        
+
+        System.out.println("choose random move");
         //choose random move
         Move move = game.getRandomMove();
-        
-        //convert to json
         MoveValid moveValid = new MoveValid();
-        moveValid.setType(TypeGame.moveValid.getOrdinal());
-        moveValid.setSkip(false);
-        moveValid.setCard(move.getCardUsed().ordinal());
-        moveValid.setSelectedValue(move.getSelectedValue());
-        int pieceId = game.getBoard()[move.getFrom().getFieldId()].getFigure().getFigureId();
-        moveValid.setPieceId(pieceId);
-        moveValid.setStarter(move.isStartMove());
-        int opponentPieceId = game.getBoard()[move.getTo().getFieldId()].getFigure().getFigureId();
-        moveValid.setOpponentPieceId(opponentPieceId);
-        
-
-        return moveValid.toString(); //return the move 3.7
+        if(move != null) {
+            move.printMove();
+            //convert to json
+            moveValid.setType(TypeGame.moveValid.getOrdinal());
+            moveValid.setSkip(false);
+            moveValid.setCard(move.getCardUsed().ordinal());
+            moveValid.setSelectedValue(move.getSelectedValue());
+            Figure playerFigure = move.getPlayerFigure();
+            Integer pieceId = null;
+            if(playerFigure != null) {
+                pieceId = playerFigure.getFigureId();
+            }
+            moveValid.setPieceId(pieceId);
+            moveValid.setStarter(move.isStartMove());
+            Integer opponentPieceId = null;
+            Figure opponentFigure = game.getBoard()[move.getTo().getFieldId()].getFigure();
+            if (opponentFigure != null) {
+                opponentPieceId = opponentFigure.getFigureId();
+            }
+            moveValid.setOpponentPieceId(opponentPieceId);
+        }
+        else {
+            System.out.println("move was null (unimplemented)");
+        }
+        return gson.toJson(moveValid).toString(); //return the move 3.7
     }
 }

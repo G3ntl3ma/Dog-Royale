@@ -9,6 +9,7 @@
 //missing: how many cards in deck
 //solution: 110 - #pile - #sumhandcards
 
+import com.nexusvision.config.AppConfig;
 import com.nexusvision.server.model.gamelogic.EngineServerHandler;
 
 //get board state and construct savestate from it
@@ -19,7 +20,7 @@ public class Main3 {
     public static void main(String[] args) {
         String SERVER_ADDRESS = "127.0.0.1";
         EngineServerHandler engineServerHandler = new EngineServerHandler();
-        engineServerHandler.run(SERVER_ADDRESS, PORT);
+        engineServerHandler.run(SERVER_ADDRESS, 3000);
     }
 }
 
