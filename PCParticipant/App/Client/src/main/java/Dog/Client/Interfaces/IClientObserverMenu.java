@@ -1,13 +1,12 @@
 package Dog.Client.Interfaces;
 
-import Dtos.DrawCardsDto;
-import Dtos.MoveDto;
-import Dtos.ReturnGameListDto;
-import Dtos.ReturnLobbyConfigDto;
+import Dtos.*;
 
 import java.io.IOException;
 
 public interface IClientObserverMenu {
 
-    void handleGameListUpdate(ReturnGameListDto runningGames);
+    void handleGameListUpdate(ReturnGameListDto gameList);
+    void handleReturnFindTournament(ReturnTournamentListDto findTournament);
+    void handleReturnTournamentInfo(ReturnTournamentInfoDto tournamentInfo) throws IOException;
 }

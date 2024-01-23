@@ -31,4 +31,3 @@ public class PCObserverGui extends Application {
             launch();
         }
 }
-

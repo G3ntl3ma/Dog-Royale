@@ -4,16 +4,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
-import java.util.ResourceBundle;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /*
 Handles drawing all the lil circles to the screen
@@ -24,77 +21,59 @@ public class DrawBoard {
     public Color fieldColor = Color.GREY;
     public int borderSize = 2;
     public Color borderColor = Color.BLACK;
+    private Set<Shape> houseObjects;
 
     public Color playerColor(int playerIndex) {
         switch (playerIndex) {
-            case 0: return Color.RED;
-            case 1: return Color.BLUE;
-            case 2: return Color.YELLOW;
-            case 3: return Color.GREEN;
-            case 4: return Color.ORANGE;
-            case 5: return Color.PURPLE;
-            default: return fieldColor;
+            case 0:
+                return Color.RED;
+            case 1:
+                return Color.BLUE;
+            case 2:
+                return Color.YELLOW;
+            case 3:
+                return Color.GREEN;
+            case 4:
+                return Color.ORANGE;
+            case 5:
+                return Color.PURPLE;
+            default:
+                return fieldColor;
         }
     }
+
     public String playerImagePath(int playerIndex) {
-        return "pawn_" + Integer.toString(playerIndex) + ".png";
-    }
-    private void drawLine(Pane paneBoard, int[] start, int[] end) {
-        paneBoard.getChildren().add(new Line(start[0], start[1], end[0], end[1]));
+        return "pawn_" + playerIndex + ".png";
     }
 
-    private void drawCircle(Pane paneBoard, int[] pos, Color color) {
-        paneBoard.getChildren().add(new Circle(pos[0],
-                pos[1],
-                radiusField, borderColor));
-        paneBoard.getChildren().add(new Circle(pos[0],
-                pos[1],
-                radiusField-borderSize, color));
+    /* fills paneBoard with the playing field */
+    public DrawBoard(Pane paneBoard, Board board, PieceHandler pieceHandler) {
+        drawBoard(paneBoard, board);
+        for (Piece piece : pieceHandler.pieces) {
+            //drawCircle(paneBoard, pos, Color.BLACK);
+            piece.fieldImage.setImage(new Image(playerImagePath(piece.player)));
+            piece.fieldImage.setPreserveRatio(true);
+            piece.fieldImage.setFitWidth(3 * radiusField);
+            piece.fieldImage.setVisible(false);
+            paneBoard.getChildren().add(piece.fieldImage);
+        }
     }
-    private void drawEllipsis(Pane paneBoard, int[] pos) {
-        int rectPosX = pos[0] - radiusField;
-        int rectPosY = (int) (pos[1] - (double) radiusField / 2.0);
-        Rectangle r1 = new Rectangle(
-            2*radiusField, radiusField, // width, height
-            Color.BLACK);
-        r1.setX(rectPosX); r1.setY(rectPosY);
-        paneBoard.getChildren().add(r1);
-        Rectangle r2 = new Rectangle(
-                2*radiusField-2*borderSize, radiusField-2*borderSize, // width, height
-                Color.WHITE);
-        r2.setX(rectPosX + borderSize); r2.setY(rectPosY + borderSize);
-        paneBoard.getChildren().add(r2);
-        paneBoard.getChildren().add(new Circle(pos[0], pos[1], 1, Color.BLACK));
-        paneBoard.getChildren().add(new Circle(pos[0] + (double) radiusField / 2, pos[1], 1, Color.BLACK));
-        paneBoard.getChildren().add(new Circle(pos[0] - (double) radiusField / 2, pos[1], 1, Color.BLACK));
+    /* fills paneBoard with the house fields */
+    public DrawBoard(Pane paneBoard, HouseBoard houseBoard, PieceHandler pieceHandler) {
+        drawHouses(paneBoard, houseBoard);
+        for (Piece piece : pieceHandler.pieces) {
+            //drawCircle(paneBoard, pos, Color.BLACK);
+            piece.houseImage.setImage(new Image(playerImagePath(piece.player)));
+            piece.houseImage.setPreserveRatio(true);
+            piece.houseImage.setFitWidth(3 * radiusField);
+            piece.houseImage.setVisible(piece.inHouse);
+            if (piece.inHouse) {
+                piece.animateHouse(new int[][]{houseBoard.houseCoordinates[piece.player][piece.position]});
+            }
+            paneBoard.getChildren().add(piece.houseImage);
+        }
     }
-    private void drawPiece(Pane paneBoard, int[] pos, int playerIndex) {
-        drawCircle(paneBoard, pos, Color.BLACK);
-        //this.getClass().getResource("style.css").toExternalForm()
-        String path = playerImagePath(playerIndex);
-        ImageView im = new ImageView(new Image(path));//PCObserverControllerGameplay.class.getResource(path).toString()
-        im.setPreserveRatio(true);
-        im.setFitWidth(3*radiusField);
-        im.setX(pos[0] - 1.5*radiusField);
-        im.setY(pos[1] - 2*radiusField);
-        paneBoard.getChildren().add(im);
-    }
-    private void drawCard(Pane paneBoard, int[] pos) {
-        String path = "drawcard_field.png";
-        ImageView im = new ImageView(new Image(path));
-        im.setPreserveRatio(true);
-        im.setFitWidth(1.3*radiusField);
-        im.setX(pos[0] - im.getFitWidth()/2);
-        im.setY(pos[1] - 0.75*radiusField);
-        paneBoard.getChildren().add(im);
-    }
-
-    private void drawText(Pane paneBoard, int[] pos, String text) {
-        paneBoard.getChildren().add(new Text(pos[0], pos[1], text));
-    }
-
-    public void drawBoard(Board board, Pane paneBoard, PieceHandler pieceHandler) {
-        paneBoard.getChildren().clear();
+    private void drawBoard(Pane paneBoard, Board board) {
         // lines between house fields
         for (int i = 0; i < board.numPlayers; i++) {
             int[] prevPos = board.fieldCoordinates[board.startingPosIndices[i]];
@@ -132,27 +111,19 @@ public class DrawBoard {
         for (int card = 0; card < board.drawCardFields.length; card++) {
             drawCard(paneBoard, board.fieldCoordinates[board.drawCardFields[card]]);
         }
-        // draw pieces
-        for (int piece = 0; piece < pieceHandler.piecePositions.length; piece++) {
-            int player = pieceHandler.whosePiece[piece];
-            int pos = pieceHandler.piecePositions[piece];
-            if (pieceHandler.pieceInHouse[piece]) {
-                if (pos < board.numHouses) {
-                    drawPiece(paneBoard, board.houseCoordinates[player][pos], player);
-                }
-            } else if (pieceHandler.pieceInField[piece]) {
-                drawPiece(paneBoard, board.fieldCoordinates[pos], player);
-            }
-        }
     }
-    public void drawHouses(HouseBoard houseBoard, Pane paneBoard, PieceHandler pieceHandler) {
+
+    private void drawHouses(Pane paneBoard, HouseBoard houseBoard) {
+        houseObjects = new HashSet<>();
         for (int i = 0; i < houseBoard.numPlayers; i++) {
             // lines between fields
             int prevIndex = 0;
             for (int j = 0; j < houseBoard.numHouses; j++) {
-                drawLine(paneBoard,
-                        houseBoard.houseCoordinates[i][prevIndex],
-                        houseBoard.houseCoordinates[i][j]);
+                houseObjects.addAll(
+                        drawLine(paneBoard,
+                                houseBoard.houseCoordinates[i][prevIndex],
+                                houseBoard.houseCoordinates[i][j])
+                );
                 prevIndex = j;
             }
             // fields
@@ -160,22 +131,92 @@ public class DrawBoard {
                 int[] pos = houseBoard.houseCoordinates[i][j];
                 // determine color of the circle
                 if (houseBoard.showHouse[j]) {
-                    drawCircle(paneBoard, pos, playerColor(i));
-                    if ((j+1) % 5 == 0 || j == 0 || j == houseBoard.numHouses-1) {
-                        drawText(paneBoard, new int[] {pos[0]-5, pos[1] - houseBoard.verticalSpacing / 3}, String.valueOf(j+1));
+                    houseObjects.addAll(drawCircle(paneBoard, pos, playerColor(i)));
+                    if ((j + 1) % 5 == 0 || j == 0 || j == houseBoard.numHouses - 1) {
+                        houseObjects.addAll(
+                                drawText(paneBoard,
+                                        new int[]{pos[0] - 5, pos[1] - houseBoard.verticalSpacing / 3},
+                                        String.valueOf(j + 1))
+                        );
                     }
                 } else if (houseBoard.isEllipsis[j]) {
-                    drawEllipsis(paneBoard, pos);
-                }
-            }
-            // draw pieces
-            for (int piece = 0; piece < pieceHandler.piecePositions.length; piece++) {
-                if (pieceHandler.pieceInHouse[piece]) {
-                    int player = pieceHandler.whosePiece[piece];
-                    int pos = pieceHandler.piecePositions[piece];
-                    drawPiece(paneBoard, houseBoard.houseCoordinates[player][pos], player);
+                    houseObjects.addAll(drawEllipsis(paneBoard, pos));
                 }
             }
         }
+    }
+    public void updateHouses(Pane paneBoard, HouseBoard houseBoard) {
+        assert !houseObjects.isEmpty(); // DrawBoard has not been initialized
+        paneBoard.getChildren().removeAll(houseObjects);
+        drawHouses(paneBoard, houseBoard);
+    }
+
+
+    //  ---- drawing utility ----
+
+    private Set<Shape> drawLine(Pane paneBoard, int[] start, int[] end) {
+        Set<Shape> shapes = new HashSet<>();
+        shapes.add(new Line(start[0], start[1], end[0], end[1]));
+        paneBoard.getChildren().addAll(shapes);
+        return shapes;
+    }
+
+    private Set<Shape> drawCircle(Pane paneBoard, int[] pos, Color color) {
+        Circle c1 = new Circle(pos[0],
+                pos[1],
+                radiusField, borderColor);
+        Circle c2 = new Circle(pos[0],
+                pos[1],
+                radiusField - borderSize, color);
+        Set<Shape> shapes = new HashSet<>();
+        shapes.add(c1); shapes.add(c2);
+        paneBoard.getChildren().add(c1); paneBoard.getChildren().add(c2);
+        return shapes;
+    }
+
+    private Set<Shape> drawEllipsis(Pane paneBoard, int[] pos) {
+        Set<Shape> shapes = new HashSet<>();
+        int rectPosX = pos[0] - radiusField;
+        int rectPosY = (int) (pos[1] - (double) radiusField / 2.0);
+        Rectangle r1 = new Rectangle(
+                2 * radiusField, radiusField, // width, height
+                Color.BLACK);
+        r1.setX(rectPosX);
+        r1.setY(rectPosY);
+        shapes.add(r1);
+        Rectangle r2 = new Rectangle(
+                2 * radiusField - 2 * borderSize, radiusField - 2 * borderSize, // width, height
+                Color.WHITE);
+        r2.setX(rectPosX + borderSize);
+        r2.setY(rectPosY + borderSize);
+        shapes.add(r2);
+        Circle c1 = new Circle(pos[0], pos[1], 1, Color.BLACK);
+        shapes.add(c1);
+        Circle c2 = new Circle(pos[0] + (double) radiusField / 2, pos[1], 1, Color.BLACK);
+        shapes.add(c2);
+        Circle c3 = new Circle(pos[0] - (double) radiusField / 2, pos[1], 1, Color.BLACK);
+        shapes.add(c3);
+        paneBoard.getChildren().add(r2);
+        paneBoard.getChildren().add(c1);
+        paneBoard.getChildren().add(c2);
+        paneBoard.getChildren().add(c3);
+        return shapes;
+    }
+
+    private void drawCard(Pane paneBoard, int[] pos) {
+        String path = "drawcard_field.png";
+        ImageView im = new ImageView(new Image(path));
+        im.setPreserveRatio(true);
+        im.setFitWidth(1.3 * radiusField);
+        im.setX(pos[0] - im.getFitWidth() / 2);
+        im.setY(pos[1] - 0.75 * radiusField);
+        paneBoard.getChildren().add(im);
+    }
+
+    private Set<Shape> drawText(Pane paneBoard, int[] pos, String text) {
+        Set<Shape> shapes = new HashSet<>();
+        shapes.add(new Text(pos[0], pos[1], text));
+        paneBoard.getChildren().addAll(shapes);
+        return shapes;
     }
 }

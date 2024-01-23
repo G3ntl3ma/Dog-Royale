@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="infoWindowsBackPane" minHeight="211.0" minWidth="395.0" prefHeight="710.0" prefWidth="964.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.PCObserverControllerInfoWindow">
+    <children>
+        <GridPane fx:id="gpMain" alignment="TOP_CENTER" hgap="8.0" prefHeight="71.0" prefWidth="1262.0" vgap="8.0" VBox.vgrow="ALWAYS">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <VBox fx:id="vbGameSettings" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                    <children>
+                        <Label text="Spiel-Einstellungen" />
+                        <GridPane hgap="2.0" vgap="2.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="80.0" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="80.0" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="80.0" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
+                                    <children>
+                                        <Label disable="true" text="Name" visible="false" />
+                                        <TextField fx:id="infoWindowName" disable="true" editable="false" visible="false" />
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                                    <children>
+                                        <Label text="Turnier" />
+                              <TextField fx:id="infoWindowTurnier" editable="false" />
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2">
+                                    <children>
+                                        <Label text="Spielfeldgröße" />
+                                        <TextField fx:id="infoWindowSpielfeld" editable="false" maxWidth="1.7976931348623157E308" />
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3">
+                                    <children>
+                                        <Label />
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                                    <children>
+                                        <Label text="Spieleranzahl" />
+                                        <TextField fx:id="infoWindowSpieleranzahl" editable="false" />
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <children>
+                                        <Label text="Max. Züge" />
+                                        <TextField fx:id="infoWindowMaxZuege" editable="false" />
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                    <children>
+                                        <Label text="Spielzeit" />
+                                        <TextField fx:id="infoWindowSpielzeit" editable="false" />
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                    <children>
+                                        <Label text="Visualisierung Dauer" />
+                                        <TextField fx:id="infoWindowVisualisierungsDauer" editable="false" />
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                                    <children>
+                                        <Label text="Bedenkzeit Spielzug" />
+                                        <TextField fx:id="infoWindowBedenkzeit" editable="false" />
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                    <children>
+                                        <Label text="Anzahl Spielfiguren" />
+                                        <TextField fx:id="infoWindowAnzahlSpielfiguren" editable="false" />
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                    <children>
+                                        <Label text="Anzahl Karten pro Spieler" />
+                                        <TextField fx:id="infoWindowAnzahlKarten" editable="false" />
+                                    </children>
+                                </VBox>
+                                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                    <children>
+                                        <Label text="Bestrafung regelw. Zug" />
+                              <TextField fx:id="infoWindowBestrafungZug" editable="false" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </GridPane>
+                        <HBox alignment="CENTER_RIGHT" prefWidth="536.0" spacing="8.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label disable="true" text="Spieler" visible="false" />
+                                        <ListView fx:id="infoWindowPlayerView" disable="true" minHeight="50.0" prefHeight="200.0" prefWidth="235.0" visible="false" />
+                                    </children>
+                                </VBox>
+                        <VBox prefHeight="383.0" prefWidth="300.0" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                        <Tab text="Karten">
+                            <content>
+                                <VBox fx:id="infoWindowCardVBox" prefHeight="200.0" prefWidth="100.0">
+                                    <children>
+                                        <ScrollPane fx:id="infoWindowScrollPane" fitToHeight="true" fitToWidth="true" prefWidth="525.0" VBox.vgrow="ALWAYS">
+                                            <content>
+                                                <VBox prefHeight="200.0" prefWidth="503.0">
+                                                    <children>
+                                                        <HBox fx:id="infoWindowCardHBox1" layoutX="10.0" layoutY="598.0" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_8.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="Startkarte 1. Hat entweder einen Wert von 13 oder kann genutzt werden um eine eigene Spielfigur von der Bank auf das eigene Startfeld zu setzen." wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox fx:id="infoWindowCardHBox2" layoutX="10.0" layoutY="598.0" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_9.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="Startkarte 2. Hat entweder einen Wert von 1 oder 11 (Spieler kann den Wert beim Ausspielen auswählen) oder kann genutzt werden um eine eigene Spielfigur von der Bank auf das eigene Startfeld zu setzen." wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox fx:id="infoWindowCardHBox3" layoutX="10.0" layoutY="766.0" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_13.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="Tauschkarte. Diese Karte hat keinen Wert. Beim Ausspielen wird ein beliebige nicht gesicherte eigene Spielfigur mit einer beliebigen nicht gesicherten gegnerischen Spielfigur getauscht. Es dürfen sich weder die eigenen noch die gegnerische Spielfigur auf dem jeweiligen eigenen Startfeld befinden." wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox fx:id="infoWindowCardHBox4" layoutX="10.0" layoutY="850.0" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_10.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="+/-4 Karte. Nach dem Ausspielen dieser Karte kann der Spieler eine Spielfigur&#10;entweder 4 Felder vorwärts oder rückwärts ziehen." wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox fx:id="infoWindowCardHBox5" layoutX="10.0" layoutY="934.0" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_11.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="1-7 Karte. Hat einen Wert zwischen 1 und 7 (1 und 7 inklusive), welcher der Spieler beim Ausspielen auswählen kann." wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox fx:id="infoWindowCardHBox6" layoutX="10.0" layoutY="1018.0" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_14.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="Kopierkarte. Die letzte ausgespielte Karte, welche keine Kopierkarte war, wird kopiert und ausgeführt. War die zuletzt ausgeführte Karte eine Spezialkarte, darf sich der Spieler, welcher die Kopierkarte ausgeführt hat, den Effekt der Spezialkarte aussuchen. (Diese Karte kann nicht zu Beginn einer Runde gespielt werden)" wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox fx:id="infoWindowCardHBox7" layoutX="10.0" layoutY="1102.0" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_12.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="Magnetkarte. Diese Karte hat keinen Wert. Beim Ausspielen wird eine beliebige&#10;ausgewählte nicht gesicherte eigene Spielfigur ein Feld vor die nächste Figur in&#10;Laufrichtung auf dem Feld (nicht im Haus) gezogen." wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox fx:id="infoWindowCardHBox8" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_0.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="Normalkarte 2. Wird benutzt um eine beliebiege Spielfigur 2 Felder weiter vorzuziehen" wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox fx:id="infoWindowCardHBox9" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_1.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="Normalkarte 3. Wird benutzt um eine beliebiege Spielfigur 3 Felder weiter vorzuziehen" wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox fx:id="infoWindowCardHBox10" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_2.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="Normalkarte 5. Wird benutzt um eine beliebiege Spielfigur 5 Felder weiter vorzuziehen" wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox fx:id="infoWindowCardHBox11" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_3.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="Normalkarte 6. Wird benutzt um eine beliebiege Spielfigur 6 Felder weiter vorzuziehen" wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox fx:id="infoWindowCardHBox12" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_4.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="Normalkarte 8. Wird benutzt um eine beliebiege Spielfigur 8 Felder weiter vorzuziehen" wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox fx:id="infoWindowCardHBox13" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_5.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="Normalkarte 9. Wird benutzt um eine beliebiege Spielfigur 9 Felder weiter vorzuziehen" wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox fx:id="infoWindowCardHBox14" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_6.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="Normalkarte 10. Wird benutzt um eine beliebiege Spielfigur 10 Felder weiter vorzuziehen" wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox fx:id="infoWindowCardHBox15" layoutX="10.0" layoutY="94.0" prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <ImageView fitHeight="84.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                                                    <image>
+                                                                        <Image url="@../card_7.png" />
+                                                                    </image>
+                                                                </ImageView>
+                                                                <TextArea editable="false" maxHeight="84.0" maxWidth="1.7976931348623157E308" minHeight="84.0" prefHeight="84.0" prefWidth="310.0" text="Normalkarte 12. Wird benutzt um eine beliebiege Spielfigur 12 Felder weiter vorzuziehen" wrapText="true" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                            </content>
+                                        </ScrollPane>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+                        <Tab text="Regeln">
+                            <content>
+                                <VBox prefHeight="200.0" prefWidth="100.0">
+                                    <children>
+                                        <ScrollPane fitToHeight="true" fitToWidth="true" prefWidth="525.0" VBox.vgrow="ALWAYS">
+                                            <content>
+                                                <VBox prefHeight="200.0" prefWidth="503.0">
+                                                    <children>
+                                                        <TextArea editable="false" prefHeight="200.0" prefWidth="200.0" text="Teilnehmerzahl:&#10;Das Spiel ist für 2 bis 6 Spieler ausgelegt.&#10;&#10;Spielaufbau:&#10;Jeder Spieler besitzt mindestens eine Spielfigur.&#10;Das Spielfeld besteht aus normalen Feldern, &quot;Karte ziehen&quot;-Feldern, Startfeldern und Hausfeldern.&#10;Jeder Spieler hat ein individuelles Startfeld.&#10;Es gibt Hausfelder, die der Anzahl der Spielfiguren jedes Spielers entsprechen.&#10;Ein Hausfeld ist mit dem jeweiligen Startfeld des Spielers verbunden.&#10;Weitere Hausfelder sind in einer Kette miteinander verbunden (maximal zwei Verbindungen).&#10;Hausfelder haben keine weiteren Verbindungen zum Spielfeld.&#10;Normale Felder, &quot;Karte ziehen&quot;-Felder und Startfelder bilden einen Kreis. Jedes normale Feld und &quot;Karte ziehen&quot;-Feld ist mit genau zwei weiteren Feldern verbunden.&#10;Jedes Startfeld ist mit drei Feldern verbunden, eins davon ist ein Hausfeld.&#10;Startfelder verschiedener Spieler sind gleichmäßig und im Uhrzeigersinn verteilt.&#10;&#10;Kartendecks:&#10;Es gibt einen Kartenstapel und einen Ablagestapel.&#10;Das Spiel besteht aus mehreren Runden.&#10;Zu Beginn einer Runde erhalten alle Spieler eine konfigurierte Anzahl von Karten vom Kartenstapel.&#10;Ein vorher festgelegter Startspieler beginnt die Runde.&#10;&#10;Spielablauf:&#10;In jedem Zug spielt ein Spieler eine Karte, die bestimmt, wie die eigene Spielfigur bewegt wird.&#10;Ein Spieler scheidet aus, wenn er keine Karte spielen kann und legt alle Karten auf den Ablagestapel. Bis zur nächsten Runde darf er keine Karten mehr spielen.&#10;Eine Runde endet, wenn alle Spieler keine Karten mehr auf der Hand haben.&#10;Eine neue Runde beginnt, Spieler erhalten erneut Karten, und der Startspieler wechselt in der Zugreihenfolge.&#10;&#10;Bewegung der Spielfiguren:&#10;Auf Hausfeldern dürfen nur eigene Figuren ziehen.&#10;Jeder Spieler darf nur eigene Spielfiguren ziehen.&#10;Normale Felder, &quot;Karte ziehen&quot;-Felder und Startfelder sind für alle Spielfiguren zugänglich.&#10;Alle Spielfiguren starten auf der &quot;Bank&quot; des Spielers.&#10;Nur eine Spielfigur darf sich auf einem Spielfeld befinden.&#10;Bei Ziehen auf ein belegtes Feld wird die vorherige Figur in die Bank zurückgesetzt.&#10;Überspringen anderer Figuren ist erlaubt.&#10;Eigene Figuren dürfen nicht von der Bank aufs Spielfeld gesetzt werden, wenn eine eigene Figur das Startfeld besetzt.&#10;Spielfiguren auf Hausfeldern sind geschützt und dürfen nicht geschlagen oder übersprungen werden.&#10;Das Haus darf nur vorwärts betreten werden, und das Startfeld wird beim Ziehen ins Haus mitgezählt.&#10;Eine Figur, die nicht ins Haus gezogen werden kann, startet eine neue Laufrunde.&#10;&#10;Karten:&#10;Es gibt normale Karten und Spezialkarten.&#10;Der Wert einer Karte bestimmt die Anzahl der Schritte, die eine eigene Spielfigur vorwärts gezogen werden muss.&#10;Normale Karten haben Werte von 2, 3, 5, 6, 8, 9, 10 oder 12.&#10;&#10;Spezialkarten:&#10;Startkarte 1: Wert von 13 oder setzt eine eigene Figur vom Start auf das Startfeld.&#10;Startkarte 2: Wert von 1 oder 11 (vom Spieler wählbar) oder setzt eine eigene Figur vom Start auf das Startfeld.&#10;1-7 Karte: Wert zwischen 1 und 7 (vom Spieler wählbar).&#10;+/-4 Karte: Erlaubt Vorwärts- oder Rückwärtsbewegung um 4 Felder.&#10;Magnetkarte: Zieht eine eigene ungesicherte Figur ein Feld vor die nächste Figur in Laufrichtung auf dem Feld (nicht im Haus).&#10;Tauschkarte: Tauscht eine eigene ungesicherte Figur mit einer gegnerischen Figur.&#10;Kopierkarte: Kopiert und führt die zuletzt gespielte Karte aus.&#10;&#10;Kartendeck:&#10;Das Deck enthält Normalkarten (2, 3, 5, 6, 8, 9, 10, 12) und Spezialkarten.&#10;Spezialkarten umfassen Startkarten 1 und 2, +/-4 Karte, 1-7 Karte, Magnetkarte, Tauschkarte, Kopierkarte.&#10;&#10;Kartenverwaltung:&#10;Karten werden zufällig gemischt und bilden den Kartenstapel.&#10;Ausgespielte Karten landen auf dem Ablagestapel.&#10;Bei zu wenigen Karten vor einer Runde werden Karten- und Ablagestapel zusammengeführt und neu gemischt.&#10;Landet eine Figur auf einem &quot;Karte ziehen&quot;-Feld, darf der Spieler eine Karte ziehen.&#10;&#10;Spielende:&#10;Das Spiel endet, wenn ein Spieler alle eigenen Spielfiguren ins Haus gezogen hat (Sieg).&#10;Bei Abbruch oder Zeit-/Zug-Limit gewinnt der Spieler mit den meisten im Haus befindlichen Spielfiguren.&#10;Bei gleichem Stand ohne Spielfiguren im Haus werden die Platzierungen zufällig ermittelt." VBox.vgrow="ALWAYS" />
+                                                    </children>
+                                                </VBox>
+                                            </content>
+                                        </ScrollPane>
+                                    </children>
+                                </VBox>
+                            </content></Tab>
+                    </tabs>
+                </TabPane>
+            </children>
+            <VBox.margin>
+                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+            </VBox.margin>
+        </GridPane>
+    </children>
+</VBox>
