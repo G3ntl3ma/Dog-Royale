@@ -14,7 +14,7 @@ public class PieceHandler {
         numTotalPieces = board.numPieces * board.numPlayers;
         // declare and fill pieces
         pieces = new Piece[numTotalPieces];
-        for (int i = 0; i < numTotalPieces; i++) {
+        for (int i = 0; i < numTotalPieces; i++) { //creates new Pieces here.
             pieces[i] = new Piece();
         }
     }

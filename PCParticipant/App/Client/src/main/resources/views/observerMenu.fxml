@@ -89,6 +89,7 @@
                      <children>
                         <Label opacity="0.0" />
                         <Button fx:id="bttnConnect" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#connectingToServer" text="Verbinden" />
+                        <Button mnemonicParsing="false" onAction="#fakeGameplay" text="fakeverbinden hehe" />
                      </children>
                   </VBox>
                   <VBox prefHeight="100.0" prefWidth="65.0" HBox.hgrow="ALWAYS">

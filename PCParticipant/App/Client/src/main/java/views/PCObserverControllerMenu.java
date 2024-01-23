@@ -172,7 +172,6 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
 
         // call stop method when stage is closed
         stageGameplay.setOnCloseRequest(windowEvent -> {
-            controller.stop();
         });
     }
     //////////////////////////////////////////////////////////////////////////////////////////TODO DELETE fakeGameplay Method after testing manually till here

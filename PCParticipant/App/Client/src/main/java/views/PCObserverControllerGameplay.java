@@ -17,10 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -205,7 +202,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         return paneBoardView;
     }
 
-    public Piece currentPiece = new Piece();
+    public PieceImages currentPiece = new PieceImages(paneBoard);
     private CardHandler cardHandler = new CardHandler(this);
 
     public ImageView getDiscardPile() {
@@ -218,6 +215,8 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     }
 
 
+
+
 ////////////////////////////////////////////////////////////////////////////
 
     public void setClient(Client client){
@@ -228,19 +227,18 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { //TODO: Delete testing data
 
+        currentPiece = new PieceImages(paneBoard);
         // init board
         board = new Board(fieldSize, numPlayers, numPieces);
         houseBoard = new HouseBoard(numPlayers, numPieces);
         pieceHandler = new PieceHandler(board, houseBoard);
-        pieceHandler.whosePiece[0] = 1; /////////////////TEST DELETE
-        pieceHandler.whosePiece[1] = 2; /////////////////TEST DELETE
-        pieceHandler.whosePiece[2] = 3; /////////////////TEST DELETE
-        pieceHandler.piecePositions[0] = 2; ///////////////////////TEST DELETE
-        pieceHandler.piecePositions[1] = 4; ///////////////////////TEST DELETE
-        pieceHandler.piecePositions[2] = 6; ///////////////////////TEST DELETE
-        pieceHandler.movePiece(0, 0, true); /////////////TEST DELETE
-        pieceHandler.movePiece(2, 1, true); /////////////TEST DELETE
-        pieceHandler.movePiece(3, 2, true); /////////////TEST DELETE
+
+        pieceHandler.pieces[0].player = 1;
+        pieceHandler.pieces[5].player = 2;
+        pieceHandler.pieces[10].player = 3;
+        pieceHandler.startPiece(0);
+        pieceHandler.startPiece(5);
+        pieceHandler.startPiece(10);
 
         houseBoard.calculateHouseCoordinates(pieceHandler); // recalculate, now that we have the pieceHandler
         drawBoard = new DrawBoard(paneBoard, board, pieceHandler);
@@ -593,15 +591,19 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
                 if(selectedValue == 11){
                     return 11;
                 }
-                if(ordinalValue == 10){
-                    return selectedValue;
+                else {
+                    return 1;
                 }
-                if(ordinalValue == 11){
-                    return selectedValue;
-                }
-                if(ordinalValue == 14){
-                    return cardNumber(lastPlayedCard, lastSelectedValue);
-                }
+            }
+            if(ordinalValue == 10){
+                return selectedValue;
+            }
+            if(ordinalValue == 11){
+                return selectedValue;
+            }
+            if(ordinalValue == 14){
+                return cardNumber(lastPlayedCard, lastSelectedValue);
+            }
             return cardValues[ordinalValue];
         } else {
             return -1;

@@ -12,10 +12,10 @@ public class ReturnGameListDto extends Dto {
     private ArrayList<GamesProgressing> GamesProgressing;
     private ArrayList<GamesFinished> gamesFinished;
 
-    public ReturnGameListDto(ArrayList<GamesProgressing> gamesUpcoming, ArrayList<GamesProgressing> GamesProgressing,
+    public ReturnGameListDto(ArrayList<GamesProgressing> gamesUpcoming, ArrayList<GamesProgressing> gamesRunning,
                              ArrayList<GamesFinished> gamesFinished) {
         this.gamesUpcoming = gamesUpcoming;
-        this.GamesProgressing = GamesProgressing;
+        this.GamesProgressing = gamesRunning;
         this.gamesFinished = gamesFinished;
     }
 
