@@ -386,6 +386,10 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @FXML // if u want to try a different card change the X in Card.cardX to one in look under Common/src/main/java/Enums/Card.java
     public void btnaddCard(ActionEvent event) {
         drawCard(Card.card8);
+        drawCard(Card.oneToSeven);
+        drawCard(Card.startCard1);
+        drawCard(Card.startCard2);
+        drawCard(Card.plusMinus4);
     }
     ///////////////////////////////////////////////////////////////////////////////////
     /**

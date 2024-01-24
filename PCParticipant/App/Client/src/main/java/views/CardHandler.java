@@ -85,6 +85,7 @@ public class CardHandler {
                     Scene scene;
                     FXMLLoader fxmlLoader;
                     Image icon = new Image("icon.png");
+                    String css = this.getClass().getResource("style.css").toExternalForm();
 
 
                     previousCard = currentCard;
@@ -109,6 +110,7 @@ public class CardHandler {
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
+                            scene.getStylesheets().add(css);
                             stage.setScene(scene);
                             stage.getIcons().add(icon);
                             stage.show();
@@ -123,6 +125,7 @@ public class CardHandler {
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
+                            scene.getStylesheets().add(css);
                             stage.setScene(scene);
                             stage.getIcons().add(icon);
                             stage.show();
@@ -146,6 +149,7 @@ public class CardHandler {
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
+                            scene.getStylesheets().add(css);
                             stage.setScene(scene);
                             stage.getIcons().add(icon);
                             stage.show();
@@ -160,6 +164,7 @@ public class CardHandler {
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
+                            scene.getStylesheets().add(css);
                             stage.setScene(scene);
                             stage.getIcons().add(icon);
                             stage.show();
