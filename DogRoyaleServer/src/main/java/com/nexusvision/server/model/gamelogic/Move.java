@@ -44,6 +44,11 @@ public final class Move {
         }
     }
 
+    public Integer getPieceId() {
+        if (playerFigure == null) return null;
+        else return playerFigure.getFigureId();
+    }
+
     public int getSelectedValue() {
         //formula
         //(startfieldofplayervalue + tofieldvalue - firsthousefieldinx) - currentfieldvalue
@@ -55,7 +60,6 @@ public final class Move {
             int fromvalue = from.getFieldId();
             return toValue - fromvalue;
         }
-
         else {
             return to.getFieldId() - from.getFieldId();
         }
@@ -173,7 +177,6 @@ public final class Move {
             //TODO assert figs in bank > 0
             // System.out.println("isStartMove move");
             // System.out.println("figs in bank before " + this.player.figuresInBank);
-            // playerFigure = player.getFirstOnBench();
             Field to = player.getStartField(); //TODO maybe set the to field somewhere else
             playerFigure.setOnBench(false);
             playerFigure.setInHouse(false);

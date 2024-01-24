@@ -14,23 +14,40 @@ public class Node {
     private int value;
     private Boolean haschildren;
     private Move move;
+    private Integer pieceId;
     private Integer hashcode = null;
     private ArrayList<Integer> hash = null; //TODO if hashcodes different print the hash that was passed and this hash
     
     public Node(Move move, Node parent) {
         this.move = move;
+        if (move != null) {
+            this.pieceId = move.getPieceId();
+        }
+        else {
+            this.pieceId = null;
+        }
         this.parent = parent;
         this.visits = 0;
         this.value = 0;
         this.haschildren = false;
     }
 
-    public void setHash(int hash) {
-        if (hashcode == null) {
-            this.hashcode = hash;
+    public void setHash(ArrayList<Integer> hash) {
+        if (this.hash == null) {
+            this.hash = hash;
         }
-        else if (hashcode != hash){
+        else if (this.hash.hashCode() != hash.hashCode()){
             System.out.println("hashcode inconsistent");
+            System.out.println("thishash " + this.hash);
+            System.out.println("hash " + hash);
+            System.out.println("thispieceId " + this.pieceId);
+
+            if(this.move != null) {
+                this.move.printMove(); //probably pieceid issue
+            }
+            else {
+                System.out.println("nullmove");
+            }
             System.exit(4232);
         }
     }
@@ -39,8 +56,8 @@ public class Node {
         //assert game not over
         if (this.haschildren == true) {
             ArrayList<Move> moves = game.getMoves();
-            if(moves.size() != children.size()) {
-                System.out.println("NODE inconsistent");
+            if(Math.max(1,moves.size()) != children.size()) {
+                System.out.println("generated different moves " + moves.size() + "children size " + children.size());
                 System.exit(264);
             }
             return;

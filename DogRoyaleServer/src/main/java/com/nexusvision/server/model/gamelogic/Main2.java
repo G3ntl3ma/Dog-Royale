@@ -40,7 +40,7 @@ public class Main2 {
         Ai ai = new Ai(10);
         int[] winCounter = new int[players];
         ArrayList<Integer>  winHistory = new ArrayList<>();                        
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 100; i++) {
             System.out.println("Main2 simulate game " + i);
             Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
             game.initDeck();

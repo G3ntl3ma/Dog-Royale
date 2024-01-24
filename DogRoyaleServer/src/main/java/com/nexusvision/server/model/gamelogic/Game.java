@@ -11,6 +11,7 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 
@@ -89,8 +90,19 @@ public final class Game {
             player.setCardList(new ArrayList<>());
         }
         pile = new ArrayList<>();
-        Collections.shuffle(deck);
+        Collections.shuffle(deck); //TODO bug in ai because this is not deterministic
+        // Collections.shuffle(this.deck, new Random(666)); //deterministic seed
         // System.out.println("reshuffle done deck size " + this.deck.size() + " pile size " + this.pile.size());
+    }
+    
+    public void reshuffle(int seed) {
+        deck.addAll(pile);
+        for (Player player : playerList) {
+            deck.addAll(player.getCardList());
+            player.setCardList(new ArrayList<>());
+        }
+        pile = new ArrayList<>();
+        Collections.shuffle(this.deck, new Random(seed)); //deterministic seed
     }
     
     /**
@@ -125,7 +137,7 @@ public final class Game {
                 break;
             }
             excludedCount++;
-        } while (!playerList.get(playerToStartColor).isExcluded());
+        } while (playerList.get(playerToStartColor).isExcluded());
 
         playerToMoveId = playerToStartColor;
         round++;
@@ -451,7 +463,7 @@ public final class Game {
             if (!player.isOutThisRound()) playersRemaining2++;
         }
         if(playersRemaining2 != playersRemaining){
-            System.out.println("inkonsistent gamestate playersremaining");
+            System.out.println("inconsistent gamestate playersremaining");
             System.exit(235);
         }
         return playersRemaining == 0;
@@ -634,7 +646,7 @@ public final class Game {
         variables.add(movesMade);
         variables.add(playersRemaining);
         variables.add(round);
-        variables.add(firstMoveOfRound ? 0 : 1);
+        variables.add(firstMoveOfRound ? 0 : 1); 
         // if (drawnCard != null) {
         //     variables.add(drawnCard.ordinal());
         // }
