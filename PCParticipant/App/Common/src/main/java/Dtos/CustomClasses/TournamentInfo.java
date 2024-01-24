@@ -4,42 +4,42 @@ import java.util.ArrayList;
 
 public class TournamentInfo extends Tournament {
     // TournamentInfo object for ReturnTournamentInfoDto
-    private CurrentGame currentGame;
-    private ArrayList<UpcomingGames> upcomingGames;
-    private ArrayList<FinishedGames> completedGames;
+    private CurrentGame gameRunning;
+    private ArrayList<GameRunningTournament> gamesUpcoming;
+    private ArrayList<GamesFinished> gamesFinished;
     private ArrayList<PlayerPoints> currentRankings;
 
-    public TournamentInfo(int tournamentId, CurrentGame currentGame, ArrayList<UpcomingGames> upcomingGames,
-        ArrayList<FinishedGames> completedGames, ArrayList<PlayerPoints> currentRankings) {
+    public TournamentInfo(int tournamentId, CurrentGame gameRunning, ArrayList<GameRunningTournament> gamesUpcoming,
+                          ArrayList<GamesFinished> gamesFinished, ArrayList<PlayerPoints> currentRankings) {
         super(tournamentId);
-        this.currentGame = currentGame;
-        this.upcomingGames = upcomingGames;
-        this.completedGames = completedGames;
+        this.gameRunning = gameRunning;
+        this.gamesUpcoming = gamesUpcoming;
+        this.gamesFinished = gamesFinished;
         this.currentRankings = currentRankings;
     }
 
-    public CurrentGame getCurrentGame() {
-        return currentGame;
+    public CurrentGame getGameRunning() {
+        return gameRunning;
     }
 
-    public void setCurrentGame(CurrentGame currentGame) {
-        this.currentGame = currentGame;
+    public void setGameRunning(CurrentGame gameRunning) {
+        this.gameRunning = gameRunning;
     }
 
-    public ArrayList<UpcomingGames> getUpcomingGames() {
-        return upcomingGames;
+    public ArrayList<GameRunningTournament> getUpcomingGames() {
+        return gamesUpcoming;
     }
 
-    public void setUpcomingGames(ArrayList<UpcomingGames> upcomingGames) {
-        this.upcomingGames = upcomingGames;
+    public void setUpcomingGames(ArrayList<GameRunningTournament> gameUpcomingGamesTournaments) {
+        this.gamesUpcoming = gameUpcomingGamesTournaments;
     }
 
-    public ArrayList<FinishedGames> getCompletedGames() {
-        return completedGames;
+    public ArrayList<GamesFinished> getGamesFinished() {
+        return gamesFinished;
     }
 
-    public void setCompletedGames(ArrayList<FinishedGames> completedGames) {
-        this.completedGames = completedGames;
+    public void setGamesFinished(ArrayList<GamesFinished> gamesFinished) {
+        this.gamesFinished = gamesFinished;
     }
 
     public ArrayList<PlayerPoints> getCurrentRankings() {

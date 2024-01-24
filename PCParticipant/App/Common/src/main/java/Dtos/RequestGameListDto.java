@@ -6,15 +6,15 @@ import com.google.gson.Gson;
 public class RequestGameListDto extends Dto {
     public final int type = TypeMenue.requestGameList.ordinal() + 100;
     private int clientId;
-    private int gameCountStarting;
-    private int gameCountInProgress;
-    private int gameCountFinished;
+    private int gamesUpcomingCount;
+    private int gamesRunningCount;
+    private int gamesFinishedCount;
 
     public RequestGameListDto(int id, int starting, int progress, int finished){
         this.clientId = id;
-        this.gameCountStarting = starting;
-        this.gameCountInProgress = progress;
-        this.gameCountFinished = finished;
+        this.gamesUpcomingCount = starting;
+        this.gamesRunningCount = progress;
+        this.gamesFinishedCount = finished;
     }
 
     public String toJson() {
@@ -34,28 +34,28 @@ public class RequestGameListDto extends Dto {
         this.clientId = clientId;
     }
 
-    public int getGameCountStarting() {
-        return gameCountStarting;
+    public int getGamesUpcomingCount() {
+        return gamesUpcomingCount;
     }
 
-    public void setGameCountStarting(int gameCountStarting) {
-        this.gameCountStarting = gameCountStarting;
+    public void setGamesUpcomingCount(int gamesUpcomingCount) {
+        this.gamesUpcomingCount = gamesUpcomingCount;
     }
 
-    public int getGameCountInProgress() {
-        return gameCountInProgress;
+    public int getGamesRunningCount() {
+        return gamesRunningCount;
     }
 
-    public void setGameCountInProgress(int gameCountInProgress) {
-        this.gameCountInProgress = gameCountInProgress;
+    public void setGamesRunningCount(int gamesRunningCount) {
+        this.gamesRunningCount = gamesRunningCount;
     }
 
-    public int getGameCountFinished() {
-        return gameCountFinished;
+    public int getGamesFinishedCount() {
+        return gamesFinishedCount;
     }
 
-    public void setGameCountFinished(int gameCountFinished) {
-        this.gameCountFinished = gameCountFinished;
+    public void setGamesFinishedCount(int gamesFinishedCount) {
+        this.gamesFinishedCount = gamesFinishedCount;
     }
 }
 

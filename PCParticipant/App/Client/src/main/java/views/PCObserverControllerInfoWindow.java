@@ -1,16 +1,11 @@
 package views;
 
-import Dog.Client.Interfaces.IClientObserverGameplay;
 import Dtos.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
-import javax.swing.*;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -49,7 +44,7 @@ public class PCObserverControllerInfoWindow implements Initializable {
     // sets infoWindow parameters with given lobbyConfig
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Platform.runLater(()->{infoWindowSpielfeld.setText(Integer.toString(lobbyConfig.getFieldsize()));
-            infoWindowSpieleranzahl.setText(Integer.toString(lobbyConfig.getPlayerCount()));
+            infoWindowSpieleranzahl.setText(Integer.toString(lobbyConfig.getMaxPlayerCount()));
             infoWindowMaxZuege.setText(Integer.toString(lobbyConfig.getMaximumTotalMoves()));
             infoWindowSpielzeit.setText(Integer.toString(lobbyConfig.getMaximumGameDuration()));
             infoWindowVisualisierungsDauer.setText(Integer.toString(lobbyConfig.getVisualizationTimePerMove()));

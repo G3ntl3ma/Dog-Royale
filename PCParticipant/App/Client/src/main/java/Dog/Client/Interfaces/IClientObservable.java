@@ -14,7 +14,7 @@ public interface IClientObservable {
 
     // update menu
     void updateGameList(ReturnGameListDto dto);
-    void updateFindTournament(ReturnFindTournamentDto findTournament);
+    void updateFindTournament(ReturnTournamentListDto findTournament);
     void updateTournamentInfo(ReturnTournamentInfoDto tournamentInfo);
     void updateError(ErrorDto error);
     void updateTechData(ReturnTechDataDto techData);

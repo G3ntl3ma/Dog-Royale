@@ -101,7 +101,7 @@ public class CardHandler {
                     switch(this.card)
                     {
                         case startCard1:
-                            Piece.setSelectEnemyPiece(false);
+                            PieceImages.setSelectEnemyPiece(false);
 
                             stage = new Stage();
                             fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValueStartCard1.fxml"));
@@ -117,7 +117,7 @@ public class CardHandler {
 
                             break;
                         case startCard2:
-                            Piece.setSelectEnemyPiece(false);
+                            PieceImages.setSelectEnemyPiece(false);
                             stage = new Stage();
                             fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValueStartCard2.fxml"));
                             try {
@@ -131,17 +131,17 @@ public class CardHandler {
                             stage.show();
                             break;
                         case swapCard:
-                            Piece.setSelectEnemyPiece(true);
+                            PieceImages.setSelectEnemyPiece(true);
                             selectedVaue = 0;
                             isStarter = false;
                             break;
                         case magnetCard:
-                            Piece.setSelectEnemyPiece(true);
+                            PieceImages.setSelectEnemyPiece(true);
                             selectedVaue = 0;
                             isStarter = false;
                             break;
                         case plusMinus4:
-                            Piece.setSelectEnemyPiece(false);
+                            PieceImages.setSelectEnemyPiece(false);
                             stage = new Stage();
                             fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValuePlusMinus4.fxml"));
                             try {
@@ -155,7 +155,7 @@ public class CardHandler {
                             stage.show();
                             break;
                         case oneToSeven:
-                            Piece.setSelectEnemyPiece(false);
+                            PieceImages.setSelectEnemyPiece(false);
 
                             stage = new Stage();
                             fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValueOneToSeven.fxml"));
@@ -170,61 +170,21 @@ public class CardHandler {
                             stage.show();
                             break;
                         case copyCard:
-                            Piece.setSelectEnemyPiece(false);
-                            selectedVaue = 0;
-                            isStarter = false;
-                            break;
-                        case card2:
-                            Piece.setSelectEnemyPiece(false);
-                            selectedVaue = 0;
-                            isStarter = false;
-                            break;
-                        case card3:
-                            Piece.setSelectEnemyPiece(false);
-                            selectedVaue = 0;
-                            isStarter = false;
-                            break;
-                        case card5:
-                            Piece.setSelectEnemyPiece(false);
-                            selectedVaue = 0;
-                            isStarter = false;
-                            break;
-                        case card6:
-                            Piece.setSelectEnemyPiece(false);
-                            selectedVaue = 0;
-                            isStarter = false;
-                            break;
-                        case card8:
-                            Piece.setSelectEnemyPiece(false);
-                            selectedVaue = 0;
-                            isStarter = false;
-                            break;
-                        case card9:
-                            Piece.setSelectEnemyPiece(false);
-                            selectedVaue = 0;
-                            isStarter = false;
-                            break;
-                        case card10:
-                            Piece.setSelectEnemyPiece(false);
-                            selectedVaue = 0;
-                            isStarter = false;
-                            break;
-                        case card12:
-                            Piece.setSelectEnemyPiece(false);
+                            PieceImages.setSelectEnemyPiece(false);
                             selectedVaue = 0;
                             isStarter = false;
                             break;
                         default:
-                            Piece.setSelectEnemyPiece(false);
-                            Piece.selectedEnemyPiece = null;
+                            PieceImages.setSelectEnemyPiece(false);
+                            PieceImages.selectedEnemyPiece = null;
                             selectedVaue = 0;
                             isStarter = false;
                             break;
                     }
                 }
-                else if(currentCard == this && (Piece.currentPiece != null ||Piece.selectEnemyPiece && Piece.selectedEnemyPiece != null)) {
+                else if(currentCard == this && (PieceImages.currentPiece != null ||PieceImages.selectEnemyPiece && PieceImages.selectedEnemyPiece != null)) {
                     layCard();
-                    Piece.setSelectEnemyPiece(false);
+                    PieceImages.setSelectEnemyPiece(false);
                 }
                 else {
                     //Show a warning to the Player that no Figure has been selected
@@ -374,7 +334,6 @@ public class CardHandler {
             //Playing the transitions
             parallelTransition.play();
         }
-
         public Card getCard() { return this.card;}
 
 

@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.logo-pb</groupId>
 	<artifactId>client</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<name>Client</name>
 	<description>PC-Observer for the popular tabletop-game DOG</description>
 	<properties>
@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>de.logo-pb</groupId>
 			<artifactId>common</artifactId>
-			<version>1.0.0</version>
+			<version>1.1.0</version>
 		</dependency>
 	</dependencies>
 

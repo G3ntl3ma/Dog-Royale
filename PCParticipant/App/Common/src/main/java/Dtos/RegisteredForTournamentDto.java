@@ -11,14 +11,14 @@ public class RegisteredForTournamentDto extends Dto {
     private int tournamentId;
     private int maxPlayer;
     private ArrayList<PlayerName> players;
-    private int rounds;
+    private int maxGames;
 
-    public RegisteredForTournamentDto(boolean success, int tournamentId, int maxPlayer, ArrayList<PlayerName> players ,int rounds) {
+    public RegisteredForTournamentDto(boolean success, int tournamentId, int maxPlayer, ArrayList<PlayerName> players ,int maxGames) {
         this.success = success;
         this.tournamentId = tournamentId;
         this.maxPlayer = maxPlayer;
         this.players = players;
-        this.rounds = rounds;
+        this.maxGames = maxGames;
     }
 
     public String toJson() {
@@ -62,11 +62,11 @@ public class RegisteredForTournamentDto extends Dto {
         this.players = players;
     }
 
-    public int getRounds() {
-        return rounds;
+    public int getMaxGames() {
+        return maxGames;
     }
 
-    public void setRounds(int rounds) {
-        this.rounds = rounds;
+    public void setMaxGames(int maxGames) {
+        this.maxGames = maxGames;
     }
 }
