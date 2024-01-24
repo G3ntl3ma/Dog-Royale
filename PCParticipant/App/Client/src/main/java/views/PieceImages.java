@@ -20,6 +20,10 @@ public class PieceImages extends ImageView {
 
     static Pane houseBoard;
 
+    static int clientPlayerIndex;
+
+
+
     /**
      * Constructor for Piece
      * paneBoardd is the Pane the pieces are drawn on
@@ -67,26 +71,22 @@ public class PieceImages extends ImageView {
      */
     private void select(int radiusField)
     {
-
-        if (currentPiece != this && !selectEnemyPiece || currentPiece == null) {
-            makeShiny(radiusField);
-            currentPiece = this;
+        if (playerIndex == clientPlayerIndex) {
+            System.out.println(clientPlayerIndex);
+            if (currentPiece != this) {
+                makeShiny(radiusField);
+                currentPiece = this;
+            } else  {
+                deselect();
+            }
         }
-        else if (!selectEnemyPiece) {
-            deselect();
-        }
-        else if (selectedEnemyPiece != this && currentPiece != this){
-
+        else if (selectedEnemyPiece != this && selectEnemyPiece) {
             this.makeShinyRed(radiusField);
             selectedEnemyPiece = this;
         }
-        else if (currentPiece != this){
+        else if (selectEnemyPiece) {
             selectedEnemyPiece = null;
-            this.removeRedShine();
-        }
-        else
-        {
-            deselect();
+            removeRedShine();
         }
     }
 

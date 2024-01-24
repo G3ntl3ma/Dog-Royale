@@ -1,5 +1,7 @@
 package views;
 
+import Dog.Client.Client;
+import Dtos.MoveDto;
 import Enums.Card;
 import javafx.animation.*;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +28,8 @@ public class CardHandler {
     private HandCard previousCard;
     private TranslateTransition previousTranslate = new TranslateTransition();
     private TranslateTransition currentTranslate = new TranslateTransition();
+
+    static Client client;
 
     private static int selectedValue;
     public Card lastPlayedCard;
@@ -105,6 +109,7 @@ public class CardHandler {
 
                 }
                 else if(currentCard == this && (PieceImages.currentPiece != null ||PieceImages.selectEnemyPiece && PieceImages.selectedEnemyPiece != null) && !(this.card == Card.copyCard && lastPlayedCard == null)) {
+                    //client.sendMessage(new MoveDto(false, )) //TODO: move message
                     layCard();
                     PieceImages.setSelectEnemyPiece(false);
                 }
@@ -130,7 +135,9 @@ public class CardHandler {
         }
 
 
-
+        /**author: mtwardy
+         * Lays the card on the board
+         */
         private void layCard() {
             HandCard cards2 = new HandCard(currentCard.getCard(), 1);
             cards2.setFitWidth(this.getFitWidth());
@@ -233,7 +240,7 @@ public class CardHandler {
                 parallelTransition.setOnFinished(event2 -> {
                     pcOCG.getPaneBoardView().getChildren().remove(cards2);
                     //pcOCG.getDiscardPane().getChildren().remove(discardCard); //TODO: as soon as message sending works, remove this directly or 500ms after message send
-                    //TODO: send message that card was played with piece Information (might be using Piece.getCurrentPieceIndex() and this.getCard(); or might make static method/variable for that)
+                    // TODO: send message that card was played with piece Information (might be using Piece.getCurrentPieceIndex() and this.getCard(); or might make static method/variable for that)
                 });
 
                 parallelTransition.play();
@@ -266,7 +273,7 @@ public class CardHandler {
             Image icon = new Image("icon.png");
             String css = this.getClass().getResource("style.css").toExternalForm();
 
-            switch(this.card)
+            switch(card1)
             {
                 case startCard1:
                     PieceImages.setSelectEnemyPiece(false);
@@ -338,7 +345,23 @@ public class CardHandler {
                     stage.show();
                     break;
                 case copyCard:
-                    whatCard(lastPlayedCard);
+                    try {
+                        whatCard(lastPlayedCard);
+                    }
+                    catch(Exception e)
+                    {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Karte kopieren");
+                        alert.setHeaderText("Es wurde noch keine Karte gespielt");
+
+                        DialogPane dialog = alert.getDialogPane();
+                        dialog.getStylesheets().add(this.getClass().getResource("style.css").toExternalForm());
+                        dialog.getStyleClass().add("dialog");
+                        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                        alertStage.getIcons().add(icon);
+
+                        alert.show();
+                    }
                     break;
                 default:
                     PieceImages.setSelectEnemyPiece(false);

@@ -21,15 +21,14 @@ public class Piece {
     private final Timeline houseAnimation = new Timeline();
     public boolean goIntoHouse = false; // whether the piece goes into its house as soon as it can
 
-
-
-    /* updates the piece position and sets the piece onto the field*/
-
-    public void setPlayer(int player) {
-        this.player = player;
-        houseImage.setPlayerIndex(player);
+    public void setPlayer(int playerindex)
+    {
+        this.player = playerindex;
+        this.houseImage.playerIndex = playerindex;
+        this.fieldImage.playerIndex = playerindex;
     }
 
+    /* updates the piece position and sets the piece onto the field*/
     public void moveToField(int fieldPosition) {
         position = fieldPosition;
         inHouse = false;

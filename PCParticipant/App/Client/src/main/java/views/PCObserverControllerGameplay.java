@@ -30,6 +30,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -228,6 +229,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     public void initialize(URL url, ResourceBundle resourceBundle) { //TODO: Delete testing data
 
         currentPiece = new PieceImages(paneBoard);
+        CardHandler.client = client;
         // init board
         board = new Board(fieldSize, numPlayers, numPieces);
         houseBoard = new HouseBoard(numPlayers, numPieces);
@@ -384,6 +386,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     }
 
     /** TODO: DELETE  after testing manually////////////////////////////////////////////////////////////////////
+     * author: mtwardy
      * TestButton to draw a card on the handCards pane
      * @param event the event that triggered the method
      */
@@ -394,8 +397,19 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         drawCard(Card.startCard1);
         drawCard(Card.startCard2);
         drawCard(Card.plusMinus4);
+        drawCard(Card.copyCard);
     }
     ///////////////////////////////////////////////////////////////////////////////////
+    @FXML
+    /**author: mtwardy
+     * Button to skip a turn
+     * @param event the event that triggered the method
+     */
+    public void skipTurn(ActionEvent event) {
+        //TODO: implement skipTurn
+        System.out.println("skippeddiskippy");
+        client.sendMessage(new MoveDto(true, Card.card2, 0, 0, false, -1).toJson());
+    }
     /**
      * Draws a card on the handCards pane
      * @param card the card to be drawn
@@ -465,6 +479,10 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
             Label[] playerNames = new Label[]{lblPlayer1, lblPlayer2, lblPlayer3, lblPlayer4,lblPlayer5, lblPlayer6};
             for(int i = 0; i < lobbyConfig.getPlayerOrder().getOrder().size(); i++){
                 playerNames[i].setText(lobbyConfig.getPlayerOrder().getOrder().get(i).getName());
+                if (lobbyConfig.getPlayerOrder().getOrder().get(i).getClientId() == this.client.getClientID())
+                {
+                    PieceImages.clientPlayerIndex = i;
+                }
             }
             });
     }
@@ -713,7 +731,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
                     if (debugPrints) {System.out.print(" - player = "); System.out.println(playerIndex); System.out.print(" - ..having Id = "); System.out.println(playerId);};
                     if (playerId == pieceClientId) {
                         if (debugPrints) {System.out.println("  -> it's a match!");};
-                        pieceHandler.pieces[i].player = playerIndex;
+                        pieceHandler.pieces[i].setPlayer(playerIndex); //mtwardy: modified
                         pieceHandler.pieces[i].fieldImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
                         pieceHandler.pieces[i].houseImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
                     }
