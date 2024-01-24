@@ -17,6 +17,10 @@ public enum Card {
     swapCard,
     copyCard;
 
+    public static Card ordinal(int card) {
+        return Card.values()[card];
+    }
+
     public String getCardPath(){
         return "card_" + ordinal();
     }

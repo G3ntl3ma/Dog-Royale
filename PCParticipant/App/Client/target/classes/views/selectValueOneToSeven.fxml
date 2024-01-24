@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="307.0" prefWidth="121.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.selectValueController">
+   <children>
+      <Button fx:id="oneToSeven1btn" mnemonicParsing="false" onAction="#select1Event" prefHeight="44.0" prefWidth="121.0" text="1" />
+      <Button fx:id="oneToSeven2btn" mnemonicParsing="false" onAction="#select2Event" prefHeight="44.0" prefWidth="121.0" text="2" />
+      <Button fx:id="oneToSeven3btn" mnemonicParsing="false" onAction="#select3Event" prefHeight="44.0" prefWidth="121.0" text="3" />
+      <Button fx:id="oneToSeven4btn" mnemonicParsing="false" onAction="#select4Event" prefHeight="44.0" prefWidth="121.0" text="4" />
+      <Button fx:id="oneToSeven5btn" mnemonicParsing="false" onAction="#select5Event" prefHeight="44.0" prefWidth="121.0" text="5" />
+      <Button fx:id="oneToSeven6btn" mnemonicParsing="false" onAction="#select6Event" prefHeight="44.0" prefWidth="121.0" text="6" />
+      <Button fx:id="oneToSeven7btn" mnemonicParsing="false" onAction="#select7Event" prefHeight="44.0" prefWidth="121.0" text="7" />
+   </children>
+</VBox>

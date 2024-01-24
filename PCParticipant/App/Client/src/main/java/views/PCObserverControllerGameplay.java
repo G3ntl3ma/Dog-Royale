@@ -733,6 +733,10 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
             ArrayList<DiscardedCard> discardPile = boardStateDto.getDiscardPile();
             if(discardPile != null && !discardPile.isEmpty()){
                 ivDiscardPile.setImage(new Image(String.format("card_%d.png",discardPile.get(0).getCard())));
+                if (Card.ordinal(discardPile.get(0).getCard()) != Card.copyCard) //Saves last played Card for copy card
+                {
+                    cardHandler.setLastPlayedCard(Card.ordinal(discardPile.get(0).getCard()));
+                }
             }else{
                 ivDiscardPile.setImage(new Image("card_default.png"));
             }

@@ -28,6 +28,7 @@ public class CardHandler {
     private TranslateTransition currentTranslate = new TranslateTransition();
 
     private static int selectedValue;
+    public Card lastPlayedCard;
     private static boolean isStarter;
 
     /**
@@ -69,11 +70,14 @@ public class CardHandler {
             this.image = new Image( getClass().getResource("/" + card.getCardPath() + ".png" ).toString());
             this.numberInHand = numberInHand;
 
+
             this.setImage(image);
             this.fitHeightProperty().set(152);
             this.fitWidthProperty().set(128);
             this.pickOnBoundsProperty().set(true);
             this.preserveRatioProperty().set(true);
+
+
 
 
             //if Card is clicked
@@ -85,11 +89,7 @@ public class CardHandler {
                     selectedValue = 0;
                     isStarter = false;
                     
-                    Stage stage;
-                    Scene scene;
-                    FXMLLoader fxmlLoader;
-                    Image icon = new Image("icon.png");
-                    String css = this.getClass().getResource("style.css").toExternalForm();
+                    whatCard(this.card);
 
 
                     previousCard = currentCard;
@@ -102,89 +102,7 @@ public class CardHandler {
                     currentTranslate.setByY(-42);
                     currentTranslate.play();
 
-                    switch(this.card)
-                    {
-                        case startCard1:
-                            PieceImages.setSelectEnemyPiece(false);
 
-                            stage = new Stage();
-                            fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValueStartCard1.fxml"));
-                            try {
-                                scene = new Scene(fxmlLoader.load());
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                            scene.getStylesheets().add(css);
-                            stage.setScene(scene);
-                            stage.getIcons().add(icon);
-                            stage.show();
-
-                            break;
-                        case startCard2:
-                            PieceImages.setSelectEnemyPiece(false);
-                            stage = new Stage();
-                            fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValueStartCard2.fxml"));
-                            try {
-                                scene = new Scene(fxmlLoader.load());
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                            scene.getStylesheets().add(css);
-                            stage.setScene(scene);
-                            stage.getIcons().add(icon);
-                            stage.show();
-                            break;
-                        case swapCard:
-                            PieceImages.setSelectEnemyPiece(true);
-                            selectedValue = 0;
-                            isStarter = false;
-                            break;
-                        case magnetCard:
-                            PieceImages.setSelectEnemyPiece(true);
-                            selectedValue = 0;
-                            isStarter = false;
-                            break;
-                        case plusMinus4:
-                            PieceImages.setSelectEnemyPiece(false);
-                            stage = new Stage();
-                            fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValuePlusMinus4.fxml"));
-                            try {
-                                scene = new Scene(fxmlLoader.load());
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                            scene.getStylesheets().add(css);
-                            stage.setScene(scene);
-                            stage.getIcons().add(icon);
-                            stage.show();
-                            break;
-                        case oneToSeven:
-                            PieceImages.setSelectEnemyPiece(false);
-
-                            stage = new Stage();
-                            fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValueOneToSeven.fxml"));
-                            try {
-                                scene = new Scene(fxmlLoader.load());
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                            scene.getStylesheets().add(css);
-                            stage.setScene(scene);
-                            stage.getIcons().add(icon);
-                            stage.show();
-                            break;
-                        case copyCard:
-                            PieceImages.setSelectEnemyPiece(false);
-                            selectedValue = 0;
-                            isStarter = false;
-                            break;
-                        default:
-                            PieceImages.setSelectEnemyPiece(false);
-                            PieceImages.selectedEnemyPiece = null;
-                            selectedValue = 0;
-                            isStarter = false;
-                            break;
-                    }
                 }
                 else if(currentCard == this && (PieceImages.currentPiece != null ||PieceImages.selectEnemyPiece && PieceImages.selectedEnemyPiece != null)) {
                     layCard();
@@ -340,11 +258,106 @@ public class CardHandler {
         }
         public Card getCard() { return this.card;}
 
+        public void whatCard(Card card1)
+        {
+            Stage stage;
+            Scene scene;
+            FXMLLoader fxmlLoader;
+            Image icon = new Image("icon.png");
+            String css = this.getClass().getResource("style.css").toExternalForm();
+
+            switch(this.card)
+            {
+                case startCard1:
+                    PieceImages.setSelectEnemyPiece(false);
+
+                    stage = new Stage();
+                    fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValueStartCard1.fxml"));
+                    try {
+                        scene = new Scene(fxmlLoader.load());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    scene.getStylesheets().add(css);
+                    stage.setScene(scene);
+                    stage.getIcons().add(icon);
+                    stage.show();
+
+                    break;
+                case startCard2:
+                    PieceImages.setSelectEnemyPiece(false);
+                    stage = new Stage();
+                    fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValueStartCard2.fxml"));
+                    try {
+                        scene = new Scene(fxmlLoader.load());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    scene.getStylesheets().add(css);
+                    stage.setScene(scene);
+                    stage.getIcons().add(icon);
+                    stage.show();
+                    break;
+                case swapCard:
+                    PieceImages.setSelectEnemyPiece(true);
+                    selectedValue = 0;
+                    isStarter = false;
+                    break;
+                case magnetCard:
+                    PieceImages.setSelectEnemyPiece(true);
+                    selectedValue = 0;
+                    isStarter = false;
+                    break;
+                case plusMinus4:
+                    PieceImages.setSelectEnemyPiece(false);
+                    stage = new Stage();
+                    fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValuePlusMinus4.fxml"));
+                    try {
+                        scene = new Scene(fxmlLoader.load());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    scene.getStylesheets().add(css);
+                    stage.setScene(scene);
+                    stage.getIcons().add(icon);
+                    stage.show();
+                    break;
+                case oneToSeven:
+                    PieceImages.setSelectEnemyPiece(false);
+
+                    stage = new Stage();
+                    fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValueOneToSeven.fxml"));
+                    try {
+                        scene = new Scene(fxmlLoader.load());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    scene.getStylesheets().add(css);
+                    stage.setScene(scene);
+                    stage.getIcons().add(icon);
+                    stage.show();
+                    break;
+                case copyCard:
+                    whatCard(lastPlayedCard);
+                    break;
+                default:
+                    PieceImages.setSelectEnemyPiece(false);
+                    PieceImages.selectedEnemyPiece = null;
+                    selectedValue = 0;
+                    isStarter = false;
+                    break;
+            }
+        }
+
 
     }
 
     public static void setSelectedValue(int value){
         selectedValue = value;
+    }
+
+    public void setLastPlayedCard(Card card) {
+    	this.lastPlayedCard = card;
     }
     public static void setIsStarter(boolean value){
         isStarter = value;
