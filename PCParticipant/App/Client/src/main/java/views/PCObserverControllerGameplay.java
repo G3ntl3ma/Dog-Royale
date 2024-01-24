@@ -6,34 +6,30 @@ import Dtos.*;
 import Dtos.CustomClasses.*;
 import Enums.Card;
 import javafx.animation.*;
-import javafx.animation.Interpolator;
-import javafx.animation.RotateTransition;
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.ScrollEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.transform.Rotate;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.stage.*;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.*;
+import javafx.scene.control.*;
 import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 
@@ -130,13 +126,13 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
     public Board board;
     public HouseBoard houseBoard;
-    public DrawBoard drawBoard;
+    public final DrawBoard drawBoard = new DrawBoard();
     public PieceHandler pieceHandler;
     private PCObserverControllerHouses houseController;
 
-    private final int fieldSize = 120;//200;
-    private final int numPlayers = 6;
-    private final int numPieces = 4;
+    private int fieldSize = 120;//200;
+    private int numPlayers = 6;
+    private int numPieces = 4;
 
     private PCObserverControllerMenu controller;
 
@@ -180,8 +176,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     private Stage infoWindowStage;
     private PCObserverControllerInfoWindow infoWindowController;
     private Client client;
-    private int lastPlayedCard = -1;
-    private int lastSelectedValue = -1;
+    private int lastPlayedCard = 0;
 
     private Label[] lblPlayerFigures;
 
@@ -202,7 +197,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         return paneBoardView;
     }
 
-    public PieceImages currentPiece = new PieceImages(paneBoard);
+    public Piece currentPiece = new Piece();
     private CardHandler cardHandler = new CardHandler(this);
 
     public ImageView getDiscardPile() {
@@ -215,8 +210,6 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     }
 
 
-
-
 ////////////////////////////////////////////////////////////////////////////
 
     public void setClient(Client client){
@@ -227,21 +220,21 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { //TODO: Delete testing data
 
-        currentPiece = new PieceImages(paneBoard);
         // init board
         board = new Board(fieldSize, numPlayers, numPieces);
         houseBoard = new HouseBoard(numPlayers, numPieces);
         pieceHandler = new PieceHandler(board, houseBoard);
-
-        pieceHandler.pieces[0].player = 1;
-        pieceHandler.pieces[5].player = 2;
-        pieceHandler.pieces[10].player = 3;
-        pieceHandler.startPiece(0);
-        pieceHandler.startPiece(5);
-        pieceHandler.startPiece(10);
+        pieceHandler.whosePiece[0] = 1; /////////////////TEST DELETE
+        pieceHandler.whosePiece[1] = 2; /////////////////TEST DELETE
+        pieceHandler.whosePiece[2] = 3; /////////////////TEST DELETE
+        pieceHandler.piecePositions[0] = 2; ///////////////////////TEST DELETE
+        pieceHandler.piecePositions[1] = 4; ///////////////////////TEST DELETE
+        pieceHandler.piecePositions[2] = 6; ///////////////////////TEST DELETE
+        pieceHandler.movePiece(0, 0, true); /////////////TEST DELETE
+        pieceHandler.movePiece(2, 1, true); /////////////TEST DELETE
+        pieceHandler.movePiece(3, 2, true); /////////////TEST DELETE
 
         houseBoard.calculateHouseCoordinates(pieceHandler); // recalculate, now that we have the pieceHandler
-        drawBoard = new DrawBoard(paneBoard, board, pieceHandler);
 
         // dynamic board size, scales with number of fields
         paneBoard.setPrefSize(board.width, board.height);
@@ -251,6 +244,9 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
         // hides player boxes if less than six players are participating
         hidePlayerIcons();
+
+        // draw field
+        drawBoard.drawBoard(board, paneBoard, pieceHandler);
 
         // center board
         Platform.runLater(this::resetView);
@@ -389,7 +385,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      */
     @FXML // if u want to try a different card change the X in Card.cardX to one in look under Common/src/main/java/Enums/Card.java
     public void btnaddCard(ActionEvent event) {
-        drawCard(Card.magnetCard);
+        drawCard(Card.card8);
     }
     ///////////////////////////////////////////////////////////////////////////////////
     /**
@@ -399,7 +395,6 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     public void drawCard(Card card)
     {
         cardHandler.addCard(card);
-        cardHandler.addCard(Card.card8);
     }
 
     private void zoomView(double zoomFactor){
@@ -447,9 +442,10 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     }
 
     private void updateDrawing() {
+        drawBoard.drawBoard(board, paneBoard, pieceHandler);
         houseBoard.calculateHouseCoordinates(pieceHandler);
         try{
-            drawBoard.updateHouses(paneBoardView, houseBoard);
+            drawBoard.drawHouses(houseBoard, houseController.paneContent, pieceHandler);
         }catch(NullPointerException e){
             // window is not open
         }
@@ -473,7 +469,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         });
 
     }
-    public void initBench(ReturnLobbyConfigDto lobbyConfig){
+    public void initBank(ReturnLobbyConfigDto lobbyConfig){
         Platform.runLater(() -> {
             Label[] numFiguresPerPlayer = new Label[]{lblFiguresPOne, lblFiguresPTwo, lblFiguresPThree, lblFiguresPFour, lblFiguresPFive, lblFiguresPSix};
             for(int i = 0; i<lobbyConfig.getPlayerOrder().getOrder().size(); i++){
@@ -483,18 +479,20 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
     }
     public void initBoard(ReturnLobbyConfigDto lobbyConfig){
-        board = new Board(lobbyConfig.getFieldsize(), lobbyConfig.getMaxPlayerCount(), lobbyConfig.getFiguresPerPlayer());
-        houseBoard = new HouseBoard(lobbyConfig.getMaxPlayerCount(), lobbyConfig.getFiguresPerPlayer());
+        board = new Board(lobbyConfig.getFieldsize(), lobbyConfig.getPlayerCount(), lobbyConfig.getFiguresPerPlayer());
+        houseBoard = new HouseBoard(lobbyConfig.getPlayerCount(), lobbyConfig.getFiguresPerPlayer());
         pieceHandler = new PieceHandler(board, houseBoard);
 
         houseBoard.calculateHouseCoordinates(pieceHandler); // recalculate, now that we have the pieceHandler
-        drawBoard = new DrawBoard(paneBoard, board, pieceHandler);
 
         // dynamic board size, scales with number of fields
         paneBoard.setPrefSize(board.width, board.height);
 
         // hides player boxes if less than six players are participating
         hidePlayerIcons();
+
+        // draw field
+        drawBoard.drawBoard(board, paneBoard, pieceHandler);
     }
 
 
@@ -511,7 +509,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
                 initBoard(lobbyConfig);
                 initPlayerNames(lobbyConfig);
                 initCardNums(lobbyConfig);
-                initBench(lobbyConfig);
+                initBank(lobbyConfig);
                 updateDrawing();
 
                 resetView();
@@ -527,57 +525,30 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @Override
     public void handleMoveValid(MoveValidDto moveValid) {
         Platform.runLater(() -> {
-            if(!moveValid.isValidMove()){
-                updatePieceLabels();
-                return;
-            }
             if(moveValid.isSkip()){
-                updatePieceLabels();
                 return;
             }
-            boolean isSwapMagnetCard = (moveValid.getOpponentPieceId() != -1);
-            if(moveValid.isStarter()){
-                pieceHandler.startPiece(moveValid.getPieceId());
+            boolean isSwapCard = (moveValid.getOpponentPieceId() ==  -1);
+            if(!isSwapCard) {// Test for Swapcard
+                // Case: Swapcard
+                pieceHandler.switchPieces(moveValid.getPieceId(), moveValid.getOpponentPieceId());
                 updateDrawing();
-                client.sendMessage(new ResponseDto().toJson());
-                updatePieceLabels();
-                return;
-            }
-            if(isSwapMagnetCard) {// Test for Swap card
-                if(cardNumber(moveValid.getCard(), moveValid.getSelectedValue()) == 100) {
-                    // Case: Magnet
-                    pieceHandler.magnet(moveValid.getPieceId(), moveValid.getOpponentPieceId());
-                }
-                else if (cardNumber(moveValid.getCard(), moveValid.getSelectedValue()) == 200) {
-                    // Case: Swap card
-                    pieceHandler.switchPieces(moveValid.getPieceId(), moveValid.getOpponentPieceId());
-                }
-                else{
-                    throw new AssertionError("Somethings wrong with your server logic. Wanting to accuse others. Probably not a valid move to begin with.");
-                }
             }
             else{
                 // Case: No Swapcard
-                pieceHandler.movePiece(cardNumber(moveValid.getCard(), moveValid.getSelectedValue()), moveValid.getPieceId());
-                lblPlayerFigures[pieceHandler.pieces[moveValid.getPieceId()].player].setText(" x " + (board.numPieces - pieceHandler.numPiecesOnBench(pieceHandler.pieces[moveValid.getPieceId()].player)));
-                if(moveValid.getCard() != 14) { // don't save copycard as last played cards
-                    lastPlayedCard = moveValid.getCard();
-                    lastSelectedValue = moveValid.getSelectedValue();
-                }
-            }
-            updatePieceLabels();
-            // interfacedoc requires (optional) response for updated gui
-            updateDrawing();
-            client.sendMessage(new ResponseDto().toJson());
-        });
-    }
-    private void updatePieceLabels() {
-        for (int player = 0; player < board.numPlayers; player++) {
-            lblPlayerFigures[player].setText("x " + pieceHandler.numPiecesOnBench(player));
-        }
+                pieceHandler.movePiece(cardNumber(moveValid.getCard(), moveValid.getSelectedValue()), moveValid.getPieceId(), moveValid.isStarter());
+                lblPlayerFigures[pieceHandler.whosePiece[moveValid.getPieceId()]].setText(" x " + pieceHandler.numPiecesInField[pieceHandler.whosePiece[moveValid.getPieceId()]]);
+                System.out.println("Gameplay: " + pieceHandler.whosePiece[moveValid.getPieceId()]);
+                lastPlayedCard = moveValid.getCard();
+                updateDrawing();
+
+                // interfacedoc requires response for updated gui
+                client.sendMessage(new ResponseDto().toJson());
+            }});
+
     }
     public int cardNumber(int ordinalValue, int selectedValue) {
-        int[] cardValues = {2, 3, 5, 6, 8, 9, 10, 12, 0, 0, 0, 0, 100, 200, 0}; // 100 = swapcard, 200 = magnetcard
+        int[] cardValues = {2, 3, 5, 6, 8, 9, 10, 12, 0, 0, 0, 0, 0, 0, lastPlayedCard};
         if (ordinalValue < cardValues.length) {
             if(ordinalValue == 8){
                 if(selectedValue == -1){
@@ -601,12 +572,9 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
             if(ordinalValue == 11){
                 return selectedValue;
             }
-            if(ordinalValue == 14){
-                return cardNumber(lastPlayedCard, lastSelectedValue);
-            }
             return cardValues[ordinalValue];
         } else {
-            return -1;
+            return 0;
         }
     }
 
@@ -618,46 +586,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @Override
     public void handleBoardState(BoardStateDto boardStateDto) {
 
-
-
         Platform.runLater(()->{
-            if(boardStateDto.isGameOver()){
-                // show end screen
-                try{
-                    if(boardStateDto.getWinnerOrder().size() <= 2){
-                        String css = this.getClass().getResource("style.css").toExternalForm();
-
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("endScreen2Player.fxml"));
-                        Parent rootMenu = fxmlLoader.load();
-                        PCObserverControllerEndScreen2Player controller = fxmlLoader.getController();
-                        controller.initData(boardStateDto.getWinnerOrder());
-                        Stage stageMenu = (Stage) lblPlayer1.getScene().getWindow();
-                        Scene sceneMenu = new Scene(rootMenu);
-                        stageMenu.setScene(sceneMenu);
-                        sceneMenu.getStylesheets().add(css);
-                        stageMenu.setMinWidth(800);
-                        stageMenu.setMinHeight(800);
-                        stageMenu.show();
-                    }else{
-                        String css = this.getClass().getResource("style.css").toExternalForm();
-
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("endScreen6Player.fxml"));
-                        Parent rootMenu = fxmlLoader.load();
-                        PCObserverControllerEndScreen6Player controller = fxmlLoader.getController();
-                        controller.initData(boardStateDto.getWinnerOrder());
-                        Stage stageMenu = (Stage) lblPlayer1.getScene().getWindow();
-                        Scene sceneMenu = new Scene(rootMenu);
-                        stageMenu.setScene(sceneMenu);
-                        sceneMenu.getStylesheets().add(css);
-                        stageMenu.setMinWidth(800);
-                        stageMenu.setMinHeight(800);
-                        stageMenu.show();
-                    }
-                }catch(IOException ignored){
-                }
-                return;
-            }
-
             lblMoveCount.setText("Zug: "+boardStateDto.getMoveCount()+"/"+ lobbyConfig.getMaximumTotalMoves() + " Runde: "+ boardStateDto.getRound());
 
             // highlight current player
@@ -701,29 +630,25 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
             boolean debugPrints = false; // Debugging for Legs
             for (int i = 0; i < pieces.size(); i++) {
                 int pieceClientId = pieces.get(i).getClientId();// alternatively: boardStateDto.getPieces().get(i).getClientId()
-
-                pieceHandler.pieces[i].player = -1;
+                pieceHandler.whosePiece[i] = -1;
                 if (debugPrints) {System.out.print("piece = "); System.out.println(i); System.out.print("pieceClientId = ");System.out.println(pieceClientId);};
                 for (int playerIndex = 0; playerIndex < board.numPlayers; playerIndex++) {
                     int playerId = lobbyConfig.getPlayerOrder().getOrder().get(playerIndex).getClientId();
                     if (debugPrints) {System.out.print(" - player = "); System.out.println(playerIndex); System.out.print(" - ..having Id = "); System.out.println(playerId);};
                     if (playerId == pieceClientId) {
                         if (debugPrints) {System.out.println("  -> it's a match!");};
-                        pieceHandler.pieces[i].player = playerIndex;
-                        pieceHandler.pieces[i].fieldImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
-                        pieceHandler.pieces[i].houseImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
+                        pieceHandler.whosePiece[i] = playerIndex;
                     }
                 }
-                if (debugPrints) {System.out.print("For the record: pieceHandler.pieces[i].player = "); System.out.println(pieceHandler.pieces[i].player);};
-                if (pieceHandler.pieces[i].player == -1) {
+                if (debugPrints) {System.out.print("For the record: pieceHandler.whosePiece = "); System.out.println(Arrays.toString(pieceHandler.whosePiece));};
+                if (pieceHandler.whosePiece[i] == -1) {
                     throw new AssertionError("The piece with index "+Integer.toString(i)+" is supposed to be player-"+Integer.toString(pieceClientId)+"'s piece however this was not assigned during the loop over all "+Integer.toString(board.numPlayers)+" player(s)");
                 }
             }
             for(PlayerPiece piece : pieces){
-                pieceHandler.assertPieceState(piece.getPieceId(),piece.isOnBench(), piece.getPosition(), piece.getInHousePosition());
+                pieceHandler.movePieceIntoHouse(piece.getClientId(), piece.getInHousePosition());
                 updateDrawing();
             }
-
 
             // update discardPile
             ArrayList<DiscardedCard> discardPile = boardStateDto.getDiscardPile();
@@ -741,13 +666,13 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
             HandCards[] listNumCards = updateDrawCards.getHandCards();
             lblCardsPOne.setText(" x " + listNumCards[0].getCount());
             lblCardsPTwo.setText(" x " + listNumCards[1].getCount());
-            if(lobbyConfig.getMaxPlayerCount() >= 3){
+            if(lobbyConfig.getPlayerCount() >= 3){
                 lblCardsPThree.setText(" x " + listNumCards[2].getCount());
-                if(lobbyConfig.getMaxPlayerCount() >= 4){
+                if(lobbyConfig.getPlayerCount() >= 4){
                     lblCardsPFour.setText(" x " + listNumCards[3].getCount());
-                    if(lobbyConfig.getMaxPlayerCount() >= 5){
+                    if(lobbyConfig.getPlayerCount() >= 5){
                         lblCardsPFive.setText(" x " + listNumCards[4].getCount());
-                        if(lobbyConfig.getMaxPlayerCount() >= 6){
+                        if(lobbyConfig.getPlayerCount() >= 6){
                             lblCardsPSix.setText(" x " + listNumCards[5].getCount());
 
                         }
@@ -771,7 +696,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @Override
     public void handleUpdateLiveTimer(LiveTimerDto liveTimerDto) {
         liveTimer = liveTimerDto.getLiveTime();
-        Platform.runLater(() -> lbLiveTimer.setText(new SimpleDateFormat("mm:ss").format(liveTimer * 1000)));
+        lbLiveTimer.setText(new SimpleDateFormat("mm:ss").format(liveTimer * 1000));
 
         if(liveTimerThread == null){
             liveTimerThread = new Thread(() -> {
@@ -792,7 +717,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @Override
     public void handleUpdateTurnTimer(TurnTimerDto turnTimerDto) {
         turnTimer = turnTimerDto.getTurnTime();
-        Platform.runLater(() -> pbTime.setProgress(turnTimer / (float) lobbyConfig.getThinkTimePerMove()));
+        pbTime.setProgress(turnTimer / (float) lobbyConfig.getThinkTimePerMove());
 
         if(turnTimerThread == null){
             turnTimerThread = new Thread(() -> {

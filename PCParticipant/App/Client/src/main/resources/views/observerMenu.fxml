@@ -110,7 +110,7 @@
             <Insets bottom="8.0" left="8.0" right="8.0" />
          </VBox.margin>
       </GridPane>
-      <TabPane fx:id="tPGameList" tabClosingPolicy="UNAVAILABLE">
+      <TabPane tabClosingPolicy="UNAVAILABLE">
          <tabs>
             <Tab fx:id="tPPlannedGames1" text="Geplante Spiele">
                <content>
@@ -162,16 +162,15 @@
             <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
          </padding>
       </TabPane>
-      <TabPane fx:id="tPTournaments" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+      <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
          <tabs>
             <Tab fx:id="tPPlannedTournaments" text="Geplante Turniere">
                <content>
-                  <TableView fx:id="tVPlannedTournaments">
+                  <TableView fx:id="tVRunningGamesTournament">
                      <columns>
-                        <TableColumn fx:id="tCPTtournamentId" prefWidth="200.0" text="Name" />
-                        <TableColumn fx:id="tCPTMaxPlayers" prefWidth="90.0" text="Max. Spieler" />
-                        <TableColumn fx:id="tCPTMaxRounds" prefWidth="153.0" text="Max. Runden" />
-                        <TableColumn fx:id="tCPTCurrentRound" prefWidth="153.0" text="Momentane Runde" />
+                        <TableColumn prefWidth="200.0" text="Name" />
+                        <TableColumn prefWidth="90.0" text="Max. Spieler" />
+                        <TableColumn prefWidth="153.0" text="Bereits beigetreten" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -181,12 +180,11 @@
             </Tab>
             <Tab text="Laufende Turniere">
                <content>
-                  <TableView fx:id="tVRunningTournaments">
+                  <TableView fx:id="tVRunningGames2">
                      <columns>
-                        <TableColumn fx:id="tCRTtournamentId" prefWidth="200.0" text="Name" />
-                        <TableColumn fx:id="tCRTMaxPlayers" prefWidth="90.0" text="Max. Spieler" />
-                        <TableColumn fx:id="tCRTMaxRounds" prefWidth="153.0" text="Max. Runden" />
-                        <TableColumn fx:id="tCRTCurrentRound" prefWidth="153.0" text="Momentane Runde" />
+                        <TableColumn prefWidth="200.0" text="Name" />
+                        <TableColumn prefWidth="90.0" text="Max. Spieler" />
+                        <TableColumn prefWidth="153.0" text="Bereits beigetreten" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -196,10 +194,11 @@
             </Tab>
             <Tab text="Abgeschlossene Turniere">
                <content>
-                  <TableView fx:id="tVFinishedTournaments">
+                  <TableView fx:id="tVRunningGames3">
                      <columns>
-                        <TableColumn fx:id="tCFTtournamentId" prefWidth="200.0" text="Turniernummer" />
-                        <TableColumn fx:id="tCFTwinnerOrder" prefWidth="90.0" text="Ergebnis" />
+                        <TableColumn prefWidth="200.0" text="Name" />
+                        <TableColumn prefWidth="90.0" text="Max. Spieler" />
+                        <TableColumn prefWidth="153.0" text="Bereits beigetreten" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -217,7 +216,7 @@
       </TabPane>
       <HBox alignment="BOTTOM_RIGHT" prefHeight="41.0" prefWidth="774.0">
          <children>
-            <Button fx:id="bttnReloadGameList" disable="true" mnemonicParsing="false" onAction="#reloadGamesAndTournaments" text="Lade Spiele neu">
+            <Button fx:id="bttnReloadGameList" disable="true" mnemonicParsing="false" onAction="#reloadGameList" text="Lade Spiele neu">
                <padding>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </padding>
@@ -225,7 +224,7 @@
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="bttnTournamentInformation" disable="true" mnemonicParsing="false" onAction="#findTournament" text="Turnierinformationen">
+            <Button fx:id="bttnReloadTournamentList" disable="true" mnemonicParsing="false" text="Lade Turniere neu">
                <padding>
                   <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                </padding>

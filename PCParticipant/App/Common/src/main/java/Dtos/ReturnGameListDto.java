@@ -1,22 +1,22 @@
 package Dtos;
 
-import Dtos.CustomClasses.GamesFinished;
-import Dtos.CustomClasses.GamesProgressing;
+import Dtos.CustomClasses.FinishedGames;
+import Dtos.CustomClasses.RunningGame;
 import Enums.TypeMenue;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 
 public class ReturnGameListDto extends Dto {
     public final int type = TypeMenue.returnGameList.ordinal() + 100;
-    private ArrayList<GamesProgressing> gamesUpcoming;
-    private ArrayList<GamesProgressing> GamesProgressing;
-    private ArrayList<GamesFinished> gamesFinished;
+    private ArrayList<RunningGame> startingGames;
+    private ArrayList<RunningGame> runningGames;
+    private ArrayList<FinishedGames> finishedGames;
 
-    public ReturnGameListDto(ArrayList<GamesProgressing> gamesUpcoming, ArrayList<GamesProgressing> gamesRunning,
-                             ArrayList<GamesFinished> gamesFinished) {
-        this.gamesUpcoming = gamesUpcoming;
-        this.GamesProgressing = gamesRunning;
-        this.gamesFinished = gamesFinished;
+    public ReturnGameListDto(ArrayList<RunningGame> startingGames, ArrayList<RunningGame> runningGames,
+                             ArrayList<FinishedGames> finishedGames) {
+        this.startingGames = startingGames;
+        this.runningGames = runningGames;
+        this.finishedGames = finishedGames;
     }
 
     public String toJson() {
@@ -28,28 +28,28 @@ public class ReturnGameListDto extends Dto {
         return type;
     }
 
-    public ArrayList<GamesProgressing> getStartingGame() {
-        return gamesUpcoming;
+    public ArrayList<RunningGame> getStartingGame() {
+        return startingGames;
     }
 
-    public void setStartingGame(ArrayList<GamesProgressing> startingGames) {
-        this.gamesUpcoming = startingGames;
+    public void setStartingGame(ArrayList<RunningGame> startingGames) {
+        this.startingGames = startingGames;
     }
 
-    public ArrayList<GamesProgressing> getRunningGames() {
-        return GamesProgressing;
+    public ArrayList<RunningGame> getRunningGames() {
+        return runningGames;
     }
 
-    public void setRunningGames(ArrayList<GamesProgressing> GamesProgressings) {
-        this.GamesProgressing = GamesProgressings;
+    public void setRunningGames(ArrayList<RunningGame> runningGames) {
+        this.runningGames = runningGames;
     }
 
-    public ArrayList<GamesFinished> getFinishedGames() {
-        return gamesFinished;
+    public ArrayList<FinishedGames> getFinishedGames() {
+        return finishedGames;
     }
 
-    public void setFinishedGames(ArrayList<GamesFinished> gamesFinishedGames) {
-        this.gamesFinished = gamesFinishedGames;
+    public void setFinishedGames(ArrayList<FinishedGames> finishedGames) {
+        this.finishedGames = finishedGames;
     }
 
 }

@@ -9,8 +9,8 @@ public class CurrentGame extends Games {
     private int currentRound;
     private ArrayList<PlayerPoints> players;
 
-    public CurrentGame(int gameId, String gameName, int playerCount, int maxPlayerCount, int currentRound, ArrayList<PlayerPoints> players) {
-        super(gameId, gameName);
+    public CurrentGame(int gameId, int playerCount, int maxPlayerCount, int currentRound, ArrayList<PlayerPoints> players) {
+        super(gameId);
         this.playerCount = playerCount;
         this.maxPlayerCount = maxPlayerCount;
         this.currentRound = currentRound;

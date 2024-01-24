@@ -1,7 +1,6 @@
 package views;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class HouseBoard {
     public final int numPlayers;
@@ -70,20 +69,23 @@ public class HouseBoard {
             slices[index[0]][index[1]] = numHouses-1;
         }
         // Sort the slices in length
-        Arrays.sort(slices, Comparator.comparingInt(s -> (s[1] - s[0])));
+        Arrays.sort(slices, (s1, s2) -> (s1[1]-s1[0]) - (s2[1]-s2[0]));
         // use the longest until number of houses is acceptable
         int shownHouses = numHouses;
+        boolean enough; // it suffices to remove until we reach numShownHouses
         for (int i = numHouses-1; i >= 0; i--) {
             int[] slice = slices[i];
-            if (shownHouses < numShownHouses) {
-                break; // it suffices to remove until we reach numShownHouses
+            enough = shownHouses < numShownHouses;
+            if (enough) {
+                break;
             }
             shownHouses++; // for the ellipsis
             for (int j = slice[1]-1; j >= slice[0]; j--) {
                 showHouse[j] = false;
                 shownHouses--;
                 if (shownHouses < numShownHouses) {
-                    break; // breaks out of the entire (outer) for loop after the if statement above
+                    enough = true;
+                    break;
                 }
             }
         }

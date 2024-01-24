@@ -1,8 +1,7 @@
 package ServiceTest;
 
-import Dtos.ConnectToServerDto;
-import Dtos.LiveTimerDto;
-import Dtos.UnfreezeDto;
+import Dtos.ConnectedToServerDto;
+import Enums.TypeMenue;
 import Service.Deserializer;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -33,36 +32,20 @@ public class DeserializerTest
     }
 
     /**
-     * These tests check, if the deserializer returns the right Json object
-     * and if those Json objects transform into the right String
+     * Rigorous Test :-)
      */
-    public void testConnectToServer()
+    public void testDeserializer()
     {
-        ConnectToServerDto expectedDto = new ConnectToServerDto("Jeff",true);
-        String expectedJason = expectedDto.toJson();
-        Deserializer deserializer = new Deserializer(expectedJason);
-        ConnectToServerDto dto = (ConnectToServerDto) deserializer.deserialize();
-        assertEquals(dto.toJson(), expectedJason);
+        String connectToServerMessage = "{" +
+                "\"type\": 101," +
+                "\"name\": \"MyNameIsJeff\"," +
+                "\"isObserver\": true" +
+                "}";
+
+        Deserializer deserializer = new Deserializer(connectToServerMessage);
+
+        ConnectedToServerDto dto = (ConnectedToServerDto) deserializer.deserialize();
+
+        assertEquals(dto.getType(), TypeMenue.connectedToServer.ordinal()+100);
     }
-
-    public void testLiveTimer()
-    {
-        LiveTimerDto expectedDto = new LiveTimerDto(420);
-        String expectedJason = expectedDto.toJson();
-        Deserializer deserializer = new Deserializer(expectedJason);
-        LiveTimerDto dto = (LiveTimerDto) deserializer.deserialize();
-
-        assertEquals(dto.toJson(), expectedJason);
-    }
-
-    public void testFreeze()
-    {
-        UnfreezeDto expectedDto = new UnfreezeDto();
-        String expectedJason = expectedDto.toJson();
-        Deserializer deserializer = new Deserializer(expectedJason);
-        UnfreezeDto dto = (UnfreezeDto) deserializer.deserialize();
-
-        assertEquals(dto.toJson(), expectedJason);
-    }
-
 }

@@ -5,9 +5,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
-
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import java.net.URL;
 import java.util.ResourceBundle;
+import views.HouseBoard;
 
 
 public class PCObserverControllerHouses implements Initializable {
@@ -19,7 +21,6 @@ public class PCObserverControllerHouses implements Initializable {
     private DrawBoard drawBoard;
     private PieceHandler pieceHandler;
 
-    PieceImages currentPiece = new PieceImages(paneContent);
     public void setBoardAttr(HouseBoard houseBoard, PieceHandler pieceHandler){
         this.houseBoard = houseBoard;
         this.pieceHandler = pieceHandler;
@@ -30,14 +31,14 @@ public class PCObserverControllerHouses implements Initializable {
         paneContent.getStyleClass().add("pane");
 
         Platform.runLater(() ->{
-            currentPiece = new PieceImages(paneContent);
             // configure scrollpane
             scrollPaneHolderPane.setPannable(true);
             scrollPaneHolderPane.setContent(paneContent);
 
             //houseBoard = new HouseBoard(numPlayers, numHouseFields);
             paneContent.setPrefSize(houseBoard.width, houseBoard.height);
-            drawBoard = new DrawBoard(paneContent, houseBoard, pieceHandler);
+            drawBoard = new DrawBoard();
+            drawBoard.drawHouses(houseBoard, paneContent, pieceHandler);
         });
     }
 }

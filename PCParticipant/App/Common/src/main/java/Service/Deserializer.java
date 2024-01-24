@@ -7,37 +7,101 @@ import com.google.gson.*;
 
 public class Deserializer {
 
-    private final String jsonString;
-    private final Gson gson;
-    private JsonObject jsonObject;
-    private Class<?> messageDtoType;
-    private Class<?> messageDtoClass;
-
+    private String jsonString;
+    private Gson gson;
     public Deserializer(String jsonString){
         this.jsonString = jsonString;
         this.gson = new Gson();
-
-        jsonObject = null;
-        try{
-            JsonElement jsonElement = JsonParser.parseString(jsonString);
-            if(jsonElement.isJsonObject()){
-                jsonObject = jsonElement.getAsJsonObject();
-                initMessageType();
-                initMessageDtoClass();
-            }else{
-                jsonObject = null;
-            }
-        }catch(JsonParseException e){
-            jsonObject = null;
-        }
-    }
-
-    public Class<?> getMessageDtoType(){
-        return messageDtoType;
     }
 
     public Class<?> getMessageDtoClass() {
-        return messageDtoClass;
+        try{
+            JsonElement jsonElement = JsonParser.parseString(jsonString);
+
+            if (jsonElement.isJsonObject()) {
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+                int type = jsonObject.get("type").getAsInt();
+                if (type >= 100 && type < 200) {
+                    // TypeMenue
+                    TypeMenue menuType = TypeMenue.values()[type - 100];
+                    switch(menuType){
+                        case connectToServer:
+                            return ConnectToServerDto.class;
+                        case connectedToServer:
+                            return ConnectedToServerDto.class;
+                        case disconnect:
+                            return DisconnectDto.class;
+                        case requestGameList:
+                            return RequestGameListDto.class;
+                        case returnGameList:
+                            return ReturnGameListDto.class;
+                        case joinGameAsParticipant:
+                            return JoinGameAsParticipantDto.class;
+                        case joinGameAsObserver:
+                            return JoinGameAsObserverDto.class;
+                        case connectedToGame:
+                            return ConnectedToGameDto.class;
+                        case findTournament:
+                            return FindTournamentDto.class;
+                        case returnFindTournament:
+                            return ReturnFindTournamentDto.class;
+                        case registerForTournament:
+                            return RegisterForTournamentDto.class;
+                        case registeredForTournament:
+                            return RegisteredForTournamentDto.class;
+                        case requestTournamentInfo:
+                            return RequestTournamentInfoDto.class;
+                        case returnLobbyConfig:
+                            return ReturnLobbyConfigDto.class;
+                        case error:
+                            return ErrorDto.class;
+                        case requestTechData:
+                            return RequestTechDataDto.class;
+                        case returnTechData:
+                            return ReturnTechDataDto.class;
+                    }
+                } else if (type > 200 && type < 300) {
+                    //TODO: TypeGame
+                    TypeGame gameType = TypeGame.values()[type - 200];
+                    switch(gameType){
+                        case boardState:
+                            return BoardStateDto.class;
+                        case cancel:
+                            return CancelDto.class;
+                        case drawCards:
+                            return DrawCardsDto.class;
+                        case freeze:
+                            return FreezeDto.class;
+                        case kick:
+                            return KickDto.class;
+                        case joinObs:
+                            return JoinObsDto.class;
+                        case leaveObs:
+                            return LeaveObsDto.class;
+                        case move:
+                            return MoveDto.class;
+                        case leavePlayer:
+                            return LeavePlayerDto.class;
+                        case liveTimer:
+                            return LiveTimerDto.class;
+                        case moveValid:
+                            return MoveValidDto.class;
+                        case turnTimer:
+                            return TurnTimerDto.class;
+                        case response:
+                            return ResponseDto.class;
+                        case unfreeze:
+                            return ReturnLobbyConfigDto.class;
+                        case updateDrawCards:
+                            return UpdateDrawCardsDto.class;
+                    }
+                }
+            }
+        }catch(JsonParseException ignored){
+        }
+
+        return null;
     }
 
     public Dto deserialize()
@@ -47,137 +111,5 @@ public class Deserializer {
             return (Dto) this.gson.fromJson(this.jsonString, dtoClass);
         }
         return null;
-    }
-
-    private void initMessageType(){
-        messageDtoType = null;
-        JsonElement typeJson = jsonObject.get("type");
-        if(typeJson == null){
-            return;
-        }
-
-        int type = typeJson.getAsInt();
-        if (type >= 100 && type < 200) {
-            messageDtoType = TypeMenue.class;
-        }else if (type >= 200 && type < 300){
-            messageDtoType = TypeGame.class;
-        }
-    }
-
-    private void initMessageDtoClass(){
-        messageDtoClass = null;
-        JsonElement typeJson = jsonObject.get("type");
-        if(typeJson == null){
-            return;
-        }
-
-        int type = typeJson.getAsInt();
-        if (messageDtoType == TypeMenue.class) {
-            // TypeMenue
-            TypeMenue menuType = TypeMenue.values()[type - 100];
-            switch(menuType){
-                case connectToServer:
-                    messageDtoClass = ConnectToServerDto.class;
-                    break;
-                case connectedToServer:
-                    messageDtoClass = ConnectedToServerDto.class;
-                    break;
-                case disconnect:
-                    messageDtoClass = DisconnectDto.class;
-                    break;
-                case requestGameList:
-                    messageDtoClass = RequestGameListDto.class;
-                    break;
-                case returnGameList:
-                    messageDtoClass = ReturnGameListDto.class;
-                    break;
-                case joinGameAsPlayer:
-                    messageDtoClass = JoinGameAsPlayerDto.class;
-                    break;
-                case joinGameAsObserver:
-                    messageDtoClass = JoinGameAsObserverDto.class;
-                    break;
-                case connectedToGame:
-                    messageDtoClass = ConnectedToGameDto.class;
-                    break;
-                case requestTournamentList:
-                    messageDtoClass = RequestTournamentListDto.class;
-                    break;
-                case returnTournamentList:
-                    messageDtoClass = ReturnTournamentListDto.class;
-                    break;
-                case registerForTournament:
-                    messageDtoClass = RegisterForTournamentDto.class;
-                    break;
-                case registeredForTournament:
-                    messageDtoClass = RegisteredForTournamentDto.class;
-                    break;
-                case requestTournamentInfo:
-                    messageDtoClass = RequestTournamentInfoDto.class;
-                    break;
-                case returnLobbyConfig:
-                    messageDtoClass = ReturnLobbyConfigDto.class;
-                    break;
-                case error:
-                    messageDtoClass = ErrorDto.class;
-                    break;
-                case requestTechData:
-                    messageDtoClass = RequestTechDataDto.class;
-                    break;
-                case returnTechData:
-                    messageDtoClass = ReturnTechDataDto.class;
-                    break;
-            }
-        } else if (messageDtoType == TypeGame.class) {
-            //TypeGame
-            TypeGame gameType = TypeGame.values()[type - 200];
-            switch(gameType){
-                case boardState:
-                    messageDtoClass = BoardStateDto.class;
-                    break;
-                case cancel:
-                    messageDtoClass = CancelDto.class;
-                    break;
-                case drawCards:
-                    messageDtoClass = DrawCardsDto.class;
-                    break;
-                case freeze:
-                    messageDtoClass = FreezeDto.class;
-                    break;
-                case kick:
-                    messageDtoClass = KickDto.class;
-                    break;
-                case joinObs:
-                    messageDtoClass = JoinObsDto.class;
-                    break;
-                case leaveObs:
-                    messageDtoClass = LeaveObsDto.class;
-                    break;
-                case move:
-                    messageDtoClass = MoveDto.class;
-                    break;
-                case leavePlayer:
-                    messageDtoClass = LeavePlayerDto.class;
-                    break;
-                case liveTimer:
-                    messageDtoClass = LiveTimerDto.class;
-                    break;
-                case moveValid:
-                    messageDtoClass = MoveValidDto.class;
-                    break;
-                case turnTimer:
-                    messageDtoClass = TurnTimerDto.class;
-                    break;
-                case response:
-                    messageDtoClass = ResponseDto.class;
-                    break;
-                case unfreeze:
-                    messageDtoClass = ReturnLobbyConfigDto.class;
-                    break;
-                case updateDrawCards:
-                    messageDtoClass = UpdateDrawCardsDto.class;
-                    break;
-            }
-        }
     }
 }

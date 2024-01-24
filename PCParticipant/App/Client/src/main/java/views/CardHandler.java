@@ -84,30 +84,60 @@ public class CardHandler {
 
                     switch(this.card)
                     {
+                        case startCard1:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case startCard2:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
                         case swapCard:
-                            PieceImages.setSelectEnemyPiece(true);
+                            Piece.setSelectEnemyPiece(true);
                             break;
                         case magnetCard:
-                            PieceImages.setSelectEnemyPiece(true);
+                            Piece.setSelectEnemyPiece(true);
                             break;
                         case plusMinus4:
-                            PieceImages.setSelectEnemyPiece(false);
+                            Piece.setSelectEnemyPiece(false);
                             break;
                         case oneToSeven:
-                            PieceImages.setSelectEnemyPiece(false);
+                            Piece.setSelectEnemyPiece(false);
                             break;
                         case copyCard:
-                            PieceImages.setSelectEnemyPiece(false);
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card2:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card3:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card5:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card6:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card8:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card9:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card10:
+                            Piece.setSelectEnemyPiece(false);
+                            break;
+                        case card12:
+                            Piece.setSelectEnemyPiece(false);
                             break;
                         default:
-                            PieceImages.setSelectEnemyPiece(false);
-                            PieceImages.selectedEnemyPiece = null;
+                            Piece.setSelectEnemyPiece(false);
+                            Piece.selectedEnemyPiece = null;
                             break;
                     }
                 }
-                else if(currentCard == this && (PieceImages.currentPiece != null ||PieceImages.selectEnemyPiece && PieceImages.selectedEnemyPiece != null)) {
+                else if(currentCard == this && (Piece.currentPiece != null ||Piece.selectEnemyPiece && Piece.selectedEnemyPiece != null)) {
                     layCard();
-                    PieceImages.setSelectEnemyPiece(false);
+                    Piece.setSelectEnemyPiece(false);
                 }
                 else {
                     //Show a warning to the Player that no Figure has been selected
@@ -257,6 +287,7 @@ public class CardHandler {
             //Playing the transitions
             parallelTransition.play();
         }
+
         public Card getCard() { return this.card;}
 
 

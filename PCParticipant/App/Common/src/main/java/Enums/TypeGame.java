@@ -6,7 +6,6 @@ public enum TypeGame {
     joinObs ,
     leaveObs ,
     leavePlayer ,
-    disconnect ,
 
     boardState ,
     move ,
@@ -17,7 +16,5 @@ public enum TypeGame {
     unfreeze ,
     drawCards ,
     updateDrawCards ,
-    kick ,
-    requestScores ,
-    returnScores
+    kick;
 }

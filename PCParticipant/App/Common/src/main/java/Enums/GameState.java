@@ -1,7 +1,6 @@
 package Enums;
 
 public enum GameState {
-    planned("geplant"),
     paused("pausiert"),
     running("laufend"),
     canceled("abgebrochen"),

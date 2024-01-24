@@ -3,7 +3,8 @@ package views;
 import Dog.Client.Client;
 import Dog.Client.Interfaces.IClientObserverMenu;
 import Dtos.*;
-import Dtos.CustomClasses.*;
+import Dtos.CustomClasses.FinishedGames;
+import Dtos.CustomClasses.RunningGame;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,7 +27,6 @@ import java.util.ResourceBundle;
 
 
 public class PCObserverControllerMenu implements Initializable, IClientObserverMenu {
-    // attr related to connecting
     @FXML
     private TextField tfIP;
     @FXML
@@ -34,84 +34,45 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
     @FXML
     private TextField tfUsername;
     @FXML
-    private Button bttnConnect;
-
-    // attr related to gameList tabpane
-    @FXML
-    private TabPane tPGameList;
-    @FXML
-    private TableView<GamesProgressing> tVPlannedGames;
-    @FXML
-    private TableColumn<GamesProgressing, String> columnName;
-    @FXML
-    private TableColumn<GamesProgressing, Integer> columnMaxPlayer;
-    @FXML
-    private TableColumn<GamesProgressing, Integer> columnAlreadyJoined;
-    @FXML
-    private  TableView<GamesProgressing> tVRunningGames;
-    @FXML
-    private TableColumn<GamesProgressing, String> clmnNameRunning;
-    @FXML
-    private TableColumn<GamesProgressing, Integer> clmnMaxPlayersRunning;
-    @FXML
-    private TableColumn<GamesProgressing, Integer> clmnAlreadyJoinedRunning;
-    @FXML
-    private TableView<GamesFinished> tVFinishedGames;
-    @FXML
-    private TableColumn<GamesFinished, String> clmnNameFinished;
-    @FXML
-    private TableColumn<GamesFinished, Array> clmnResultsFinished;
-    @FXML
-    private TableColumn<GamesFinished, Boolean> clmnWasCanceled;
-
-    // attr related to tournament tabpane
-    @FXML
-    private TabPane tPTournaments;
-    @FXML
-    private TableView<TournamentsUpcoming> tVPlannedTournaments;
-    @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCPTtournamentId;
-    @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCPTMaxPlayers;
-    @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCPTMaxRounds;
-    @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCPTCurrentRound;
-    @FXML
-    private TableView<TournamentsUpcoming> tVRunningTournaments;
-    @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCRTtournamentId;
-    @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCRTMaxPlayers;
-    @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCRTMaxRounds;
-    @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCRTCurrentRound;
-    @FXML
-    private TableView<TournamentsFinished> tVFinishedTournaments;
-    @FXML
-    private TableColumn<TournamentsFinished, Integer> tCFTtournamentId;
-    @FXML
-    private TableColumn<TournamentsFinished, Array> tCFTwinnerOrder;
-
-    @FXML
     private TextArea tAClientLog;
-
+    @FXML
+    private Button bttnConnect;
     @FXML
     private Button bttnObserve;
     @FXML
-    private Button bttnReloadGameList;
-    @FXML
-    private Button bttnTournamentInformation;
+    private Button bttnReloadTournamentList;
     @FXML
     private CheckBox cBIsObserver;
-
+    @FXML
+    private TableView<RunningGame> tVPlannedGames;
+    @FXML
+    private  TableView<RunningGame> tVRunningGames;
+    @FXML
+    private TableView<FinishedGames> tVFinishedGames;
+    @FXML
+    private Button bttnReloadGameList;
+    @FXML
+    private TableColumn<RunningGame, Integer> columnName;
+    @FXML
+    private TableColumn<RunningGame, Integer> columnMaxPlayer;
+    @FXML
+    private TableColumn<RunningGame, Integer> columnAlreadyJoined;
+    @FXML
+    private TableColumn<RunningGame, Integer> clmnNameRunning;
+    @FXML
+    private TableColumn<RunningGame, Integer> clmnMaxPlayersRunning;
+    @FXML
+    private TableColumn<RunningGame, Integer> clmnAlreadyJoinedRunning;
+    @FXML
+    private TableColumn<FinishedGames, Integer> clmnNameFinished;
+    @FXML
+    private TableColumn<FinishedGames, Array> clmnResultsFinished;
+    @FXML
+    private TableColumn<FinishedGames, Boolean> clmnWasCanceled;
     @FXML
     private Client client;
     private ReturnGameListDto gameList;
-    private ReturnTournamentListDto findTournament;
     private PCObserverControllerGameplay controller;
-    private ReturnTournamentInfoDto tournamentInfo;
 
 
     @FXML
@@ -119,13 +80,9 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         if(client == null) {
             return;
         }
-        // check for which tab is selected to send proper join-msg
-        Tab selectedTab = tPGameList.getSelectionModel().getSelectedItem();
-        if(selectedTab != null)
-            joinGameAsObserver();
-        else {
-            joinTournamentGame();
-        }
+
+        int gameID = gameList.getStartingGame().get(tVPlannedGames.getSelectionModel().getSelectedIndex()).getGameId();
+        client.sendMessage(new JoinGameAsObserverDto(gameID, client.getClientID()).toJson());
 
         String css = this.getClass().getResource("style.css").toExternalForm();
 
@@ -172,57 +129,19 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
 
         // call stop method when stage is closed
         stageGameplay.setOnCloseRequest(windowEvent -> {
+            controller.stop();
         });
     }
     //////////////////////////////////////////////////////////////////////////////////////////TODO DELETE fakeGameplay Method after testing manually till here
-    public void joinGameAsObserver(){
-        Tab selectedTab = tPGameList.getSelectionModel().getSelectedItem();
-        TableView selectedTableview = (TableView) selectedTab.getContent();
-        int gameId;
-        if(selectedTableview.equals(tVPlannedGames)){
-            gameId = gameList.getStartingGame().get(selectedTableview.getSelectionModel().getSelectedIndex()).getGameId();
-        }
-        else{
-           gameId = gameList.getRunningGames().get(selectedTableview.getSelectionModel().getSelectedIndex()).getGameId();
-        }
-        client.sendMessage(new JoinGameAsObserverDto(client.getClientID(), gameId).toJson());
-    }
 
-
-    // see also @handleReturnTournamentInfo()
-    public void joinTournamentGame(){
-        Tab selectedTab = tPTournaments.getSelectionModel().getSelectedItem();
-        TableView selectedTableview = (TableView) selectedTab.getContent();
-        int tournamentId;
-
-        int gameId;
-        if(selectedTableview.equals(tVPlannedTournaments)){
-            tournamentId = findTournament.getTournamentsUpcoming().get(selectedTableview.getSelectionModel().getSelectedIndex()).getTournamentId();
-        }
-        else{
-            tournamentId = findTournament.getTournamentsRunning().get(selectedTableview.getSelectionModel().getSelectedIndex()).getTournamentId();
-        }
-        requestTournamentInfo(tournamentId);
-    }
     public void requestGameList(){
         client.sendMessage(new RequestGameListDto(client.getClientID(), 100,100,100).toJson());
     }
-    public void findTournament(){
-        client.sendMessage(new RequestTournamentListDto(client.getClientID(), 100, 100, 100).toJson());
-    }
 
     @FXML
-    public void reloadGamesAndTournaments(){
-        requestGameList();
-        findTournament();
+    public void reloadGameList(){
+        client.sendMessage(new RequestGameListDto(client.getClientID(), 100,100,100).toJson());
     }
-    public void requestTournamentInfo(int tournamentId){
-         client.sendMessage(new RequestTournamentInfoDto(client.getClientID(), tournamentId).toJson());
-    }
-
-
-    // registers class as observer on client after connection to server is established
-    // immediately sends requestGameList and findTournament
     @FXML
     public void connectingToServer(ActionEvent event) throws IOException {
         if (client != null) {
@@ -253,7 +172,6 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
             });
 
             requestGameList();
-            findTournament();
             client.registerObserverMenu(this);
 
             bttnReloadGameList.setDisable(false);
@@ -267,57 +185,22 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Platform.runLater(()->{
+
             // configure table columns for single games
-            columnName.setCellValueFactory(new PropertyValueFactory<>("gameName"));
+            columnName.setCellValueFactory(new PropertyValueFactory<>("gameId"));
             columnMaxPlayer.setCellValueFactory(new PropertyValueFactory<>("maxPlayerCount"));
             columnAlreadyJoined.setCellValueFactory(new PropertyValueFactory<>("currentPlayerCount"));
-            clmnNameRunning.setCellValueFactory(new PropertyValueFactory<>("gameName"));
+            clmnNameRunning.setCellValueFactory(new PropertyValueFactory<>("gameId"));
             clmnMaxPlayersRunning.setCellValueFactory(new PropertyValueFactory<>("maxPlayerCount"));
             clmnAlreadyJoinedRunning.setCellValueFactory(new PropertyValueFactory<>("currentPlayerCount"));
-            clmnNameFinished.setCellValueFactory(new PropertyValueFactory<>("gameName"));
+            clmnNameFinished.setCellValueFactory(new PropertyValueFactory<>("gameId"));
             clmnResultsFinished.setCellValueFactory(new PropertyValueFactory<>("winnerOrder"));
             clmnWasCanceled.setCellValueFactory(new PropertyValueFactory<>("wasCanceled"));
-            // configure table columns for tournaments
-            tCPTtournamentId.setCellValueFactory(new PropertyValueFactory<>("tournamentId"));
-            tCPTMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("maxPlayer"));
-            tCPTMaxRounds.setCellValueFactory(new PropertyValueFactory<>("maxRounds"));
-            tCPTCurrentRound.setCellValueFactory(new PropertyValueFactory<>("currentRound"));
-            tCRTtournamentId.setCellValueFactory(new PropertyValueFactory<>("tournamentId"));
-            tCRTMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("maxPlayer"));
-            tCRTMaxRounds.setCellValueFactory(new PropertyValueFactory<>("maxRounds"));
-            tCRTCurrentRound.setCellValueFactory(new PropertyValueFactory<>("currentRound"));
-            tCFTtournamentId.setCellValueFactory(new PropertyValueFactory<>("tournamentId"));
-            tCFTwinnerOrder.setCellValueFactory(new PropertyValueFactory<>("winnerOrder"));
         });
-
-        // Enable "observe"-button after game is selected
         tVPlannedGames.getSelectionModel().selectedItemProperty().addListener((observableValue, oldSelection, newSelection) -> {
             bttnObserve.setDisable(newSelection == null);
         });
 
-        tVRunningGames.getSelectionModel().selectedItemProperty().addListener(((observableValue, oldSelection, newSelection) -> {
-            bttnObserve.setDisable(newSelection == null);
-        }));
-
-        // Enable "observe"-button after tournament is selected
-        tVPlannedTournaments.getSelectionModel().selectedItemProperty().addListener((observableValue, oldSelection, newSelection) -> {
-            bttnObserve.setDisable(newSelection == null);
-        });
-
-        tVRunningTournaments.getSelectionModel().selectedItemProperty().addListener(((observableValue, oldSelection, newSelection) -> {
-            bttnObserve.setDisable(newSelection == null);
-        }));
-
-        // Enable "tournamentinfo"-button after tournament is selected
-        tVPlannedTournaments.getSelectionModel().selectedItemProperty().addListener(((observableValue, oldSelection, newSelection) -> {
-            bttnTournamentInformation.setDisable(newSelection == null);
-        }));
-
-        tVRunningTournaments.getSelectionModel().selectedItemProperty().addListener(((observableValue, oldSelection, newSelection) -> {
-            bttnTournamentInformation.setDisable(newSelection == null);
-        }));
-
-        // Enable "connect"-button after all information is entered
         tfIP.textProperty().addListener((observableValue, oldValue, newValue) -> {
             bttnConnect.setDisable(tfIP.getText().isEmpty() || tfUsername.getText().isEmpty() || tfPort.getText().isEmpty());
         });
@@ -353,43 +236,17 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
     public void handleGameListUpdate(ReturnGameListDto gameList) {
         this.gameList=gameList;
         tVPlannedGames.getItems().clear();
-        for(GamesProgressing startingGames : gameList.getStartingGame()) {
+        for(RunningGame startingGames : gameList.getStartingGame()) {
             tVPlannedGames.getItems().add(startingGames);
         }
         tVRunningGames.getItems().clear();
-        for(GamesProgressing GamesProgressing : gameList.getRunningGames()){
-            tVRunningGames.getItems().add(GamesProgressing);
+        for(RunningGame runningGame : gameList.getRunningGames()){
+            tVRunningGames.getItems().add(runningGame);
         }
         tVFinishedGames.getItems().clear();
-        for(GamesFinished gamesFinished : gameList.getFinishedGames()){
-            tVFinishedGames.getItems().add(gamesFinished);
+        for(FinishedGames finishedGames : gameList.getFinishedGames()){
+            tVFinishedGames.getItems().add(finishedGames);
         }
 
-    }
-
-    @Override
-    public void handleReturnFindTournament(ReturnTournamentListDto findTournament) {
-        this.findTournament = findTournament;
-        tVPlannedTournaments.getItems().clear();
-        for(TournamentsUpcoming tournament : findTournament.getTournamentsUpcoming()){
-            tVPlannedTournaments.getItems().add(tournament);
-        }
-        tVRunningTournaments.getItems().clear();
-        for(TournamentsUpcoming tournament : findTournament.getTournamentsRunning()){
-            tVPlannedTournaments.getItems().add(tournament);
-        }
-        tVFinishedTournaments.getItems().clear();
-        for (TournamentsFinished tournament : findTournament.getTournamentsFinished()){
-            tVFinishedTournaments.getItems().add(tournament);
-        }
-    }
-
-    //
-    // to join tournamentGame
-    @Override
-    public void handleReturnTournamentInfo(ReturnTournamentInfoDto tournamentInfo) throws IOException {
-        this.tournamentInfo = tournamentInfo;
-        int gameId = tournamentInfo.getTournamentInfo().getGameRunning().getGameId();
-        client.sendMessage(new JoinGameAsObserverDto(client.getClientID(), gameId).toJson());
     }
 }

@@ -58,10 +58,6 @@ public class Client implements IClientObservable {
                 try {
                     message = bufferedReader.readLine();
 
-                    if(message == null){
-                        break;
-                    }
-
                     Deserializer deserializer = new Deserializer(message);
                     Class<?> dtoClass = deserializer.getMessageDtoClass();
                     // dtos messages related to menu
@@ -73,8 +69,8 @@ public class Client implements IClientObservable {
                         updateGameList(dto);
                     }else if(dtoClass == ConnectedToGameDto.class){
                         ConnectedToGameDto dto = (ConnectedToGameDto) deserializer.deserialize();
-                    }else if(dtoClass == ReturnTournamentListDto.class){
-                        ReturnTournamentListDto dto = (ReturnTournamentListDto) deserializer.deserialize();
+                    }else if(dtoClass == ReturnFindTournamentDto.class){
+                        ReturnFindTournamentDto dto = (ReturnFindTournamentDto) deserializer.deserialize();
                     }else if(dtoClass == RegisteredForTournamentDto.class){
                         // ignore
                     }else if(dtoClass == ReturnTournamentInfoDto.class){
@@ -175,7 +171,7 @@ public class Client implements IClientObservable {
     }
 
     @Override
-    public void updateFindTournament(ReturnTournamentListDto findTournament) {
+    public void updateFindTournament(ReturnFindTournamentDto findTournament) {
 
     }
 

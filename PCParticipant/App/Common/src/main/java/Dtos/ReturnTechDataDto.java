@@ -7,12 +7,12 @@ public class ReturnTechDataDto extends Dto {
     public final int type = TypeMenue.returnTechData.ordinal() + 100;
     private String serverVersion;
     private String supportedProtocol;
-    private int[] embeddedExtensions;
+    private int[] embededExtensions;
 
-    public ReturnTechDataDto(String serverVersion, String supportedProtocol, int[] embeddedExtensions){
+    public ReturnTechDataDto(String serverVersion, String supportedProtocol, int[] embededExtensions){
         this.serverVersion = serverVersion;
         this.supportedProtocol = supportedProtocol;
-        this.embeddedExtensions = embeddedExtensions;
+        this.embededExtensions = embededExtensions;
     }
 
     public String toJson() {
@@ -40,12 +40,12 @@ public class ReturnTechDataDto extends Dto {
         this.supportedProtocol = supportedProtocol;
     }
 
-    public int[] getEmbeddedExtensions() {
-        return embeddedExtensions;
+    public int[] getEmbededExtensions() {
+        return embededExtensions;
     }
 
-    public void setEmbeddedExtensions(int[] embeddedExtensions) {
-        this.embeddedExtensions = embeddedExtensions;
+    public void setEmbededExtensions(int[] embededExtensions) {
+        this.embededExtensions = embededExtensions;
     }
 
 }

@@ -12,7 +12,7 @@ public class MessageSender {
         client.sendMessage(new LeavePlayerDto().toJson());
     }
     public void sendJoinGameAsPlayer(int gameId,int clientId,String playerName){
-        client.sendMessage(new JoinGameAsPlayerDto(gameId, clientId, playerName).toJson());
+        client.sendMessage(new JoinGameAsParticipantDto(gameId, clientId, playerName).toJson());
     }
     public void sendRegisterForTournament(int tournamentId, int clientId){
         client.sendMessage(new RegisterForTournamentDto(tournamentId, clientId).toJson());

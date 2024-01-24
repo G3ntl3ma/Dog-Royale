@@ -2,7 +2,6 @@ package Dtos;
 
 import Dtos.CustomClasses.DiscardedCard;
 import Dtos.CustomClasses.PlayerPiece;
-import Dtos.CustomClasses.PlayerPoints;
 import Enums.TypeGame;
 import com.google.gson.Gson;
 import java.util.ArrayList;
@@ -16,14 +15,10 @@ public class BoardStateDto extends Dto {
     private int moveCount;
     private int nextPlayer;
     private boolean gameOver;
-
-
-
-    private boolean wasCanceled;
-    private ArrayList<PlayerPoints> winnerOrder;
+    private int[] winnerOrder;
 
     public BoardStateDto(int lastPlayedCard, ArrayList<PlayerPiece> pieces,ArrayList<DiscardedCard> discardPile,
-    int round, int moveCount, int nextPlayer, boolean gameOver, boolean wasCanceled, ArrayList<PlayerPoints> winnerOrder) {
+    int round, int moveCount, int nextPlayer, boolean gameOver, int[] winnerOrder) {
         this.pieces = pieces;
         this.discardPile = discardPile;
         this.lastPlayedCard = lastPlayedCard;
@@ -31,7 +26,6 @@ public class BoardStateDto extends Dto {
         this.moveCount = moveCount;
         this.nextPlayer = nextPlayer;
         this.gameOver = gameOver;
-        this.wasCanceled = wasCanceled;
         this.winnerOrder = winnerOrder;
     }
 
@@ -91,23 +85,16 @@ public class BoardStateDto extends Dto {
     public boolean isGameOver() {
         return gameOver;
     }
-    public boolean isWasCanceled() {
-        return wasCanceled;
-    }
-
-    public void setWasCanceled(boolean wasCanceled) {
-        this.wasCanceled = wasCanceled;
-    }
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
 
-    public ArrayList<PlayerPoints> getWinnerOrder() {
+    public int[] getWinnerOrder() {
         return winnerOrder;
     }
 
-    public void setWinnerOrder(ArrayList<PlayerPoints> winnerOrder) {
+    public void setWinnerOrder(int[] winnerOrder) {
         this.winnerOrder = winnerOrder;
     }
 

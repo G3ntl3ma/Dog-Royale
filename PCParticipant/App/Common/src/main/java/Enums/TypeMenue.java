@@ -1,24 +1,21 @@
 package Enums;
 
 public enum TypeMenue {
-    leaveObs,
-    leavePlayer,
-    disconnect,
-
     connectToServer,
     connectedToServer,
+    disconnect,
     requestGameList,
-    returnGameList,
-    joinGameAsPlayer,
+    returnGameList, // 5
+    joinGameAsParticipant,
     joinGameAsObserver,
     connectedToGame,
-    requestTournamentList,
-    returnTournamentList,
+    findTournament,
+    returnFindTournament, // 10
     registerForTournament,
     registeredForTournament,
     requestTournamentInfo,
     returnTournamentInfo,
-    returnLobbyConfig,
+    returnLobbyConfig, //15
     error,
     requestTechData,
     returnTechData
