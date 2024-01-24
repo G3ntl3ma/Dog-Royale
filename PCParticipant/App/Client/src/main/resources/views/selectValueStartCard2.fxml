@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="132.0" prefWidth="121.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.selectValueController">
+   <children>
+      <Button fx:id="startCard2Startbtn" mnemonicParsing="false" onAction="#selectStartEvent" prefHeight="44.0" prefWidth="121.0" text="Start" />
+      <Button fx:id="startCard2Onebtn" mnemonicParsing="false" onAction="#select1Event" prefHeight="44.0" prefWidth="121.0" text="1" />
+      <Button fx:id="startCard2Elevenbtn" mnemonicParsing="false" onAction="#select11Event" prefHeight="44.0" prefWidth="121.0" text="11" />
+   </children>
+</VBox>
