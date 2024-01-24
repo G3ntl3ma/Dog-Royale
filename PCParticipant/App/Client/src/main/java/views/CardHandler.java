@@ -84,12 +84,6 @@ public class CardHandler {
 
                     switch(this.card)
                     {
-                        case startCard1:
-                            PieceImages.setSelectEnemyPiece(false);
-                            break;
-                        case startCard2:
-                            PieceImages.setSelectEnemyPiece(false);
-                            break;
                         case swapCard:
                             PieceImages.setSelectEnemyPiece(true);
                             break;
@@ -103,30 +97,6 @@ public class CardHandler {
                             PieceImages.setSelectEnemyPiece(false);
                             break;
                         case copyCard:
-                            PieceImages.setSelectEnemyPiece(false);
-                            break;
-                        case card2:
-                            PieceImages.setSelectEnemyPiece(false);
-                            break;
-                        case card3:
-                            PieceImages.setSelectEnemyPiece(false);
-                            break;
-                        case card5:
-                            PieceImages.setSelectEnemyPiece(false);
-                            break;
-                        case card6:
-                            PieceImages.setSelectEnemyPiece(false);
-                            break;
-                        case card8:
-                            PieceImages.setSelectEnemyPiece(false);
-                            break;
-                        case card9:
-                            PieceImages.setSelectEnemyPiece(false);
-                            break;
-                        case card10:
-                            PieceImages.setSelectEnemyPiece(false);
-                            break;
-                        case card12:
                             PieceImages.setSelectEnemyPiece(false);
                             break;
                         default:

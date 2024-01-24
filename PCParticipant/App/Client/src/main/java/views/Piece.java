@@ -16,6 +16,7 @@ public class Piece {
     public int player = 0; // whose piece this is
     public final PieceImages fieldImage = new PieceImages();
     public final PieceImages houseImage = new PieceImages();
+
     private final Timeline fieldAnimation = new Timeline();
     private final Timeline houseAnimation = new Timeline();
     public boolean goIntoHouse = false; // whether the piece goes into its house as soon as it can

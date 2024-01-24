@@ -19,6 +19,7 @@ public class PCObserverControllerHouses implements Initializable {
     private DrawBoard drawBoard;
     private PieceHandler pieceHandler;
 
+    PieceImages currentPiece = new PieceImages(paneContent);
     public void setBoardAttr(HouseBoard houseBoard, PieceHandler pieceHandler){
         this.houseBoard = houseBoard;
         this.pieceHandler = pieceHandler;
@@ -29,6 +30,7 @@ public class PCObserverControllerHouses implements Initializable {
         paneContent.getStyleClass().add("pane");
 
         Platform.runLater(() ->{
+            currentPiece = new PieceImages(paneContent);
             // configure scrollpane
             scrollPaneHolderPane.setPannable(true);
             scrollPaneHolderPane.setContent(paneContent);

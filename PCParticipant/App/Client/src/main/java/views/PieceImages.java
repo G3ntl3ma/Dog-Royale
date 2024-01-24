@@ -16,8 +16,13 @@ public class PieceImages extends ImageView {
     static boolean selectEnemyPiece = false;
     static PieceImages currentPiece; //Saves the selected Piece
 
+    public boolean isOnHouse = false;
+
+    static Pane houseBoard;
+
     /**
      * Constructor for Piece
+     * paneBoardd is the Pane the pieces are drawn on
      */
     public PieceImages(Pane paneBoardd) {
         paneBoard = paneBoardd;
@@ -27,13 +32,6 @@ public class PieceImages extends ImageView {
     }
     /**
      * Constructor for Piece
-     * @param image Image of the piece
-     * @param pieceIndex Index of the piece
-     * @param onboard Boolean if the piece is on the board
-     * @param playerIndex Index of the player
-     * @param paneBoard Pane to draw the piece in
-     * @param radiusField Radius of fields
-     * @param pos Position of the piece (x, y)
      */
     public PieceImages() {
 
@@ -69,6 +67,7 @@ public class PieceImages extends ImageView {
      */
     private void select(int radiusField)
     {
+
         if (currentPiece != this && !selectEnemyPiece || currentPiece == null) {
             makeShiny(radiusField);
             currentPiece = this;
@@ -120,9 +119,17 @@ public class PieceImages extends ImageView {
         shine.setY(this.getY());
         shine.setFitWidth(3*radiusField);
         shine.setBlendMode(BlendMode.LIGHTEN);
-        paneBoard.getChildren().add(shine);
-        paneBoard.getChildren().remove(this);
-        paneBoard.getChildren().add(this);
+        if (isOnHouse)
+        {
+            houseBoard.getChildren().add(shine);
+            houseBoard.getChildren().remove(this);
+            houseBoard.getChildren().add(this);
+        }
+        else{
+            paneBoard.getChildren().add(shine);
+            paneBoard.getChildren().remove(this);
+            paneBoard.getChildren().add(this);
+        }
         if (currentPiece != null)
         {
             currentPiece.removeShine();
