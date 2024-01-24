@@ -2,6 +2,8 @@ package views;
 
 import Enums.Card;
 import javafx.animation.*;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
@@ -10,6 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 /**
  * made to handle ur handcards
@@ -22,6 +26,9 @@ public class CardHandler {
     private HandCard previousCard;
     private TranslateTransition previousTranslate = new TranslateTransition();
     private TranslateTransition currentTranslate = new TranslateTransition();
+
+    private static int selectedVaue;
+    private static boolean isStarter;
 
     /**
      * Constructor for the CardHandler - handles the cards in your hand
@@ -57,6 +64,7 @@ public class CardHandler {
          * @param numberInHand which place in ur hand is the card in TODO: delete if not needed
          */
         public HandCard(Card card, int numberInHand) {
+
             this.card = card;
             this.image = new Image( getClass().getResource("/" + card.getCardPath() + ".png" ).toString());
             this.numberInHand = numberInHand;
@@ -72,6 +80,13 @@ public class CardHandler {
             this.setOnMouseClicked(event -> {
                 //Animation for selecting a new different card (and no animation still running)
                 if(currentTranslate.getStatus() != Animation.Status.RUNNING && currentCard != this) {
+
+                    Stage stage;
+                    Scene scene;
+                    FXMLLoader fxmlLoader;
+                    Image icon = new Image("icon.png");
+
+
                     previousCard = currentCard;
                     previousTranslate.setNode(previousCard);
                     previousTranslate.setByY(42);
@@ -86,52 +101,119 @@ public class CardHandler {
                     {
                         case startCard1:
                             Piece.setSelectEnemyPiece(false);
+
+                            stage = new Stage();
+                            fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValueStartCard1.fxml"));
+                            try {
+                                scene = new Scene(fxmlLoader.load());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            stage.setScene(scene);
+                            stage.getIcons().add(icon);
+                            stage.show();
+
                             break;
                         case startCard2:
                             Piece.setSelectEnemyPiece(false);
+                            stage = new Stage();
+                            fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValueStartCard2.fxml"));
+                            try {
+                                scene = new Scene(fxmlLoader.load());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            stage.setScene(scene);
+                            stage.getIcons().add(icon);
+                            stage.show();
                             break;
                         case swapCard:
                             Piece.setSelectEnemyPiece(true);
+                            selectedVaue = 0;
+                            isStarter = false;
                             break;
                         case magnetCard:
                             Piece.setSelectEnemyPiece(true);
+                            selectedVaue = 0;
+                            isStarter = false;
                             break;
                         case plusMinus4:
                             Piece.setSelectEnemyPiece(false);
+                            stage = new Stage();
+                            fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValuePlusMinus4.fxml"));
+                            try {
+                                scene = new Scene(fxmlLoader.load());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            stage.setScene(scene);
+                            stage.getIcons().add(icon);
+                            stage.show();
                             break;
                         case oneToSeven:
                             Piece.setSelectEnemyPiece(false);
+
+                            stage = new Stage();
+                            fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValueOneToSeven.fxml"));
+                            try {
+                                scene = new Scene(fxmlLoader.load());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            stage.setScene(scene);
+                            stage.getIcons().add(icon);
+                            stage.show();
                             break;
                         case copyCard:
                             Piece.setSelectEnemyPiece(false);
+                            selectedVaue = 0;
+                            isStarter = false;
                             break;
                         case card2:
                             Piece.setSelectEnemyPiece(false);
+                            selectedVaue = 0;
+                            isStarter = false;
                             break;
                         case card3:
                             Piece.setSelectEnemyPiece(false);
+                            selectedVaue = 0;
+                            isStarter = false;
                             break;
                         case card5:
                             Piece.setSelectEnemyPiece(false);
+                            selectedVaue = 0;
+                            isStarter = false;
                             break;
                         case card6:
                             Piece.setSelectEnemyPiece(false);
+                            selectedVaue = 0;
+                            isStarter = false;
                             break;
                         case card8:
                             Piece.setSelectEnemyPiece(false);
+                            selectedVaue = 0;
+                            isStarter = false;
                             break;
                         case card9:
                             Piece.setSelectEnemyPiece(false);
+                            selectedVaue = 0;
+                            isStarter = false;
                             break;
                         case card10:
                             Piece.setSelectEnemyPiece(false);
+                            selectedVaue = 0;
+                            isStarter = false;
                             break;
                         case card12:
                             Piece.setSelectEnemyPiece(false);
+                            selectedVaue = 0;
+                            isStarter = false;
                             break;
                         default:
                             Piece.setSelectEnemyPiece(false);
                             Piece.selectedEnemyPiece = null;
+                            selectedVaue = 0;
+                            isStarter = false;
                             break;
                     }
                 }
@@ -149,8 +231,8 @@ public class CardHandler {
                     DialogPane dialog = alert.getDialogPane();
                     dialog.getStylesheets().add(this.getClass().getResource("style.css").toExternalForm());
                     dialog.getStyleClass().add("dialog");
-                    Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-                    stage.getIcons().add(icon);
+                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(icon);
 
                     alert.show();
                 }
@@ -291,5 +373,12 @@ public class CardHandler {
         public Card getCard() { return this.card;}
 
 
+    }
+
+    public static void setSelectedValue(int value){
+        selectedVaue = value;
+    }
+    public static void setIsStarter(boolean value){
+        isStarter = value;
     }
 }
