@@ -254,8 +254,7 @@ public final class Game {
         }
 
         int fieldCount = conf.length();
-
-        System.out.println("fieldCount"+fieldCount);
+        // System.out.println("fieldCount"+fieldCount);
         this.mainFieldCount = fieldCount;
 
         int totalFieldCount = fieldCount + figuresPerPlayer * players; //playerCount
@@ -664,11 +663,11 @@ public final class Game {
 
     public void makeMove(Move move) {
         if (move == null) {
-            System.out.println("exclude");
+            // System.out.println("exclude");
             excludeFromRound(getCurrentPlayer());
             return;
         }
-        System.out.println("EXECUTE");
+        // System.out.println("EXECUTE");
         move.execute(this);
     }
 

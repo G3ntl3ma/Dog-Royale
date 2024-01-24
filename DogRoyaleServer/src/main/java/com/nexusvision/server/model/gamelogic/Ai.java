@@ -7,12 +7,14 @@ import java.util.ArrayList;
 
 public class Ai {
     private int numberOfSimulations;
+    private int thinkTime;
 
-    public Ai(int numberOfSimulations) {
+    public Ai(int numberOfSimulations, int thinkTime) {
         this.numberOfSimulations = numberOfSimulations;
+        this.thinkTime = thinkTime;
     }
 
-    public Move getMove(Game game) {
+    public Move getMove(Game game, long startTime) {
         Node root = new Node(null, null);
         Player currentPlayer = game.getCurrentPlayer();
         SaveState savestate = new SaveState(game);
@@ -20,6 +22,9 @@ public class Ai {
         ArrayList<Integer> oldhash = game.hash();
         //TODO assert same hash
         for (int i = 0; i < this.numberOfSimulations; ++i) {
+            if(System.currentTimeMillis() - startTime > thinkTime) {
+                break;
+            }
             // System.out.println("ai simulation " + i);
             Node currentnode = root;
             // System.out.println("visits root node: " + currentnode.getVisits());
@@ -82,7 +87,7 @@ public class Ai {
                 // game.printBoard();
                 Move move = game.getRandomMove();
                 if(move != null) {
-                    move.printMove();
+                    // move.printMove();
                 }
                 else {
                     // System.out.println("null move");
@@ -145,5 +150,3 @@ public class Ai {
         return bestmove;
     }
 }
-
-

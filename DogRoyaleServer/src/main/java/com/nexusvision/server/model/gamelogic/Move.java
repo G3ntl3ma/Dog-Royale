@@ -119,9 +119,9 @@ public final class Move {
      * @param game An object representing the game
      */
     public UndoMove execute(Game game) {
-        System.out.println("player " + this.player.getPlayerId() + " execute the following card: " + this.cardUsed);
+        // System.out.println("player " + this.player.getPlayerId() + " execute the following card: " + this.cardUsed);
         boolean hascard = this.player.getCardList().contains(this.cardUsed);
-        System.out.println("has card " + hascard);
+        // System.out.println("has card " + hascard);
         if(!hascard) {
             System.out.println("player " + this.player.getPlayerId() + " doesnt hold the card he is trying to play " + this.cardUsed);
             for(Card card : player.getCardList()) {
@@ -244,7 +244,7 @@ public final class Move {
             }
         }
 
-        System.out.println("before increasemoves");
+        // System.out.println("before increasemoves");
         game.increaseMovesCounter(1);
         // game.nextPlayer();
         // System.out.println("cards num after 2 " + this.player.cards.size());

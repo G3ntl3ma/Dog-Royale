@@ -31,6 +31,7 @@ public class EngineServerHandler{
     private HashMap<Integer, Integer> handCardCounts = new HashMap<>(); //clientId key //TODO fix clientid vs playerid
     private Game game;
     private HashMap<Integer,Integer> clientIdToPlayerId = new HashMap<>();
+    private Ai ai;
     protected static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
             .create();
@@ -111,6 +112,7 @@ public class EngineServerHandler{
         System.out.println(lobbyConfig.getFiguresPerPlayer()+ "-" + lobbyConfig.getInitialCardsPerPlayer()+ "-" + lobbyConfig.getMaximumTotalMoves()+ "-" + lobbyConfig.getConsequencesForInvalidMove());
         
         List<ReturnLobbyConfig.PlayerOrder.Order> playerOrder = lobbyConfig.getPlayerOrder().getOrder();
+        this.ai = new Ai(100000, lobbyConfig.getThinkTimePerMove()*1000-500);
         
         for (int i = 0; i < playerOrder.size(); i++) {
             int playerId = playerOrder.get(i).getClientId();
@@ -295,9 +297,13 @@ public class EngineServerHandler{
             }
         }
 
-        System.out.println("choose random move");
+        System.out.println("choose move");
+        long startTime = System.currentTimeMillis();
         //choose random move
-        Move move = game.getRandomMove();
+        // Move move = game.getRandomMove();
+        //choose ai move
+        Move move = this.ai.getMove(game, startTime);
+        //TODO put this into a function ?
         MoveValid moveValid = new MoveValid();
         if(move != null) {
             move.printMove();
