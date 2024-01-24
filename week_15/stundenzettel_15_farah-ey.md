@@ -3,7 +3,7 @@ name: Farah El Azzouzi-Yücel
 imt: farah-ey
 gruppe: 01
 woche: 15
-gesamtarbeitszeit: 1,30h
+gesamtarbeitszeit: 5,30h
 ---
 
 # Stundenzettel des Softwaretechnikpraktikums WS 2023/24
@@ -19,6 +19,8 @@ gesamtarbeitszeit: 1,30h
 ## Dokumentation
 - Abschlussdokument
   - 2024-01-22 1,00h
+  - 2024-01-23 1,00h
+  - 2024-01-24 3,00h
 
 ## Sprint Planning
 
