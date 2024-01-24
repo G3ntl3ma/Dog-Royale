@@ -1,0 +1,222 @@
+
+*{
+    -fx-font-size: 12pt;
+}
+
+#paneBoardView{
+    -fx-background-image: url("../images/dog_background.png");
+    -fx-border-style: solid;
+}
+
+#paneBoard{
+    -fx-background-color: rgba(27, 39, 100);
+    -fx-border-style: solid;
+    -fx-border-width: 3px;
+}
+
+#gvOptions, #vbPlayTime{
+    -fx-background-color: rgb(44, 90, 182);
+}
+
+#gvOptions .progress-indicator{
+    -fx-pie-label-visible: false;
+}
+
+#gvOptions .label, #gvOptions .check-box{
+    -fx-text-fill: rgb(255, 255, 255);
+}
+
+#playerShowcase{
+    -fx-background-color: rgb(36, 63, 136);
+}
+
+#playerShowcase .label{
+    -fx-text-fill: rgb(255, 255, 255);
+    -fx-font-size: 6px;
+}
+
+#vbPlayTime .progress-bar{
+    -fx-background-color: transparent;
+    -fx-control-inner-background: rgba(27, 39, 100);
+    -fx-background-insets: 0;
+
+
+}
+#vbPlayTime .label{
+    -fx-text-fill: rgb(255, 255, 255);
+}
+
+
+.button{
+    -fx-background-color: rgb(48, 153, 206);
+    -fx-text-fill: rgb(255, 255, 255);
+}
+
+.button:hover{
+    -fx-background-color: rgb(87, 167, 224);
+    -fx-text-fill: rgb(255, 255, 255);
+    -fx-font-size: 12pt; 
+    -fx-effect: dropshadow(three-pass-box, black, 0, 5, 0, 2);
+}
+
+*{
+    -fx-font-size: 12pt;
+    -fx-text-fill: rgba(255, 255, 255);
+}
+
+.menu-bar, .context-menu{
+    -fx-background-color: rgb(44, 90, 182);
+}
+
+.menu-item:hover{
+    -fx-background-color: rgb(48, 153, 206);
+}
+
+#mbMenu.menu-item{
+    -fx-text-fill: rgb(0, 0, 0);
+}
+
+#vbBackground{
+    -fx-background-color: rgb(36, 63, 136);
+}
+
+.button{
+    -fx-background-color: rgb(48, 153, 206);
+    -fx-text-fill: rgb(255, 255, 255);
+}
+
+.button:hover{
+    -fx-background-color: rgb(87, 167, 224);
+    -fx-text-fill: rgb(255, 255, 255);
+    -fx-font-size: 12pt;
+    -fx-effect: dropshadow(three-pass-box, black, 0, 5, 0, 2);
+}
+
+.text-field, .text-area, .list-view{
+    -fx-background-color: rgb(24, 40, 100);
+    -fx-border-style: solid;
+    -fx-border-color: rgb(48, 153, 206);
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-control-inner-background: rgb(24, 40, 100);
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab{
+    -fx-background-color: rgb(44, 90, 182);
+}
+
+.tab:selected{
+    -fx-background-color: rgb(87, 167, 224);
+}
+
+.table-view{
+    -fx-background-color: rgb(24, 40, 100);
+    -fx-border-style: solid;
+    -fx-border-color: rgb(87, 167, 224);
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.table-view:focused .table-row-cell:selected .table-cell {
+    -fx-background-color: rgb(89, 150, 213);
+}
+
+.table-row-cell:selected .table-cell {
+    -fx-background-color: rgb(89, 150, 213);
+}
+
+.table-row-cell:hover .table-cell {
+    -fx-background-color: rgb(67, 133, 211);
+}
+
+
+.table-column{
+    -fx-background-color: rgb(44, 90, 182);
+    -fx-border-color: rgb(87, 167, 224);
+}
+
+
+
+
+
+#infoWindowsBackPane{
+    -fx-background-color: rgb(36, 63, 136);
+}
+#scrollPaneHolderPane{
+    -fx-background-color: rgb(36, 63, 136);
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: rgb(36, 63, 136);
+}
+#infoWindowCardHBox1, #infoWindowCardHBox2, #infoWindowCardHBox3, #infoWindowCardHBox4, #infoWindowCardHBox5,
+#infoWindowCardHBox6, #infoWindowCardHBox7, #infoWindowCardHBox8, #infoWindowCardHBox9, #infoWindowCardHBox10,
+#infoWindowCardHBox11, #infoWindowCardHBox12, #infoWindowCardHBox13, #infoWindowCardHBox14, #infoWindowCardHBox15{
+    -fx-background-color: rgb(36, 63, 136);
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+    -fx-background-color : rgb(36, 63, 136);
+    -fx-border-color : rgb(36, 63, 136);
+    -fx-background-radius : 0.0em;
+    -fx-border-radius :2.0em;
+}
+
+
+.scroll-bar:horizontal .increment-button ,
+.scroll-bar:horizontal .decrement-button {
+    -fx-background-color : rgb(36, 63, 136);
+    -fx-background-radius : 0.0em;
+    -fx-padding :0.0 0.0 10.0 0.0;
+
+}
+
+.scroll-bar:vertical .increment-button ,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color : rgb(36, 63, 136);
+    -fx-background-radius : 0.0em;
+    -fx-padding :0.0 10.0 0.0 0.0;
+
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow{
+    -fx-shape : " ";
+    -fx-padding :0.15em 0.0;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow{
+    -fx-shape : " ";
+    -fx-padding :0.0 0.15em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color : rgb(87, 167, 224);
+    -fx-background-insets : 2.0, 0.0, 0.0;
+    -fx-background-radius : 2.0em;
+}
+
+.scroll-bar:horizontal .thumb:hover,
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color : rgb(87, 167, 224);
+    -fx-background-insets : 2.0, 0.0, 0.0;
+    -fx-background-radius : 2.0em;
+}
+
+.pane{
+    -fx-background-color: transparent;
+}
+.dialog{
+    -fx-background-color : rgb(36, 63, 136);
+    -fx-font-size: 8pt;
+}
+.dialog:header *.header-panel {
+    -fx-background-color : rgb(36, 63, 136);
+}

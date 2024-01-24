@@ -1,6 +1,7 @@
 package views;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Helps to keep track of the board.
@@ -59,9 +60,9 @@ public class Board {
         }
 
         // calculate size of board
-        Arrays.sort(allPoints, (p1, p2) -> p1[0]-p2[0]);
+        Arrays.sort(allPoints, Comparator.comparingInt(p -> p[0]));
         int minX = allPoints[0][0] - padding; int maxX = allPoints[allPoints.length-1][0] + padding;
-        Arrays.sort(allPoints, (p1, p2) -> p1[1]-p2[1]);
+        Arrays.sort(allPoints, Comparator.comparingInt(p -> p[1]));
         int minY = allPoints[0][1] - padding; int maxY = allPoints[allPoints.length-1][1] + padding;
         width = maxX - minX; height = maxY - minY;
 
@@ -134,7 +135,7 @@ public class Board {
         class Vertex {
             public double x;
             public double y;
-            public double[] velocity;
+            public final double[] velocity;
             public final double repelStrength = 1000;
             public double random() {
                 return 0.1*(Math.random()*2-1);
@@ -197,8 +198,8 @@ public class Board {
 
         class Edge {
             public final double strength = 0.001;
-            public Vertex v1;
-            public Vertex v2;
+            public final Vertex v1;
+            public final Vertex v2;
             public Edge(Vertex v1, Vertex v2) {
                 this.v1 = v1;
                 this.v2 = v2;
