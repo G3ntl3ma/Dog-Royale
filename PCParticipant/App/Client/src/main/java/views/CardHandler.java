@@ -104,7 +104,7 @@ public class CardHandler {
 
 
                 }
-                else if(currentCard == this && (PieceImages.currentPiece != null ||PieceImages.selectEnemyPiece && PieceImages.selectedEnemyPiece != null)) {
+                else if(currentCard == this && (PieceImages.currentPiece != null ||PieceImages.selectEnemyPiece && PieceImages.selectedEnemyPiece != null) && !(this.card == Card.copyCard && lastPlayedCard == null)) {
                     layCard();
                     PieceImages.setSelectEnemyPiece(false);
                 }
