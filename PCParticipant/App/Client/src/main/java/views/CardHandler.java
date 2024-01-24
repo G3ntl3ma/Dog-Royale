@@ -27,7 +27,7 @@ public class CardHandler {
     private TranslateTransition previousTranslate = new TranslateTransition();
     private TranslateTransition currentTranslate = new TranslateTransition();
 
-    private static int selectedVaue;
+    private static int selectedValue;
     private static boolean isStarter;
 
     /**
@@ -81,6 +81,10 @@ public class CardHandler {
                 //Animation for selecting a new different card (and no animation still running)
                 if(currentTranslate.getStatus() != Animation.Status.RUNNING && currentCard != this) {
 
+                    //Set selectedValue and isStarter to default
+                    selectedValue = 0;
+                    isStarter = false;
+                    
                     Stage stage;
                     Scene scene;
                     FXMLLoader fxmlLoader;
@@ -132,12 +136,12 @@ public class CardHandler {
                             break;
                         case swapCard:
                             PieceImages.setSelectEnemyPiece(true);
-                            selectedVaue = 0;
+                            selectedValue = 0;
                             isStarter = false;
                             break;
                         case magnetCard:
                             PieceImages.setSelectEnemyPiece(true);
-                            selectedVaue = 0;
+                            selectedValue = 0;
                             isStarter = false;
                             break;
                         case plusMinus4:
@@ -171,13 +175,13 @@ public class CardHandler {
                             break;
                         case copyCard:
                             PieceImages.setSelectEnemyPiece(false);
-                            selectedVaue = 0;
+                            selectedValue = 0;
                             isStarter = false;
                             break;
                         default:
                             PieceImages.setSelectEnemyPiece(false);
                             PieceImages.selectedEnemyPiece = null;
-                            selectedVaue = 0;
+                            selectedValue = 0;
                             isStarter = false;
                             break;
                     }
@@ -340,7 +344,7 @@ public class CardHandler {
     }
 
     public static void setSelectedValue(int value){
-        selectedVaue = value;
+        selectedValue = value;
     }
     public static void setIsStarter(boolean value){
         isStarter = value;
