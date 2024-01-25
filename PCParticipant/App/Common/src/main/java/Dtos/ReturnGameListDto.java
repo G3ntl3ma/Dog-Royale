@@ -9,23 +9,19 @@ import java.util.ArrayList;
 public class ReturnGameListDto extends Dto {
     public final int type = TypeMenue.returnGameList.ordinal() + 100;
     private ArrayList<GamesProgressing> gamesUpcoming;
-    private ArrayList<GamesProgressing> GamesProgressing;
+    private ArrayList<GamesProgressing> gamesRunning;
     private ArrayList<GamesFinished> gamesFinished;
 
     public ReturnGameListDto(ArrayList<GamesProgressing> gamesUpcoming, ArrayList<GamesProgressing> GamesProgressing,
                              ArrayList<GamesFinished> gamesFinished) {
         this.gamesUpcoming = gamesUpcoming;
-        this.GamesProgressing = GamesProgressing;
+        this.gamesRunning = GamesProgressing;
         this.gamesFinished = gamesFinished;
     }
 
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
-    }
-
-    public int getType() {
-        return type;
     }
 
     public ArrayList<GamesProgressing> getStartingGame() {
@@ -37,11 +33,11 @@ public class ReturnGameListDto extends Dto {
     }
 
     public ArrayList<GamesProgressing> getRunningGames() {
-        return GamesProgressing;
+        return gamesRunning;
     }
 
     public void setRunningGames(ArrayList<GamesProgressing> GamesProgressings) {
-        this.GamesProgressing = GamesProgressings;
+        this.gamesRunning = GamesProgressings;
     }
 
     public ArrayList<GamesFinished> getFinishedGames() {

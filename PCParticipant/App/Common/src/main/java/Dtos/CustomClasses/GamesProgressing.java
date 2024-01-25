@@ -9,7 +9,7 @@ public class GamesProgressing extends Games {
 
     private ArrayList<PlayerPoints> winnerOrder;
 
-    public GamesProgressing(int gameId, String gameName, PlayerOrder playerOrder, int maxPlayerCount, ArrayList<PlayerPoints> winnerOrder) {
+    public GamesProgressing(int gameId, String gameName, PlayerOrder playerOrder,  ArrayList<PlayerPoints> winnerOrder, int maxPlayerCount) {
         super(gameId, gameName);
         this.playerOrder = playerOrder;
         this.maxPlayerCount = maxPlayerCount;

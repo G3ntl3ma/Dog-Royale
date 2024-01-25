@@ -5,6 +5,8 @@ import Dog.Client.Interfaces.IClientObserverMenu;
 import Dtos.*;
 import Dtos.CustomClasses.*;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,12 +18,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 
@@ -46,7 +50,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
     @FXML
     private TableColumn<GamesProgressing, Integer> columnMaxPlayer;
     @FXML
-    private TableColumn<GamesProgressing, Integer> columnAlreadyJoined;
+    private TableColumn<GamesProgressing, String> columnAlreadyJoined;
     @FXML
     private  TableView<GamesProgressing> tVRunningGames;
     @FXML
@@ -54,7 +58,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
     @FXML
     private TableColumn<GamesProgressing, Integer> clmnMaxPlayersRunning;
     @FXML
-    private TableColumn<GamesProgressing, Integer> clmnAlreadyJoinedRunning;
+    private TableColumn<GamesProgressing, String> clmnAlreadyJoinedRunning;
     @FXML
     private TableView<GamesFinished> tVFinishedGames;
     @FXML
@@ -144,9 +148,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         stageGameplay.show();
 
         // call stop method when stage is closed
-        stageGameplay.setOnCloseRequest(windowEvent -> {
-            controller.stop();
-        });
+        stageGameplay.setOnCloseRequest(windowEvent -> controller.stop());
     }
 
     public void joinGameAsObserver(){
@@ -157,9 +159,9 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
             gameId = gameList.getStartingGame().get(selectedTableview.getSelectionModel().getSelectedIndex()).getGameId();
         }
         else{
-           gameId = gameList.getRunningGames().get(selectedTableview.getSelectionModel().getSelectedIndex()).getGameId();
+            gameId = gameList.getRunningGames().get(selectedTableview.getSelectionModel().getSelectedIndex()).getGameId();
         }
-        client.sendMessage(new JoinGameAsObserverDto(client.getClientID(), gameId).toJson());
+        client.sendMessage(new JoinGameAsPlayerDto(gameId, client.getClientID(), tfUsername.getText()).toJson());
     }
 
 
@@ -191,7 +193,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         findTournament();
     }
     public void requestTournamentInfo(int tournamentId){
-         client.sendMessage(new RequestTournamentInfoDto(client.getClientID(), tournamentId).toJson());
+        client.sendMessage(new RequestTournamentInfoDto(client.getClientID(), tournamentId).toJson());
     }
 
 
@@ -240,14 +242,30 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         Platform.runLater(()->{
+            // callback for representing player order cell correctly
+            Callback<TableColumn.CellDataFeatures<GamesProgressing, String>, ObservableValue<String>> playerOrderFactory = gamesProgressingStringCellDataFeatures -> {
+                StringBuilder names = new StringBuilder();
+                ArrayList<PlayerName> playerNameList = gamesProgressingStringCellDataFeatures.getValue().getPlayerOrder();
+
+                for(int i = 0; i < playerNameList.size(); ++i){
+                    names.append(playerNameList.get(i).getName());
+                    if(i < playerNameList.size() - 1){
+                        names.append(", ");
+                    }
+                }
+                return new SimpleStringProperty( names.toString());
+            };
+
             // configure table columns for single games
             columnName.setCellValueFactory(new PropertyValueFactory<>("gameName"));
             columnMaxPlayer.setCellValueFactory(new PropertyValueFactory<>("maxPlayerCount"));
-            columnAlreadyJoined.setCellValueFactory(new PropertyValueFactory<>("currentPlayerCount"));
+            columnAlreadyJoined.setCellValueFactory(playerOrderFactory);
+
             clmnNameRunning.setCellValueFactory(new PropertyValueFactory<>("gameName"));
             clmnMaxPlayersRunning.setCellValueFactory(new PropertyValueFactory<>("maxPlayerCount"));
-            clmnAlreadyJoinedRunning.setCellValueFactory(new PropertyValueFactory<>("currentPlayerCount"));
+            clmnAlreadyJoinedRunning.setCellValueFactory(playerOrderFactory);
             clmnNameFinished.setCellValueFactory(new PropertyValueFactory<>("gameName"));
             clmnResultsFinished.setCellValueFactory(new PropertyValueFactory<>("winnerOrder"));
             clmnWasCanceled.setCellValueFactory(new PropertyValueFactory<>("wasCanceled"));
@@ -312,13 +330,11 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         client.closeConnection();
         client = null;
         bttnConnect.setText("Verbinden");
-        bttnConnect.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                try {
-                    connectingToServer(event);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        bttnConnect.setOnAction(event -> {
+            try {
+                connectingToServer(event);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
             }
         });
     }
@@ -361,7 +377,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
     //
     // to join tournamentGame
     @Override
-    public void handleReturnTournamentInfo(ReturnTournamentInfoDto tournamentInfo) throws IOException {
+    public void handleReturnTournamentInfo(ReturnTournamentInfoDto tournamentInfo) {
         this.tournamentInfo = tournamentInfo;
         int gameId = tournamentInfo.getTournamentInfo().getGameRunning().getGameId();
         client.sendMessage(new JoinGameAsObserverDto(client.getClientID(), gameId).toJson());
