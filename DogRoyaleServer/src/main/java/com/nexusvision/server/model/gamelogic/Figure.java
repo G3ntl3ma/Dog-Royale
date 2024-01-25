@@ -11,6 +11,7 @@ import java.util.ArrayList;
  */
 @Data
 public class Figure  {
+    private int clientId; // where the figure belongs to
     private Field field;
     private boolean isOnBench; //ignore field if isInBank
     private boolean isInHouse; //cant be swapped for example
@@ -22,10 +23,11 @@ public class Figure  {
         this.figureId = figureId;
     }
     
-    public Figure(Field field, boolean isOnBench, boolean isInHouse, int ownerId) {
+    public Figure(int clientId, Field field, boolean isOnBench, boolean isInHouse) {
         this.field = field;
         this.isOnBench = isOnBench;
         this.isInHouse = isInHouse;
+        this.clientId = clientId;
     }
 
 //    public void print() {

@@ -4,6 +4,7 @@ package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.FieldType;
+import com.nexusvision.server.model.utils.PlayerElement;
 import com.nexusvision.server.service.CardService;
 import com.nexusvision.server.service.KickService;
 import lombok.Data;
@@ -12,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -24,12 +26,6 @@ import java.util.stream.Collectors;
 @Log4j2
 @Data // TODO: Should this really be @Data??
 public final class Game {
-
-    //    private final int figuresPerPlayer;
-//    private final int initialCardsPerPlayer;
-//    private final int maximumTotalMoves;
-    // private final int maximumGameDuration; //in GameLobby class
-//    private final Penalty consequencesForInvalidMove;
     private final LobbyConfig lobbyConfig;
     private final int lobbyId;
 
@@ -266,9 +262,10 @@ public final class Game {
             this.board[i] = new Field(i, conf.charAt(i));
         }
 
-        //add players TournamentPlayer
-        for (int playerCol = 0; playerCol < players; playerCol++) {
-            this.playerList.add(new Player(lobbyConfig.getFiguresPerPlayer()));
+        //add players
+        List<Integer> playerOrder = lobbyConfig.getPlayerOrder().getClientIdList();
+        for (int playerOrderIndex = 0; playerOrderIndex < playerOrder.size(); playerOrderIndex++) {
+            this.playerList.add(new Player(playerOrder.get(playerOrderIndex), lobbyConfig.getFiguresPerPlayer()));
         }
         int seenStarts = 0;
         for (int i = 0; i < conf.length(); i++) {
@@ -277,7 +274,7 @@ public final class Game {
             // System.out.println("iter"+i);
             this.board[i].setNext(this.board[next]);
             this.board[i].setPrev(this.board[prev]);
-            // this.board[i].settype(conf.charAt(i));
+            // this.board[i].setType(conf.charAt(i));
 
             if (conf.charAt(i) == 's') {
                 // this.players.get(seenStarts++).startField = this.board.get(i); //init starts
@@ -590,8 +587,8 @@ public final class Game {
     /**
      * Calculates position of a player's figure in the house
      *
-     * @param playerId An Integer representing Id of the player
-     * @param pieceId  An Integer representing Id of a figure
+     * @param playerId An Integer representing id of the player
+     * @param pieceId  An Integer representing id of a figure
      * @return An Integer indicating the position of the figure in the house
      */
     public Integer getHousePosition(int playerId, int pieceId) {
@@ -601,7 +598,7 @@ public final class Game {
     }
 
     public void removePlayerFromBoard(Player player) {
-        //dont touch figures in house for winner order
+        //don't touch figures in house for winner order
         for (Figure figure : player.getFigureList()) {
             figure.setField(null);
         }

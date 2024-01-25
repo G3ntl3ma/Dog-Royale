@@ -258,8 +258,9 @@ public class GameLobby {
      *
      * @param clientId The client id of the observer being added
      */
-    public void addObserver(int clientId, String name) {
+    public void addObserver(int clientId) {
         List<ObserverElement> observerList = lobbyConfig.getObserverList();
+        String name = serverController.getClientById(clientId).getName();
         observerList.add(new ObserverElement(clientId, name));
         messageBroker.registerSubscriber(clientId, id);
 

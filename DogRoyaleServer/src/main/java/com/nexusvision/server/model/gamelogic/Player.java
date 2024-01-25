@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 @Data
 public final class Player {
-
+    private int clientId; // The clientId of this very player
     private boolean outThisRound = false;
     private ArrayList<Figure> figureList = new ArrayList<>();
     private ArrayList<Card> cardList = new ArrayList<>();
@@ -29,7 +29,8 @@ public final class Player {
      *
      * @param figureCount An Integer representing the amount of figures a player has
      */
-    public Player(int figureCount) {
+    public Player(int clientId, int figureCount) {
+        this.clientId = clientId;
         this.figuresInBank = figureCount;
         this.lastMoveCountFigureMovedIntoHouse = 0;
         for (int i = 0; i < figureCount; i++) {

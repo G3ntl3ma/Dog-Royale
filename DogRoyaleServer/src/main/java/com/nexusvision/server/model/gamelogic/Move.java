@@ -162,8 +162,7 @@ public final class Move {
             playerFigure.setInHouse(false);
 
             if (!to.isEmpty()) {
-                opponentFigure = to.getFigure();
-                Player opponent = game.getPlayerList().get(opponentFigure.getOwnerId());
+                Player opponent = to.getFigure().getPlayerObjectByOwner(game);
                 opponent.setFiguresInBank(opponent.getFiguresInBank() + 1);
                 //set field of figure
                 to.getFigure().setOnBench(true);
@@ -228,7 +227,7 @@ public final class Move {
         game.increaseMovesCounter(1);
         // game.nextPlayer();
         // System.out.println("cards num after 2 " + this.player.cards.size());
-        return new UndoMove(this,playerFigure, opponentFigure,playerDrawnCard, opponentDrawnCard, lastCardOnPile, LastMoveCountFigureMovedIntoHouse);
+        return new UndoMove(this, playerFigure, opponentFigure,playerDrawnCard, opponentDrawnCard, lastCardOnPile, LastMoveCountFigureMovedIntoHouse);
     }
 
     /**

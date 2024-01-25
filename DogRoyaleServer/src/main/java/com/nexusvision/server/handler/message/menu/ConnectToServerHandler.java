@@ -28,7 +28,7 @@ public class ConnectToServerHandler extends MessageHandler<ConnectToServer> {
         ServerController serverController = ServerController.getInstance();
         Client client = serverController.getClientById(clientId);
         client.setName(message.getName());
-        client.setObserver(message.getIsObserver());
+        client.setObserver(message.isObserver());
 
         ConnectedToServer connectedToServer = new ConnectedToServer();
         connectedToServer.setType(TypeMenue.connectedToServer.getOrdinal());

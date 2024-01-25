@@ -78,7 +78,7 @@ public class Main {
                     long startFunc = System.currentTimeMillis();
 
                     Player curPlayer = game.getCurrentPlayer();
-                    System.out.println("gen moves for player " + curPlayer.getPlayerId());
+                    System.out.println("gen moves for player with clientId" + curPlayer.getClientId());
                     ArrayList<Move> moves = curPlayer.generateMoves(game); //
                     long endFunc = System.currentTimeMillis();
                     funcTime += (endFunc - startFunc);

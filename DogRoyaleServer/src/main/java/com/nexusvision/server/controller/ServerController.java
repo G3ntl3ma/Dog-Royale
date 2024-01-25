@@ -123,7 +123,7 @@ public class ServerController {
      */
     public boolean startGameForLobby(GameLobby lobby) {
         boolean isSuccessful = true;
-        for (int clientId : lobby.getPlayerOrderList()) {
+        for (int clientId : lobby.getLobbyConfig().getPlayerOrder().getClientIdList()) {
             ClientHandler handler = handlerMap.get(clientId);
             isSuccessful = isSuccessful && handler.startGame();
         }
@@ -167,8 +167,7 @@ public class ServerController {
      * @param observerList    The observer id list
      * @return The lobby id
      */
-    public int createNewLobby(ArrayList<Integer> playerOrderList, HashMap<Integer, Colors> playerColorMap,
-                              ArrayList<Integer> observerList) {
+    public int createNewLobby() {
         Random random = new Random();
         int newLobbyID;
 
@@ -176,7 +175,7 @@ public class ServerController {
             newLobbyID = random.nextInt(Integer.MAX_VALUE);
         } while (lobbyMap.containsKey(newLobbyID));
 
-        lobbyMap.put(newLobbyID, new GameLobby(newLobbyID, playerOrderList, playerColorMap, observerList));
+        lobbyMap.put(newLobbyID, new GameLobby(newLobbyID));
         return newLobbyID;
     }
 

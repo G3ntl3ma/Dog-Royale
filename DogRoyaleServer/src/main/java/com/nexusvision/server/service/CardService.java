@@ -225,7 +225,7 @@ public class CardService {
     }
 
     /**
-     * Gets the Ordinal of the card
+     * Gets the ordinal of the card
      */
     public int getOrdinal() {
         switch (this.usedType) {
