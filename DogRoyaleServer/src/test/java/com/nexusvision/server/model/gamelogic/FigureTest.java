@@ -1,12 +1,53 @@
 package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.FieldType;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.mockito.Mockito.*;
 
 public class FigureTest {
 
+    private Figure figure;
+    private Field mockField;
+
+    @Before
+    public void setUp() {
+        mockField = mock(Field.class);
+        figure = new Figure(1, 1); // 使用默认构造函数
+    }
+
     @Test
+    public void testFigureConstructor() {
+        assertEquals(1, figure.getOwnerId());
+        assertEquals(1, figure.getFigureId());
+        assertTrue(figure.isOnBench());
+        assertFalse(figure.isInHouse());
+        assertNull(figure.getField());
+    }
+    @Test
+    public void testSetAndGetField() {
+        figure.setField(mockField);
+        assertEquals(mockField, figure.getField());
+    }
+    @Test
+    public void testSetAndGetIsOnBench() {
+        figure.setOnBench(false);
+        assertFalse(figure.isOnBench());
+    }
+
+    @Test
+    public void testSetAndGetIsInHouse() {
+        figure.setInHouse(true);
+        assertTrue(figure.isInHouse());
+    }
+    @Test
+    public void testPrint() {
+        figure.print(); // 这个测试只是确保 print 方法不会抛出异常
+    }
+    @org.junit.jupiter.api.Test
     public void testHash() {
         // Arrange
         Field field1 = new Field(1, FieldType.NORMAL);

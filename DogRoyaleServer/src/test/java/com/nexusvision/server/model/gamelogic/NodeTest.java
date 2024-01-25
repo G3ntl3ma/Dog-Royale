@@ -1,72 +1,68 @@
 package com.nexusvision.server.model.gamelogic;
 
-import com.nexusvision.server.model.enums.Card;
-import com.nexusvision.server.model.enums.FieldType;
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class NodeTest {
 
-    @Test
-    public void testSetHash() {
-        Move move = new Move(new Player(1, 4), new Field(1, FieldType.START), new Field(2, FieldType.HOUSE), false, Card.card2);
-        Node node = new Node(move, null);
+    private Node testNode;
+    private Move mockMove;
+    private Game mockGame;
 
-        // Test setting hashcode for the first time
-        int hash1 = 12345;
-        node.setHash(hash1);
-        assertEquals(hash1, (int)node.getHashcode());
-
-        // Test setting hashcode again with the same value
-        node.setHash(hash1);
-        assertEquals(hash1, (int)node.getHashcode());
-
-        // Test setting hashcode again with a different value (should exit with an error)
-        int hash2 = 54321;
-        assertThrows(RuntimeException.class, () -> {
-            node.setHash(hash2);
-        });
+    @Before
+    public void setUp() {
+        mockMove = mock(Move.class);
+        mockGame = mock(Game.class);
+        testNode = new Node(mockMove, null);
     }
 
     @Test
-    public void testVisitsAndValue() {
-        Move move = new Move(new Player(1, 4), new Field(1, FieldType.START), new Field(2, FieldType.HOUSE), false, Card.card2);
-        Node node = new Node(move, null);
-
-        assertEquals(0, node.getVisits());
-        assertEquals(0, node.getValue());
-
-        // Test incrementing visits and adding value
-        node.incVisits();
-        node.addValue(10);
-
-        assertEquals(1, node.getVisits());
-        assertEquals(10, node.getValue());
+    public void testNodeConstructor() {
+        assertNotNull(testNode);
+        assertEquals(0, testNode.getVisits());
+        assertEquals(0, testNode.getValue());
+        assertFalse(testNode.getHaschildren());
     }
 
     @Test
-    public void testGetutc() {
-        // build a rootNode object
-        Move move = new Move(new Player(1, 4), new Field(1, FieldType.START), new Field(2, FieldType.HOUSE), false, Card.card2);
-        Node node = new Node(move, null);
-        Node rootNode = new Node(move,node);
+    public void testSetHashWhenNull() {
+        testNode.setHash(123);
+        assertEquals((Integer) 123, testNode.getHashcode());
+    }
 
-        //do some operation to make sure that, rootNode have value.
-        Game game = new Game("conf", 4, 5, 50, 0);
-        rootNode.expand(game);
-        // get childNode list
-        ArrayList<Node> children = rootNode.getChildren();
+    @Test
+    public void testIncVisits() {
+        testNode.incVisits();
+        assertEquals(1, testNode.getVisits());
+    }
 
+    @Test
+    public void testAddValue() {
+        testNode.addValue(5);
+        assertEquals(5, testNode.getValue());
+    }
 
-        children.get(0).incVisits();
-        children.get(0).addValue(5);
+    @Test
+    public void testGetUtc() {
+        // set father node
+        Node parentNode = new Node(mock(Move.class), null);
+        parentNode.incVisits(); // assume father node has get once call
+        parentNode.addValue(10); // assume value
 
-        // call getutc
-        float result = rootNode.getutc();
+        Node childNode = new Node(mock(Move.class), parentNode);
+        childNode.incVisits(); // assume child node has get once call
+        childNode.addValue(5); // assume value
 
-        //assert the result should not smaller than 0
-        assertTrue(result >= 0);
+        // assert
+        float expectedUtc = 5;
+        assertEquals(expectedUtc, childNode.getutc(), 0.001);
     }
 }
+

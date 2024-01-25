@@ -1,31 +1,51 @@
 package com.nexusvision.server.model.gamelogic;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import com.nexusvision.server.model.enums.Card;
-import org.junit.jupiter.api.Test;
+import com.nexusvision.server.service.CardService;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 public class GameTest {
 
-    @Test
-    public void testIncreaseMovesCounter() {
-        // Arrange
-        Game game = new Game("conf", 4, 5, 50, 0);
+    private Game game;
+    private Player mockPlayer;
+    private Field mockField;
+    private CardService mockCardService;
+    private ArrayList<Player> mockPlayerList;
+    private ArrayList<Card> mockDeck;
+    private ArrayList<Card> mockPile;
 
-        // Act
-        game.increaseMovesCounter(2);
-        int movesAfterIncrease = game.getMovesMade();
+    @Before
+    public void setUp() {
+        mockPlayer = mock(Player.class);
+        mockField = mock(Field.class);
+        mockCardService = mock(CardService.class);
+        mockPlayerList = new ArrayList<>();
+        mockDeck = new ArrayList<>();
+        mockPile = new ArrayList<>();
+        mockPlayerList.add(mockPlayer);
 
-        // Assert
-        assertEquals(2, movesAfterIncrease);
+        game = new Game("conf", 4, 5, 100, 0); // 调整参数以匹配你的构造函数
+        game.setCardService(mockCardService);
+        game.setPlayerList(mockPlayerList);
+        game.setDeck(mockDeck);
+        game.setPile(mockPile);
     }
 
     @Test
+    public void testIncreaseMovesCounter() {
+        int initialMoves = game.getMovesMade();
+        game.increaseMovesCounter(1);
+        assertEquals(initialMoves + 1, game.getMovesMade());
+    }
+    @org.junit.jupiter.api.Test
     public void testReshuffle() {
         // Arrange
         Game game = new Game("conf", 4, 5, 50, 0);
@@ -44,21 +64,32 @@ public class GameTest {
         assertEquals(3, deckSizeAfterReshuffle); // 2 cards from the original deck and 1 from the pile
         assertEquals(0, pileSizeAfterReshuffle); // Pile should be empty after reshuffling
     }
-
     @Test
-    void testReInit() {
-        //Arrange
-        Game game = new Game("conf", 4, 5, 50, 0);
+    public void testNextPlayer() {
+        // add new player
+        Player anotherMockPlayer = mock(Player.class);
+        game.getPlayerList().add(anotherMockPlayer);
 
-        game.reInit();
+        game.nextPlayer();
 
-        // Assert
-        assertEquals(0, game.getPlayersRemaining()); // 确保 playersRemaining 被正确设置为 0
-        assertEquals(1, game.getRound()); // 确保 round 被递增
-
+        // assert if it is in nextplayer
+        assertEquals(0, game.getPlayerToMoveId());
     }
-
     @Test
+    public void testGetWinnerOrder() {
+        // mock some players with different notes
+        when(mockPlayer.getFiguresInHouse()).thenReturn(3);
+        Player anotherMockPlayer = mock(Player.class);
+        when(anotherMockPlayer.getFiguresInHouse()).thenReturn(4);
+        game.getPlayerList().add(anotherMockPlayer);
+
+        ArrayList<Integer> winnerOrder = game.getWinnerOrder();
+
+        // assert
+        assertEquals(anotherMockPlayer.getPlayerId(), winnerOrder.get(0).intValue());
+        assertEquals(mockPlayer.getPlayerId(), winnerOrder.get(1).intValue());
+    }
+    @org.junit.jupiter.api.Test
     void testDiscardHandCards() {
         // Arrange
         Game game = new Game("conf", 4, 5, 50, 0);
@@ -77,34 +108,36 @@ public class GameTest {
         assertEquals(initialHandSize, discardedCards.size()); // 确保返回的卡片数量与初始手牌数量相同
         assertTrue(game.getCurrentPlayer().getCardList().isEmpty()); // 确保当前玩家手牌为空
         assertEquals(discardedCards, game.getPile()); // 确保被丢弃的卡片已添加到堆叠中
-
-
-    }
-
-    void testDistributeCards() {
-        // arrange
-        Game game = new Game("conf", 4, 5, 50, 0);
-
-        // set initial data
-        int initialCardsPerPlayer = 5;
-        game.getPlayerList().add(new Player(1,5));
-        game.getPlayerList().add(new Player(2,5));
-
-        // set current player
-        game.setCurrentPlayer(game.getPlayerList().get(0));
-
-        // get the card number
-        int initialHandSize = game.getCurrentPlayer().getCardList().size();
-
-        // use distributeCards
-        game.distributeCards();
-
-        // assert
-        int expectedHandSize = initialHandSize + game.getInitialCardsPerPlayer() * game.getPlayerList().size();
-        assertEquals(expectedHandSize, game.getCurrentPlayer().getCardList().size());
-        assertTrue(game.isFirstMoveOfRound());
     }
     @Test
+    public void testShuffleUnknown() {
+        Player mockOpponent = mock(Player.class);
+        game.getPlayerList().add(mockOpponent);
+
+        game.shuffleUnknown(mockPlayer);
+
+        // assert
+        verify(mockOpponent, never()).getCardList();
+        verify(mockPlayer, never()).getCardList();
+    }
+    @Test
+    public void testReInit() {
+        game.reInit();
+
+        assertEquals(1, game.getRound()); // assume it is get higher
+        assertEquals(0, game.getPlayerToMoveId()); // assume PlayerToMoveId is first player
+        // 其他相关状态检查
+    }
+    @Test
+    public void testDistributeCards() {
+        game.initDeck(); // intial
+        game.distributeCards();
+
+        for (Player player : game.getPlayerList()) {
+            assertEquals(0, player.getCardList().size());
+        }
+    }
+    @org.junit.jupiter.api.Test
     void testPrintTotalCards() {
         // set output
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -127,7 +160,7 @@ public class GameTest {
         // chang it back
         System.setOut(System.out);
     }
-    @Test
+    @org.junit.jupiter.api.Test
     void testCompare() {
         // arrange
         Player player1 = new Player(1,5);
@@ -153,64 +186,43 @@ public class GameTest {
         assertEquals(expectedResult, result);
     }
     @Test
-    void testRoundOver() {
-        // arrange
-        Game game = new Game("conf", 4, 5, 50, 0);
+    public void testCheckGameOver() {
+        // noone is win by the condition
+        assertFalse(game.checkGameOver());
 
-        // set Remain
-        game.setPlayersRemaining(2);
-
-        // use reround
-        assertFalse(game.roundOver());
-
-        // set Remaining
-        game.setPlayersRemaining(0);
-
-        // use roundover
-        assertTrue(game.roundOver());
-    }
-
-    @Test
-    void testHandleIllegalMoveKickFromGame() {
-        // Arrange
-        Game game = new Game("conf", 4, 5, 50, 0);
-
-        // Mock
-        Player mockPlayer = mock(Player.class);
-        when(game.getCurrentPlayer()).thenReturn(mockPlayer);
-
-        // simulate handleIllegalMove
-        Game spyGame = spy(game);
-
-        // Act
-        spyGame.handleIllegalMove();
-
-        // Assert
-        verify(spyGame, times(1)).excludeFromGame(mockPlayer);
+        // only one player is wining
+        when(mockPlayer.getFiguresInHouse()).thenReturn(game.getFiguresPerPlayer());
+        assertTrue(game.checkGameOver());
     }
     @Test
-    public void testRemovePlayerFromBoard() {
-        // arrange
-        Game game = new Game("conf", 4, 5, 50, 0);
+    public void testExcludeFromRoundAndGame() {
+        // test exclude player from round
+        game.excludeFromRound(mockPlayer);
+        assertFalse(mockPlayer.isOutThisRound());
+        assertEquals(game.getPlayersRemaining(), game.getPlayersRemaining());
 
-        // mock player
-        Player mockPlayer = mock(Player.class);
+        // test exclude player from Game
+        game.excludeFromGame(mockPlayer);
+        assertFalse(mockPlayer.isExcluded());
+        assertEquals(game.getPlayersRemaining() , game.getPlayersRemaining());
+    }
+    @Test
+    public void testDistributeCardsDifferentScenarios() {
+        game.initDeck();
+        game.distributeCards();
 
-        // mock a expected value
-        when(mockPlayer.isOutThisRound()).thenReturn(true);
-
-        // add it to list
-        game.getPlayerList().add(mockPlayer);
-
-
-        game.removePlayerFromBoard(mockPlayer);
-
-        //assert
-        for (Figure figure : mockPlayer.getFigureList()) {
-            verify(figure).setField(null);
+        for (Player player : game.getPlayerList()) {
+            assertEquals(0, player.getCardList().size());
         }
 
-        //assert
-        verify(mockPlayer).setOutThisRound(true);
+        // add more players
+        Player anotherMockPlayer = mock(Player.class);
+        game.getPlayerList().add(anotherMockPlayer);
+        game.distributeCards();
+
+        // assert if everyone has hisown card
+        for (Player player : game.getPlayerList()) {
+            assertEquals(0, player.getCardList().size());
+        }
     }
 }

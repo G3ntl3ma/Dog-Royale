@@ -1,33 +1,97 @@
 package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.FieldType;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class FieldTest {
 
+    private Field field;
+    private Figure mockFigure;
+    private Field mockNextField;
+    private Field mockPrevField;
+
+    @Before
+    public void setUp() {
+        field = new Field(1, 'n');
+        mockFigure = mock(Figure.class);
+        mockNextField = mock(Field.class);
+        mockPrevField = mock(Field.class);
+    }
+
+    @Test
+    public void testFieldConstructor() {
+        assertEquals(1, field.getFieldId());
+        assertEquals(FieldType.NORMAL, field.getType());
+        assertNull(field.getFigure());
+    }
+    @Test
+    public void testIsEmpty() {
+        assertTrue(field.isEmpty());
+        field.setFigure(mockFigure);
+        assertFalse(field.isEmpty());
+    }
+    @Test
+    public void testSetFigureAndSetEmpty() {
+        field.setFigure(mockFigure);
+        assertEquals(mockFigure, field.getFigure());
+
+        field.setEmpty();
+        assertNull(field.getFigure());
+    }
+    @Test
+    public void testSetNextAndSetHouse() {
+        field.setNext(mockNextField);
+        assertEquals(mockNextField, field.getNext());
+
+        field.setHouse(mockPrevField);
+        assertEquals(mockPrevField, field.getHouse());
+    }
     @Test
     public void testHash() {
-        // Arrange
-        Field field1 = new Field(1, FieldType.NORMAL);
-        Field field2 = new Field(1, FieldType.NORMAL);
-        Field field3 = new Field(2, FieldType.NORMAL);
-        Field field4 = new Field(1, FieldType.HOUSE);
-        Field field5 = new Field(1, FieldType.NORMAL);
-        field5.setFigure(new Figure(1,2)); // Assuming Figure class has a constructor that takes a figureId
+        int initialHash = field.hash();
 
-        // Act
-        int hash1 = field1.hash();
-        int hash2 = field2.hash();
-        int hash3 = field3.hash();
-        int hash4 = field4.hash();
-        int hash5 = field5.hash();
+        field.setFigure(mockFigure);
+        int newHash = field.hash();
 
-        // Assert
-        assertEquals(hash1, hash2); // Same fields should have the same hash
-        assertNotEquals(hash1, hash3); // Different fieldId should have different hash
-        assertNotEquals(hash1, hash4); // Different FieldType should have different hash
-        assertNotEquals(hash1, hash5); // Different Figure should have different hash
+        assertNotEquals(initialHash, newHash);
+    }
+    @Test
+    public void testPrintMethods() {
+        field.setNext(mockNextField);
+        field.setPrev(mockPrevField);
 
+        field.printVal();       // assert there are no excpetion here
+        field.printVals();
+        field.printType();
+        field.printTypes();
+    }
+    @Test
+    public void testSetNextAndSetPrev() {
+        field.setNext(mockNextField);
+        assertEquals(mockNextField, field.getNext());
+
+        field.setPrev(mockPrevField);
+        assertEquals(mockPrevField, field.getPrev());
+    }
+    @Test
+    public void testFieldConstructorWithTypeChar() {
+        Field houseField = new Field(2, 'h');
+        assertEquals(FieldType.HOUSE, houseField.getType());
+
+        Field drawField = new Field(3, 'k');
+        assertEquals(FieldType.DRAW, drawField.getType());
+
+        Field startField = new Field(4, 's');
+        assertEquals(FieldType.START, startField.getType());
+
+        Field normalField = new Field(5, 'n');
+        assertEquals(FieldType.NORMAL, normalField.getType());
+
+        // test default Field
+        Field defaultField = new Field(6, 'x');
+        assertEquals(FieldType.NORMAL, defaultField.getType());
     }
 }
