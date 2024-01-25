@@ -31,6 +31,8 @@ public class CardHandler {
 
     static Client client;
 
+    static boolean turn = false;
+
     private static int selectedValue;
     public Card lastPlayedCard;
     private static boolean isStarter;
@@ -108,8 +110,8 @@ public class CardHandler {
 
 
                 }
-                else if(currentCard == this && (PieceImages.currentPiece != null ||PieceImages.selectEnemyPiece && PieceImages.selectedEnemyPiece != null) && !(this.card == Card.copyCard && lastPlayedCard == null)) {
-                    //client.sendMessage(new MoveDto(false, )) //TODO: move message
+                else if(currentCard == this && (PieceImages.currentPiece != null ||PieceImages.selectEnemyPiece && PieceImages.selectedEnemyPiece != null) && !(this.card == Card.copyCard && lastPlayedCard == null) && turn) {
+                    client.sendMessage(new MoveDto(false, currentCard.getCard(), selectedValue, PieceImages.getCurrentPieceIndex(), isStarter, PieceImages.selectedEnemyPiece.getPieceIndex()).toJson()); //TODO: test
                     layCard();
                     PieceImages.setSelectEnemyPiece(false);
                 }
@@ -117,7 +119,7 @@ public class CardHandler {
                     //Show a warning to the Player that no Figure has been selected
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Figur auswählen");
-                    alert.setHeaderText("Es wurde keine Figur ausgewählt");
+                    alert.setHeaderText("Es wurde keine Figur ausgewählt oder es ist noch nicht dein Zug");
 
                     Image icon = new Image("icon.png");
                     DialogPane dialog = alert.getDialogPane();
@@ -373,6 +375,10 @@ public class CardHandler {
         }
 
 
+    }
+
+    public void setTurnWithId(int id) {
+        turn = id == client.getClientID();
     }
 
     public static void setSelectedValue(int value){

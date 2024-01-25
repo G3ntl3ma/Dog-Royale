@@ -717,6 +717,8 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
                     break;
                 }
             }
+            // check if it´s your turn author: mtwardy
+            cardHandler.setTurnWithId(boardStateDto.getNextPlayer());
 
             // update board
             ArrayList<PlayerPiece> pieces = boardStateDto.getPieces();

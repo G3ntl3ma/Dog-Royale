@@ -172,4 +172,13 @@ public class PieceImages extends ImageView {
             deselectEnemyPiece();
         }
     }
+
+    public static int getSelectedEnemyPieceId()
+    {
+        if (selectedEnemyPiece == null)
+        {
+            return -1;
+        }
+        return selectedEnemyPiece.getPieceIndex();
+    }
 }
