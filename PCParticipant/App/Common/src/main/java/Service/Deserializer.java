@@ -172,7 +172,7 @@ public class Deserializer {
                     messageDtoClass = ResponseDto.class;
                     break;
                 case unfreeze:
-                    messageDtoClass = ReturnLobbyConfigDto.class;
+                    messageDtoClass = UnfreezeDto.class;
                     break;
                 case updateDrawCards:
                     messageDtoClass = UpdateDrawCardsDto.class;

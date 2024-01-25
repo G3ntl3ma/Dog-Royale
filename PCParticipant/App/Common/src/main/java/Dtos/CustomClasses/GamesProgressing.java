@@ -4,22 +4,21 @@ import java.util.ArrayList;
 
 public class GamesProgressing extends Games {
     // Game objects starting und running games in ReturnGameListDto
-    private PlayerOrder playerOrder;
+    private ArrayList<PlayerName> playerOrder;
+    private ArrayList<PlayerPoints> winnerOrder;
     private int maxPlayerCount;
 
-    private ArrayList<PlayerPoints> winnerOrder;
-
-    public GamesProgressing(int gameId, String gameName, PlayerOrder playerOrder, int maxPlayerCount, ArrayList<PlayerPoints> winnerOrder) {
+    public GamesProgressing(int gameId, String gameName, ArrayList<PlayerName> playerOrder, ArrayList<PlayerPoints> winnerOrder, int maxPlayerCount) {
         super(gameId, gameName);
         this.playerOrder = playerOrder;
         this.maxPlayerCount = maxPlayerCount;
         this.winnerOrder = winnerOrder;
     }
 
-    public PlayerOrder getPlayerOrder() {
+    public ArrayList<PlayerName> getPlayerOrder() {
         return playerOrder;
     }
-    public void setPlayerOrder(PlayerOrder playerOrder) {
+    public void setPlayerOrder(ArrayList<PlayerName> playerOrder) {
         this.playerOrder = playerOrder;
     }
     public ArrayList<PlayerPoints> getWinnerOrder() {
