@@ -187,7 +187,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         else{
             gameId = gameList.getRunningGames().get(selectedTableview.getSelectionModel().getSelectedIndex()).getGameId();
         }
-        client.sendMessage(new JoinGameAsPlayerDto(gameId, client.getClientID(), tfUsername.getText()).toJson());
+        client.sendMessage(new JoinGameAsObserverDto(gameId, client.getClientID(), tfUsername.getText()).toJson());
     }
 
 
@@ -406,6 +406,6 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
     public void handleReturnTournamentInfo(ReturnTournamentInfoDto tournamentInfo) {
         this.tournamentInfo = tournamentInfo;
         int gameId = tournamentInfo.getTournamentInfo().getGameRunning().getGameId();
-        client.sendMessage(new JoinGameAsObserverDto(client.getClientID(), gameId).toJson());
+        client.sendMessage(new JoinGameAsObserverDto(client.getClientID(), gameId, client.getplayerName()).toJson());
     }
 }

@@ -18,6 +18,12 @@ public class Client implements IClientObservable {
     private ArrayList<IClientObserverMenu> cOMenu;
     private ArrayList<IClientObserverGameplay> cOGameplay;
 
+    /**
+     * constructor for client class
+     * @param socket socket client is connecting with server
+     * @param username username user choose for client
+     */
+
     public Client(Socket socket, String username)
     {
         try{
@@ -32,14 +38,29 @@ public class Client implements IClientObservable {
         cOMenu = new ArrayList<>();
         cOGameplay = new ArrayList<>();
     }
+
+    /**
+     * getter method for clientID
+     * @return returns clientID server has choosen for client
+     */
     public int getClientID(){
         return clientID;
     }
 
+    public String getplayerName(){return username}
+
+    /**
+     * opens a new thread for messages from client
+     * @param message stream of String characters
+     */
     public void sendMessage(String message) {
         new Thread(()->{ sendMessageSync(message); }).start();
     }
 
+    /**
+     * buffering String characters of client messages
+     * @param message stream of String characters
+     */
     private synchronized void sendMessageSync(String message){
         try{
             bufferedWriter.write(message);
@@ -50,6 +71,9 @@ public class Client implements IClientObservable {
         }
     }
 
+    /**
+     * comparing Messaging classes for message from Server
+     */
     public void listenForMessage() {
         new Thread(() -> {
             String message;
@@ -129,6 +153,9 @@ public class Client implements IClientObservable {
         }).start();
     }
 
+    /**
+     * closes connection with server
+     */
     public void closeConnection() {
         try{
             if(socket != null) {
@@ -146,6 +173,10 @@ public class Client implements IClientObservable {
         }
     }
 
+    /**
+     * puts Observer in List of Observer
+     * @param observer
+     */
     @Override
     public void registerObserverGameplay(IClientObserverGameplay observer) {
         cOGameplay.add(observer);
