@@ -30,6 +30,22 @@ public class Figure  {
         this.clientId = clientId;
     }
 
+    public Player getPlayerObjectByOwner(Game game) {
+        int clientId = this.getClientId();
+        Player opponent = null;
+        for (Player player : game.getPlayerList()) {
+            if(player.getClientId() == clientId) {
+                opponent = player;
+                break;
+            }
+        }
+        return opponent;
+    }
+
+    public Field getStartFieldByOwner(Game game){
+        return getPlayerObjectByOwner(game).getStartField();
+    }
+
 //    public void print() {
 //        System.out.print("figure print: id: " + this.figureId + " isOnBench " + this.isOnBench + " isInHouse " + this.isInHouse + " ownerId :" + this.ownerId);
 //        if (this.field != null) {

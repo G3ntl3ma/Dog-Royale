@@ -82,12 +82,12 @@ public final class Move {
         if (this.from == null || move.from == null || this.to == null || move.to == null) {
             return this.from == null && move.from == null && this.to == null && move.to == null &&
                     this.isSwapMove == move.isSwapMove && this.isStartMove == move.isStartMove
-                    && this.player.getPlayerId() == move.player.getPlayerId() && this.cardUsed == move.cardUsed;
+                    && this.player.getClientId() == move.player.getClientId() && this.cardUsed == move.cardUsed;
         }
 
         return this.from.getFieldId() == move.from.getFieldId() && this.to.getFieldId() == move.to.getFieldId() &&
                 this.isSwapMove == move.isSwapMove && this.isStartMove == move.isStartMove
-                && this.player.getPlayerId() == move.player.getPlayerId() && this.cardUsed == move.cardUsed;
+                && this.player.getClientId() == move.player.getClientId() && this.cardUsed == move.cardUsed;
     }
 
     /**
@@ -98,11 +98,11 @@ public final class Move {
      * @param game An object representing the game
      */
     public UndoMove execute(Game game) {
-        System.out.println("player " + this.player.getPlayerId() + " execute the following card: " + this.cardUsed);
+        System.out.println("player " + this.player.getClientId() + " execute the following card: " + this.cardUsed);
         boolean hascard = this.player.getCardList().contains(this.cardUsed);
         System.out.println("has card " + hascard);
         if(!hascard) {
-            System.out.println("player " + this.player.getPlayerId() + " doesnt hold the card he is trying to play " + this.cardUsed);
+            System.out.println("player " + this.player.getClientId() + " doesnt hold the card he is trying to play " + this.cardUsed);
             for(Card card : player.getCardList()) {
                 System.out.print(card + " ");
             }
@@ -130,7 +130,9 @@ public final class Move {
         // System.out.println("cards num after 1 " + this.player.cards.size());
         if (isSwapMove) {
             opponentFigure = to.getFigure();
-            Player opponent = game.getPlayerList().get(to.getFigure().getOwnerId());
+            //get player object of figure
+            //Player opponent = game.getPlayerList().get(to.getFigure().getOwnerId());
+            Player opponent = to.getFigure().getPlayerObjectByOwner(game);
             //set figure of field
             playerFigure = from.getFigure();
             to.setFigure(playerFigure);
@@ -173,7 +175,7 @@ public final class Move {
             to.setFigure(playerFigure);
             this.player.setFiguresInBank(player.getFiguresInBank() - 1);
 
-            game.occupied[player.getPlayerId()] = true; //unused
+            //game.occupied[player.getPlayerId()] = true; //unused
 
             //TODO assert figcol == playercol
             // System.out.println("figs in bank " + this.player.figuresInBank);
@@ -182,7 +184,8 @@ public final class Move {
         } else { //normal move
             assert to != null;
             if (!to.isEmpty()) {
-                Player opponent = game.getPlayerList().get(to.getFigure().getOwnerId());
+                Player opponent = to.getFigure().getPlayerObjectByOwner(game);
+                //Player opponent = game.getPlayerList().get(to.getFigure().getOwnerId());
                 opponent.setFiguresInBank(opponent.getFiguresInBank() + 1);
                 to.getFigure().setOnBench(true);
             }
@@ -215,12 +218,12 @@ public final class Move {
                 player.draw(game);
             }
 
-            if (from.getType() == FieldType.START) {
-                game.occupied[player.getPlayerId()] = false;
-            }
-            if (to.getType() == FieldType.START) {
-                game.occupied[player.getPlayerId()] = true;
-            }
+            //if (from.getType() == FieldType.START) {
+            //    game.occupied[player.getPlayerId()] = false;
+            //}
+            //if (to.getType() == FieldType.START) {
+            //    game.occupied[player.getPlayerId()] = true;
+            //}
         }
 
         System.out.println("before increasemoves");
@@ -241,7 +244,7 @@ public final class Move {
         if (this.to != null) {
             System.out.print("to " + this.to.getFieldId() + " ");
         }
-        System.out.println("swap figs " + this.isSwapMove + " isStartMove " + this.isStartMove + " player.color " + this.player.getPlayerId());
+        System.out.println("swap figs " + this.isSwapMove + " isStartMove " + this.isStartMove + " player.color " + this.player.getClientId());
     }
 
     /**

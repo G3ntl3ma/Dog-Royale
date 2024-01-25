@@ -55,8 +55,9 @@ public class CardService {
         if (to == null) return;
 
         if (!to.isEmpty()) { //check.isEmpty()ness first otherwise to.figure is null and therefore to.figure.color bug
+            Field startField = figure.getStartFieldByOwner(game);
             if ((to.getType() == FieldType.START
-                    && to == game.getPlayerList().get(to.getFigure().getOwnerId()).getStartField())
+                    && to == startField)
                     || to.getType() == FieldType.HOUSE) {
                 return;
             }
@@ -72,7 +73,8 @@ public class CardService {
             } else {
                 steps--;
                 //check if move passes own startField
-                if (game.getPlayerList().get(figure.getOwnerId()).getStartField() == to) {
+                Field startField = to.getFigure().getStartFieldByOwner(game);
+                if (startField == to) {
                     to = to.getHouse();
                 } else to = to.getNext();
             }
@@ -80,8 +82,9 @@ public class CardService {
 
             //check if fields occupied and startField of that figure
             if (!to.isEmpty()) { //check.isEmpty()ness first otherwise to.figure is null and therefore to.figure.color bug
+                Field startField = to.getFigure().getStartFieldByOwner(game);
                 if ((to.getType() == FieldType.START
-                        && to == game.getPlayerList().get(to.getFigure().getOwnerId()).getStartField())
+                        && to == startField)
                         || to.getType() == FieldType.HOUSE) {
                     return;
                 }
@@ -147,9 +150,8 @@ public class CardService {
         switch (this.emulatedType) {
             case swapCard:
                 if (figure.isOnBench() || figure.isInHouse()) break;
-                for (int i = 0; i < game.getPlayerList().size(); i++) {
-                    if (i == figure.getOwnerId()) continue;
-                    Player opponent = game.getPlayerList().get(i);
+                for (Player opponent : game.getPlayerList()) {
+                    if (opponent.getClientId() == figure.getClientId()) continue; // don't swap with own figure
                     for (int j = 0; j < opponent.getFigureList().size(); j++) {
                         Figure oppfigure = opponent.getFigureList().get(j);
                         if (!oppfigure.isOnBench() && !oppfigure.isInHouse() && oppfigure.getField().getType() != FieldType.START) {
@@ -182,7 +184,7 @@ public class CardService {
             case startCard1:
                 if (figure.isOnBench()
                         && (player.getStartField().isEmpty()
-                        || player.getStartField().getFigure().getOwnerId() != figure.getOwnerId())) {
+                        || player.getStartField().getFigure().getClientId() != figure.getClientId())) {
                     moves.add(new Move(player, this.usedType));
                 } else if (!figure.isOnBench()) {
                     addStepMove(moves, 13, figure, game, player, false);
@@ -191,7 +193,7 @@ public class CardService {
             case startCard2:
                 if (figure.isOnBench()
                         && (player.getStartField().isEmpty()
-                        || player.getStartField().getFigure().getOwnerId() != figure.getOwnerId())) {
+                        || player.getStartField().getFigure().getClientId() != figure.getClientId())) {
                     moves.add(new Move(player, this.usedType));
                 } else if (!figure.isOnBench()) {
                     addStepMove(moves, 1, figure, game, player, false);

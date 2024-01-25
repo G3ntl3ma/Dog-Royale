@@ -132,6 +132,7 @@ public final class Game {
         int excludedCount = 0;
         // TODO: What if game over
         playerToMoveId = (playerToStartColor + 1) % playerList.size(); // TODO: Check if this is correct
+        playerToStartColor = playerToMoveId;
         round++;
         // System.out.println(this.round);
     }
@@ -254,7 +255,7 @@ public final class Game {
         this.board = new Field[totalFieldCount];
 
         this.startIndexes = new int[players];
-        this.occupied = new boolean[players];
+        //this.occupied = new boolean[players];
 
         // System.out.println("conf string length " + max);
 
@@ -279,7 +280,7 @@ public final class Game {
             if (conf.charAt(i) == 's') {
                 // this.players.get(seenStarts++).startField = this.board.get(i); //init starts
                 this.startIndexes[seenStarts] = i;
-                this.occupied[seenStarts] = false;
+                //this.occupied[seenStarts] = false;
                 this.playerList.get(seenStarts).setStartField(this.board[i]); //init starts
                 int off = fieldCount;
                 this.playerList.get(seenStarts).setHouseFirstIndex(fieldCount);
