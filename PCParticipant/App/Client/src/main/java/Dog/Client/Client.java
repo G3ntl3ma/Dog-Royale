@@ -47,7 +47,7 @@ public class Client implements IClientObservable {
         return clientID;
     }
 
-    public String getplayerName(){return username}
+    public String getplayerName(){return username};
 
     /**
      * opens a new thread for messages from client
