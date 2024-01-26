@@ -52,7 +52,7 @@ public class UndoMove {
         game.increaseMovesCounter(-1);
 
         //restore last card on pile 
-        game.setDrawnCard(this.lastCardOnPile); //TODO rename this function
+        //game.setDrawnCard(this.lastCardOnPile); //TODO rename this function
 
         //give back used card to hand
         if (move.getCardUsed() != null) {
