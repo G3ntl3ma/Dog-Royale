@@ -9,7 +9,7 @@ public class JoinGameAsObserverDto extends Dto {
     private int clientId;
     private String playerName;
 
-    public JoinGameAsObserverDto(int gameId, int clientId, String playerName){
+    public JoinGameAsObserverDto(int gameId, int clientId){
         this.gameId = gameId;
         this.clientId = clientId;
     }

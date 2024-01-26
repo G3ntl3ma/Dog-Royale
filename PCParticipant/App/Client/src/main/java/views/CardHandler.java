@@ -38,7 +38,7 @@ public class CardHandler {
     private List<Card> cards = new ArrayList<Card>();
     static boolean turn = false;
 
-    static Card lastRemovedCard;
+    static Card lastRemovedCard = Card.nothingCard;
     static int lastRemovedCardIndex = -1;
 
     private static int selectedValue;

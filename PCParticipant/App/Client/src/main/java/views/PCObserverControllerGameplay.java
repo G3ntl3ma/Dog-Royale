@@ -654,7 +654,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @Override
     public void handleBoardState(BoardStateDto boardStateDto) {
 
-
+        System.out.println("boardstate handelt oqwudhaisudhwi");
 
         Platform.runLater(()->{
             if(boardStateDto.isGameOver()){
@@ -782,7 +782,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         Platform.runLater(() ->{
             HandCards[] listNumCards = updateDrawCards.getHandCards();
             lblCardsPOne.setText(" x " + listNumCards[0].getCount());
-            lblCardsPTwo.setText(" x " + listNumCards[1].getCount());
+            //lblCardsPTwo.setText(" x " + listNumCards[1].getCount());
             if(lobbyConfig.getMaxPlayerCount() >= 3){
                 lblCardsPThree.setText(" x " + listNumCards[2].getCount());
                 if(lobbyConfig.getMaxPlayerCount() >= 4){
