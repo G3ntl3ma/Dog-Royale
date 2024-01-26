@@ -4,6 +4,7 @@ package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.FieldType;
+import com.nexusvision.server.model.messages.game.BoardState;
 import com.nexusvision.server.model.utils.PlayerElement;
 import com.nexusvision.server.service.CardService;
 import com.nexusvision.server.service.KickService;
@@ -35,6 +36,8 @@ public final class Game {
     private Field[] board;
     private ArrayList<Card> deck;
     private ArrayList<Card> pile;
+    private Card lastCardOnPile;
+    private ArrayList<BoardState.DiscardItem> pileInfo; //exact same as pile but with more info
     private int mainFieldCount;
     private int playerToStartColor;
     private int playerToMoveId;
@@ -61,6 +64,7 @@ public final class Game {
         this.playerList = new ArrayList<>();
         this.deck = new ArrayList<>();
         this.pile = new ArrayList<>();
+        this.pileInfo = new ArrayList<>();
         this.playerToMoveId = 0;
         this.playerToStartColor = 0;
         this.movesMade = 0;
@@ -76,12 +80,12 @@ public final class Game {
         StringBuilder fieldStringBuild = new StringBuilder();
         fieldStringBuild.append("n".repeat(Math.max(0, lobbyConfig.getFieldSize())));
 
-        for (int i = 0; i < lobbyConfig.getStartFields().getPositions().size(); i++) {
-            fieldStringBuild.setCharAt(i, 's');
+        for (int inx : lobbyConfig.getStartFields().getPositions()) {
+            fieldStringBuild.setCharAt(inx, 's');
         }
 
-        for (int i = 0; i < lobbyConfig.getDrawCardFields().getPositions().size(); i++) {
-            fieldStringBuild.setCharAt(i, 'k');
+        for (int inx : lobbyConfig.getDrawCardFields().getPositions()) {
+            fieldStringBuild.setCharAt(inx, 'k');
         }
 
         return fieldStringBuild.toString();
@@ -123,6 +127,8 @@ public final class Game {
             player.setCardList(new ArrayList<>());
         }
         pile = new ArrayList<>();
+        lastCardOnPile = null;
+        pileInfo = new ArrayList<>();
         Collections.shuffle(this.deck, new Random(seed)); //deterministic seed
     }
 
@@ -146,6 +152,7 @@ public final class Game {
         for (Player player : playerList) {
             player.setOutThisRound(false);
         }
+        this.playersRemaining = playerList.size();
         int excludedCount = 0;
         // TODO: What if game over
         playerToMoveId = (playerToStartColor + 1) % playerList.size(); // TODO: Check if this is correct
@@ -161,16 +168,13 @@ public final class Game {
         Player player = getCurrentPlayer();
         discardedCardList = new ArrayList<>(player.getCardList());
         if (!player.getCardList().isEmpty()) {
-            if (!pile.isEmpty()) {
-                //keep the last card the same
-                //pop
-                Card pop = pile.remove(pile.size() - 1);
-                pile.addAll(player.getCardList());
-                //read
-                pile.add(pop);
-            } else {
-                pile.addAll(player.getCardList());
+            for (Card card : player.getCardList()) {
+                BoardState.DiscardItem discardItem = new BoardState.DiscardItem();
+                discardItem.setClientId(player.getClientId());
+                discardItem.setCard(card.ordinal());
+                pileInfo.add(discardItem);
             }
+            pile.addAll(player.getCardList());
             player.setCardList(new ArrayList<>());
         }
         return discardedCardList;
@@ -191,33 +195,33 @@ public final class Game {
     /**
      * Print the current state of the game
      */
-//    public void printBoard() { // TODO: Fix prints
-//        System.out.println("BOARD=================");
-//        System.out.println("player to move " + playerToMoveId);
-//        System.out.println("players remaining " + playersRemaining);
-//        for (TournamentPlayer p : playerList) {
-//            p.printInfo();
-//            p.printHouse();
-//        }
-//        for (int i = 0; i < this.mainFieldCount; i++) {
-//            System.out.print(i + "-");
-//        }
-//        System.out.println();
-//        for (int i = 0; i < mainFieldCount; i++) {
-//            // Field f = this.board.get(i);
-//            Field f = board[i];
-//            System.out.print(f.getType().toString().charAt(0) + "-");
-//        }
-//        System.out.println();
-//        for (int i = 0; i < mainFieldCount; i++) {
-//            Field f = this.board[i];
-//            if (!f.isEmpty()) System.out.print(f.getFigure().getOwnerId() + "-");
-//            else System.out.print("_" + "-");
-//        }
-//        System.out.println();
-//        printTotalCards();
-//        System.out.println("===================");
-//    }
+    public void printBoard() { // TODO: Fix prints
+        System.out.println("BOARD=================");
+        System.out.println("player to move " + playerToMoveId);
+        System.out.println("players remaining " + playersRemaining);
+        for (Player p : playerList) {
+            p.printInfo();
+            p.printHouse();
+        }
+        for (int i = 0; i < this.mainFieldCount; i++) {
+            System.out.print(i + "-");
+        }
+        System.out.println();
+        for (int i = 0; i < mainFieldCount; i++) {
+            // Field f = this.board.get(i);
+            Field f = board[i];
+            System.out.print(f.getType().toString().charAt(0) + "-");
+        }
+        System.out.println();
+        for (int i = 0; i < mainFieldCount; i++) {
+            Field f = this.board[i];
+            if (!f.isEmpty()) System.out.print(f.getFigure().getClientId() + "-");
+            else System.out.print("_" + "-");
+        }
+        System.out.println();
+        printTotalCards();
+        System.out.println("===================");
+    }
 
     /**
      * Set up the initial deck, defining types and quantities of the cards
@@ -262,7 +266,7 @@ public final class Game {
         for (int i = 0; i < conf.length(); i++) {
             if (conf.charAt(i) == 's') players++;
         }
-
+        System.out.println(conf);
         int fieldCount = conf.length();
 
         // System.out.println("fieldCount" + fieldCount);
@@ -285,11 +289,11 @@ public final class Game {
         for (int playerOrderIndex = 0; playerOrderIndex < playerOrder.size(); playerOrderIndex++) {
             this.playerList.add(new Player(playerOrder.get(playerOrderIndex), lobbyConfig.getFiguresPerPlayer()));
         }
+        System.out.println("players " + playerOrder.size());
         int seenStarts = 0;
         for (int i = 0; i < conf.length(); i++) {
             int prev = ((i - 1) + conf.length()) % conf.length();
             int next = (i + 1) % conf.length();
-            // System.out.println("iter"+i);
             this.board[i].setNext(this.board[next]);
             this.board[i].setPrev(this.board[prev]);
             // this.board[i].setType(conf.charAt(i));
@@ -297,7 +301,6 @@ public final class Game {
             if (conf.charAt(i) == 's') {
                 // this.players.get(seenStarts++).startField = this.board.get(i); //init starts
                 this.startIndexes[seenStarts] = i;
-                //this.occupied[seenStarts] = false;
                 this.playerList.get(seenStarts).setStartField(this.board[i]); //init starts
                 int off = fieldCount;
                 this.playerList.get(seenStarts).setHouseFirstIndex(fieldCount);
@@ -408,7 +411,7 @@ public final class Game {
                 playerWinOrder.add(player);
             }
         }
-        return null; // (ArrayList<Integer>) playerWinOrder.stream().map(TournamentPlayer::getPlayerId).collect(Collectors.toList()); // TODO: This doesn't work
+        return (ArrayList<Integer>) playerWinOrder.stream().map(Player::getClientId).collect(Collectors.toList()); // TODO: This doesn't work
     }
 
     /**
@@ -451,12 +454,7 @@ public final class Game {
         this.round++;
     }
 
-    /**
-     * Gets last card of the pile
-     */
-    public Card getLastCard() {
-        return pile.get(pile.size() - 1);
-    }
+
 
     /**
      * Determines if the round is over
@@ -469,7 +467,7 @@ public final class Game {
             if (!player.isOutThisRound()) playersRemaining2++;
         }
         if (playersRemaining2 != playersRemaining){
-            System.out.println("inconsistent game state playersRemaining");
+            System.out.println("inconsistent game state playersRemaining " + playersRemaining + " " + playersRemaining2);
             System.exit(235);
         }
         return playersRemaining == 0;

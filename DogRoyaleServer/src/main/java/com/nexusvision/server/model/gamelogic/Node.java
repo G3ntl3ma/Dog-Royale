@@ -57,7 +57,7 @@ public class Node {
         if (this.haschildren == true) {
             ArrayList<Move> moves = game.getMoves();
             if(Math.max(1,moves.size()) != children.size()) {
-                System.out.println("generated different moves " + moves.size() + "children size " + children.size());
+                System.out.println("generated different moves " + Math.max(moves.size(),1) + "children size " + children.size());
                 System.exit(264);
             }
             return;

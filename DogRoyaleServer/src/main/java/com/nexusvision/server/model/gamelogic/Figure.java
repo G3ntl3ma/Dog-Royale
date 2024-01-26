@@ -39,17 +39,17 @@ public class Figure  {
     public Field getStartFieldByOwner(Game game){
         return getPlayerObjectByOwner(game).getStartField();
     }
-
-//    public void print() {
-//        System.out.print("figure print: id: " + this.figureId + " isOnBench " + this.isOnBench + " isInHouse " + this.isInHouse + " ownerId :" + this.ownerId);
-//        if (this.field != null) {
-//            System.out.println(" field " + this.field.getFieldId());
-//        }
-//        else {
-//            System.out.println(" field: null");
-//        }
-//    }
-
+    
+    public void print() {
+        System.out.print("figure print: id: " + this.figureId + " isOnBench " + this.isOnBench + " isInHouse " + this.isInHouse + " clientId :" + this.clientId);
+        if (this.field != null) {
+            System.out.println(" field " + this.field.getFieldId());
+        }
+        else {
+            System.out.println(" field: null");
+        }
+    }
+    
     public int hash() {
         ArrayList<Integer> variables = new ArrayList<>();
         variables.add(isOnBench ? 0 : 1);

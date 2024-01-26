@@ -2,6 +2,7 @@ package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.FieldType;
+import com.nexusvision.server.model.messages.game.BoardState;
 import lombok.Data;
 
 /**
@@ -131,22 +132,27 @@ public final class Move {
             System.exit(42);
         }
 
+        //NOTE: UndoMove is never actually used
         // Figure playerFigure = null; //TODO
         Figure opponentFigure = null;
         Card playerDrawnCard= null;
         Card opponentDrawnCard= null;
         Card lastCardOnPile = null;
         if(game.getPile().size() != 0) {
-            lastCardOnPile= game.getPile().get(game.getPile().size() - 1);
+            lastCardOnPile= game.getLastCardOnPile();
         }
         int LastMoveCountFigureMovedIntoHouse = this.getPlayer().getLastMoveCountFigureMovedIntoHouse();
-
         game.setDrawnCard(null);
 
         // System.out.println("cards num before " + this.player.cards.size());
         if (cardUsed != null) {
             player.getCardList().remove(cardUsed);
             game.getPile().add(cardUsed);
+            if(cardUsed != Card.copyCard) game.setLastCardOnPile(cardUsed);
+            BoardState.DiscardItem discardItem = new BoardState.DiscardItem();
+            discardItem.setClientId(player.getClientId());
+            discardItem.setCard(cardUsed.ordinal());
+            game.getPileInfo().add(discardItem);
         }
         // System.out.println("cards num after 1 " + this.player.cards.size());
         if (isSwapMove) {
@@ -217,9 +223,9 @@ public final class Move {
 
             assert from != null;
             if (to.getType() == FieldType.HOUSE && from.getType() != FieldType.HOUSE) {
-                player.setFiguresInHouse(player.getFiguresInHouse() + 1);
                 player.setLastMoveCountFigureMovedIntoHouse(game.getMovesMade());
                 from.getFigure().setInHouse(true);
+                player.incFiguresInHouse();
             }
 
             //moving out of house not possible but
