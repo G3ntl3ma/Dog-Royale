@@ -87,6 +87,7 @@ public final class SaveState {
     private int playersRemaining;
     private int round;
     private boolean firstMoveOfRound;
+    private Card lastCardOnPile;
 
     private FieldState[] board;
     private ArrayList<PlayerState> playerList;
@@ -101,7 +102,8 @@ public final class SaveState {
         this.playersRemaining = game.getPlayersRemaining();
         this.round = game.getRound();
         this.firstMoveOfRound = game.isFirstMoveOfRound();
-
+        
+        this.lastCardOnPile = game.getLastCardOnPile();
         this.deck = new ArrayList<>(game.getDeck());
         this.pile = new ArrayList<>(game.getPile());
         
@@ -125,7 +127,9 @@ public final class SaveState {
         game.setPlayersRemaining(this.playersRemaining);
         game.setRound(this.round);
         game.setFirstMoveOfRound(this.firstMoveOfRound);
-
+        
+        game.setLastCardOnPile(this.getLastCardOnPile());
+        
         game.setDeck(new ArrayList<>(this.getDeck()));
         game.setPile(new ArrayList<>(this.getPile()));
 

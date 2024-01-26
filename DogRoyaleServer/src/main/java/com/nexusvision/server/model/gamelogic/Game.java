@@ -4,6 +4,7 @@ package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.FieldType;
+import com.nexusvision.server.model.enums.OrderType;
 import com.nexusvision.server.model.messages.game.BoardState;
 import com.nexusvision.server.model.utils.PlayerElement;
 import com.nexusvision.server.service.CardService;
@@ -11,11 +12,7 @@ import com.nexusvision.server.service.KickService;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -41,7 +38,8 @@ public final class Game {
     private int mainFieldCount;
     private int playerToStartColor;
     private int playerToMoveId;
-    private Card drawnCard; // for server communication
+    // private Card drawnCard; // for server communication
+    private HashMap<Integer, Card> drawnCards; // for server communication 3.4
     private ArrayList<Card> discardedCardList; // for server communication
     private int movesMade;
     private int playersRemaining;
@@ -71,6 +69,7 @@ public final class Game {
         this.round = 0;
         this.cardService = new CardService(null);
         this.kickService = new KickService();
+        this.drawnCards = new HashMap<>();
         //constructing a string that can be parsed by the game
         String conf = buildConf();
         init(conf);
@@ -286,6 +285,9 @@ public final class Game {
 
         //add players
         List<Integer> playerOrder = lobbyConfig.getPlayerOrder().getClientIdList();
+        if(lobbyConfig.getPlayerOrder().getType() == OrderType.random) { //shuffle the order randomly if random order
+            Collections.shuffle(playerOrder);
+        }
         for (int playerOrderIndex = 0; playerOrderIndex < playerOrder.size(); playerOrderIndex++) {
             this.playerList.add(new Player(playerOrder.get(playerOrderIndex), lobbyConfig.getFiguresPerPlayer()));
         }

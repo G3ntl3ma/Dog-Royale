@@ -134,6 +134,7 @@ public final class Move {
 
         //NOTE: UndoMove is never actually used
         // Figure playerFigure = null; //TODO
+        game.getDrawnCards().clear();
         Figure opponentFigure = null;
         Card playerDrawnCard= null;
         Card opponentDrawnCard= null;
@@ -142,7 +143,7 @@ public final class Move {
             lastCardOnPile= game.getLastCardOnPile();
         }
         int LastMoveCountFigureMovedIntoHouse = this.getPlayer().getLastMoveCountFigureMovedIntoHouse();
-        game.setDrawnCard(null);
+        //game.setDrawnCard(null);
 
         // System.out.println("cards num before " + this.player.cards.size());
         if (cardUsed != null) {

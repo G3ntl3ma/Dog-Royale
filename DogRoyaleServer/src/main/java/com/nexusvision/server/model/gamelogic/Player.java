@@ -133,7 +133,7 @@ public final class Player {
             game.reshuffle();
         }
         Card pop = game.getDeck().remove(game.getDeck().size() - 1);
-        game.setDrawnCard(pop);
+        game.getDrawnCards().put(this.clientId, pop);
         this.cardList.add(pop);
     }
 

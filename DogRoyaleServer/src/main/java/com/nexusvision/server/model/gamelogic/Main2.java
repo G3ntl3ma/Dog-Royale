@@ -39,7 +39,7 @@ public class Main2 {
         
         // ArrayList<Integer> oldhash = game.hash();
         // SaveState savestate = new SaveState(game);
-        Ai ai = new Ai(100000000, 1000);
+        Ai ai = new Ai(100, 1000);
         int[] winCounter = new int[players];
         ArrayList<Integer>  winHistory = new ArrayList<>();
         List<ColorMapping> colorMap = new ArrayList<>();
@@ -81,7 +81,7 @@ public class Main2 {
         lobbyConfig.addPlayer("mike", 1);
         lobbyConfig.addPlayer("grigori oxlong", 2);
         Scanner userInput = new Scanner(System.in);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 10; i++) {
             System.out.println("Main2 simulate game " + i);
             Game game = new Game(lobbyConfig, 0);
             //Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
