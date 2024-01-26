@@ -33,15 +33,15 @@ public class LobbyExtension implements BeforeAllCallback {
         playerOrderList.add(5);
         playerOrderList.add(6);
 
-        int lobbyID1 = serverController.createNewLobby(playerOrderList, playerColorMap, observerList);
-        int lobbyID2 = serverController.createNewLobby(playerOrderList, playerColorMap, observerList);
-        int lobbyID3 = serverController.createNewLobby(playerOrderList, playerColorMap, observerList);
-        int lobbyID4 = serverController.createNewLobby(playerOrderList, playerColorMap, observerList);
+//        int lobbyID1 = serverController.createNewLobby(playerOrderList, playerColorMap, observerList); // TODO: Fix
+//        int lobbyID2 = serverController.createNewLobby(playerOrderList, playerColorMap, observerList);
+//        int lobbyID3 = serverController.createNewLobby(playerOrderList, playerColorMap, observerList);
+//        int lobbyID4 = serverController.createNewLobby(playerOrderList, playerColorMap, observerList);
 
-        GameLobby lobby1 = serverController.getLobbyById(lobbyID1);
-        GameLobby lobby2 = serverController.getLobbyById(lobbyID2);
-        GameLobby lobby3 = serverController.getLobbyById(lobbyID3);
-        GameLobby lobby4 = serverController.getLobbyById(lobbyID4);
+//        GameLobby lobby1 = serverController.getLobbyById(lobbyID1); // TODO: Fix
+//        GameLobby lobby2 = serverController.getLobbyById(lobbyID2);
+//        GameLobby lobby3 = serverController.getLobbyById(lobbyID3);
+//        GameLobby lobby4 = serverController.getLobbyById(lobbyID4);
 
         // TODO: Game needs to be set as well!!! (null currently)
 

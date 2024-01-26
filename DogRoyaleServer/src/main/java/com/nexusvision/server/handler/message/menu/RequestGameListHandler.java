@@ -26,7 +26,7 @@ public class RequestGameListHandler extends MessageHandler<RequestGameList> {
      * The response includes information about starting, running, and finished games.
      *
      * @param message An Instance of the <code>RequestGameList</code> representing a client's request for a list of games
-     * @param clientId An Integer representing the Id of the requesting client
+     * @param clientId An Integer representing the id of the requesting client
      */
     @Override
     protected void performHandle(RequestGameList message, int clientId) throws HandlingException {
@@ -37,30 +37,22 @@ public class RequestGameListHandler extends MessageHandler<RequestGameList> {
         ArrayList<GameLobby> runningLobbyList = serverController.getStateGames(message.getGamesRunningCount(), GameState.IN_PROGRESS);
         ArrayList<GameLobby> finishedLobbyList = serverController.getStateGames(message.getGamesFinishedCount(), GameState.FINISHED);
 
-        ArrayList<ReturnGameList.Game> startingGameList = new ArrayList<>();
-        ArrayList<ReturnGameList.Game> runningGameList = new ArrayList<>();
-        ArrayList<ReturnGameList.Game> finishedGameList = new ArrayList<>();
+        ArrayList<ReturnGameList.NotFinishedGame> startingGameList = new ArrayList<>();
+        ArrayList<ReturnGameList.NotFinishedGame> runningGameList = new ArrayList<>();
+        ArrayList<ReturnGameList.FinishedGame> finishedGameList = new ArrayList<>();
 
         for (GameLobby lobby : startingLobbyList) {
-            ReturnGameList.Game game = new ReturnGameList.Game();
-            game.setGameId(lobby.getId());
-            game.setCurrentPlayerCount(lobby.getCurrentPlayerCount()); // TODO: Use lobbyConfig here...
-            game.setMaxPlayerCount(lobby.getMaxPlayerCount());
+            ReturnGameList.NotFinishedGame game = getNotFinishedGame(lobby);
             startingGameList.add(game);
         }
 
         for (GameLobby lobby : runningLobbyList) {
-            ReturnGameList.Game game = new ReturnGameList.Game();
-            game.setGameId(lobby.getId());
-            game.setCurrentPlayerCount(lobby.getCurrentPlayerCount());
-            game.setMaxPlayerCount(lobby.getMaxPlayerCount());
+            ReturnGameList.NotFinishedGame game = getNotFinishedGame(lobby);
             runningGameList.add(game);
         }
 
         for (GameLobby lobby : finishedLobbyList) {
-            ReturnGameList.Game game = new ReturnGameList.Game();
-            game.setGameId(lobby.getId());
-            game.setWinnerPlayerId(lobby.getWinnerPlayerId());
+            ReturnGameList.FinishedGame game = getFinishedGame(lobby);
             finishedGameList.add(game);
         }
 
@@ -72,6 +64,25 @@ public class RequestGameListHandler extends MessageHandler<RequestGameList> {
 
         String response = gson.toJson(returnGameList);
         MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientId, response);
+    }
+
+    private static ReturnGameList.NotFinishedGame getNotFinishedGame(GameLobby lobby) {
+        ReturnGameList.NotFinishedGame game = new ReturnGameList.NotFinishedGame();
+        game.setGameId(lobby.getId());
+        game.setGameName(lobby.getLobbyConfig().getGameName());
+        game.setPlayerOrder(lobby.getLobbyConfig().getPlayerOrder().getOrder());
+        game.setWinnerOrder(lobby.getLobbyConfig().getWinnerOrder());
+        game.setMaxPlayerCount(lobby.getLobbyConfig().getMaxPlayerCount());
+        return game;
+    }
+
+    private static ReturnGameList.FinishedGame getFinishedGame(GameLobby lobby) {
+        ReturnGameList.FinishedGame game = new ReturnGameList.FinishedGame();
+        game.setGameId(lobby.getId());
+        game.setGameName(lobby.getLobbyConfig().getGameName());
+        game.setWasCanceled(lobby.isCanceled());
+        game.setWinnerOrder(lobby.getLobbyConfig().getWinnerOrder());
+        return game;
     }
 }
 

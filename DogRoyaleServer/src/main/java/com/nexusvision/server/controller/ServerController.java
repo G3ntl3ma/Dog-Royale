@@ -1,13 +1,14 @@
 package com.nexusvision.server.controller;
 
 import com.nexusvision.server.handler.ClientHandler;
+import com.nexusvision.server.handler.ConsistencyException;
 import com.nexusvision.server.model.entities.Client;
-import com.nexusvision.server.model.enums.Colors;
 import com.nexusvision.server.model.enums.GameState;
+import com.nexusvision.server.model.utils.ColorMapping;
+import com.nexusvision.server.model.utils.DrawCardFields;
+import com.nexusvision.server.model.utils.StartFields;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -70,14 +71,12 @@ public class ServerController {
      * @param clientId An Integer representing the id of the player for whom the associated game lobby is being searched
      * @return An object representing the game the player is participating otherwise null
      */
-    public GameLobby getGameOfPlayer(int clientId) {
+    public GameLobby getLobbyOfPlayer(int clientId) {
         for (int key : lobbyMap.keySet()) {
-            GameLobby g = lobbyMap.get(key);
+            GameLobby lobby = lobbyMap.get(key);
             //see if player in players of game
-            for (int i = 0; i < g.getPlayerOrderList().size(); i++) {
-                if (g.getPlayerOrderList().get(i) == clientId) {
-                    return g;
-                }
+            for (int player : lobby.getLobbyConfig().getPlayerOrder().getClientIdList()) {
+                if (player == clientId) return lobby;
             }
         }
         return null;
@@ -119,15 +118,16 @@ public class ServerController {
      * Starts the game for all clients of the specified lobby
      *
      * @param lobby The lobby whose clients should get their game started
-     * @return true if successful
      */
-    public boolean startGameForLobby(GameLobby lobby) {
-        boolean isSuccessful = true;
+    public void startGameForLobby(GameLobby lobby) {
         for (int clientId : lobby.getLobbyConfig().getPlayerOrder().getClientIdList()) {
             ClientHandler handler = handlerMap.get(clientId);
-            isSuccessful = isSuccessful && handler.startGame();
+            try {
+                handler.startGame();
+            } catch (ConsistencyException e) {
+                log.error(e.getMessage());
+            }
         }
-        return isSuccessful;
     }
 
     /**
@@ -162,9 +162,6 @@ public class ServerController {
      * Generates a lobby id that doesn't exist yet and saves a new lobby object
      * linked to that id
      *
-     * @param playerOrderList The player order list
-     * @param playerColorMap  The player color map
-     * @param observerList    The observer id list
      * @return The lobby id
      */
     public int createNewLobby() {
@@ -192,26 +189,52 @@ public class ServerController {
     /**
      * Sets the configuration parameters for a game
      *
-     * @param gameID An Integer representing the Id of the game
-     * @param playerCount An Integer representing the number of players in the game
-     * @param fieldSize An Integer representing the size of the gamefield
-     * @param figuresPerPlayer An Integer representing the number of figures each player has
-     * @param drawFieldpositions A List of Integers representing the position of the drawfields in the game
-     * @param startFields A List of Integers representing the positions of start fields on the game board
-     * @param initialCardsPerPlayer An Integer representing the initial number of cards each player recieves
-     * @param thinkingTimePerMove An Integer representing the maximum time a player has to make a move
+     * @param gameId An Integer representing the id of the game
+     * @param gameName                   The game name
+     * @param maxPlayerCount             An Integer representing the number of maximum players in the game
+     * @param fieldSize                  An Integer representing the size of the game field
+     * @param figuresPerPlayer           An Integer representing the number of figures each player has
+     * @param colorMap                   A mapping from colors to clientIds
+     * @param drawCardFields             A List of Integers representing the position of the draw fields in the game
+     * @param startFields                A List of Integers representing the positions of start fields on the game board
+     * @param initialCardsPerPlayer      An Integer representing the initial number of cards each player receives
+     * @param thinkTimePerMove           An Integer representing the maximum time a player has to make a move
+     * @param visualizationTimePerMove   The time provided to visualize the move
      * @param consequencesForInvalidMove An Integer representing the consequences for an invalid move
-     * @param maxGameDuration An Integer representing the maximum duration of a game
-     * @param maxTotalMoves An Integer representing the maximum total number of moves allowed in the game
+     * @param maximumGameDuration        An Integer representing the maximum duration of a game
+     * @param maximumTotalMoves          An Integer representing the maximum total number of moves allowed in the game
      */
-    public void setConfiguration(int gameID, int playerCount, int fieldSize, int figuresPerPlayer, List<Integer> drawFieldpositions,
-                                 List<Integer> startFields, int initialCardsPerPlayer, int thinkingTimePerMove,
-                                 int consequencesForInvalidMove, int maxGameDuration, int maxTotalMoves) {
+    public void setConfiguration(int gameId,
+                                 String gameName,
+                                 int maxPlayerCount,
+                                 int fieldSize,
+                                 int figuresPerPlayer,
+                                 List<ColorMapping> colorMap,
+                                 DrawCardFields drawCardFields,
+                                 StartFields startFields,
+                                 int initialCardsPerPlayer,
+                                 int thinkTimePerMove,
+                                 int visualizationTimePerMove,
+                                 int consequencesForInvalidMove,
+                                 int maximumGameDuration,
+                                 int maximumTotalMoves) {
         for (int key : lobbyMap.keySet()) {
-            if (key == gameID) {
-                lobbyMap.get(key).setConfiguration(playerCount, fieldSize, figuresPerPlayer, drawFieldpositions,
-                        startFields, initialCardsPerPlayer, thinkingTimePerMove,
-                        consequencesForInvalidMove, maxGameDuration, maxTotalMoves);
+            if (key == gameId) {
+                lobbyMap.get(key).setConfiguration(
+                        gameName,
+                        maxPlayerCount,
+                        fieldSize,
+                        figuresPerPlayer,
+                        colorMap,
+                        drawCardFields,
+                        startFields,
+                        initialCardsPerPlayer,
+                        thinkTimePerMove,
+                        visualizationTimePerMove,
+                        consequencesForInvalidMove,
+                        maximumGameDuration,
+                        maximumTotalMoves
+                );
             }
         }
     }

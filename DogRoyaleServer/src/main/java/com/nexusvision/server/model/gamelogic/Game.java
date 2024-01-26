@@ -14,11 +14,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 
 /**
- * This class represents the game and manages TournamentPlayer, Cards, Moves and more
+ * This class represents the game and manages Player, Cards, Moves and more
  *
  * @author dgehse
  */
@@ -49,7 +50,7 @@ public final class Game {
     private KickService kickService;
 
     /**
-     * The constructor initializes games
+     * Create game and initialize it already
      *
      * @param lobbyConfig The lobby config
      * @param lobbyId The lobbyId
@@ -60,7 +61,7 @@ public final class Game {
         this.playerList = new ArrayList<>();
         this.deck = new ArrayList<>();
         this.pile = new ArrayList<>();
-        this.playerToMoveId = 0; // TODO: Should this really be the first player? Check please
+        this.playerToMoveId = 0;
         this.playerToStartColor = 0;
         this.movesMade = 0;
         this.round = 0;
@@ -86,6 +87,11 @@ public final class Game {
         return fieldStringBuild.toString();
     }
 
+    public void startGame() {
+        initDeck();
+        distributeCards();
+    }
+
     /**
      * Increases the value of movesMade by 1
      */
@@ -105,8 +111,19 @@ public final class Game {
             player.setCardList(new ArrayList<>());
         }
         pile = new ArrayList<>();
-        Collections.shuffle(deck);
+        Collections.shuffle(deck); //TODO bug in ai because this is not deterministic
+        // Collections.shuffle(this.deck, new Random(666)); //deterministic seed
         // System.out.println("reshuffle done deck size " + this.deck.size() + " pile size " + this.pile.size());
+    }
+
+    public void reshuffle(int seed) {
+        deck.addAll(pile);
+        for (Player player : playerList) {
+            deck.addAll(player.getCardList());
+            player.setCardList(new ArrayList<>());
+        }
+        pile = new ArrayList<>();
+        Collections.shuffle(this.deck, new Random(seed)); //deterministic seed
     }
 
     /**
@@ -248,7 +265,7 @@ public final class Game {
 
         int fieldCount = conf.length();
 
-        System.out.println("fieldCount" + fieldCount);
+        // System.out.println("fieldCount" + fieldCount);
         this.mainFieldCount = fieldCount;
 
         int totalFieldCount = fieldCount + lobbyConfig.getFiguresPerPlayer() * players; //playerCount
@@ -412,17 +429,12 @@ public final class Game {
             return true;
         }
         return false;
-        // boolean noNext = !this.nextPlayer();
-        // if (noNext) {
-        //     System.out.println("game over: no next player");
-        // }
-        // return noNext;
     }
 
     // Eventuell nicht nötig, da man sowieso erst einmal checken muss, ob das Spiel zu Ende ist bevor man
     // sich winner holen möchte
-//    public ArrayList<TournamentPlayer> getWinners() {
-//        ArrayList<TournamentPlayer> playerWinOrder;
+//    public ArrayList<Player> getWinners() {
+//        ArrayList<Player> playerWinOrder;
 //
 //        if (checkGameOver()) {
 //            playerWinOrder = getWinnerOrder();
@@ -456,8 +468,8 @@ public final class Game {
         for (Player player : this.playerList) {
             if (!player.isOutThisRound()) playersRemaining2++;
         }
-        if (playersRemaining2 != playersRemaining) {
-            System.out.println("inkonsistent gamestate playersremaining"); // TODO: Why is this German?!?!
+        if (playersRemaining2 != playersRemaining){
+            System.out.println("inconsistent game state playersRemaining");
             System.exit(235);
         }
         return playersRemaining == 0;
@@ -526,11 +538,10 @@ public final class Game {
         Move move = getMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
         if (move == null) {
             handleIllegalMove();
-            return false;
         } else {
             move.execute(this);
-            return true;
         }
+        return move != null;
     }
 
     /**
@@ -550,7 +561,8 @@ public final class Game {
     }
 
     /**
-     * Excludes a specific player from the game
+     * Excludes a specific player from the game and also
+     * sends the kick message to all lobby subscribers
      *
      * @param player An object representing the player to exclude from the game
      */
@@ -559,12 +571,10 @@ public final class Game {
             log.error("error trying to exclude a player from game who is already out");
             System.exit(41);
         }
-        kickService.kick(lobbyConfig, getClientIdFromPlayer(player), lobbyId);
         playerList.remove(player);
 
         this.playersRemaining--;
         this.discardHandCards();
-        //TODO Send message to throw away cards
     }
 
     private Integer getClientIdFromPlayer(Player player) {
@@ -592,9 +602,9 @@ public final class Game {
      * @param pieceId  An Integer representing id of a figure
      * @return An Integer indicating the position of the figure in the house
      */
-    public Integer getHousePosition(int playerId, int pieceId) {
+    public int getHousePosition(int playerId, int pieceId) {
         Figure f = this.playerList.get(playerId).getFigureList().get(pieceId);
-        if (!f.isInHouse()) return null;
+        if (!f.isInHouse()) return -1;
         return this.playerList.size() - (f.getField().getFieldId() - this.playerList.get(playerId).getHouseFirstIndex()) + 1;
     }
 
@@ -621,24 +631,24 @@ public final class Game {
     public ArrayList<Integer> hash() {
         //get hash of board
         ArrayList<Integer> deckValues = this.deck.stream()
-                .map(card -> card.ordinal())
-                .sorted()
-                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+            .map(Enum::ordinal)
+            .sorted()
+            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 
         ArrayList<Integer> boardValues = Arrays.stream(this.board)
-                .map(field -> field.hash())
-                .sorted()
-                .collect(Collectors.toCollection(ArrayList::new));
-
+            .map(Field::hash)
+            .sorted()
+            .collect(Collectors.toCollection(ArrayList::new));
+        
         ArrayList<Integer> pileValues = this.pile.stream()
-                .map(card -> card.ordinal())
-                .sorted()
-                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-
+            .map(Enum::ordinal)
+            .sorted()
+            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+        
         ArrayList<Integer> playerValues = this.playerList.stream()
-                .map(player -> player.hash())
-                .sorted()
-                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+            .map(Player::hash)
+            .sorted()
+            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 
         ArrayList<Integer> variables = new ArrayList<>();
         variables.add(mainFieldCount);
@@ -665,13 +675,19 @@ public final class Game {
 
     public void makeMove(Move move) {
         if (move == null) {
-            System.out.println("exclude");
+            // System.out.println("exclude");
             excludeFromRound(getCurrentPlayer());
             return;
         }
-        System.out.println("EXECUTE");
+        // System.out.println("EXECUTE");
         move.execute(this);
     }
 
+    public Player getPlayer(int clientId) {
+        for (Player player : playerList) {
+            if(player.getClientId() == clientId) return player;
+        }
+        return null;
+    }
 }
 

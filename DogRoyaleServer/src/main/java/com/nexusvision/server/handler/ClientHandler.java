@@ -95,14 +95,14 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
     /**
      * Lets the client handler know that the game has started
      *
-     * @return true if successful
+     * @throws ConsistencyException if the expected state doesn't match the correct state
      */
-    public boolean startGame() {
+    public void startGame() throws ConsistencyException {
         if (expectedState != State.WAITING_FOR_GAME_START) {
-            return false;
+            throw new ConsistencyException("Expected client handler to have the state WAITING_FOR_GAME_START right " +
+                    "now, but was actually in the state " + expectedState.toString());
         }
         expectedState = State.NO_MOVE;
-        return true;
     }
 
     /**

@@ -11,7 +11,7 @@ public class LeavePlayerHandler extends MessageHandler<LeavePlayer> {
     @Override
     protected void performHandle(LeavePlayer message, int clientID) throws HandlingException {
         ServerController serverController = ServerController.getInstance();
-        GameLobby lobby = serverController.getGameOfPlayer(clientID);
+        GameLobby lobby = serverController.getLobbyOfPlayer(clientID);
 
         lobby.removePlayer(clientID);
     }

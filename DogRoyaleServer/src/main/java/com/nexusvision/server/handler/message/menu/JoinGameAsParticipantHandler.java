@@ -33,7 +33,7 @@ public class JoinGameAsParticipantHandler extends MessageHandler<JoinGameAsPlaye
         ServerController serverController = ServerController.getInstance();
 
         GameLobby lobby = serverController.getLobbyById(message.getGameId());
-        lobby.addPlayer(message.getClientId(), Colors.farbe1); // TODO: What if player can't join because lobby is full, should maybe receive success = false
+        lobby.addPlayer(message.getPlayerName(), message.getClientId()); // TODO: What if player can't join because lobby is full, should maybe receive success = false
 
         ConnectedToGame connectedToGame = new ConnectedToGame();
         connectedToGame.setType(TypeMenue.connectedToGame.getOrdinal());

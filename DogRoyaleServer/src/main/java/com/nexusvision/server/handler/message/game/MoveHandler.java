@@ -4,13 +4,8 @@ import com.nexusvision.server.controller.GameLobby;
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.HandlingException;
 import com.nexusvision.server.handler.message.MessageHandler;
-import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.GameState;
-import com.nexusvision.server.model.enums.Penalty;
 import com.nexusvision.server.model.messages.game.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Handles messages of type <code>Move</code>
@@ -30,7 +25,7 @@ public class MoveHandler extends MessageHandler<Move> {
     @Override
     protected void performHandle(Move message, int clientId) throws HandlingException {
         ServerController serverController = ServerController.getInstance();
-        GameLobby gameLobby = serverController.getGameOfPlayer(clientId); //find game corresponding to clientId
+        GameLobby gameLobby = serverController.getLobbyOfPlayer(clientId); //find game corresponding to clientId
 
         //try the move only if game running and not paused
         if (gameLobby.getGameState() != GameState.IN_PROGRESS || gameLobby.isPaused()) {

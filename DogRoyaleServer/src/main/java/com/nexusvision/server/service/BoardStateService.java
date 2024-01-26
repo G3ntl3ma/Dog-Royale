@@ -31,7 +31,7 @@ public class BoardStateService {
                 Figure figure = player.getFigureList().get(pieceId);
                 int position = figure.getField().getFieldId();
                 boolean isOnBench = figure.isOnBench();
-                Integer inHousePosition = game.getHousePosition(playerOrderIndex, pieceId);
+                int inHousePosition = game.getHousePosition(playerOrderIndex, pieceId);
                 piece.setPieceId(pieceId);
                 piece.setClientId(clientId);
                 piece.setPosition(position);

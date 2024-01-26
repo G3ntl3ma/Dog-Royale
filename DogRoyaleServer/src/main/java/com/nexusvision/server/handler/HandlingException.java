@@ -8,9 +8,9 @@ import lombok.Getter;
  *
  * @author felixwr
  */
+@Getter
 public class HandlingException extends Exception {
 
-    @Getter
     private int type;
 
     /**

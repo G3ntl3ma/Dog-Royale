@@ -1,6 +1,8 @@
 package com.nexusvision.server.model.gamelogic;
 
+import com.nexusvision.server.model.enums.Colors;
 import com.nexusvision.server.model.enums.Penalty;
+import com.nexusvision.server.model.utils.*;
 
 import java.util.*;
 
@@ -31,18 +33,54 @@ public class Main2 {
             if (conf.charAt(i) == 's') players++;
         }
         int handCardCount = 10;
+        
         //TODO assert that field of figure is figure of field
-
-        //BUG replaying the same game over and over...
+        //BUG replaying the same game over and over if using savestate...
         
         // ArrayList<Integer> oldhash = game.hash();
         // SaveState savestate = new SaveState(game);
-        Ai ai = new Ai(10);
+        Ai ai = new Ai(100000000, 1000);
         int[] winCounter = new int[players];
-        ArrayList<Integer>  winHistory = new ArrayList<>();                        
-        for (int i = 0; i < 1; i++) {
+        ArrayList<Integer>  winHistory = new ArrayList<>();
+        List<ColorMapping> colorMap = new ArrayList<>();
+        for(int i = 0; i < 3; i++) {
+            ColorMapping colorMapping = new ColorMapping();
+            colorMapping.setColor(i);
+            colorMapping.setClientId(i);
+            colorMap.add(colorMapping);
+        }
+
+        DrawCardFields drawCardFields = new DrawCardFields();
+        StartFields startFields = new StartFields();
+
+        drawCardFields.setCount(2);
+        List<Integer> positions = new ArrayList<>();
+        positions.add(1);        positions.add(3);
+        drawCardFields.setPositions(positions);
+
+        startFields.setCount(3);
+        positions = new ArrayList<>();
+        positions.add(0);        positions.add(2);        positions.add(4);
+        startFields.setPositions(positions);
+
+        LobbyConfig lobbyConfig = new LobbyConfig();
+        lobbyConfig.importLobbyConfig( "gameName",
+                3,
+                10,
+                4,
+                colorMap,
+                drawCardFields,
+                startFields,
+                10,
+                1,
+                10,
+                0,
+                10000,
+                1000000);
+        for (int i = 0; i < 2; i++) {
             System.out.println("Main2 simulate game " + i);
-            Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
+            Game game = new Game(lobbyConfig, 0);
+            //Game game = new Game(conf, figureCount, handCardCount, maxMoves, Penalty.kickFromGame.ordinal());
             game.initDeck();
             game.distributeCards();
             //first move can be null
@@ -52,9 +90,9 @@ public class Main2 {
             while (winner == null) {
                 //get move
                 Move move = game.getRandomMove();
-                if(game.getCurrentPlayer().getPlayerId() == 0) {
+                if(game.getCurrentPlayer().getClientId() == 0) {
                     // System.out.println("ai generated move");
-                    move = ai.getMove(game);
+                    move = ai.getMove(game, System.currentTimeMillis());
                 }
                 if (move != null) {
                     // move.printMove();

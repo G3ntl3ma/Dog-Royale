@@ -7,20 +7,25 @@ import java.util.ArrayList;
 
 public class Ai {
     private int numberOfSimulations;
+    private int thinkTime;
 
-    public Ai(int numberOfSimulations) {
+    public Ai(int numberOfSimulations, int thinkTime) {
         this.numberOfSimulations = numberOfSimulations;
+        this.thinkTime = thinkTime;
     }
 
-    public Move getMove(Game game) {
+    public Move getMove(Game game, long startTime) {
         Node root = new Node(null, null);
         Player currentPlayer = game.getCurrentPlayer();
         SaveState savestate = new SaveState(game);
-        System.out.println("getting move from ai");
+        // System.out.println("getting move from ai");
         ArrayList<Integer> oldhash = game.hash();
         //TODO assert same hash
         for (int i = 0; i < this.numberOfSimulations; ++i) {
-            System.out.println("ai simulation " + i);
+            if(System.currentTimeMillis() - startTime > thinkTime) {
+                break;
+            }
+            // System.out.println("ai simulation " + i);
             Node currentnode = root;
             // System.out.println("visits root node: " + currentnode.getVisits());
             Node bestchild = currentnode;
@@ -31,11 +36,11 @@ public class Ai {
             while (true) {
                 bestchild = null;
                 float bestutc = -Float.MAX_VALUE;
-                currentnode.setHash(game.hash().hashCode());
+                currentnode.setHash(game.hash());
                 currentnode.expand(game);
                 float utc = bestutc;
                 ArrayList<Node> children = currentnode.getChildren();
-                System.out.println("num of children " + children.size());
+                // System.out.println("num of children " + children.size());
                 for (Node child : children) {
                     utc = child.getutc();
                     // System.out.println("utc " + utc + "bestutc " + bestutc);
@@ -48,44 +53,46 @@ public class Ai {
                     }
                 }
                 currentnode = bestchild;
+
                 Move move = currentnode.getMove();
-                System.out.println("child makemove");
+                // System.out.println("child makemove");
                 game.makeMove(move);
-                currentnode.setHash(game.hash().hashCode());
-                System.out.println("set nextPlayer");
                 game.nextPlayer();
+
+                // System.out.println("set nextPlayer");
                 if (game.checkGameOver()) {
                     winnerOrder = game.getWinnerOrder();
-                    int rank = winnerOrder.indexOf(currentPlayer.getPlayerId());
+                    int rank = winnerOrder.indexOf(currentPlayer.getClientId());
                     value = -rank;
                     winner = winnerOrder.get(0);
                     break;
                 }
                 if (game.roundOver()) {
-                    game.reshuffle();
+                    // System.out.println("roundover");
+                    game.reshuffle(42);
                     game.reInit();
                     game.distributeCards();
                 }
                 if (currentnode.getVisits() == 0) {
                     break;
                 }
-                System.out.println("after the 3 checks");
+                // System.out.println("after the 3 checks");
                                 
             }
-            System.out.println("simulate the game");
+            // System.out.println("simulate the game");
             //simulate the game
             int simulations = 0;
             while (winner == null) {
-                System.out.println("simulations " + simulations);
+                // System.out.println("simulations " + simulations);
                 // game.printBoard();
                 Move move = game.getRandomMove();
                 if(move != null) {
-                    move.printMove();
+                    // move.printMove();
                 }
                 else {
-                    System.out.println("null move");
+                    // System.out.println("null move");
                 }
-                System.out.println("rollout makemove");
+                // System.out.println("rollout makemove");
                 game.makeMove(move);
                 game.nextPlayer();
                 if (game.checkGameOver()) {
@@ -99,8 +106,12 @@ public class Ai {
                 }
                 simulations++;
             }//end of game
-            
-            int rank = winnerOrder.indexOf(currentPlayer.getPlayerId());
+
+            int rank = winnerOrder.indexOf(currentPlayer.getClientId());
+            if(rank == -1) {
+                System.out.println("currentplayer not found in winnerorder");
+                System.exit(2322);
+            }
             value = -rank;
             // System.out.println("value after rolling out the game " + value);
 
@@ -143,5 +154,3 @@ public class Ai {
         return bestmove;
     }
 }
-
-

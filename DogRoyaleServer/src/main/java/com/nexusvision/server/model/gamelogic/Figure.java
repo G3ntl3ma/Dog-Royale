@@ -17,16 +17,10 @@ public class Figure  {
     private boolean isInHouse; //cant be swapped for example
     private int figureId;
 
-    public Figure(int figureId) {
+    public Figure(int figureId, int clientId) {
         this.isOnBench = true;
         this.isInHouse = false;
         this.figureId = figureId;
-    }
-    
-    public Figure(int clientId, Field field, boolean isOnBench, boolean isInHouse) {
-        this.field = field;
-        this.isOnBench = isOnBench;
-        this.isInHouse = isInHouse;
         this.clientId = clientId;
     }
 

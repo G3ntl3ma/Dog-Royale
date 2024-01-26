@@ -2,6 +2,7 @@ package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.Colors;
 import com.nexusvision.server.model.enums.Penalty;
+import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
 import com.nexusvision.server.model.utils.*;
 import lombok.Getter;
 
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.nexusvision.server.model.gamelogic.EngineServerHandler.gson;
 
 /**
  * @author felixwr
@@ -88,11 +91,31 @@ public class LobbyConfig {
     }
 
     /**
-     * TODO: Import from file
+     * Imports the lobby config by making use of the provided object
+     *
+     * @param returnLobbyConfig The lobby config object being used to import the lobby config
      */
-    public void importLobbyConfig() {
+    public void importLobbyConfig(ReturnLobbyConfig returnLobbyConfig) {
+        importLobbyConfig(
+                returnLobbyConfig.getGameName(),
+                returnLobbyConfig.getMaxPlayerCount(),
+                returnLobbyConfig.getFieldsize(),
+                returnLobbyConfig.getFiguresPerPlayer(),
+                returnLobbyConfig.getColors(),
+                returnLobbyConfig.getDrawCardFields(),
+                returnLobbyConfig.getStartFields(),
+                returnLobbyConfig.getInitialCardsPerPlayer(),
+                returnLobbyConfig.getThinkTimePerMove(),
+                returnLobbyConfig.getVisualizationTimePerMove(),
+                returnLobbyConfig.getConsequencesForInvalidMove(),
+                returnLobbyConfig.getMaximumGameDuration(),
+                returnLobbyConfig.getMaximumTotalMoves()
+        );
+   }
 
-    }
+   public void importLobbyConfig(String path) {
+        // TODO: Import lobby config from file
+   }
 
     /**
      * TODO: Export to file

@@ -52,6 +52,8 @@ public class GameLobby {
     private final MessageBroker messageBroker;
 
     private final ScheduledExecutorService scheduler;
+    @Getter
+    private final LobbyConfig lobbyConfig;
     private ScheduledFuture<?> liveTimerTask;
     private ScheduledFuture<?> turnTimerTask;
     private int gameDuration; // TODO: Populate properly when starting
@@ -64,9 +66,8 @@ public class GameLobby {
     private GameState gameState;
     @Getter
     private boolean isPaused;
-
     @Getter
-    private final LobbyConfig lobbyConfig;
+    private boolean canceled;
 
     private ArrayList<Integer> receivedResponseList = new ArrayList<>();
 
@@ -253,6 +254,7 @@ public class GameLobby {
 //        }
 //        return true;
 //    }
+
     /**
      * Adds an observer to the lobby
      *
@@ -281,6 +283,7 @@ public class GameLobby {
             lobbyPublisher.publish(boardStateMessage);
         }
     }
+
     /**
      * Removes an observer from the lobby
      *
@@ -300,7 +303,7 @@ public class GameLobby {
     /**
      * Adds a player to the lobby with a random, suiting color
      *
-     * @param name The name of the player to add
+     * @param name     The name of the player to add
      * @param clientId The client id of the player being added
      */
     public void addPlayer(String name, int clientId) {
@@ -334,19 +337,16 @@ public class GameLobby {
     public void removePlayer(int clientId) {
         int playerOrderIndex = getPlayerId(clientId);
         switch (gameState) {
-            case STARTING:
-                lobbyConfig.removePlayerByOrderIndex(playerOrderIndex);
-                kickService.kick(lobbyConfig, clientId, id);
-                break;
             case IN_PROGRESS:
                 Player player = game.getPlayerList().get(playerOrderIndex);
                 game.removePlayerFromBoard(player);
-                game.excludeFromGame(player); // performs kick of KickService inside
-                lobbyConfig.removePlayerByOrderIndex(playerOrderIndex);
+                game.excludeFromGame(player);
                 break;
             case FINISHED:
                 return;
         }
+        lobbyConfig.removePlayerByOrderIndex(playerOrderIndex);
+        kickService.kick(lobbyConfig, clientId, id);
         // TODO: Again - there might be more to remove
         if (lobbyConfig.getPlayerOrder().getOrder().isEmpty()) {
             finishGame();
@@ -356,18 +356,17 @@ public class GameLobby {
     /**
      * Sets GameState to <code>IN_PROGRESS</code> and sends board state to all clients
      */
-    // This is how Ausrichter starts the game. Sending board states to all clients
-    public void runGame() {
+    public void runGame() { // TODO: Check that min 2 players are connected before starting
+        game = new Game(lobbyConfig, id);
         gameState = GameState.IN_PROGRESS;
-        BoardState boardState = boardStateService.generateBoardState(game, lobbyConfig.getPlayerOrder());
+        BoardState boardState = boardStateService.generateBoardState(game, lobbyConfig.getPlayerOrder()); // This is how Ausrichter starts the game. Sending board states to all clients
         String boardStateMessage = gson.toJson(boardState);
-        boolean successful = serverController.startGameForLobby(this);
-        if (successful) { // TODO: Check this, might be dumb because some client handlers might have changed states but some not
-            lobbyPublisher.publish(boardStateMessage);
-            startLiveTimer();
-        }
-        // TODO: probably needs to create game object
-        // if simulate game make random move every 3 seconds or so
+        serverController.startGameForLobby(this);
+        lobbyPublisher.publish(boardStateMessage);
+
+        game.initDeck();
+        setupNewRound();
+        startLiveTimer();
     }
 
     /**
@@ -404,7 +403,7 @@ public class GameLobby {
      * @param opponentPieceId An Integer representing the ID of the opponents figure
      */
     public synchronized void tryMove(int clientId, boolean skip, int card, int selectedValue,
-                        int pieceId, boolean isStarter, Integer opponentPieceId) {
+                                     int pieceId, boolean isStarter, Integer opponentPieceId) {
         stopTurnTimer();
         boolean isValidMove = game.tryMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
         MoveValid moveValid = new MoveValid();
@@ -417,11 +416,12 @@ public class GameLobby {
         moveValid.setOpponentPieceId(opponentPieceId);
         moveValid.setValidMove(isValidMove);
         String moveValidMessage = gson.toJson(moveValid, MoveValid.class);
-
+        //TODO check if the game over
         lobbyPublisher.publish(moveValidMessage);
 
         cleanUpAfterMove(clientId, isValidMove);
     }
+
     /**
      * Clean up game after performing a move
      *
@@ -434,12 +434,7 @@ public class GameLobby {
         } else if (!wasValidMove) {
             switch (lobbyConfig.getConsequencesForInvalidMove()) {
                 case kickFromGame:
-                    removePlayer(clientId); // remove clientId from the arraylist in the lobby
-                    Kick kick = new Kick();
-                    kick.setType(TypeGame.kick.getOrdinal());
-                    kick.setClientId(clientId);
-                    kick.setReason("illegal move");
-                    lobbyPublisher.publish(gson.toJson(kick));
+                    removePlayer(clientId);
                     break;
                 case excludeFromRound:
                     removeFromRound(clientId, player);
@@ -467,6 +462,7 @@ public class GameLobby {
         }
         startTurnTimer();
     }
+
     /**
      * Can be used internally or by Ausrichter to cancel/finish the game
      */
@@ -477,7 +473,9 @@ public class GameLobby {
         cancel.setType(TypeGame.cancel.getOrdinal());
         cancel.setWinnerOrder(game.getWinnerOrder());
         lobbyPublisher.publish(gson.toJson(cancel));
+        canceled = true;
     }
+
     private synchronized void removeFromRound(int clientId, Player player) {
         DrawCards drawCards = new DrawCards();
         drawCards.setType(TypeGame.drawCards.getOrdinal());
@@ -512,7 +510,8 @@ public class GameLobby {
         for (int playerOrderIndex = 0; playerOrderIndex < order.size(); playerOrderIndex++) {
             int playerClientId = order.get(playerOrderIndex).getClientId();
             if (playerClientId == -1) continue;
-            Player player = game.getPlayerList().get(playerOrderIndex);;
+            Player player = game.getPlayerList().get(playerOrderIndex);
+
             drawCards.setDrawnCards(player.getCardListInteger());
             String drawCardsMessage = gson.toJson(drawCards, DrawCards.class);
             messageBroker.sendMessage(ChannelType.SINGLE, playerClientId, drawCardsMessage);
@@ -625,18 +624,16 @@ public class GameLobby {
                 card = move.getCardUsed();
                 selectedValue = move.getSelectedValue();
                 //selected figure could be on bench
-                if(move.isStartMove()) {
+                if (move.isStartMove()) {
                     pieceId = game.getCurrentPlayer().getFirstOnBench().getFigureId();
-                }
-                else {
+                } else {
                     pieceId = move.getFrom().getFigure().getFigureId();
 
                 }
                 isStarter = move.isStartMove();
-                if(move.isSwapMove()) {
+                if (move.isSwapMove()) {
                     opponentPieceId = move.getTo().getFigure().getFigureId();
-                }
-                else {
+                } else {
                     opponentPieceId = -1; //dont care
                 }
 

@@ -30,8 +30,8 @@ public class UndoMove {
         Player player = move.getPlayer();
         Player opponent = null;
         if (opponentFigure != null) {
-            int opponentId = opponentFigure.getOwnerId();
-            opponent = game.getPlayerList().get(opponentId);
+            //int opponentId = opponentFigure.getClientId();
+            opponent = opponentFigure.getPlayerObjectByOwner(game);
         }
         if(to == null) {
             to = player.getStartField();
