@@ -7,7 +7,7 @@
   "Colors": [
     {"clientId": -1, "color": 0},
     {"clientId": -1, "color": 1},
-    {"clientId": -1, "color": 2},
+    {"clientId": -1, "color": 2}
   ],
   "drawCardFields": {
     "count": 3,

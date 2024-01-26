@@ -266,7 +266,7 @@ public final class Game {
         for (int i = 0; i < conf.length(); i++) {
             if (conf.charAt(i) == 's') players++;
         }
-        System.out.println(conf);
+//        System.out.println(conf);
         int fieldCount = conf.length();
 
         // System.out.println("fieldCount" + fieldCount);
@@ -289,7 +289,7 @@ public final class Game {
         for (int playerOrderIndex = 0; playerOrderIndex < playerOrder.size(); playerOrderIndex++) {
             this.playerList.add(new Player(playerOrder.get(playerOrderIndex), lobbyConfig.getFiguresPerPlayer()));
         }
-        System.out.println("players " + playerOrder.size());
+//        System.out.println("players " + playerOrder.size());
         int seenStarts = 0;
         for (int i = 0; i < conf.length(); i++) {
             int prev = ((i - 1) + conf.length()) % conf.length();

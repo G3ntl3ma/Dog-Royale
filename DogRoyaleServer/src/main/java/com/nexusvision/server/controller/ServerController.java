@@ -122,6 +122,9 @@ public class ServerController {
     public void startGameForLobby(GameLobby lobby) {
         for (int clientId : lobby.getLobbyConfig().getPlayerOrder().getClientIdList()) {
             ClientHandler handler = handlerMap.get(clientId);
+            if (handler == null) {
+                continue;
+            }
             try {
                 handler.startGame();
             } catch (ConsistencyException e) {
@@ -240,7 +243,7 @@ public class ServerController {
     }
 
     /**
-     * Gets the gamecount
+     * Gets the game count
      *
      * @return An Integer representing the count of games
      */
@@ -257,11 +260,4 @@ public class ServerController {
     public boolean clientIdRegistered(int clientId) {
         return clientMap.containsKey(clientId);
     }
-
-
-    /*
-    public SpiellogikInstanz getLobby(int lobbyID) {
-        // Gebe Spiellogik zurück
-    }
-     */
 }

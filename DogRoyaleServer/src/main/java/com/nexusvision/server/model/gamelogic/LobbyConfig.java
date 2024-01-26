@@ -55,20 +55,6 @@ public class LobbyConfig {
         maxPlayerCount = -1; // this means it isn't set yet
     }
 
-    private static String readJsonFile(String filePath) throws IOException {
-        Path path = Paths.get(filePath);
-        StringBuilder contentBuilder = new StringBuilder();
-
-        try (BufferedReader reader = Files.newBufferedReader(path)) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                contentBuilder.append(line).append("\n");
-            }
-        }
-
-        return contentBuilder.toString();
-    }
-
     public void importLobbyConfig(String gameName,
                                   int maxPlayerCount,
                                   int fieldSize,
