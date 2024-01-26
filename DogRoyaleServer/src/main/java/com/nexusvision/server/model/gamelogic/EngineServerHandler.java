@@ -184,7 +184,7 @@ public class EngineServerHandler{
         System.out.println("my turn");
         game.setPlayerToMoveId(boardState.getNextPlayer());
         
-        //TODO parse field
+        //parse field
         //set piece stuff
         for (int i = 0; i < game.getBoard().length; i++) {
             Field field = game.getBoard()[i];
@@ -244,8 +244,7 @@ public class EngineServerHandler{
         //put all unknown vars into an arraylist
         //distribute stuffs
         //handcardCounts
-        Integer lastPlayedCardInx = boardState.getLastPlayedCard();
-        Card lastPlayedCard = Card.values()[lastPlayedCardInx]; //TODO pile might not be in order
+        game.setLastCardOnPile(Card.values()[boardState.getLastPlayedCard()]);
         ArrayList<Card> unknownCardPool = new ArrayList<>();
         for (int i = 0; i < game.getPlayerList().size(); i++) {
             if(i != clientId) {
@@ -254,8 +253,6 @@ public class EngineServerHandler{
         }
         unknownCardPool.addAll(game.getDeck());
         unknownCardPool.addAll(game.getPile());
-        //remove last card from pool
-        // unknownCardPool.remove(lastPlayedCard);
         
         Collections.shuffle(unknownCardPool);
         game.setDeck(new ArrayList<Card>());
@@ -293,10 +290,10 @@ public class EngineServerHandler{
         Move move = this.ai.getMove(game, startTime);
         //TODO put this into a function ?
         MoveValid moveValid = new MoveValid();
+        moveValid.setType(TypeGame.moveValid.getOrdinal());
         if(move != null) {
             move.printMove();
             //convert to json
-            moveValid.setType(TypeGame.moveValid.getOrdinal());
             moveValid.setSkip(false);
             moveValid.setCard(move.getCardUsed().ordinal());
             moveValid.setSelectedValue(move.getSelectedValue());
@@ -315,7 +312,12 @@ public class EngineServerHandler{
             moveValid.setOpponentPieceId(opponentPieceId);
         }
         else {
-            System.out.println("move was null (unimplemented)");
+            moveValid.setSkip(true);
+            moveValid.setCard(-1);
+            moveValid.setSelectedValue(-1);
+            moveValid.setPieceId(-1);
+            moveValid.setStarter(false);
+            moveValid.setOpponentPieceId(-1);
         }
         return gson.toJson(moveValid).toString(); //return the move 3.7
     }

@@ -4,6 +4,7 @@ package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.FieldType;
+import com.nexusvision.server.model.enums.OrderType;
 import com.nexusvision.server.model.messages.game.BoardState;
 import com.nexusvision.server.model.utils.PlayerElement;
 import com.nexusvision.server.service.CardService;
@@ -286,6 +287,9 @@ public final class Game {
 
         //add players
         List<Integer> playerOrder = lobbyConfig.getPlayerOrder().getClientIdList();
+        if(lobbyConfig.getPlayerOrder().getType() == OrderType.random) { //shuffle the order randomly if random order
+            Collections.shuffle(playerOrder);
+        }
         for (int playerOrderIndex = 0; playerOrderIndex < playerOrder.size(); playerOrderIndex++) {
             this.playerList.add(new Player(playerOrder.get(playerOrderIndex), lobbyConfig.getFiguresPerPlayer()));
         }
