@@ -576,6 +576,10 @@ public class GameLobby {
 //        this.game = new Game(fieldStringBuild.toString(), figuresPerPlayer, initialCardsPerPlayer, maxTotalMoves, consequencesForInvalidMove);
     }
 
+    public void setConfiguration(String path) {
+        lobbyConfig.importLobbyConfig(path);
+    }
+
     /**
      * Checks whether responses have been received from every player and observer in the game lobby
      *

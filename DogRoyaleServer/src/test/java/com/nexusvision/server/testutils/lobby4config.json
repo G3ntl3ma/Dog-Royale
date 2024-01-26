@@ -1,0 +1,36 @@
+{
+  "type": 116,
+  "gameName": "lobby4config",
+  "maxPlayerCount": 3,
+  "fieldsize": 21,
+  "figuresPerPlayer": 5,
+  "Colors": [
+    {"clientId": -1, "color": 0},
+    {"clientId": -1, "color": 1},
+    {"clientId": -1, "color": 2},
+  ],
+  "drawCardFields": {
+    "count": 3,
+    "positions": [4,15,17]
+  },
+  "startFields": {
+    "count": 0,
+    "positions": []
+  },
+  "initialCardsPerPlayer": 3,
+  "playerOrder": {
+    "type": 0,
+    "order": [
+      {"clientId": -1, "name": ""},
+      {"clientId": -1, "name": ""},
+      {"clientId": -1, "name": ""}
+    ]
+  },
+  "winnerOrder": [],
+  "observer": [],
+  "thinkTimePerMove": 180,
+  "visualizationTimePerMove": 1,
+  "consequencesForInvalidMove": 0,
+  "maximumGameDuration": 1800,
+  "maximumTotalMoves": 1000
+}

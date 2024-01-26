@@ -30,7 +30,7 @@ class ConnectToServerHandlerTest extends HandlerTest {
         ConnectToServer request = new ConnectToServer();
         request.setType(TypeMenue.connectToServer.getOrdinal());
         request.setName("Max Mustermann");
-        // request.setIsObserver(true); TODO: Fix
+        request.setObserver(true);
 
         try {
             handler.handle(request, clientId);
@@ -38,8 +38,6 @@ class ConnectToServerHandlerTest extends HandlerTest {
 
             try {
                 ConnectedToServer connectedToServer = gson.fromJson(response, ConnectedToServer.class);
-                assertNotNull(connectedToServer.getType());
-                assertNotNull(connectedToServer.getClientId()); // In case type gets changed later
                 assertEquals(connectedToServer.getType(), TypeMenue.connectedToServer.getOrdinal());
                 assertEquals(connectedToServer.getClientId(), clientId);
             } catch (JsonSyntaxException e) {

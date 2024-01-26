@@ -29,7 +29,7 @@ public class BoardStateService {
                 BoardState.Piece piece = new BoardState.Piece();
 
                 Figure figure = player.getFigureList().get(pieceId);
-                int position = figure.getField().getFieldId();
+                int position = figure.getField() == null ? -1 : figure.getField().getFieldId();
                 boolean isOnBench = figure.isOnBench();
                 int inHousePosition = game.getHousePosition(playerOrderIndex, pieceId);
                 piece.setPieceId(pieceId);

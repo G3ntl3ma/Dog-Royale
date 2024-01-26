@@ -5,7 +5,15 @@ import com.nexusvision.server.model.enums.Penalty;
 import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
 import com.nexusvision.server.model.utils.*;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,20 +24,21 @@ import static com.nexusvision.server.model.gamelogic.EngineServerHandler.gson;
 /**
  * @author felixwr
  */
+@Log4j2
 @Getter
 public class LobbyConfig {
 
+    private final HashMap<Colors, Integer> colorMap;
+    private final PlayerOrder playerOrder;
+    private final List<WinnerOrderElement> winnerOrder;
+    private final List<ObserverElement> observerList;
     private String gameName;
     private int maxPlayerCount;
     private int fieldSize;
     private int figuresPerPlayer;
-    private final HashMap<Colors, Integer> colorMap;
     private DrawCardFields drawCardFields;
     private StartFields startFields;
     private int initialCardsPerPlayer;
-    private final PlayerOrder playerOrder;
-    private final List<WinnerOrderElement> winnerOrder;
-    private final List<ObserverElement> observerList;
     private int thinkTimePerMove;
     private int visualizationTimePerMove;
     private Penalty consequencesForInvalidMove;
@@ -44,6 +53,20 @@ public class LobbyConfig {
         winnerOrder = new ArrayList<>();
         observerList = new ArrayList<>();
         maxPlayerCount = -1; // this means it isn't set yet
+    }
+
+    private static String readJsonFile(String filePath) throws IOException {
+        Path path = Paths.get(filePath);
+        StringBuilder contentBuilder = new StringBuilder();
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                contentBuilder.append(line).append("\n");
+            }
+        }
+
+        return contentBuilder.toString();
     }
 
     public void importLobbyConfig(String gameName,
@@ -111,11 +134,25 @@ public class LobbyConfig {
                 returnLobbyConfig.getMaximumGameDuration(),
                 returnLobbyConfig.getMaximumTotalMoves()
         );
-   }
+    }
 
-   public void importLobbyConfig(String path) {
-        // TODO: Import lobby config from file
-   }
+    /**
+     * Imports the lobby config via the file from path
+     *
+     * @param filePath The path to the json file being used
+     */
+    public void importLobbyConfig(String filePath) {
+        ReturnLobbyConfig returnLobbyConfig;
+
+        try (Reader reader = new FileReader(filePath)) {
+            returnLobbyConfig = gson.fromJson(reader, ReturnLobbyConfig.class);
+        } catch (Exception e) {
+            log.error("Couldn't import lobby config: " + e.getMessage());
+            return;
+        }
+
+        importLobbyConfig(returnLobbyConfig);
+    }
 
     /**
      * TODO: Export to file
@@ -127,7 +164,7 @@ public class LobbyConfig {
     /**
      * Add the player if possible
      *
-     * @param name The name of the player
+     * @param name     The name of the player
      * @param clientId The clientId of the player
      * @return <code>true</code> if added successfully and <code>false</code> if maxPlayerCount is reached
      * or player is added already
@@ -165,7 +202,7 @@ public class LobbyConfig {
     /**
      * Adds a player with exactly the given color
      *
-     * @param color The color which the player will be added with
+     * @param color    The color which the player will be added with
      * @param clientId The clientId to add the color with
      */
     public synchronized void addColor(Colors color, int clientId) {
@@ -188,6 +225,8 @@ public class LobbyConfig {
         }
     }
 
+    // TODO: Provide a way to change the playerOrder for the Ausrichter
+
     /**
      * Returns a suited color that is not used yet
      *
@@ -206,6 +245,4 @@ public class LobbyConfig {
         }
         return null; // Should never happen
     }
-
-    // TODO: Provide a way to change the playerOrder for the Ausrichter
 }

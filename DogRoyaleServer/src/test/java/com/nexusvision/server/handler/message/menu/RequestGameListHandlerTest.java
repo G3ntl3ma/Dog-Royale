@@ -27,8 +27,8 @@ class RequestGameListHandlerTest extends HandlerTest {
         request.setType(TypeMenue.requestGameList.getOrdinal());
         request.setClientId(clientId);
         request.setGamesUpcomingCount(1);
-        request.setGamesRunningCount(2);
-        request.setGamesFinishedCount(1);
+        request.setGamesRunningCount(1);
+        request.setGamesFinishedCount(3);
 
         try {
             handler.handle(request, clientId);
@@ -36,13 +36,12 @@ class RequestGameListHandlerTest extends HandlerTest {
 
             try  {
                 ReturnGameList returnGameList = gson.fromJson(response, ReturnGameList.class);
-                assertNotNull(returnGameList.getType());
                 assertNotNull(returnGameList.getGamesUpcoming());
                 assertNotNull(returnGameList.getGamesRunning());
                 assertNotNull(returnGameList.getGamesFinished());
                 assertEquals(returnGameList.getType(), TypeMenue.returnGameList.getOrdinal());
-                assertEquals(returnGameList.getGamesUpcoming().size(), 0);
-                assertEquals(returnGameList.getGamesRunning().size(), 2);
+                assertEquals(returnGameList.getGamesUpcoming().size(), 1);
+                assertEquals(returnGameList.getGamesRunning().size(), 1);
                 assertEquals(returnGameList.getGamesFinished().size(), 1);
             } catch (JsonSyntaxException e) {
                 fail("Response string has wrong format: " + e.getMessage());
