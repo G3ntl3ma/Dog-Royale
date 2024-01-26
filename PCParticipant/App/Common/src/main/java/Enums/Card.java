@@ -15,7 +15,9 @@ public enum Card {
     oneToSeven,
     magnetCard,
     swapCard,
-    copyCard;
+    copyCard,
+    //Card for special usage, just to make it easier for me :)
+    nothingCard;
 
     public static Card ordinal(int card) {
         return Card.values()[card];

@@ -187,7 +187,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         else{
             gameId = gameList.getRunningGames().get(selectedTableview.getSelectionModel().getSelectedIndex()).getGameId();
         }
-        client.sendMessage(new JoinGameAsObserverDto(gameId, client.getClientID(), tfUsername.getText()).toJson());
+        client.sendMessage(new JoinGameAsPlayerDto(gameId, client.getClientID(), tfUsername.getText()).toJson());
     }
 
 

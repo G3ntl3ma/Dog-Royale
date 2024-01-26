@@ -222,6 +222,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
     public void setClient(Client client){
         this.client = client;
+        CardHandler.client = client;
         client.registerObserverGameplay(this);
     }
 
@@ -229,18 +230,12 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     public void initialize(URL url, ResourceBundle resourceBundle) { //TODO: Delete testing data
 
         currentPiece = new PieceImages(paneBoard);
-        CardHandler.client = client;
         // init board
         board = new Board(fieldSize, numPlayers, numPieces);
         houseBoard = new HouseBoard(numPlayers, numPieces);
         pieceHandler = new PieceHandler(board, houseBoard);
 
-        pieceHandler.pieces[0].player = 1;
-        pieceHandler.pieces[5].player = 2;
-        pieceHandler.pieces[10].player = 3;
-        pieceHandler.startPiece(0);
-        pieceHandler.startPiece(5);
-        pieceHandler.startPiece(10);
+
 
         houseBoard.calculateHouseCoordinates(pieceHandler); // recalculate, now that we have the pieceHandler
         drawBoard = new DrawBoard(paneBoard, board, pieceHandler);
@@ -634,6 +629,25 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
     @Override
     public void handleDrawCards(DrawCardsDto drawCards) {
+        Platform.runLater(() -> {
+            System.out.println("drawn Cards");
+
+            Card[] droppedCards = new Card[lobbyConfig.getInitialCardsPerPlayer()+lobbyConfig.getDrawCardFields().getCount()];
+            int count = 0;
+            for (int i : drawCards.getDroppedCards())
+            {
+                System.out.println("dropped card: " + Card.ordinal(i));
+                droppedCards[count] = Card.ordinal(i);
+                count++;
+            }
+            cardHandler.removeCards(droppedCards);
+            for (int i : drawCards.getDrawnCards())
+            {
+                cardHandler.addCard(Card.ordinal(i));
+            }
+
+            cardHandler.updateCards();
+        });
 
     }
 

@@ -16,6 +16,9 @@ import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * made to handle ur handcards
@@ -31,10 +34,15 @@ public class CardHandler {
 
     static Client client;
 
+    private List<HandCard> handCards = new ArrayList<HandCard>();
+    private List<Card> cards = new ArrayList<Card>();
     static boolean turn = false;
 
+    static Card lastRemovedCard;
+    static int lastRemovedCardIndex = -1;
+
     private static int selectedValue;
-    public Card lastPlayedCard;
+    public Card lastPlayedCard = Card.nothingCard;
     private static boolean isStarter;
 
     /**
@@ -52,7 +60,42 @@ public class CardHandler {
      */
     public void addCard(Card card)
     {
-        HandCard cardcard = new HandCard(card, 1);
+        HandCard handcard = new HandCard(card, 1);
+        handCards.add(handcard);
+        cards.add(card);
+        System.out.println("added card" + card);
+    }
+    public void removeCards(Card[] removedCards)
+    {
+
+        if (removedCards[0] != null) {
+            List<Card> removedCardsList = new ArrayList<Card>(Arrays.asList(removedCards));
+
+            if (removedCardsList.contains(lastRemovedCard) ) {
+                removedCardsList.remove(lastRemovedCard);
+                handCards.remove(lastRemovedCardIndex);
+                cards.remove(lastRemovedCardIndex);
+            }
+
+            for (Card card : removedCardsList) {
+                if(card != null) {
+                    int cardsIndex = cards.indexOf(card);
+                    System.out.println("cardsIndex: " + cardsIndex);
+                    cards.remove(card);
+                    handCards.remove(cardsIndex);
+                }
+
+            }
+        }
+    }
+
+    public void updateCards()
+    {
+        pcOCG.getHandCards().getChildren().removeAll(pcOCG.getHandCards().getChildren());
+        for (HandCard card : handCards)
+        {
+            pcOCG.getHandCards().getChildren().add(card);
+        }
     }
 
     /**
@@ -112,6 +155,8 @@ public class CardHandler {
                 }
                 else if(currentCard == this && (PieceImages.currentPiece != null ||PieceImages.selectEnemyPiece && PieceImages.selectedEnemyPiece != null) && !(this.card == Card.copyCard && lastPlayedCard == null) && turn) {
                     client.sendMessage(new MoveDto(false, currentCard.getCard(), selectedValue, PieceImages.getCurrentPieceIndex(), isStarter, PieceImages.selectedEnemyPiece.getPieceIndex()).toJson()); //TODO: test
+                    lastRemovedCard = this.card;
+                    lastRemovedCardIndex = handCards.indexOf(this);
                     layCard();
                     PieceImages.setSelectEnemyPiece(false);
                 }
@@ -131,7 +176,6 @@ public class CardHandler {
                     alert.show();
                 }
             });
-            pcOCG.getHandCards().getChildren().add(this);
             //TODO: decide whether we add error testing for illegal moves or not since they are said to punish the player so we do not have to check for them in the client but we could for some
             //TODO: for example can u use a start card on an piece thats already in game and it would be called an illegal move and u get kicked or something or would it just not be possible?
         }
