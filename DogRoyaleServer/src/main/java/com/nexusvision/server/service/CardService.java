@@ -66,14 +66,15 @@ public class CardService {
         if (range || steps == 0) moves.add(new Move(player, figure.getField(), to, false, this.usedType));
 
         while (steps != 0) {
-            // System.out.println(steps);
+            // System.out.println("steps " + steps);
             if (neg) {
                 steps++;
                 to = to.getPrev();
             } else {
                 steps--;
                 //check if move passes own startField
-                Field startField = to.getFigure().getStartFieldByOwner(game);
+                Field startField = player.getStartField();
+
                 if (startField == to) {
                     to = to.getHouse();
                 } else to = to.getNext();
@@ -146,6 +147,7 @@ public class CardService {
      */
     //move generator for card
     public void getMoves(Game game, Figure figure, ArrayList<Move> moves, Player player) { //target figure
+        // System.out.println("get moves " + this.emulatedType);
         Field to;
         switch (this.emulatedType) {
             case swapCard:
@@ -202,14 +204,12 @@ public class CardService {
                 break;
             case copyCard:
                 int inx = game.getPile().size() - 1;
-                for (int i = inx; i > 0; i--) {
-                    Card lastcard = game.getPile().get(game.getPile().size() - 1);
-                    if (lastcard != Card.copyCard) {
-                        // lastCard.getMoves(game, figure, moves);//bug, sets wrong usedCard
-                        this.emulatedType = lastcard;
-                        this.getMoves(game, figure, moves, player);
-                        break;
-                    }
+                Card lastcard = game.getLastCardOnPile();
+                if (lastcard != Card.copyCard && lastcard != null) {
+                    // lastCard.getMoves(game, figure, moves);//bug, sets wrong usedCard
+                    this.emulatedType = lastcard;
+                    this.getMoves(game, figure, moves, player);
+                    break;
                 }
                 break;
             default: //normal

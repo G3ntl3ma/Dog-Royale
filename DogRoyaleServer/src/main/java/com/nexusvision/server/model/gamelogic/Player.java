@@ -82,35 +82,47 @@ public final class Player {
     /**
      * Prints information player, figures in bank, figures in house and the cards
      */
-//    public void printInfo() {
-//        System.out.print("player " + this.playerId + " figBank " + this.figuresInBank + " figs in house " + this.figuresInHouse + " out this round " + this.outThisRound);
-//        System.out.print(" cards ");
-//        this.printCards();
-//        System.out.println("");
-//        for(Figure figure : this.figureList) {
-//            if (figure != null) {
-//                figure.print();
-//            }
-//            else {
-//                System.out.println("null field");
-//            }
-//        }
-//    }
+    public void printInfo() {
+        System.out.print("player " + this.clientId + " figBank " + this.figuresInBank + " figs in house " + this.figuresInHouse + " out this round " + this.outThisRound);
+        System.out.print(" cards ");
+        this.printCards();
+        System.out.println("");
+        for(Figure figure : this.figureList) {
+            if (figure != null) {
+                figure.print();
+            }
+            else {
+                System.out.println("null field");
+            }
+        }
+    }
 
     /**
      * Prints information about all the figures in every house
      */
-//    public void printHouse() {
-//        Field house = this.startField.getHouse();
-//        System.out.print("house: ");
-//        while (house != null) {
-//            if (!house.isEmpty()) System.out.print(house.getFigure().getOwnerId() + "-");
-//            else System.out.print("_" + "-");
-//            house = house.getNext();
-//        }
-//        System.out.println("");
-//    }
+    public void printHouse() {
+        Field house = this.startField.getHouse();
+        System.out.print("house: ");
+        while (house != null) {
+            if (!house.isEmpty()) System.out.print(house.getFigure().getClientId() + "-");
+            else System.out.print("_" + "-");
+            house = house.getNext();
+        }
+        System.out.println("");
+    }
 
+    public void incFiguresInHouse() {
+        this.figuresInHouse++;
+        int figuresInHouse2 = 0;
+        for(Figure figure : this.figureList) {
+            if(figure.isInHouse()) figuresInHouse2++;
+        }
+        if(figuresInHouse != figuresInHouse2) {
+            System.out.println("figures in house inconsistency " + figuresInHouse + " " + figuresInHouse2);
+            System.exit(42);
+        }
+    }
+    
     /**
      * Draw a card from the deck, shuffle if empty
      *
@@ -162,7 +174,7 @@ public final class Player {
         // System.out.println("this player color " + this.color);
         for (Card card : this.cardList) {
             game.getCardService().setType(card);
-            // System.out.println("card " + card);
+            // System.out.println("checking card " + card);
             if (seenCardTypes[card.ordinal()]) continue;
             seenCardTypes[card.ordinal()] = true;
             for (Figure figure : figureList) {

@@ -76,7 +76,11 @@ public class Main2 {
                 10,
                 0,
                 10000,
-                1000000);
+            1000000);
+        lobbyConfig.addPlayer("grigori perelman", 0);
+        lobbyConfig.addPlayer("mike", 1);
+        lobbyConfig.addPlayer("grigori oxlong", 2);
+        Scanner userInput = new Scanner(System.in);
         for (int i = 0; i < 2; i++) {
             System.out.println("Main2 simulate game " + i);
             Game game = new Game(lobbyConfig, 0);
@@ -88,8 +92,13 @@ public class Main2 {
             ArrayList<Integer> winners;
             int round = 0;
             while (winner == null) {
+                game.printBoard();
                 //get move
+                // System.out.println("----------input----------");
+                // String input = userInput.nextLine();
                 Move move = game.getRandomMove();
+                System.out.println("executing");
+                if(move != null)                move.printMove();
                 if(game.getCurrentPlayer().getClientId() == 0) {
                     // System.out.println("ai generated move");
                     move = ai.getMove(game, System.currentTimeMillis());
@@ -99,7 +108,6 @@ public class Main2 {
                 }
                 
                 game.makeMove(move);
-                // game.printBoard();
                 if (game.checkGameOver()) {
                     winners = game.getWinnerOrder();
                     winner = winners.get(0);
@@ -112,6 +120,7 @@ public class Main2 {
                     round++;
                 }
             }//end of game
+            game.printBoard();
             winCounter[winner]++;
             winHistory.add(winner);
             System.out.println("simulated the game, winner: " + winner);
