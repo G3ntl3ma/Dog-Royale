@@ -3,7 +3,7 @@ name: Felix Werner
 imt: felixwr
 gruppe: 01
 woche: 15
-gesamtarbeitszeit: 3h 
+gesamtarbeitszeit: 10,5h 
 ---
 
 
@@ -16,3 +16,4 @@ gesamtarbeitszeit: 3h
 ## Programmieren
 - Programmieren, Code lesen und Recherchieren
     - 2024-01-22 1,5h
+    - 2024-01-25 7,5h
