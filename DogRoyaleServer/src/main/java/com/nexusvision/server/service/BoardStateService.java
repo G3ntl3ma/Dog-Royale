@@ -53,7 +53,7 @@ public class BoardStateService {
         boardState.setDiscardPile(cardList);
 
         //get last played card
-        boardState.setLastPlayedCard(game.getLastCard().getOrdinal());
+        boardState.setLastPlayedCard(game.getLastCardOnPile().getOrdinal());
         boardState.setRound(game.getRound());
         boardState.setMoveCount(game.getMovesMade());
         boardState.setNextPlayer(game.getPlayerToMoveId());
