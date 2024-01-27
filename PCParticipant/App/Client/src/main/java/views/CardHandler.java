@@ -22,6 +22,7 @@ import java.util.List;
 
 /**
  * made to handle ur handcards
+ * author: mtwardy
  */
 public class CardHandler {
 
@@ -57,6 +58,7 @@ public class CardHandler {
 
     /**
      * Adds a Card to the Hand
+     * @param card the card that should be added
      */
     public void addCard(Card card)
     {
@@ -65,6 +67,11 @@ public class CardHandler {
         cards.add(card);
         System.out.println("added card" + card);
     }
+
+    /**
+     * Removes a Card from the Hand
+     * @param removedCards the card that should be removed
+     */
     public void removeCards(Card[] removedCards)
     {
 
@@ -89,6 +96,9 @@ public class CardHandler {
         }
     }
 
+    /**
+     * Updates the Cards in the Hand
+     */
     public void updateCards()
     {
         pcOCG.getHandCards().getChildren().removeAll(pcOCG.getHandCards().getChildren());
@@ -314,8 +324,17 @@ public class CardHandler {
             //Playing the transitions
             parallelTransition.play();
         }
+
+        /**
+         * Returns the card
+         * @return the card
+         */
         public Card getCard() { return this.card;}
 
+        /**
+         * handles different cases related to playing specific cards in a card game
+         * @param card1 Represents the type of card being played
+         */
         public void whatCard(Card card1)
         {
             Stage stage;
@@ -426,17 +445,34 @@ public class CardHandler {
 
     }
 
+    /**
+     * Sets if it is the players turn
+     * @param id An Integer representing the ID of the Client
+     */
     public void setTurnWithId(int id) {
         turn = id == client.getClientID();
     }
 
+    /**
+     * Sets the selected value
+    * @param value An Integer representing the selected value
+    */
     public static void setSelectedValue(int value){
         selectedValue = value;
     }
 
+    /**
+     * Sets the last played card
+     * @param card A Card representing the last played card
+     */
     public void setLastPlayedCard(Card card) {
     	this.lastPlayedCard = card;
     }
+
+    /**
+     * Sets if the player is the starter
+     * @param value A Boolean representing if the player is the starter
+     */
     public static void setIsStarter(boolean value){
         isStarter = value;
     }

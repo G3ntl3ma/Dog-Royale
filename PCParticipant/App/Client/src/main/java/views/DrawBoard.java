@@ -12,9 +12,11 @@ import javafx.scene.text.Text;
 
 import java.util.*;
 
-/*
-Handles drawing all the lil circles to the screen
-and choosing the correct color
+/**
+ *Handles drawing all the lil circles to the screen
+ *and choosing the correct color
+ *
+ * @author Gruppe 8
  */
 public class DrawBoard {
     public int radiusField = 11;
@@ -23,6 +25,11 @@ public class DrawBoard {
     public Color borderColor = Color.BLACK;
     private Set<Shape> houseObjects;
 
+    /**
+     * returns the color of the player
+     * @param playerIndex index of the player
+     * @return color of the player
+     */
     public Color playerColor(int playerIndex) {
         switch (playerIndex) {
             case 0:
@@ -42,11 +49,22 @@ public class DrawBoard {
         }
     }
 
+    /**
+     * returns the file path of an image associated with a player
+     * @param playerIndex index of the player
+     * @return A string containing the file path
+     */
     public String playerImagePath(int playerIndex) {
         return "pawn_" + playerIndex + ".png";
     }
 
-    /* fills paneBoard with the playing field */
+    /**
+     *  fills paneBoard with the playing field
+     *
+     * @param paneBoard Represents the JavaFX Pane where the game board is to be drawn.
+     * @param board Represents an instance of a Board class
+     * @param pieceHandler Represents an instance of a PieceHandler class
+     */
     public DrawBoard(Pane paneBoard, Board board, PieceHandler pieceHandler) {
         drawBoard(paneBoard, board);
         for (Piece piece : pieceHandler.pieces) {
@@ -58,7 +76,13 @@ public class DrawBoard {
             paneBoard.getChildren().add(piece.fieldImage);
         }
     }
-    /* fills paneBoard with the house fields */
+    /**
+     *  fills paneBoard with the house fields
+     *  and the pieces in the house
+     *  @param paneBoard Represents the JavaFX Pane where the game board is to be drawn.
+     *  @param houseBoard Represents an instance of a HouseBoard class
+     *  @param pieceHandler Represents an instance of a PieceHandler class
+     */
     public DrawBoard(Pane paneBoard, HouseBoard houseBoard, PieceHandler pieceHandler) {
         drawHouses(paneBoard, houseBoard);
         for (Piece piece : pieceHandler.pieces) {
@@ -73,6 +97,13 @@ public class DrawBoard {
             paneBoard.getChildren().add(piece.houseImage);
         }
     }
+
+    /**
+     *  fills paneBoard with the playing field
+     *
+     * @param paneBoard Represents the JavaFX Pane where the game board is to be drawn.
+     * @param board Represents an instance of a Board class
+     */
     private void drawBoard(Pane paneBoard, Board board) {
         // lines between house fields
         for (int i = 0; i < board.numPlayers; i++) {
@@ -113,6 +144,11 @@ public class DrawBoard {
         }
     }
 
+    /**
+     * fills paneBoard with the house fields
+     * @param paneBoard Represents the JavaFX Pane where the game board is to be drawn.
+     * @param houseBoard Represents an instance of a HouseBoard class
+     */
     private void drawHouses(Pane paneBoard, HouseBoard houseBoard) {
         houseObjects = new HashSet<>();
         for (int i = 0; i < houseBoard.numPlayers; i++) {
@@ -145,6 +181,12 @@ public class DrawBoard {
             }
         }
     }
+
+    /**
+     * updates the pieces on the playing field
+     * @param paneBoard Represents the JavaFX Pane where the game board is to be drawn.
+     * @param houseBoard Represents an instance of a HouseBoard class
+     */
     public void updateHouses(Pane paneBoard, HouseBoard houseBoard) {
         assert !houseObjects.isEmpty(); // DrawBoard has not been initialized
         paneBoard.getChildren().removeAll(houseObjects);
@@ -154,6 +196,13 @@ public class DrawBoard {
 
     //  ---- drawing utility ----
 
+    /**
+     * draws a line between two points
+     * @param paneBoard Represents the JavaFX Pane where the game board is to be drawn.
+     * @param start starting point of the line
+     * @param end end point of the line
+     * @return A set of shapes that represent the line
+     */
     private Set<Shape> drawLine(Pane paneBoard, int[] start, int[] end) {
         Set<Shape> shapes = new HashSet<>();
         shapes.add(new Line(start[0], start[1], end[0], end[1]));
@@ -161,6 +210,13 @@ public class DrawBoard {
         return shapes;
     }
 
+    /**
+     * draws a circle at a given position
+     * @param paneBoard Represents the JavaFX Pane where the game board is to be drawn.
+     * @param pos position of the circle
+     * @param color color of the circle
+     * @return A set of shapes that represent the circle
+     */
     private Set<Shape> drawCircle(Pane paneBoard, int[] pos, Color color) {
         Circle c1 = new Circle(pos[0],
                 pos[1],
@@ -174,6 +230,12 @@ public class DrawBoard {
         return shapes;
     }
 
+    /**
+     * draws an ellipsis at a given position
+     * @param paneBoard Represents the JavaFX Pane where the game board is to be drawn.
+     * @param pos position of the ellipsis
+     * @return A set of shapes that represent the ellipsis
+     */
     private Set<Shape> drawEllipsis(Pane paneBoard, int[] pos) {
         Set<Shape> shapes = new HashSet<>();
         int rectPosX = pos[0] - radiusField;
@@ -203,6 +265,11 @@ public class DrawBoard {
         return shapes;
     }
 
+    /**
+     * draws a card at a given position
+     * @param paneBoard Represents the JavaFX Pane where the game board is to be drawn.
+     * @param pos position of the card
+     */
     private void drawCard(Pane paneBoard, int[] pos) {
         String path = "drawcard_field.png";
         ImageView im = new ImageView(new Image(path));
@@ -213,6 +280,13 @@ public class DrawBoard {
         paneBoard.getChildren().add(im);
     }
 
+    /**
+     * draws text at a given position
+     * @param paneBoard Represents the JavaFX Pane where the game board is to be drawn.
+     * @param pos position of the text
+     * @param text text to be drawn
+     * @return A set of shapes that represent the text
+     */
     private Set<Shape> drawText(Pane paneBoard, int[] pos, String text) {
         Set<Shape> shapes = new HashSet<>();
         shapes.add(new Text(pos[0], pos[1], text));

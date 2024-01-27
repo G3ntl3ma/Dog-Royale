@@ -6,6 +6,8 @@ import java.util.Comparator;
 /**
  * Helps to keep track of the board.
  * Doesn't matter the layout.
+ *
+ * @author gruppe 8
  */
 public class Board {
     public final int fieldSize;
@@ -21,6 +23,13 @@ public class Board {
     public final int[][] fieldCoordinates;// = new int[fieldSize][2]; // for each field their coordinate onscreen
     public final int[][][] houseCoordinates;// = new int[numPlayers][numPieces][2]; // for each player, for each of the 4 house-fields, their coordinate
     public final int[] drawCardFields;
+
+    /**
+     * Constructor for Board class
+    * @param fieldSize An Integer representing the size of the field
+    * @param numPlayers An Integer representing the number of players
+    * @param numPieces An Integer representing the number of pieces
+    */
     public Board(int fieldSize, int numPlayers, int numPieces) {
         this.fieldSize = fieldSize;
         this.numPlayers = numPlayers;
@@ -70,8 +79,11 @@ public class Board {
         shiftAll(-minX, -minY);
     }
 
-    /*
+    /**
     shifts all coordinates by dx, dy
+
+     @param dx An Integer representing the amount to shift in the x direction
+     @param dy An Integer representing the amount to shift in the y direction
      */
     private void shiftAll(int dx, int dy) {
         for (int i = 0; i < fieldSize; i++) {
@@ -85,9 +97,12 @@ public class Board {
             }
         }
     }
-    /*
+    /**
     If the field index is starting pos of player j, returns j.
     Otherwise, returns -1
+
+     @param index An Integer representing an index value
+     @return An Integer representing the player whose starting position is at the given index
      */
     public int whoseStartingPosIndex(int index) {
         for (int j = 0; j < numPlayers; j++) {
@@ -97,6 +112,10 @@ public class Board {
         }
         return -1;
     }
+
+    /**
+     * Calculates the coordinates of the fields and houses.
+     */
     private void positionFields() {
         // make a wobbly circle with house-"arms"
         double radius = 3.0 * (double) fieldSize + 50.0;
@@ -124,6 +143,11 @@ public class Board {
         }
         positionFieldsNaturally();
     }
+
+    /**
+     * Calculates the coordinates of the fields and houses.
+     * Uses a physics simulation to position the fields.
+     */
     private void positionFieldsNaturally() {
         if (fieldSize > 300) {
             // Algorithm has quadratic time which is too inefficient
@@ -137,20 +161,42 @@ public class Board {
             public double y;
             public final double[] velocity;
             public final double repelStrength = 1000;
+
+            /**
+             * Returns a random double between -0.1 and 0.1
+             * @return A random double between -0.1 and 0.1
+             */
             public double random() {
                 return 0.1*(Math.random()*2-1);
             }
+
+            /**
+             * Constructor for Vertex class
+            * @param x An Integer representing the x coordinate of the vertex
+            * @param y An Integer representing the y coordinate of the vertex
+            */
             public Vertex(double x, double y) {
                 this.x = x;
                 this.y = y;
                 velocity = new double[] {0, 0};
             }
+
+            /**
+             * Updates the position of the vertex
+             */
             public void update() {
                 x += velocity[0];
                 y += velocity[1];
                 velocity[0] = 0;
                 velocity[1] = 0;
             }
+
+            /**
+             * Returns the repel force from the given vertex
+            * @param pos The vertex to repel from
+            * @param strength The strength of the repel force
+            * @return A double array representing the repel force
+            */
             private double[] getRepelFrom(Vertex pos, double strength) {
                 if (this == pos) {
                     return new double[]{0,0};
@@ -164,12 +210,26 @@ public class Board {
                 scaleToLength(posToSelf, strength);
                 return posToSelf;
             }
+
+            /**
+             * Returns the attract force to the given vertex
+             * @param pos The vertex to attract to
+             * @param strength The strength of the attract force
+             * @return A double array representing the attract force
+             */
             private double[] getAttractTo(Vertex pos, double strength) {
                 double[] posToSelf = pos.vecTo(this);
                 strength *= Math.pow(distanceBetween(new double[]{0,0}, posToSelf), 2);
                 scaleToLength(posToSelf, -strength);
                 return posToSelf;
             }
+
+            /**
+             * Adds the repel forces from the given vertex
+            * @param other The vertex to repel from
+            * @param strength The strength of the repel force
+            * @param attract Whether to attract or repel
+            */
             public void addRepelForces(Vertex other, double strength, boolean attract) {
                 double[] otherToSelf;
                 if (attract) {
@@ -182,12 +242,30 @@ public class Board {
                 other.velocity[0] -= otherToSelf[0] + random();
                 other.velocity[1] -= otherToSelf[1] + random();
             }
+
+            /**
+             * Returns the vector from this vertex to the given vertex
+            * @param dest The vertex to get the vector to
+            * @return A double array representing the vector
+            */
             public double[] vecTo(Vertex dest) {
                 return new double[] {dest.x - x, dest.y - y};
             }
+            /**
+             * Returns the distance between the two given vertices
+             * @param a The first vertex
+             * @param b The second vertex
+             * @return A double representing the distance between the two vertices
+             */
             public double distanceBetween(double[] a, double[] b) {
                 return Math.sqrt(Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2));
             }
+
+            /**
+             * Scales the given vector to the given length
+            * @param vector The vector to scale
+            * @param targetLength The length to scale to
+            */
             private void scaleToLength(double[] vector, double targetLength) {
                 double length = distanceBetween(new double[]{0,0}, vector);
                 double factor = targetLength / length;
@@ -196,14 +274,27 @@ public class Board {
             }
         }
 
+        /**
+         * Represents an edge between two vertices
+         */
         class Edge {
             public final double strength = 0.001;
             public final Vertex v1;
             public final Vertex v2;
+
+            /**
+             * Constructor for Edge class
+             * @param v1 The first vertex
+             * @param v2 The second vertex
+             */
             public Edge(Vertex v1, Vertex v2) {
                 this.v1 = v1;
                 this.v2 = v2;
             }
+
+            /**
+             * Contracts the edge
+             */
             public void contract() {
                 v1.addRepelForces(v2, strength, true);
             }
@@ -264,6 +355,13 @@ public class Board {
             }
         }
     }
+
+    /**
+     * Calculates the coordinates of the fields and houses.
+     * Uses a physics simulation to position the fields.
+     * This is a hardcoded version of positionFieldsNaturally.
+     * It is not yet implemented.
+     */
     private void positionFieldsNaturallyButHardcoded() {
         double radiusDifference = 50;
         double edgeSpacing = 30;

@@ -3,6 +3,12 @@ package views;
 import java.util.Arrays;
 import java.util.Comparator;
 
+/**
+ * This class represents the board of the game.
+ * It contains the coordinates of the houses and the ellipsis.
+ *
+ * @author gruppe 8
+ */
 public class HouseBoard {
     public final int numPlayers;
     public final int numHouses;
@@ -14,6 +20,12 @@ public class HouseBoard {
     public final boolean[] showHouse; // if no piece is there, showHouse has many false
     public int numShownHouses = 20;
     public final boolean[] isEllipsis;
+
+    /**
+     * Constructor for the HouseBoard class.
+     * @param numPlayers Number of players in the game.
+     * @param numHouses Number of houses in the game.
+     */
     public HouseBoard(int numPlayers, int numHouses) {
         this.numPlayers = numPlayers;
         this.numHouses = numHouses;
@@ -23,6 +35,11 @@ public class HouseBoard {
         isEllipsis = new boolean[numHouses];
         calculateHouseCoordinates();
     }
+
+    /**
+     * the method organizes the graphical representation of houses on a board,
+     * adjusting coordinates based on spacing and visibility conditions
+     */
     private void calculateHouseCoordinates() {
         int y = 0;
         for (int i = 0; i < numPlayers; i++) { // iterate player
@@ -42,6 +59,12 @@ public class HouseBoard {
         width = horizontalSpacing * (numHouses + 1);
         height = verticalSpacing * (numPlayers + 1);
     }
+
+    /**
+     * the method organizes the graphical representation of houses on a board,
+     * adjusting coordinates based on spacing and visibility conditions
+     * @param pieceHandler the pieceHandler to check for pieces in houses
+     */
     public void calculateHouseCoordinates(PieceHandler pieceHandler) {
         Arrays.fill(showHouse, true);
         Arrays.fill(isEllipsis, false);
