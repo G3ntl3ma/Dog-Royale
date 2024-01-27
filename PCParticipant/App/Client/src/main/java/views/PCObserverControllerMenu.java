@@ -117,8 +117,6 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
     private PCObserverControllerGameplay controller;
     private ReturnTournamentInfoDto tournamentInfo;
 
-
-
     @FXML
     public void switchToGameplay(ActionEvent event) throws IOException {
         if(client == null) {
@@ -147,6 +145,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         stageGameplay.setMinWidth(960);
         stageGameplay.setMinHeight(900);
         stageGameplay.show();
+
 
         // call stop method when stage is closed
         stageGameplay.setOnCloseRequest(windowEvent -> controller.stop());
@@ -178,6 +177,17 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         });
     }
     //////////////////////////////////////////////////////////////////////////////////////////TODO DELETE fakeGameplay Method after testing manually till here
+    public void checkBoxSwitch(){
+        cBIsObserver.setOnAction(event-> {
+            if(cBIsObserver.isSelected()) {
+                bttnObserve.setText("Beobachten");
+            }
+            else {
+                bttnObserve.setText("Teilnehmen");
+            }
+        });
+
+    }
     public void joinGameAsObserver(){
         Tab selectedTab = tPGameList.getSelectionModel().getSelectedItem();
         TableView selectedTableview = (TableView) selectedTab.getContent();
@@ -354,6 +364,8 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         tfPort.textProperty().addListener((observableValue, oldValue, newValue) -> {
             bttnConnect.setDisable(tfIP.getText().isEmpty() || tfUsername.getText().isEmpty() || tfPort.getText().isEmpty());
         });
+
+        checkBoxSwitch();
     }
 
     public void stop() {
