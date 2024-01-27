@@ -79,6 +79,7 @@ public class CardHandler {
             List<Card> removedCardsList = new ArrayList<Card>(Arrays.asList(removedCards));
 
             if (removedCardsList.contains(lastRemovedCard) ) {
+                System.out.println("last removed Card" + lastRemovedCard);
                 removedCardsList.remove(lastRemovedCard);
                 handCards.remove(lastRemovedCardIndex);
                 cards.remove(lastRemovedCardIndex);
