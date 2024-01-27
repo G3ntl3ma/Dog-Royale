@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 
@@ -171,7 +172,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
     // timer
     private Thread liveTimerThread;
-    private long liveTimer;
+    private int liveTimer;
     private Thread turnTimerThread;
     private long turnTimer;
     private boolean infoWindowState;
@@ -812,7 +813,8 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @Override
     public void handleUpdateLiveTimer(LiveTimerDto liveTimerDto) {
         liveTimer = liveTimerDto.getLiveTime();
-        Platform.runLater(() -> lbLiveTimer.setText(new SimpleDateFormat("mm:ss").format(liveTimer * 1000)));
+        String time = new SimpleDateFormat("mm:ss").format(liveTimer);
+        Platform.runLater(() -> lbLiveTimer.setText(time));
 
         if(liveTimerThread == null){
             liveTimerThread = new Thread(() -> {
