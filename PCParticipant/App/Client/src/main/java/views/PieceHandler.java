@@ -15,7 +15,7 @@ public class PieceHandler {
         // declare and fill pieces
         pieces = new Piece[numTotalPieces];
         for (int i = 0; i < numTotalPieces; i++) { //creates new Pieces here.
-            pieces[i] = new Piece();
+            pieces[i] = new Piece(i);
             pieces[i].houseImage.isOnHouse = true;
         }
     }

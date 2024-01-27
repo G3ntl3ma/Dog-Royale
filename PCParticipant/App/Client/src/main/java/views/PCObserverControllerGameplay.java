@@ -5,7 +5,6 @@ import Dog.Client.Interfaces.IClientObserverGameplay;
 import Dtos.*;
 import Dtos.CustomClasses.*;
 import Enums.Card;
-import javafx.animation.*;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
@@ -30,7 +29,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -403,7 +401,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     public void skipTurn(ActionEvent event) {
         //TODO: implement skipTurn
         System.out.println("skippeddiskippy");
-        client.sendMessage(new MoveDto(true, Card.card2, 0, 0, false, -1).toJson());
+        client.sendMessage(new MoveDto(true, Card.card2.ordinal(), 0, 0, false, -1).toJson());
     }
     /**
      * Draws a card on the handCards pane
@@ -636,14 +634,14 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
             int count = 0;
             for (int i : drawCards.getDroppedCards())
             {
-                System.out.println("dropped card: " + Card.ordinal(i));
-                droppedCards[count] = Card.ordinal(i);
+                System.out.println("dropped card: " + Card.getByOrdinal(i));
+                droppedCards[count] = Card.getByOrdinal(i);
                 count++;
             }
             cardHandler.removeCards(droppedCards);
             for (int i : drawCards.getDrawnCards())
             {
-                cardHandler.addCard(Card.ordinal(i));
+                cardHandler.addCard(Card.getByOrdinal(i));
             }
 
             cardHandler.updateCards();
@@ -747,12 +745,10 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
                     if (debugPrints) {System.out.print(" - player = "); System.out.println(playerIndex); System.out.print(" - ..having Id = "); System.out.println(playerId);};
                     if (playerId == pieceClientId) {
                         if (debugPrints) {System.out.println("  -> it's a match!");};
-                        System.out.println("PlayerPosition: " + boardStateDto.getPieces().get(i).getPosition());
-                        System.out.println("PlayerIndex: " + playerIndex);
-                        PieceHandler.pieces[i].isOnBench = pieces.get(i).isOnBench();
                         PieceHandler.pieces[i].setPlayer(playerIndex); //mtwardy: modified
                         PieceHandler.pieces[i].fieldImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
                         PieceHandler.pieces[i].houseImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
+                        PieceHandler.pieces[i].isOnBench = pieces.get(i).isOnBench();
                     }
                 }
                 if (debugPrints) {System.out.print("For the record: pieceHandler.pieces[i].player = "); System.out.println(pieceHandler.pieces[i].player);};
@@ -770,9 +766,9 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
             ArrayList<DiscardedCard> discardPile = boardStateDto.getDiscardPile();
             if(discardPile != null && !discardPile.isEmpty()){
                 ivDiscardPile.setImage(new Image(String.format("card_%d.png",discardPile.get(0).getCard())));
-                if (Card.ordinal(discardPile.get(0).getCard()) != Card.copyCard) //Saves last played Card for copy card
+                if (Card.getByOrdinal(discardPile.get(0).getCard()) != Card.copyCard) //Saves last played Card for copy card
                 {
-                    cardHandler.setLastPlayedCard(Card.ordinal(discardPile.get(0).getCard()));
+                    cardHandler.setLastPlayedCard(Card.getByOrdinal(discardPile.get(0).getCard()));
                 }
             }else{
                 ivDiscardPile.setImage(new Image("card_default.png"));

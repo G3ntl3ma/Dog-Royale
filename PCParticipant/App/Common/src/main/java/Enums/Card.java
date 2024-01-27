@@ -19,7 +19,7 @@ public enum Card {
     //Card for special usage, just to make it easier for me :)
     nothingCard;
 
-    public static Card ordinal(int card) {
+    public static Card getByOrdinal(int card) {
         return Card.values()[card];
     }
 

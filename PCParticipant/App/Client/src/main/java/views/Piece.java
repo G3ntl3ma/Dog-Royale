@@ -19,9 +19,17 @@ public class Piece {
     public final PieceImages fieldImage = new PieceImages();
     public final PieceImages houseImage = new PieceImages();
 
+
     private final Timeline fieldAnimation = new Timeline();
     private final Timeline houseAnimation = new Timeline();
     public boolean goIntoHouse = false; // whether the piece goes into its house as soon as it can
+
+
+    public Piece(int i)
+    {
+        this.fieldImage.pieceIndex = i;
+        this.houseImage.pieceIndex = i;
+    }
 
     public void setPlayer(int playerindex)
     {

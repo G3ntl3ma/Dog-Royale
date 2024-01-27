@@ -18,6 +18,7 @@ public class PieceImages extends ImageView {
 
     public boolean isOnHouse = false;
 
+
     static Pane houseBoard;
 
     static int clientPlayerIndex;

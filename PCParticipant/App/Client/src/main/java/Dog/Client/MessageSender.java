@@ -18,7 +18,7 @@ public class MessageSender {
         client.sendMessage(new RegisterForTournamentDto(tournamentId, clientId).toJson());
     }
     public void sendMove (boolean skip, Card card, int selectedValue, int pieceId, boolean isStarter, int opponentPieceId){
-        client.sendMessage(new MoveDto(skip, card, selectedValue, pieceId, isStarter, opponentPieceId).toJson());
+        client.sendMessage(new MoveDto(skip, card.ordinal(), selectedValue, pieceId, isStarter, opponentPieceId).toJson());
     }
 
 }
