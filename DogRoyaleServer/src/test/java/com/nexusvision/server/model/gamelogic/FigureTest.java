@@ -45,8 +45,7 @@ public class FigureTest {
     }
     @Test
     public void testPrint() {
-        figure.print(); // 这个测试只是确保 print 方法不会抛出异常
-    }
+        figure.print(); //is just test print mehtod is still work good
     @org.junit.jupiter.api.Test
     public void testHash() {
         // Arrange
