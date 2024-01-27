@@ -3,7 +3,7 @@ name: Abdelkarim Meziane
 imt: ameziane
 gruppe: 01
 woche: 14
-gesamtarbeitszeit: 6,00h
+gesamtarbeitszeit: 9,00h
 ---
 
 
@@ -19,3 +19,6 @@ gesamtarbeitszeit: 6,00h
 ## Implementierung
 - Client-Player implementieren
     - 2024-01-19 4,00h
+
+- Versuchen, den Observer-CLient zum Laufen zu bringen
+    - 2024-01-21 3,00h
