@@ -29,13 +29,20 @@ public final class Player {
      *
      * @param figureCount An Integer representing the amount of figures a player has
      */
-    public Player(int clientId, int figureCount) {
+    public Player(int playerOrderIndex, int clientId, int figureCount) {
         this.clientId = clientId;
         this.figuresInBank = figureCount;
         this.lastMoveCountFigureMovedIntoHouse = 0;
-        for (int i = 0; i < figureCount; i++) {
-            figureList.add(new Figure(i, clientId));
+        for (int i = 0; i < figureCount; i++) { 
+            figureList.add(new Figure(playerOrderIndex*figureCount+i, clientId));
         }
+    }
+
+    public Figure getFigure(int figureId) {
+        for(Figure figure : getFigureList()) {
+            if(figure.getFigureId() == figureId) return figure;
+        }
+        return null;
     }
 
     // public TournamentPlayer copy() {
@@ -141,6 +148,7 @@ public final class Player {
      * Prints all cards from the player
      */
     public void printCards() {
+        System.out.print("card count="+ this.cardList.size() + " ");
         for (Card card : this.cardList) {
             System.out.print(card + " ");
         }
@@ -160,11 +168,11 @@ public final class Player {
      * @return An ArrayList storing the represented moves
      */
     public ArrayList<Move> generateMoves(Game game) {
-        // System.out.print("generating moves for a player "+ this.playerId + " with the follwing handcards");
-        // for(Card card : this.getCardList()) {
-            // System.out.print(card + " ");
-        // }
-        // System.out.println("");
+        System.out.print("generating moves for a player "+ this.clientId + " with the follwing handcards");
+        for(Card card : this.getCardList()) {
+            System.out.print(card + " ");
+        }
+        System.out.println("");
         ArrayList<Move> moves = new ArrayList<>();
         boolean[] seenCardTypes = new boolean[Card.values().length];
         boolean seenBenchFigure = false;
@@ -187,7 +195,7 @@ public final class Player {
                 game.getCardService().getMoves(game, figure, moves, this);
             }
         }
-        // System.out.println("size of moves array" + moves.size());
+        System.out.println("size of moves array" + moves.size());
         return moves;
     }
 

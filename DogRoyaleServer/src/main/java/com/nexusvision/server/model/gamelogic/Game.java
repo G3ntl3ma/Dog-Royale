@@ -7,6 +7,7 @@ import com.nexusvision.server.model.enums.FieldType;
 import com.nexusvision.server.model.enums.OrderType;
 import com.nexusvision.server.model.messages.game.BoardState;
 import com.nexusvision.server.model.utils.PlayerElement;
+import com.nexusvision.server.model.utils.PlayerOrder;
 import com.nexusvision.server.service.CardService;
 import com.nexusvision.server.service.KickService;
 import lombok.Data;
@@ -246,6 +247,30 @@ public final class Game {
         Collections.shuffle(this.deck); // not deterministic
     }
 
+    public void fillWithAllCards(ArrayList<Card> deck) {
+        for (int i = 0; i < 7; i++) {
+            deck.add(Card.card2);
+            deck.add(Card.card3);
+            deck.add(Card.plusMinus4);
+            deck.add(Card.card5);
+            deck.add(Card.card6);
+            deck.add(Card.oneToSeven);
+            deck.add(Card.card8);
+            deck.add(Card.card9);
+            deck.add(Card.card10);
+            deck.add(Card.card12);
+            deck.add(Card.swapCard);
+            deck.add(Card.copyCard);
+        }
+        for (int i = 0; i < 10; i++) {
+            deck.add(Card.startCard1);
+            deck.add(Card.startCard2);
+        }
+        for (int i = 0; i < 6; i++) {
+            deck.add(Card.magnetCard);
+        }
+    }
+
     /**
      * Set up the initial game state, count the numbers of players,
      * initialize board, create fields and players,
@@ -277,14 +302,18 @@ public final class Game {
         }
 
         //add players
+        List<PlayerElement> _playerOrder = lobbyConfig.getPlayerOrder().getOrder();
+        System.out.println("playerorder " + lobbyConfig.getPlayerOrder().toString());
+        System.out.println("playerorder.getorder " + lobbyConfig.getPlayerOrder().getOrder().toString());
         List<Integer> playerOrder = lobbyConfig.getPlayerOrder().getClientIdList();
         if(lobbyConfig.getPlayerOrder().getType() == OrderType.random) { //shuffle the order randomly if random order
             Collections.shuffle(playerOrder);
         }
         for (int playerOrderIndex = 0; playerOrderIndex < playerOrder.size(); playerOrderIndex++) {
-            this.playerList.add(new Player(playerOrder.get(playerOrderIndex), lobbyConfig.getFiguresPerPlayer()));
+            this.playerList.add(new Player(playerOrderIndex, playerOrder.get(playerOrderIndex), lobbyConfig.getFiguresPerPlayer()));
         }
-//        System.out.println("players " + playerOrder.size());
+        System.out.println("playersOrder " + playerOrder.size());
+        System.out.println("_playerOrder " + _playerOrder.size());
         int seenStarts = 0;
         for (int i = 0; i < conf.length(); i++) {
             int prev = ((i - 1) + conf.length()) % conf.length();
@@ -682,5 +711,6 @@ public final class Game {
         }
         return null;
     }
+
 }
 

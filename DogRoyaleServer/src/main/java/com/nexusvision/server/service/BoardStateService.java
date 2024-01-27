@@ -8,6 +8,7 @@ import com.nexusvision.server.model.messages.game.BoardState;
 import com.nexusvision.server.model.messages.game.TypeGame;
 import com.nexusvision.server.model.utils.PlayerOrder;
 import com.nexusvision.server.model.utils.PlayerElement;
+import com.nexusvision.server.model.utils.WinnerOrderElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +59,15 @@ public class BoardStateService {
         boardState.setMoveCount(game.getMovesMade());
         boardState.setNextPlayer(game.getPlayerToMoveId());
         boardState.setGameOver(game.checkGameOver());
-        boardState.setWinnerOrder(game.getWinnerOrder());
+
+        List<WinnerOrderElement> winnerOrder = new ArrayList<>();
+        for(int clientId : game.getWinnerOrder()) {
+            WinnerOrderElement winner = new WinnerOrderElement();
+            winner.setClientId(clientId);
+            winner.setName("placeholder");
+            winner.setPoints(42);
+        }
+        boardState.setWinnerOrder(winnerOrder);
         return boardState;
     }
 }

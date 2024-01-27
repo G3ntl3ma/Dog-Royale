@@ -2,6 +2,7 @@ package com.nexusvision.server.model.messages.game;
 
 import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.messages.AbstractMessage;
+import com.nexusvision.server.model.utils.WinnerOrderElement;
 import lombok.Data;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class BoardState extends AbstractMessage {
     private int moveCount;
     private int nextPlayer;
     private boolean gameOver;
-    private List<Integer> winnerOrder;
+    private List<WinnerOrderElement> winnerOrder;
 
     @Data
     public static class Piece {

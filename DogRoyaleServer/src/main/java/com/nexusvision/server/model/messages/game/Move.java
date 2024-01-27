@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class Move extends AbstractMessage {
     private boolean skip;
-    private Card card;
+    private int card;
     private int selectedValue;
     private int pieceId;
     private boolean isStarter;

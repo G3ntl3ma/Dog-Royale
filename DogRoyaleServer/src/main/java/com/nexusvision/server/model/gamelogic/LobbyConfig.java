@@ -29,7 +29,7 @@ import static com.nexusvision.server.model.gamelogic.EngineServerHandler.gson;
 public class LobbyConfig {
 
     private final HashMap<Colors, Integer> colorMap;
-    private final PlayerOrder playerOrder;
+    private PlayerOrder playerOrder;
     private final List<WinnerOrderElement> winnerOrder;
     private final List<ObserverElement> observerList;
     private String gameName;
@@ -122,6 +122,27 @@ public class LobbyConfig {
         );
     }
 
+
+    //TODO...
+    public void importLobbyConfig2(ReturnLobbyConfig returnLobbyConfig) {
+        importLobbyConfig(
+                returnLobbyConfig.getGameName(),
+                returnLobbyConfig.getMaxPlayerCount(),
+                returnLobbyConfig.getFieldsize(),
+                returnLobbyConfig.getFiguresPerPlayer(),
+                returnLobbyConfig.getColors(),
+                returnLobbyConfig.getDrawCardFields(),
+                returnLobbyConfig.getStartFields(),
+                returnLobbyConfig.getInitialCardsPerPlayer(),
+                returnLobbyConfig.getThinkTimePerMove(),
+                returnLobbyConfig.getVisualizationTimePerMove(),
+                returnLobbyConfig.getConsequencesForInvalidMove(),
+                returnLobbyConfig.getMaximumGameDuration(),
+                returnLobbyConfig.getMaximumTotalMoves()
+        );
+        this.playerOrder = returnLobbyConfig.getPlayerOrder();
+    }
+    
     /**
      * Imports the lobby config via the file from path
      *

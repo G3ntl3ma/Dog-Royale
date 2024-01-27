@@ -33,7 +33,7 @@ public class MoveHandler extends MessageHandler<Move> {
                     TypeGame.move.getOrdinal());
         }
 
-        gameLobby.tryMove(clientId, message.isSkip(), message.getCard().ordinal(), message.getSelectedValue(), message.getPieceId(),
+        gameLobby.tryMove(clientId, message.isSkip(), message.getCard(), message.getSelectedValue(), message.getPieceId(),
                 message.isStarter(), message.getOpponentPieceId());
     }
 }
