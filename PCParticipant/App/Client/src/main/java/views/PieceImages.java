@@ -38,7 +38,6 @@ public class PieceImages extends ImageView {
      * Constructor for Piece
      */
     public PieceImages() {
-
         this.setOnMouseClicked(e -> {       //changing the clicked event
             select((int) this.getFitWidth()/3);
         });

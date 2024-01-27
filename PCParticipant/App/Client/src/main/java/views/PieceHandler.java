@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class PieceHandler {
-    public final Piece[] pieces;
+    public static Piece[] pieces;
     private final Board board;
     private final HouseBoard houseBoard;
     public final int numTotalPieces;

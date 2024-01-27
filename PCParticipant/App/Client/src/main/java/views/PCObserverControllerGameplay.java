@@ -740,20 +740,23 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
             for (int i = 0; i < pieces.size(); i++) {
                 int pieceClientId = pieces.get(i).getClientId();// alternatively: boardStateDto.getPieces().get(i).getClientId()
 
-                pieceHandler.pieces[i].player = -1;
+                PieceHandler.pieces[i].player = -1;
                 if (debugPrints) {System.out.print("piece = "); System.out.println(i); System.out.print("pieceClientId = ");System.out.println(pieceClientId);};
                 for (int playerIndex = 0; playerIndex < board.numPlayers; playerIndex++) {
                     int playerId = lobbyConfig.getPlayerOrder().getOrder().get(playerIndex).getClientId();
                     if (debugPrints) {System.out.print(" - player = "); System.out.println(playerIndex); System.out.print(" - ..having Id = "); System.out.println(playerId);};
                     if (playerId == pieceClientId) {
                         if (debugPrints) {System.out.println("  -> it's a match!");};
-                        pieceHandler.pieces[i].setPlayer(playerIndex); //mtwardy: modified
-                        pieceHandler.pieces[i].fieldImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
-                        pieceHandler.pieces[i].houseImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
+                        System.out.println("PlayerPosition: " + boardStateDto.getPieces().get(i).getPosition());
+                        System.out.println("PlayerIndex: " + playerIndex);
+                        PieceHandler.pieces[i].isOnBench = pieces.get(i).isOnBench();
+                        PieceHandler.pieces[i].setPlayer(playerIndex); //mtwardy: modified
+                        PieceHandler.pieces[i].fieldImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
+                        PieceHandler.pieces[i].houseImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
                     }
                 }
                 if (debugPrints) {System.out.print("For the record: pieceHandler.pieces[i].player = "); System.out.println(pieceHandler.pieces[i].player);};
-                if (pieceHandler.pieces[i].player == -1) {
+                if (PieceHandler.pieces[i].player == -1) {
                     throw new AssertionError("The piece with index "+Integer.toString(i)+" is supposed to be player-"+Integer.toString(pieceClientId)+"'s piece however this was not assigned during the loop over all "+Integer.toString(board.numPlayers)+" player(s)");
                 }
             }

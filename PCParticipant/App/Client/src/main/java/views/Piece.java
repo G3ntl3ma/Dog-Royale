@@ -13,6 +13,8 @@ public class Piece {
     protected boolean inHouse = false; // whether "position" means house position
     protected boolean inField = false; // whether "position" means field position
     // if both inHouse and inField are set to false, the piece is not on any board
+    public boolean isOnBench = true; // whether the piece is on the bench
+
     public int player = 0; // whose piece this is
     public final PieceImages fieldImage = new PieceImages();
     public final PieceImages houseImage = new PieceImages();

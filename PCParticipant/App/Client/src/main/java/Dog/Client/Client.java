@@ -54,6 +54,7 @@ public class Client implements IClientObservable {
      * @param message stream of String characters
      */
     public void sendMessage(String message) {
+        System.out.println(message);
         new Thread(()->{ sendMessageSync(message); }).start();
     }
 

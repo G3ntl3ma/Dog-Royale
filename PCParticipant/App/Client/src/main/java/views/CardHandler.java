@@ -131,6 +131,9 @@ public class CardHandler {
 
             //if Card is clicked
             this.setOnMouseClicked(event -> {
+                System.out.println(turn);
+                System.out.println(!(this.card == Card.copyCard && lastPlayedCard == null) + "nicht copy card");
+                System.out.println("Piece is not null" + (PieceImages.currentPiece != null));
                 //Animation for selecting a new different card (and no animation still running)
                 if(currentTranslate.getStatus() != Animation.Status.RUNNING && currentCard != this) {
 
@@ -154,10 +157,11 @@ public class CardHandler {
 
                 }
                 else if(currentCard == this && (PieceImages.currentPiece != null ||PieceImages.selectEnemyPiece && PieceImages.selectedEnemyPiece != null) && !(this.card == Card.copyCard && lastPlayedCard == null) && turn) {
-                    client.sendMessage(new MoveDto(false, currentCard.getCard(), selectedValue, PieceImages.getCurrentPieceIndex(), isStarter, PieceImages.selectedEnemyPiece.getPieceIndex()).toJson()); //TODO: test
+                    client.sendMessage(new MoveDto(false, currentCard.getCard(), selectedValue, PieceImages.getCurrentPieceIndex(), isStarter, PieceImages.getSelectedEnemyPieceId()).toJson()); //TODO: test
                     lastRemovedCard = this.card;
                     lastRemovedCardIndex = handCards.indexOf(this);
                     layCard();
+                    PieceImages.currentPiece = null;
                     PieceImages.setSelectEnemyPiece(false);
                 }
                 else {
@@ -335,7 +339,6 @@ public class CardHandler {
                     stage.setScene(scene);
                     stage.getIcons().add(icon);
                     stage.show();
-
                     break;
                 case startCard2:
                     PieceImages.setSelectEnemyPiece(false);
@@ -350,6 +353,7 @@ public class CardHandler {
                     stage.setScene(scene);
                     stage.getIcons().add(icon);
                     stage.show();
+
                     break;
                 case swapCard:
                     PieceImages.setSelectEnemyPiece(true);

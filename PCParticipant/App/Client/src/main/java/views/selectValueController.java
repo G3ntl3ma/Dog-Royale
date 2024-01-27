@@ -67,6 +67,17 @@ public class selectValueController {
     public void selectStartEvent(ActionEvent e){
         CardHandler.setSelectedValue(0);
         CardHandler.setIsStarter(true);
+        System.out.println("clientPlayerIndex: " + PieceImages.clientPlayerIndex);
+        System.out.println("PieceHandler.pieces.length: " + PieceHandler.pieces.length);
+        for (int i = 0; i < PieceHandler.pieces.length; i++)
+        {
+            if (PieceHandler.pieces[i].player == PieceImages.clientPlayerIndex && PieceHandler.pieces[i].isOnBench)
+            {
+                System.out.println("current Piece is now" + PieceHandler.pieces[i].fieldImage.getPieceIndex());
+                PieceImages.currentPiece = PieceHandler.pieces[i].fieldImage;
+                break;
+            }
+        }
         stage = (Stage)((Node)e.getSource()).getScene().getWindow();
         stage.close();
     }
