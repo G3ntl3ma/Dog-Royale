@@ -28,14 +28,14 @@ class RequestGameListHandlerTest extends HandlerTest {
 
         RequestGameList request = new RequestGameList();
         request.setType(TypeMenue.requestGameList.getOrdinal());
-        request.setClientId(clientId);
+        request.setClientId(clientId1);
         request.setGamesUpcomingCount(1);
         request.setGamesRunningCount(1);
         request.setGamesFinishedCount(3);
 
         try {
-            handler.handle(request, clientId);
-            String response = messageListener.getLastMessage();
+            handler.handle(request, clientId1);
+            String response = messageListener1.getLastMessage();
 
             try  {
                 ReturnGameList returnGameList = gson.fromJson(response, ReturnGameList.class);

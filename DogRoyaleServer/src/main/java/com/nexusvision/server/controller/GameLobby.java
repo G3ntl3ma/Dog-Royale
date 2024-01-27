@@ -305,10 +305,11 @@ public class GameLobby {
      *
      * @param name     The name of the player to add
      * @param clientId The client id of the player being added
+     * @return         True if adding the player was successful and false else
      */
-    public void addPlayer(String name, int clientId) {
+    public boolean addPlayer(String name, int clientId) {
         Colors color = lobbyConfig.findUnusedColor();
-        addPlayer(name, clientId, color);
+        return addPlayer(name, clientId, color);
     }
 
     /**
@@ -317,16 +318,14 @@ public class GameLobby {
      * @param name     The name of the player to add
      * @param clientId The client id of the player being added
      * @param color    The color of the player being added
+     * @return         True if adding the player was successful and false else
      */
-    public void addPlayer(String name, int clientId, Colors color) {
+    public boolean addPlayer(String name, int clientId, Colors color) {
         boolean successful = lobbyConfig.addPlayer(name, clientId);
-        if (!successful) { // more players added than maxPlayerCount allows or when player exists already
-            String errorMessage = String.format("Couldn't add player with name %s and clientId %d", name, clientId);
-            sendError(clientId, errorMessage);
-            return;
-        }
+        if (!successful) return false;
         lobbyConfig.addColor(color, clientId);
         messageBroker.registerSubscriber(clientId, id);
+        return true;
     }
 
     /**

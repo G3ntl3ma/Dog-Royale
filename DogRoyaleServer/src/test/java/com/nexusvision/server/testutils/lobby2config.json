@@ -1,15 +1,12 @@
 {
   "type": 116,
   "gameName": "lobby2config",
-  "maxPlayerCount": 5,
+  "maxPlayerCount": 2,
   "fieldsize": 21,
   "figuresPerPlayer": 5,
   "Colors": [
     {"clientId": -1, "color": 0},
-    {"clientId": -1, "color": 1},
-    {"clientId": -1, "color": 2},
-    {"clientId": -1, "color": 3},
-    {"clientId": -1, "color": 4}
+    {"clientId": -1, "color": 1}
   ],
   "drawCardFields": {
     "count": 3,
@@ -23,9 +20,6 @@
   "playerOrder": {
     "type": 0,
     "order": [
-      {"clientId": -1, "name": ""},
-      {"clientId": -1, "name": ""},
-      {"clientId": -1, "name": ""},
       {"clientId": -1, "name": ""},
       {"clientId": -1, "name": ""}
     ]

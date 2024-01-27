@@ -1,7 +1,7 @@
 {
   "type": 116,
   "gameName": "lobby3config",
-  "maxPlayerCount": 6,
+  "maxPlayerCount": 5,
   "fieldsize": 21,
   "figuresPerPlayer": 5,
   "Colors": [
@@ -9,8 +9,7 @@
     {"clientId": -1, "color": 1},
     {"clientId": -1, "color": 2},
     {"clientId": -1, "color": 3},
-    {"clientId": -1, "color": 4},
-    {"clientId": -1, "color": 5}
+    {"clientId": -1, "color": 4}
   ],
   "drawCardFields": {
     "count": 3,
@@ -24,7 +23,6 @@
   "playerOrder": {
     "type": 0,
     "order": [
-      {"clientId": -1, "name": ""},
       {"clientId": -1, "name": ""},
       {"clientId": -1, "name": ""},
       {"clientId": -1, "name": ""},

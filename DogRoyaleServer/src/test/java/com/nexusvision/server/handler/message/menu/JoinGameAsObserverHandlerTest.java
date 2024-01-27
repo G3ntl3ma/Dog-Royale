@@ -10,7 +10,9 @@ import com.nexusvision.server.model.messages.menu.ConnectedToGame;
 import com.nexusvision.server.model.messages.menu.JoinGameAsObserver;
 import com.nexusvision.server.model.messages.menu.ReturnGameList;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
+import com.nexusvision.server.testutils.LobbyExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -18,9 +18,12 @@ public abstract class HandlerTest {
             .create();
 
     protected static ServerController serverController;
-    protected static int clientId;
-    protected static MessageListener messageListener;
     protected static MessageBroker messageBroker;
+
+    protected static int clientId1;
+    protected static int clientId2;
+    protected static MessageListener messageListener1;
+    protected static MessageListener messageListener2;
 
     /**
      * Create <code>clientId</code> and hook it up with <code>messageListener</code>
@@ -30,8 +33,12 @@ public abstract class HandlerTest {
         serverController = ServerController.getInstance();
         messageBroker = MessageBroker.getInstance();
 
-        clientId = serverController.createNewClient();
-        messageListener = new MessageListener();
-        messageBroker.addIdentifier(clientId, messageListener);
+        clientId1 = serverController.createNewClient();
+        messageListener1 = new MessageListener();
+        messageBroker.addIdentifier(clientId1, messageListener1);
+
+        clientId2 = serverController.createNewClient();
+        messageListener2 = new MessageListener();
+        messageBroker.addIdentifier(clientId2, messageListener2);
     }
 }

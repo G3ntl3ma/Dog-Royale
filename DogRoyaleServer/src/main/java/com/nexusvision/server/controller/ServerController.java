@@ -35,8 +35,9 @@ public class ServerController {
     private final HashMap<Integer, Client> clientMap = new HashMap<>();
     private final HashMap<Integer, GameLobby> lobbyMap = new HashMap<>();
 
-    // ArrayList<Socket> clientSockets = new ArrayList<>();
     private final HashMap<Integer, ClientHandler> handlerMap = new HashMap<>();
+
+    private int clientIdCounter = 1;
 
     private ServerController() {
     }
@@ -140,11 +141,11 @@ public class ServerController {
      * @return The generated client id
      */
     public int createNewClient() {
-        Random random = new Random();
         int newClientID;
 
         do {
-            newClientID = random.nextInt(Integer.MAX_VALUE);
+            newClientID = clientIdCounter++;
+            if (clientIdCounter < 0) clientIdCounter = 1;
         } while (clientMap.containsKey(newClientID));
 
         clientMap.put(newClientID, new Client());

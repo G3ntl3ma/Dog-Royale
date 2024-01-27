@@ -296,7 +296,7 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
         log.info("Trying to handle join game as participant request");
         try {
             JoinGameAsPlayer joinGameAsPlayer = gson.fromJson(request, JoinGameAsPlayer.class);
-            new JoinGameAsParticipantHandler().handle(joinGameAsPlayer, clientID);
+            new JoinGameAsPlayerHandler().handle(joinGameAsPlayer, clientID);
             expectedState = State.WAITING_FOR_GAME_START;
             log.info("Join game as participant was successful");
         } catch (JsonSyntaxException e) {
