@@ -16,7 +16,7 @@ public class FigureTest {
     @Before
     public void setUp() {
         mockField = mock(Field.class);
-        figure = new Figure(1, 1); // 使用默认构造函数
+        figure = new Figure(1, 1);
     }
 
     @Test
@@ -46,6 +46,7 @@ public class FigureTest {
     @Test
     public void testPrint() {
         figure.print(); //is just test print mehtod is still work good
+    }
     @org.junit.jupiter.api.Test
     public void testHash() {
         // Arrange

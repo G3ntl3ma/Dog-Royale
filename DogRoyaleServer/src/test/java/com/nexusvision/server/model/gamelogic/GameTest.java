@@ -105,9 +105,9 @@ public class GameTest {
         ArrayList<Card> discardedCards = game.discardHandCards();
 
 
-        assertEquals(initialHandSize, discardedCards.size()); // 确保返回的卡片数量与初始手牌数量相同
-        assertTrue(game.getCurrentPlayer().getCardList().isEmpty()); // 确保当前玩家手牌为空
-        assertEquals(discardedCards, game.getPile()); // 确保被丢弃的卡片已添加到堆叠中
+        assertEquals(initialHandSize, discardedCards.size()); //make  sure the card number is same
+        assertTrue(game.getCurrentPlayer().getCardList().isEmpty()); // make sure the card number is 0 in playershand
+        assertEquals(discardedCards, game.getPile()); // Ensure that the discarded cards have been added to the deck.
     }
     @Test
     public void testShuffleUnknown() {

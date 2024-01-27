@@ -37,8 +37,8 @@ public class UndoMoveTest {
         when(mockMove.getPlayer()).thenReturn(mockPlayer);
         when(mockMove.getFrom()).thenReturn(mockFromField);
         when(mockMove.getTo()).thenReturn(mockToField);
-        when(mockPlayerFigure.getOwnerId()).thenReturn(0); // 假设玩家 ID 为 0
-        when(mockOpponentFigure.getOwnerId()).thenReturn(1); // 假设对手 ID 为 1
+        when(mockPlayerFigure.getOwnerId()).thenReturn(0); // assume playerId is 0
+        when(mockOpponentFigure.getOwnerId()).thenReturn(1); // assume the opponenId is 1
         ArrayList<Player> playerList = new ArrayList<>(Arrays.asList(mockPlayer, mockOpponent));
         when(mockGame.getPlayerList()).thenReturn(playerList);
 
