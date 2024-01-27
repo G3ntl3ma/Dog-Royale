@@ -139,7 +139,7 @@ public final class Move {
         Card playerDrawnCard= null;
         Card opponentDrawnCard= null;
         Card lastCardOnPile = null;
-        if(game.getPile().size() != 0) {
+        if(!game.getPile().isEmpty()) {
             lastCardOnPile= game.getLastCardOnPile();
         }
         int LastMoveCountFigureMovedIntoHouse = this.getPlayer().getLastMoveCountFigureMovedIntoHouse();

@@ -48,7 +48,6 @@ public final class Game {
     private int[] startIndexes; //indexes of startFields, unused
 
     private CardService cardService;
-    private KickService kickService;
 
     /**
      * Create game and initialize it already
@@ -68,9 +67,8 @@ public final class Game {
         this.movesMade = 0;
         this.round = 0;
         this.cardService = new CardService(null);
-        this.kickService = new KickService();
         this.drawnCards = new HashMap<>();
-        //constructing a string that can be parsed by the game
+        // constructing a string that can be parsed by the game
         String conf = buildConf();
         init(conf);
     }
@@ -88,11 +86,6 @@ public final class Game {
         }
 
         return fieldStringBuild.toString();
-    }
-
-    public void startGame() {
-        initDeck();
-        distributeCards();
     }
 
     /**

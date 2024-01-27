@@ -429,9 +429,16 @@ public class GameLobby {
      */
     private void cleanUpAfterMove(int clientId, boolean wasValidMove) {
         Player player = game.getCurrentPlayer();
-        if (wasValidMove && player.generateMoves(game).isEmpty()) { // If player has no possible moves
-            removeFromRound(clientId, player);
-        } else if (!wasValidMove) {
+        if (wasValidMove) {
+            if (player.generateMoves(game).isEmpty()) { // If player has no possible moves
+                removeFromRound(clientId, player);
+            } else {
+                Card card = game.getDrawnCards().get(clientId);
+                if (card != null){
+                    sendDrawCardFromField(clientId, card, player);
+                }
+            }
+        } else {
             switch (lobbyConfig.getConsequencesForInvalidMove()) {
                 case kickFromGame:
                     removePlayer(clientId);
@@ -461,6 +468,29 @@ public class GameLobby {
             throw new RuntimeException("Failed to keep up consistency because setting up next move failed");
         }
         startTurnTimer();
+    }
+
+    private void sendDrawCardFromField(int clientId, Card card, Player player) {
+        // 3.4
+        DrawCards drawCards = new DrawCards();
+        drawCards.setType(TypeGame.drawCards.getOrdinal());
+        drawCards.setDroppedCards(new ArrayList<>());
+        List<Integer> cardList = new ArrayList<>();
+        cardList.add(card.getOrdinal());
+        drawCards.setDrawnCards(cardList);
+        String drawCardsMessage = gson.toJson(drawCards, DrawCards.class);
+        messageBroker.sendMessage(ChannelType.SINGLE, clientId, drawCardsMessage);
+        // 3.5
+        UpdateDrawCards updateDrawCards = new UpdateDrawCards();
+        updateDrawCards.setType(TypeGame.updateDrawCards.getOrdinal());
+        List<UpdateDrawCards.HandCard> handCards = new ArrayList<>();
+        UpdateDrawCards.HandCard handCard = new UpdateDrawCards.HandCard();
+        handCard.setClientId(clientId);
+        handCard.setCount(player.getCardList().size());
+        handCards.add(handCard);
+        updateDrawCards.setHandCards(handCards);
+        String updateDrawCardsMessage = gson.toJson(updateDrawCards, UpdateDrawCards.class);
+        lobbyPublisher.publish(updateDrawCardsMessage);
     }
 
     /**
