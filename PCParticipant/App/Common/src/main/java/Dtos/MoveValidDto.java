@@ -4,8 +4,6 @@ import Enums.TypeGame;
 import com.google.gson.Gson;
 
 public class MoveValidDto extends Dto{
-
-    public final int type = TypeGame.moveValid.ordinal() + 200;
     private boolean skip;
     private int card;
     private int selectedValue;
@@ -15,6 +13,7 @@ public class MoveValidDto extends Dto{
     private boolean validMove;
 
     public MoveValidDto(boolean skip, int card, int selectedValue, int pieceId, boolean isStarter, int opponentPieceId, boolean validMove) {
+        super(TypeGame.moveValid.ordinal() + 200);
         this.skip = skip;
         this.card = card;
         this.selectedValue = selectedValue;
@@ -27,10 +26,6 @@ public class MoveValidDto extends Dto{
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
-    }
-
-    public int getType() {
-        return type;
     }
 
     public boolean isSkip() {

@@ -4,13 +4,13 @@ import Enums.TypeMenue;
 import com.google.gson.Gson;
 
 public class RequestGameListDto extends Dto {
-    public final int type = TypeMenue.requestGameList.ordinal() + 100;
     private int clientId;
     private int gamesUpcomingCount;
     private int gamesRunningCount;
     private int gamesFinishedCount;
 
     public RequestGameListDto(int id, int starting, int progress, int finished){
+        super(TypeMenue.requestGameList.ordinal() + 100);
         this.clientId = id;
         this.gamesUpcomingCount = starting;
         this.gamesRunningCount = progress;
@@ -20,10 +20,6 @@ public class RequestGameListDto extends Dto {
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
-    }
-
-    public int getType() {
-        return type;
     }
 
     public int getClientId() {

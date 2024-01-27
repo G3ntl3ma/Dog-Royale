@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 public class BoardStateDto extends Dto {
-    public final int type = TypeGame.boardState.ordinal() + 200;
     private ArrayList<PlayerPiece> pieces;
     private ArrayList<DiscardedCard> discardPile;
     private int lastPlayedCard;
@@ -22,8 +21,9 @@ public class BoardStateDto extends Dto {
     private boolean wasCanceled;
     private ArrayList<PlayerPoints> winnerOrder;
 
-    public BoardStateDto(int lastPlayedCard, ArrayList<PlayerPiece> pieces,ArrayList<DiscardedCard> discardPile,
-    int round, int moveCount, int nextPlayer, boolean gameOver, boolean wasCanceled, ArrayList<PlayerPoints> winnerOrder) {
+    public BoardStateDto(ArrayList<PlayerPiece> pieces,ArrayList<DiscardedCard> discardPile,int lastPlayedCard,
+                         int round, int moveCount, int nextPlayer, boolean gameOver, boolean wasCanceled, ArrayList<PlayerPoints> winnerOrder) {
+        super(TypeGame.boardState.ordinal() + 200);
         this.pieces = pieces;
         this.discardPile = discardPile;
         this.lastPlayedCard = lastPlayedCard;
@@ -38,10 +38,6 @@ public class BoardStateDto extends Dto {
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
-    }
-
-    public int getType() {
-        return type;
     }
 
     public ArrayList<PlayerPiece> getPieces() {

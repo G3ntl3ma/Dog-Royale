@@ -4,9 +4,9 @@ public class TournamentsRunning extends Tournament {
     // Tournament object for starting tournaments or tournaments in progress
     private int maxPlayer;
     private int maxGames;
-    private GameRunningTournament gameRunning;
+    private int gameRunning;
 
-    public TournamentsRunning(int tournamentId, int maxPlayer, int maxGames, GameRunningTournament gameRunning) {
+    public TournamentsRunning(int tournamentId, int maxPlayer, int maxGame, int gameRunning) {
         super(tournamentId);
         this.maxPlayer = maxPlayer;
         this.maxGames = maxGames;
@@ -29,11 +29,11 @@ public class TournamentsRunning extends Tournament {
         this.maxGames = maxGames;
     }
 
-    public GameRunningTournament getGameRunning() {
+    public int getGameRunning() {
         return gameRunning;
     }
 
-    public void setGameRunning(GameRunningTournament gameRunning) {
+    public void setGameRunning(int gameRunning) {
         this.gameRunning = gameRunning;
     }
 }

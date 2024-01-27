@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 public class RegisteredForTournamentDto extends Dto {
-    public final int type = TypeMenue.registeredForTournament.ordinal() + 100;
     private boolean success;
     private int tournamentId;
     private int maxPlayer;
@@ -14,6 +13,7 @@ public class RegisteredForTournamentDto extends Dto {
     private int maxGames;
 
     public RegisteredForTournamentDto(boolean success, int tournamentId, int maxPlayer, ArrayList<PlayerName> players ,int maxGames) {
+        super(TypeMenue.registeredForTournament.ordinal() + 100);
         this.success = success;
         this.tournamentId = tournamentId;
         this.maxPlayer = maxPlayer;
@@ -24,10 +24,6 @@ public class RegisteredForTournamentDto extends Dto {
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
-    }
-
-    public int getType() {
-        return type;
     }
 
     public boolean isSuccess() {

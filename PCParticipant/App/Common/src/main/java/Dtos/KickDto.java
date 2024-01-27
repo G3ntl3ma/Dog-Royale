@@ -4,12 +4,11 @@ import Enums.TypeGame;
 import com.google.gson.Gson;
 
 public class KickDto extends Dto {
-
-    public final int type = TypeGame.kick.ordinal() + 200;
     private int clientId;
     private String reason;
 
     public KickDto(int clientId, String reason) {
+        super(TypeGame.kick.ordinal() + 200);
         this.clientId = clientId;
         this.reason = reason;
     }
@@ -17,10 +16,6 @@ public class KickDto extends Dto {
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
-    }
-
-    public int getType() {
-        return type;
     }
 
     public int getClientId() {

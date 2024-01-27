@@ -1,19 +1,17 @@
 package Dtos;
 
 import Dtos.CustomClasses.*;
-import Enums.OrderType;
 import Enums.TypeMenue;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 public class ReturnLobbyConfigDto extends Dto {
-    public final int type = TypeMenue.returnLobbyConfig.ordinal() + 100;
     private String gameName;
     private int maxPlayerCount;
     private int fieldsize;
     private int figuresPerPlayer;
-    private ArrayList<PlayerColor> colors;
+    private ArrayList<PlayerColor> Colors; // yes with capital C, look at interface doc
     private Field drawCardFields;
     private Field startFields;
     private int initialCardsPerPlayer;
@@ -33,11 +31,12 @@ public class ReturnLobbyConfigDto extends Dto {
                                 Field drawCardFields, Field startFields, int initialCardsPerPlayer, PlayerOrder playerOrder, ArrayList<PlayerPoints> winnerOrder,
                                 ArrayList<PlayerName> observer, int thinkTimePerMove, int visualizationTimePerMove,
                                 int consequencesForInvalidMove, int maximumGameDuration, int maximumTotalMoves) {
+        super(TypeMenue.returnLobbyConfig.ordinal() + 100);
         this.gameName = gameName;
         this.maxPlayerCount = maxPlayerCount;
         this.fieldsize = fieldsize;
         this.figuresPerPlayer = figuresPerPlayer;
-        this.colors = colors;
+        this.Colors = colors;
         this.drawCardFields = drawCardFields;
         this.startFields = startFields;
         this.initialCardsPerPlayer = initialCardsPerPlayer;
@@ -62,10 +61,6 @@ public class ReturnLobbyConfigDto extends Dto {
 
     public void setGameName(String gameName) {
         this.gameName = gameName;
-    }
-
-    public int getType() {
-        return type;
     }
 
     public int getMaxPlayerCount() {
@@ -93,11 +88,11 @@ public class ReturnLobbyConfigDto extends Dto {
     }
 
     public ArrayList<PlayerColor> getColors() {
-        return colors;
+        return Colors;
     }
 
     public void setColors(ArrayList<PlayerColor> colors) {
-        this.colors = colors;
+        this.Colors = colors;
     }
 
     public Field getDrawCardFields() {

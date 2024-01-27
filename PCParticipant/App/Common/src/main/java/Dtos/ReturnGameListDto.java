@@ -7,15 +7,15 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 public class ReturnGameListDto extends Dto {
-    public final int type = TypeMenue.returnGameList.ordinal() + 100;
     private ArrayList<GamesProgressing> gamesUpcoming;
     private ArrayList<GamesProgressing> gamesRunning;
     private ArrayList<GamesFinished> gamesFinished;
 
-    public ReturnGameListDto(ArrayList<GamesProgressing> gamesUpcoming, ArrayList<GamesProgressing> GamesProgressing,
+    public ReturnGameListDto(ArrayList<GamesProgressing> gamesUpcoming, ArrayList<GamesProgressing> gamesRunning,
                              ArrayList<GamesFinished> gamesFinished) {
+        super(TypeMenue.returnGameList.ordinal() + 100);
         this.gamesUpcoming = gamesUpcoming;
-        this.gamesRunning = GamesProgressing;
+        this.gamesRunning = gamesRunning;
         this.gamesFinished = gamesFinished;
     }
 
@@ -36,8 +36,8 @@ public class ReturnGameListDto extends Dto {
         return gamesRunning;
     }
 
-    public void setRunningGames(ArrayList<GamesProgressing> GamesProgressings) {
-        this.gamesRunning = GamesProgressings;
+    public void setRunningGames(ArrayList<GamesProgressing> gamesRunning) {
+        this.gamesRunning = gamesRunning;
     }
 
     public ArrayList<GamesFinished> getFinishedGames() {

@@ -4,12 +4,12 @@ import Enums.TypeMenue;
 import com.google.gson.Gson;
 
 public class ReturnTechDataDto extends Dto {
-    public final int type = TypeMenue.returnTechData.ordinal() + 100;
     private String serverVersion;
     private String supportedProtocol;
     private int[] embeddedExtensions;
 
     public ReturnTechDataDto(String serverVersion, String supportedProtocol, int[] embeddedExtensions){
+        super(TypeMenue.returnTechData.ordinal() + 100);
         this.serverVersion = serverVersion;
         this.supportedProtocol = supportedProtocol;
         this.embeddedExtensions = embeddedExtensions;
@@ -18,10 +18,6 @@ public class ReturnTechDataDto extends Dto {
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
-    }
-
-    public int getType() {
-        return type;
     }
 
     public String getServerVersion() {
