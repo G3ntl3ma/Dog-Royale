@@ -321,6 +321,7 @@ public class GameLobby {
      * @return         True if adding the player was successful and false else
      */
     public boolean addPlayer(String name, int clientId, Colors color) {
+        if (gameState != GameState.STARTING) return false;
         boolean successful = lobbyConfig.addPlayer(name, clientId);
         if (!successful) return false;
         lobbyConfig.addColor(color, clientId);

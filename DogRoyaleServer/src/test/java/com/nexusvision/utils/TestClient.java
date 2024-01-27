@@ -13,13 +13,13 @@ import java.net.Socket;
  * Die Client-Applikation, die eine Verbindung zum Server herstellt und Nachrichten sendet
  * und empfängt
  */
-public class Client {
-    private static final Logger logger = LogManager.getLogger(Client.class);
+public class TestClient {
+    private static final Logger logger = LogManager.getLogger(TestClient.class);
     private static final String SERVER_ADDRESS = "127.0.0.1"; // IP-Adresse des Servers
     private static final int SERVER_PORT = 8080; // Port des Servers
 
     public static void main(String[] args) {
-        new Client().startClient();
+        new TestClient().startClient();
     }
 
     /**

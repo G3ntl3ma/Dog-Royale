@@ -7,6 +7,7 @@ import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.ClientHandler;
 import com.nexusvision.server.model.enums.Colors;
 import com.nexusvision.server.model.enums.GameState;
+import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
@@ -14,17 +15,21 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class LobbyExtension implements BeforeAllCallback {
+public class LobbyExtension implements BeforeAllCallback, AfterAllCallback {
 
-    private final static ServerController serverController = ServerController.getInstance();
-    private final static MessageBroker messageBroker = MessageBroker.getInstance();
+    private static ServerController serverController;
+    private static MessageBroker messageBroker;
     private final static int CLIENT_ID_LOBBY_1 = -101;
     private final static int CLIENT_ID_LOBBY_2 = -102;
+    private final static int CLIENT_ID_LOBBY_3 = -103;
+    private final static int CLIENT_ID_LOBBY_4 = -104;
+    private final static int CLIENT_ID_LOBBY_5 = -105;
     private final static String JSON_FILE_PATH = "src/test/java/com/nexusvision/server/testutils/";
 
     @Override
     public void beforeAll(ExtensionContext extensionContext) throws Exception {
-        ServerController serverController = ServerController.getInstance();
+        serverController = ServerController.getInstance();
+        messageBroker = MessageBroker.getInstance();
 
         int lobbyID1 = serverController.createNewLobby();
         int lobbyID2 = serverController.createNewLobby();
@@ -39,15 +44,23 @@ public class LobbyExtension implements BeforeAllCallback {
         GameLobby lobby5 = serverController.getLobbyById(lobbyID5); // FINISHED
 
         messageBroker.addIdentifier(CLIENT_ID_LOBBY_1, new MessageListener());
-        lobby1.addPlayer("clientId:" + CLIENT_ID_LOBBY_1, CLIENT_ID_LOBBY_1);
+        lobby1.addPlayer("clientId:" + CLIENT_ID_LOBBY_1, CLIENT_ID_LOBBY_1); // artificial player to find lobby
 
         lobby2.setConfiguration(JSON_FILE_PATH + "lobby2config.json");
         messageBroker.addIdentifier(CLIENT_ID_LOBBY_2, new MessageListener());
         lobby2.addPlayer("clientId:" + CLIENT_ID_LOBBY_2, CLIENT_ID_LOBBY_2);
 
-        runLobby(lobby3, "lobby3config.json", 4);
-        runLobby(lobby4, "lobby4config.json", 6);
-        runLobby(lobby5, "lobby5config.json", 3);
+        messageBroker.addIdentifier(CLIENT_ID_LOBBY_3, new MessageListener());
+        lobby3.addPlayer("clientId:" + CLIENT_ID_LOBBY_3, CLIENT_ID_LOBBY_3);
+        runLobby(lobby3, "lobby3config.json", 3);
+
+        messageBroker.addIdentifier(CLIENT_ID_LOBBY_4, new MessageListener());
+        lobby4.addPlayer("clientId:" + CLIENT_ID_LOBBY_4, CLIENT_ID_LOBBY_4);
+        runLobby(lobby4, "lobby4config.json", 5);
+
+        messageBroker.addIdentifier(CLIENT_ID_LOBBY_5, new MessageListener());
+        lobby5.addPlayer("clientId:" + CLIENT_ID_LOBBY_5, CLIENT_ID_LOBBY_5);
+        runLobby(lobby5, "lobby5config.json", 2);
         lobby5.finishGame();
     }
 
@@ -59,5 +72,11 @@ public class LobbyExtension implements BeforeAllCallback {
             lobby.addPlayer("clientId:" + clientId, clientId);
         }
         lobby.runGame();
+    }
+
+    @Override
+    public void afterAll(ExtensionContext extensionContext) throws Exception {
+        serverController = null;
+        messageBroker = null;
     }
 }

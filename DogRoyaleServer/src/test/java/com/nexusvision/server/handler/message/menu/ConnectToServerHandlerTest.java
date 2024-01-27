@@ -26,7 +26,7 @@ class ConnectToServerHandlerTest extends HandlerTest {
 
         try {
             handler.handle(request, clientId1);
-            String response = messageListener1.getLastMessage();
+            String response = messageListener1.retrieveMessage();
 
             try {
                 ConnectedToServer connectedToServer = gson.fromJson(response, ConnectedToServer.class);

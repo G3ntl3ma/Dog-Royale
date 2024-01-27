@@ -1,6 +1,7 @@
 package com.nexusvision.server.handler.message.menu;
 
 import com.google.gson.JsonSyntaxException;
+import com.nexusvision.server.common.MessageListener;
 import com.nexusvision.server.controller.GameLobby;
 import com.nexusvision.server.handler.HandlerTest;
 import com.nexusvision.server.handler.HandlingException;
@@ -17,82 +18,74 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author felixwr
  */
 @ExtendWith(LobbyExtension.class)
-public class JoinGameAsPlayerHandlerTest extends HandlerTest {
+class JoinGameAsPlayerHandlerTest extends HandlerTest {
 
     JoinGameAsPlayerHandler handler = new JoinGameAsPlayerHandler();
 
     @Test
-    public void testHandleSuccessful() {
+    void testHandleSuccessful() {
         GameLobby upcomingLobby = serverController.getLobbyOfPlayer(-101);
 
-        JoinGameAsPlayer joinGameAsPlayer = getJoinGameAsPlayerWithLobby(clientId1, upcomingLobby.getId());
+        JoinGameAsPlayer request = getJoinGameAsPlayerWithLobby(clientId1, upcomingLobby.getId());
 
-        try {
-            handler.handle(joinGameAsPlayer, clientId1);
-            String response = messageListener1.getLastMessage();
+        ConnectedToGame connectedToGame = handleAndRetrieve(request, clientId1, messageListener1);
 
-            try {
-                ConnectedToGame connectedToGame = gson.fromJson(response, ConnectedToGame.class);
-
-                assertEquals(connectedToGame.getType(), TypeMenue.connectedToGame.getOrdinal());
-                assertTrue(connectedToGame.isSuccess());
-            } catch (JsonSyntaxException e) {
-                fail("Response string has wrong format: " + e.getMessage());
-            }
-        } catch (HandlingException e) {
-            fail("Handling exception thrown during test: " + e.getMessage());
-        }
+        assertEquals(connectedToGame.getType(), TypeMenue.connectedToGame.getOrdinal());
+        assertTrue(connectedToGame.isSuccess());
+        assertTrue(upcomingLobby.getLobbyConfig().getPlayerOrder().getOrder().stream().anyMatch(
+                playerElement -> playerElement.getClientId() == clientId1
+        ));
     }
 
     @Test
-    public void testHandleWrongLobby() {
+    void testHandleWrongLobby() {
         JoinGameAsPlayer joinGameAsPlayer = getJoinGameAsPlayerWithLobby(clientId1, -1000);
 
-        try {
-            handler.handle(joinGameAsPlayer, clientId1);
-            String response = messageListener1.getLastMessage();
+        ConnectedToGame connectedToGame = handleAndRetrieve(joinGameAsPlayer, clientId1, messageListener1);
 
-            try {
-                ConnectedToGame connectedToGame = gson.fromJson(response, ConnectedToGame.class);
-
-                assertEquals(connectedToGame.getType(), TypeMenue.connectedToGame.getOrdinal());
-                assertFalse(connectedToGame.isSuccess());
-            } catch (JsonSyntaxException e) {
-                fail("Response string has wrong format: " + e.getMessage());
-            }
-        } catch (HandlingException e) {
-            fail("Handling exception thrown during test: " + e.getMessage());
-        }
+        assertEquals(connectedToGame.getType(), TypeMenue.connectedToGame.getOrdinal());
+        assertFalse(connectedToGame.isSuccess());
     }
 
     @Test
-    public void testHandleFullLobby() {
+    void testHandleFullLobby() {
         GameLobby upcomingLobby = serverController.getLobbyOfPlayer(-102); // maxPlayerCount=2 for this lobby
 
         JoinGameAsPlayer joinGameAsPlayer1 = getJoinGameAsPlayerWithLobby(clientId1, upcomingLobby.getId());
         JoinGameAsPlayer joinGameAsPlayer2 = getJoinGameAsPlayerWithLobby(clientId2, upcomingLobby.getId());
 
-        try {
-            handler.handle(joinGameAsPlayer1, clientId1);
-            handler.handle(joinGameAsPlayer2, clientId2);
-            String response1 = messageListener1.getLastMessage();
-            String response2 = messageListener2.getLastMessage();
+        ConnectedToGame connectedToGame1 = handleAndRetrieve(joinGameAsPlayer1, clientId1, messageListener1);
+        ConnectedToGame connectedToGame2 = handleAndRetrieve(joinGameAsPlayer2, clientId2, messageListener2);
 
-            try {
-                ConnectedToGame connectedToGame1 = gson.fromJson(response1, ConnectedToGame.class);
-                ConnectedToGame connectedToGame2 = gson.fromJson(response2, ConnectedToGame.class);
+        assertEquals(connectedToGame1.getType(), TypeMenue.connectedToGame.getOrdinal());
+        assertTrue(connectedToGame1.isSuccess());
 
-                assertEquals(connectedToGame1.getType(), TypeMenue.connectedToGame.getOrdinal());
-                assertTrue(connectedToGame1.isSuccess());
+        assertEquals(connectedToGame2.getType(), TypeMenue.connectedToGame.getOrdinal());
+        assertFalse(connectedToGame2.isSuccess());
+    }
 
-                assertEquals(connectedToGame2.getType(), TypeMenue.connectedToGame.getOrdinal());
-                assertFalse(connectedToGame2.isSuccess());
-            } catch (JsonSyntaxException e) {
-                fail("Response string has wrong format: " + e.getMessage());
-            }
-        } catch (HandlingException e) {
-            fail("Handling exception thrown during test: " + e.getMessage());
-        }
+    @Test
+    void testHandleRunningLobby() {
+        GameLobby runningLobby = serverController.getLobbyOfPlayer(-103);
+
+        JoinGameAsPlayer joinGameAsPlayer = getJoinGameAsPlayerWithLobby(clientId1, runningLobby.getId());
+
+        ConnectedToGame connectedToGame = handleAndRetrieve(joinGameAsPlayer, clientId1, messageListener1);
+
+        assertEquals(connectedToGame.getType(), TypeMenue.connectedToGame.getOrdinal());
+        assertFalse(connectedToGame.isSuccess());
+    }
+
+    @Test
+    void testHandleFinishedLobby() {
+        GameLobby runningLobby = serverController.getLobbyOfPlayer(-105);
+
+        JoinGameAsPlayer joinGameAsPlayer = getJoinGameAsPlayerWithLobby(clientId1, runningLobby.getId());
+
+        ConnectedToGame connectedToGame = handleAndRetrieve(joinGameAsPlayer, clientId1, messageListener1);
+
+        assertEquals(connectedToGame.getType(), TypeMenue.connectedToGame.getOrdinal());
+        assertFalse(connectedToGame.isSuccess());
     }
 
     private JoinGameAsPlayer getJoinGameAsPlayerWithLobby(int clientId, int lobbyId) {
@@ -103,5 +96,9 @@ public class JoinGameAsPlayerHandlerTest extends HandlerTest {
         joinGameAsPlayer.setPlayerName("clientId:" + clientId);
 
         return joinGameAsPlayer;
+    }
+
+    private ConnectedToGame handleAndRetrieve(JoinGameAsPlayer request, int clientId, MessageListener messageListener) {
+        return super.handleAndRetrieve(request, handler, clientId, messageListener, ConnectedToGame.class);
     }
 }

@@ -4,23 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr: Added functionality from new interface document (send draw card messages if player moved to draw card field)">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/lobby5config.json" afterDir="false" />
+    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr: Small fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/MessageBroker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/MessageBroker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/JoinGameAsParticipantHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/JoinGameAsPlayerHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/JoinGameAsObserverHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/JoinGameAsObserverHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/common/MessageListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/common/MessageListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/HandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/HandlerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/ConnectToServerHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/ConnectToServerHandlerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/JoinGameAsObserverHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/JoinGameAsObserverHandlerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/JoinGameAsParticipantHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/JoinGameAsPlayerHandlerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/JoinGameAsPlayerHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/JoinGameAsPlayerHandlerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestGameListHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestGameListHandlerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestTechDataHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestTechDataHandlerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/LobbyExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/LobbyExtension.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/lobby2config.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/lobby2config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/lobby3config.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/lobby3config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/lobby4config.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/lobby4config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/utils/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/utils/TestClient.java" afterDir="false" />
     </list>
     <list id="a985bf5a-7afc-46b3-a346-c4dc2988afa8" name="Changes by archbtw" comment="felixwr and dgehse: Rewriting and fixing (making code compilable)" />
     <option name="SHOW_DIALOG" value="false" />
@@ -59,9 +58,11 @@
     "Application.Main2.executor": "Run",
     "Application.Main3.executor": "Run",
     "JUnit.ConnectToServerHandlerTest.executor": "Run",
+    "JUnit.JoinGameAsObserverHandlerTest.executor": "Run",
     "JUnit.JoinGameAsPlayerHandlerTest.executor": "Run",
     "JUnit.RequestGameListHandlerTest.executor": "Run",
     "JUnit.RequestGameListHandlerTest.testHandle.executor": "Run",
+    "JUnit.menu in DogRoyaleServer.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -74,26 +75,11 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.JoinGameAsPlayerHandlerTest">
-    <configuration name="ConnectToServerHandlerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="DogRoyaleServer" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.nexusvision.server.handler.message.menu.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.nexusvision.server.handler.message.menu" />
-      <option name="MAIN_CLASS_NAME" value="com.nexusvision.server.handler.message.menu.ConnectToServerHandlerTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.menu in DogRoyaleServer">
     <configuration name="JoinGameAsObserverHandlerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="DogRoyaleServer" />
       <extension name="coverage">
@@ -104,6 +90,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.nexusvision.server.handler.message.menu" />
       <option name="MAIN_CLASS_NAME" value="com.nexusvision.server.handler.message.menu.JoinGameAsObserverHandlerTest" />
+      <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -134,6 +121,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.nexusvision.server.handler.message.menu" />
       <option name="MAIN_CLASS_NAME" value="com.nexusvision.server.handler.message.menu.RequestGameListHandlerTest" />
+      <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -155,13 +143,28 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="menu in DogRoyaleServer" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="DogRoyaleServer" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="JUnit.RequestGameListHandlerTest.testHandle" />
+      <item itemvalue="JUnit.menu in DogRoyaleServer" />
+      <item itemvalue="JUnit.RequestGameListHandlerTest" />
+      <item itemvalue="JUnit.JoinGameAsPlayerHandlerTest" />
+      <item itemvalue="JUnit.JoinGameAsObserverHandlerTest" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.JoinGameAsPlayerHandlerTest" />
-        <item itemvalue="JUnit.RequestGameListHandlerTest" />
-        <item itemvalue="JUnit.ConnectToServerHandlerTest" />
+        <item itemvalue="JUnit.menu in DogRoyaleServer" />
         <item itemvalue="JUnit.RequestGameListHandlerTest.testHandle" />
         <item itemvalue="JUnit.JoinGameAsObserverHandlerTest" />
+        <item itemvalue="JUnit.JoinGameAsPlayerHandlerTest" />
+        <item itemvalue="JUnit.RequestGameListHandlerTest" />
       </list>
     </recent_temporary>
   </component>
@@ -187,7 +190,7 @@
       <workItem from="1706229172606" duration="6000" />
       <workItem from="1706262189370" duration="699000" />
       <workItem from="1706279800172" duration="15915000" />
-      <workItem from="1706357480017" duration="6202000" />
+      <workItem from="1706357480017" duration="29456000" />
     </task>
     <task id="LOCAL-00001" summary="felixwr and dgehse: Rewriting and fixing (making code compilable)">
       <option name="closed" value="true" />
@@ -221,7 +224,23 @@
       <option name="project" value="LOCAL" />
       <updated>1706320441640</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="felixwr: Fixes + added tests (JoinGameAsPlayerHandlerTest)">
+      <option name="closed" value="true" />
+      <created>1706364003182</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1706364003182</updated>
+    </task>
+    <task id="LOCAL-00006" summary="felixwr: Small fix">
+      <option name="closed" value="true" />
+      <created>1706364027823</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1706364027823</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -270,6 +289,8 @@
     <MESSAGE value="felixwr: Writing tests" />
     <MESSAGE value="felixwr: hotfix" />
     <MESSAGE value="felixwr: Added functionality from new interface document (send draw card messages if player moved to draw card field)" />
-    <option name="LAST_COMMIT_MESSAGE" value="felixwr: Added functionality from new interface document (send draw card messages if player moved to draw card field)" />
+    <MESSAGE value="felixwr: Fixes + added tests (JoinGameAsPlayerHandlerTest)" />
+    <MESSAGE value="felixwr: Small fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="felixwr: Small fix" />
   </component>
 </project>

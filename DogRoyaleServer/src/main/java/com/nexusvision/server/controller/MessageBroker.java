@@ -4,10 +4,7 @@ import com.nexusvision.server.common.ChannelType;
 import com.nexusvision.server.common.Subscriber;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The message broker provides the functionality to propagate messages to subscriber by
@@ -17,8 +14,7 @@ import java.util.Map;
  */
 public class MessageBroker {
 
-    @Getter
-    private static final MessageBroker instance = new MessageBroker();
+    private static MessageBroker instance;
 
     private final Hashtable<Integer, List<Subscriber>> lobbySubLists;
     private final Hashtable<Integer, Subscriber> subIdentifier;
@@ -26,6 +22,13 @@ public class MessageBroker {
     private MessageBroker() {
         lobbySubLists = new Hashtable<>();
         subIdentifier = new Hashtable<>();
+    }
+
+    public static MessageBroker getInstance() {
+        if (instance == null) {
+            instance = new MessageBroker();
+        }
+        return instance;
     }
 
     /**
@@ -77,7 +80,7 @@ public class MessageBroker {
     public void unregisterSubscriber(int subscriberId, int channel) {
         List<Subscriber> subList = lobbySubLists.get(channel);
         Subscriber sub = subIdentifier.get(subscriberId);
-        removeSubscriber(sub, subList, channel);
+        removeSubscriberFromSubList(sub, subList, channel);
     }
 
     /**
@@ -91,23 +94,34 @@ public class MessageBroker {
     }
 
     /**
-     * Deletes the subscriber <code>target</code> completely
+     * Deletes the subscriber with id <code>subscriberId</code> completely
      *
-     * @param target The target subscriber to get deleted
+     * @param subscriberId The id of the subscriber to get deleted
      */
-    public void deleteSubscriber(Subscriber target) {
+    public void deleteSubscriber(int subscriberId) {
+        Subscriber targetSubscriber = subIdentifier.get(subscriberId);
         for (Map.Entry<Integer, List<Subscriber>> entry : lobbySubLists.entrySet()) {
             int channel = entry.getKey();
             List<Subscriber> subList = entry.getValue();
-            for (Subscriber sub : subList) {
-                if (sub == target) {
-                    removeSubscriber(sub, subList, channel);
+            deleteSubFromSubList(channel, subList, targetSubscriber);
+        }
+        subIdentifier.remove(subscriberId);
+    }
+
+    private void deleteSubFromSubList(int channel, List<Subscriber> subList, Subscriber targetSubscriber) {
+        Iterator<Subscriber> iterator = subList.iterator();
+        while (iterator.hasNext()) {
+            Subscriber sub = iterator.next();
+            if (sub == targetSubscriber) {
+                iterator.remove(); // Remove the current element via iterator
+                if (subList.isEmpty()) {
+                    lobbySubLists.remove(channel);
                 }
             }
         }
     }
 
-    private void removeSubscriber(Subscriber sub, List<Subscriber> subList, int channel) {
+    private void removeSubscriberFromSubList(Subscriber sub, List<Subscriber> subList, int channel) {
         subList.remove(sub);
         if (subList.isEmpty()) {
             lobbySubLists.remove(channel);

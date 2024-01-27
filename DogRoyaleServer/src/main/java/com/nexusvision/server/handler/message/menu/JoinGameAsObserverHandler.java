@@ -1,6 +1,8 @@
 package com.nexusvision.server.handler.message.menu;
 
+import com.nexusvision.server.common.ChannelType;
 import com.nexusvision.server.controller.GameLobby;
+import com.nexusvision.server.controller.MessageBroker;
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.handler.HandlingException;
 import com.nexusvision.server.handler.message.MessageHandler;
@@ -17,8 +19,8 @@ public class JoinGameAsObserverHandler extends MessageHandler<JoinGameAsObserver
 
     /**
      * Handles the logic for a client joining a game as an observer.
-     * It verifies the client ID, retrieves the associated game lobby, adds the client as an observer,
-     * creates a success response and returns the response
+     * It verifies the client id, retrieves the associated game lobby, adds the client as an observer
+     * and sends a success response
      *
      * @param message An Instance of the <code>JoinGameAsObserver</code> representing a client's request to join a game as an observer
      * @param clientId An Integer representing the id of the requesting client
@@ -28,8 +30,16 @@ public class JoinGameAsObserverHandler extends MessageHandler<JoinGameAsObserver
 
         verifyClientID(clientId, message.getClientId());
         ServerController serverController = ServerController.getInstance();
+        MessageBroker messageBroker = MessageBroker.getInstance();
 
         GameLobby lobby = serverController.getLobbyById(message.getGameId());
+        if (lobby == null) {
+            ConnectedToGame connectedToGame = new ConnectedToGame();
+            connectedToGame.setType(TypeMenue.connectedToGame.getOrdinal());
+            connectedToGame.setSuccess(false);
+            messageBroker.sendMessage(ChannelType.SINGLE, clientId, gson.toJson(connectedToGame));
+            return;
+        }
         lobby.addObserver(message.getClientId());
     }
 }

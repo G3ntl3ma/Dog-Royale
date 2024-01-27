@@ -27,8 +27,7 @@ import java.util.concurrent.Executors;
  */
 @Log4j2
 public class ServerController {
-    @Getter
-    private static final ServerController instance = new ServerController();
+    private static ServerController instance;
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(100);
 
@@ -40,6 +39,13 @@ public class ServerController {
     private int clientIdCounter = 1;
 
     private ServerController() {
+    }
+
+    public static ServerController getInstance() {
+        if (instance == null) { // can be set to null by test methods
+            instance = new ServerController();
+        }
+        return instance;
     }
 
     /**
