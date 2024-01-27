@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class CardHandler {
 
-    private PCObserverControllerGameplay pcOCG;
+    private final PCObserverControllerGameplay pcOCG;
 
     private HandCard currentCard;
     private HandCard previousCard;
@@ -83,7 +83,9 @@ public class CardHandler {
                 handCards.remove(lastRemovedCardIndex);
                 cards.remove(lastRemovedCardIndex);
             }
-
+            System.out.println("removedCardsList: " + removedCardsList);
+            System.out.println("cards: " + cards);
+            System.out.println("handCards: " + handCards);
             for (Card card : removedCardsList) {
                 if(card != null) {
                     int cardsIndex = cards.indexOf(card);
@@ -141,9 +143,8 @@ public class CardHandler {
 
             //if Card is clicked
             this.setOnMouseClicked(event -> {
-                System.out.println(turn);
-                System.out.println(!(this.card == Card.copyCard && lastPlayedCard == null) + "nicht copy card");
-                System.out.println("Piece is not null" + (PieceImages.currentPiece != null));
+                System.out.println(this.card + "layed");
+
                 //Animation for selecting a new different card (and no animation still running)
                 if(currentTranslate.getStatus() != Animation.Status.RUNNING && currentCard != this) {
 
@@ -230,8 +231,6 @@ public class CardHandler {
             cards2.setTranslateX(this.localToScene(0, 0).getX() - pcOCG.getPaneBoardView().localToScene(0, 0).getX());
             cards2.setTranslateY(this.localToScene(0, 0).getY() - pcOCG.getPaneBoardView().localToScene(0, 0).getY());
 
-            System.out.println("blabla" + cards2.localToScene(0,0).getX());
-
             //Animation for laying the card on the board on the board
             TranslateTransition translateBoard = new TranslateTransition();
             translateBoard.setNode(cards2);
@@ -282,7 +281,6 @@ public class CardHandler {
                 toDiscardPile2.setNode(discardCard);
                 toDiscardPile2.setToX(pcOCG.getDiscardPile().getTranslateX() + pcOCG.getDiscardPile().getFitWidth() / 2 + 2);
                 toDiscardPile2.setToY(- discardCard.getFitHeight() + 3*pcOCG.getDiscardPile().getFitHeight()/2 - 7);
-                System.out.println("discardPile y" + (- discardCard.getFitHeight() + 3*pcOCG.getDiscardPile().getFitHeight()/2 - 7));
 
                // andAnotherOne.play();
                 ScaleTransition toDiscardPileS2 = new ScaleTransition();
@@ -299,8 +297,14 @@ public class CardHandler {
                 );
 
                 parallelTransition.setOnFinished(event2 -> {
-                    pcOCG.getPaneBoardView().getChildren().remove(cards2);
-                    //pcOCG.getDiscardPane().getChildren().remove(discardCard); //TODO: as soon as message sending works, remove this directly or 500ms after message send
+                    PauseTransition pauseTransition = new PauseTransition(javafx.util.Duration.millis(pcOCG.getAnimationTime() * 1000));
+                    System.out.println("animation time: " + pcOCG.getAnimationTime());
+                    pauseTransition.setOnFinished(event3 -> {
+                        pcOCG.getPaneBoardView().getChildren().remove(cards2);
+                        pcOCG.getDiscardPane().getChildren().remove(discardCard);
+                    });
+                    pauseTransition.play();
+                    //TODO: as soon as message sending works, remove this directly or 500ms after message send
                     // TODO: send message that card was played with piece Information (might be using Piece.getCurrentPieceIndex() and this.getCard(); or might make static method/variable for that)
                 });
 
@@ -376,11 +380,6 @@ public class CardHandler {
 
                     break;
                 case swapCard:
-                    PieceImages.setSelectEnemyPiece(true);
-                    selectedValue = 0;
-                    isStarter = false;
-                    break;
-                case magnetCard:
                     PieceImages.setSelectEnemyPiece(true);
                     selectedValue = 0;
                     isStarter = false;

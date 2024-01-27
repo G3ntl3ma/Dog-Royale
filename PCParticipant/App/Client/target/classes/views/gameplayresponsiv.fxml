@@ -326,7 +326,6 @@
                      <children>
                         <Button fx:id="btnResetView" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnResetViewClicked" text="Ansicht Reset" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#leaveMatch" text="Spiel verlassen" />
-                        <Button mnemonicParsing="false" onAction="#btnaddCard" text="AddCardButtonTest" />
                      </children>
                   </VBox>
                   <CheckBox fx:id="cbFullscreen" mnemonicParsing="false" onAction="#cbFullscreenClicked" text="Vollbild" />

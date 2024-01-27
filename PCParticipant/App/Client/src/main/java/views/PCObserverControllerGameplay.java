@@ -193,6 +193,8 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @FXML
     private Pane discardPane;
 
+    public int animationTime = 1000;
+
     public HBox getHandCards() {
         return handCards;
     }
@@ -214,7 +216,9 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         return discardPane;
     }
 
-
+    public int getAnimationTime() {
+        return animationTime;
+    }
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -379,21 +383,6 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         resetView();
     }
 
-    /** TODO: DELETE  after testing manually////////////////////////////////////////////////////////////////////
-     * author: mtwardy
-     * TestButton to draw a card on the handCards pane
-     * @param event the event that triggered the method
-     */
-    @FXML // if u want to try a different card change the X in Card.cardX to one in look under Common/src/main/java/Enums/Card.java
-    public void btnaddCard(ActionEvent event) {
-        drawCard(Card.card8);
-        drawCard(Card.oneToSeven);
-        drawCard(Card.startCard1);
-        drawCard(Card.startCard2);
-        drawCard(Card.plusMinus4);
-        drawCard(Card.copyCard);
-    }
-    ///////////////////////////////////////////////////////////////////////////////////
     @FXML
     /**author: mtwardy
      * Button to skip a turn
@@ -403,15 +392,6 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         //TODO: implement skipTurn
         System.out.println("skippeddiskippy");
         client.sendMessage(new MoveDto(true, Card.card2.ordinal(), 0, 0, false, -1).toJson());
-    }
-    /**
-     * Draws a card on the handCards pane
-     * @param card the card to be drawn
-     */
-    public void drawCard(Card card)
-    {
-        cardHandler.addCard(card);
-        cardHandler.addCard(Card.card8);
     }
 
     private void zoomView(double zoomFactor){
@@ -522,6 +502,8 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
         Platform.runLater(()-> {
             this.lobbyConfig = lobbyConfig;
+            this.animationTime = lobbyConfig.getVisualizationTimePerMove();
+            System.out.println("lobby Config animatetime: " + animationTime);
             paneBoard.getChildren().clear();
             try {
                 initBoard(lobbyConfig);
