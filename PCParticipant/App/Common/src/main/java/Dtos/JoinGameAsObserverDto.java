@@ -4,11 +4,11 @@ import Enums.TypeMenue;
 import com.google.gson.Gson;
 
 public class JoinGameAsObserverDto extends Dto {
-    public final int type = TypeMenue.joinGameAsObserver.ordinal() + 100;
     private int gameId;
     private int clientId;
 
     public JoinGameAsObserverDto(int gameId,int clientId){
+        super(TypeMenue.joinGameAsObserver.ordinal() + 100);
         this.gameId = gameId;
         this.clientId = clientId;
     }
@@ -16,10 +16,6 @@ public class JoinGameAsObserverDto extends Dto {
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
-    }
-
-    public int getType() {
-        return type;
     }
 
     public int getGameId() {

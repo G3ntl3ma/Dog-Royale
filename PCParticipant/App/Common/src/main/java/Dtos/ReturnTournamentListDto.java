@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 public class ReturnTournamentListDto extends Dto {
-    public final int type = TypeMenue.returnTournamentList.ordinal() + 100;
     private int clientId;
     private ArrayList<TournamentsUpcoming> tournamentsUpcoming;
     private ArrayList<TournamentsUpcoming> tournamentsRunning;
@@ -15,6 +14,7 @@ public class ReturnTournamentListDto extends Dto {
 
     public ReturnTournamentListDto(int id, ArrayList<TournamentsUpcoming> tournamentsUpcoming,
                                    ArrayList<TournamentsUpcoming> tournamentsRunning, ArrayList<TournamentsFinished> tournamentsFinished) {
+        super(TypeMenue.returnTournamentList.ordinal() + 100);
         this.clientId = id;
         this.tournamentsUpcoming = tournamentsUpcoming;
         this.tournamentsRunning = tournamentsRunning;
@@ -24,10 +24,6 @@ public class ReturnTournamentListDto extends Dto {
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
-    }
-
-    public int getType() {
-        return type;
     }
 
     public int getClientId() {

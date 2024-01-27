@@ -78,9 +78,9 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
     @FXML
     private TableColumn<TournamentsUpcoming, Integer> tCPTMaxPlayers;
     @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCPTMaxRounds;
+    private TableColumn<TournamentsUpcoming, Integer> tCPTMaxGames;
     @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCPTCurrentRound;
+    private TableColumn<TournamentsUpcoming, Integer> tCPTCurrentPlayerCount;
     @FXML
     private TableView<TournamentsUpcoming> tVRunningTournaments;
     @FXML
@@ -88,9 +88,9 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
     @FXML
     private TableColumn<TournamentsUpcoming, Integer> tCRTMaxPlayers;
     @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCRTMaxRounds;
+    private TableColumn<TournamentsUpcoming, Integer> tCRTMaxGames;
     @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCRTCurrentRound;
+    private TableColumn<TournamentsUpcoming, Integer> tCRTCurrentPlayerCount;
     @FXML
     private TableView<TournamentsFinished> tVFinishedTournaments;
     @FXML
@@ -159,7 +159,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
             gameId = gameList.getStartingGame().get(selectedTableview.getSelectionModel().getSelectedIndex()).getGameId();
         }
         else{
-            gameId = gameList.getRunningGames().get(selectedTableview.getSelectionModel().getSelectedIndex()).getGameId();
+           gameId = gameList.getRunningGames().get(selectedTableview.getSelectionModel().getSelectedIndex()).getGameId();
         }
         client.sendMessage(new JoinGameAsPlayerDto(gameId, client.getClientID(), tfUsername.getText()).toJson());
     }
@@ -193,7 +193,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         findTournament();
     }
     public void requestTournamentInfo(int tournamentId){
-        client.sendMessage(new RequestTournamentInfoDto(client.getClientID(), tournamentId).toJson());
+         client.sendMessage(new RequestTournamentInfoDto(client.getClientID(), tournamentId).toJson());
     }
 
 
@@ -269,15 +269,16 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
             clmnNameFinished.setCellValueFactory(new PropertyValueFactory<>("gameName"));
             clmnResultsFinished.setCellValueFactory(new PropertyValueFactory<>("winnerOrder"));
             clmnWasCanceled.setCellValueFactory(new PropertyValueFactory<>("wasCanceled"));
+
             // configure table columns for tournaments
             tCPTtournamentId.setCellValueFactory(new PropertyValueFactory<>("tournamentId"));
             tCPTMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("maxPlayer"));
-            tCPTMaxRounds.setCellValueFactory(new PropertyValueFactory<>("maxRounds"));
-            tCPTCurrentRound.setCellValueFactory(new PropertyValueFactory<>("currentRound"));
+            tCPTMaxGames.setCellValueFactory(new PropertyValueFactory<>("maxGames"));
+            tCPTCurrentPlayerCount.setCellValueFactory(new PropertyValueFactory<>("currentPlayerCount"));
             tCRTtournamentId.setCellValueFactory(new PropertyValueFactory<>("tournamentId"));
             tCRTMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("maxPlayer"));
-            tCRTMaxRounds.setCellValueFactory(new PropertyValueFactory<>("maxRounds"));
-            tCRTCurrentRound.setCellValueFactory(new PropertyValueFactory<>("currentRound"));
+            tCRTMaxGames.setCellValueFactory(new PropertyValueFactory<>("maxGames"));
+            tCRTCurrentPlayerCount.setCellValueFactory(new PropertyValueFactory<>("currentPlayerCount"));
             tCFTtournamentId.setCellValueFactory(new PropertyValueFactory<>("tournamentId"));
             tCFTwinnerOrder.setCellValueFactory(new PropertyValueFactory<>("winnerOrder"));
         });

@@ -7,7 +7,7 @@ public class GamesFinished extends Games {
     private ArrayList<PlayerPoints> winnerOrder;
     private boolean wasCanceled;
 
-    public GamesFinished(int gameId, String gameName, ArrayList<PlayerPoints> winnerOrder, boolean wasCanceled) {
+    public GamesFinished(int gameId, String gameName, boolean wasCanceled, ArrayList<PlayerPoints> winnerOrder) {
         super(gameId, gameName);
         this.winnerOrder = winnerOrder;
         this.wasCanceled = wasCanceled;
