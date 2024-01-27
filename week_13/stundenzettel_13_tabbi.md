@@ -3,7 +3,7 @@ name: Abderrahmane Tabbi
 imt: tabbi
 gruppe: 01
 woche: 13
-gesamtarbeitszeit: 0h
+gesamtarbeitszeit: 9h
 ---
 
 <!--
@@ -22,4 +22,14 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
 -->
 
 # Stundenzettel des Softwaretechnikpraktikums WS 2023/24
+## Projektmanagement
+- Meeting
+  -2024-01-08 1,30h
+- online-Meeting
+  -2024-01-11 0,30h
+
+## Android Beobachter
+- neue Methoden Testen
+ -2024-01-09 3,00h
+ -2024-01-12 4,00h
 
