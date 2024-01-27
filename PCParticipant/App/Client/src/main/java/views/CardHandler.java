@@ -77,14 +77,16 @@ public class CardHandler {
 
         if (removedCards[0] != null) {
             List<Card> removedCardsList = new ArrayList<Card>(Arrays.asList(removedCards));
-
+            System.out.println("befor removedCardsList: " + removedCardsList);
+            System.out.println("cards: " + cards);
+            System.out.println("handCards: " + handCards);
             if (removedCardsList.contains(lastRemovedCard) ) {
                 System.out.println("last removed Card" + lastRemovedCard);
                 removedCardsList.remove(lastRemovedCard);
-                handCards.remove(lastRemovedCardIndex);
+                handCards.remove(lastRemovedCardIndex );
                 cards.remove(lastRemovedCardIndex);
             }
-            System.out.println("removedCardsList: " + removedCardsList);
+            System.out.println("after removedCardsList: " + removedCardsList);
             System.out.println("cards: " + cards);
             System.out.println("handCards: " + handCards);
             for (Card card : removedCardsList) {
@@ -351,6 +353,7 @@ public class CardHandler {
             switch(card1)
             {
                 case startCard1:
+
                     PieceImages.setSelectEnemyPiece(false);
 
                     stage = new Stage();

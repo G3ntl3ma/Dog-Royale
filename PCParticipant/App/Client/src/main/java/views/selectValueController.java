@@ -65,6 +65,9 @@ public class selectValueController {
         stage.close();
     }
     public void selectStartEvent(ActionEvent e){
+        if (PieceImages.currentPiece != null) {
+            PieceImages.currentPiece.deselect();
+        }
         CardHandler.setSelectedValue(0);
         CardHandler.setIsStarter(true);
         System.out.println("clientPlayerIndex: " + PieceImages.clientPlayerIndex);
