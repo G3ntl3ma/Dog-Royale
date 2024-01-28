@@ -21,12 +21,6 @@ public class PieceHandler {
 
     /*
     For this piece, if anything is not right, it gets updated accordingly.
-    For positionInHouse, read the documented conversation of two developers/magicians which
-    also encaptures our feelings about the subject:
-     - legends say the positionInHouse reads 0 if the piece is not in the house,
-       and if it is >0, it represents the index (starting at 1) from the last house place...
-       I'm not gonna question it, only implement it
-     - yooooooo, wtf?!
      */
     public void assertPieceState(int pieceIndex, boolean onBench, int positionInField, int positionInHouse) {
         Piece piece = pieces[pieceIndex];
@@ -64,15 +58,15 @@ public class PieceHandler {
                 piece.fieldImage.setVisible(false);
                 piece.inHouse = true;
                 piece.houseImage.setVisible(true);
-                piece.position = houseBoard.numHouses - positionInHouse;
+                piece.position = positionInHouse;
                 if (piece.position < board.numHouses) {
                     piece.animateField(new int[][]{board.houseCoordinates[piece.player][piece.position]});
                 }
                 piece.animateHouse(new int[][]{houseBoard.houseCoordinates[piece.player][piece.position]});
                 throw new AssertionError("piece " + pieceIndex + " belongs in house, but wasn't");
             }
-            if (piece.position != houseBoard.numHouses - positionInHouse) {
-                piece.position = houseBoard.numHouses - positionInHouse;
+            if (piece.position != positionInHouse) {
+                piece.position = positionInHouse;
                 if (piece.position < board.numHouses) {
                     piece.animateField(new int[][]{board.houseCoordinates[piece.player][piece.position]});
                 }
@@ -114,6 +108,7 @@ public class PieceHandler {
                 piece.moveToHouse(newPos);
             } else {
                 // piece simply walks in the fields
+                newPos = Math.floorMod(newPos, board.fieldSize);
                 piece.moveTo(newPos);
                 piece.animateField(fieldCoordsFromTo(oldPos, newPos));
                 piece.goIntoHouse = true;

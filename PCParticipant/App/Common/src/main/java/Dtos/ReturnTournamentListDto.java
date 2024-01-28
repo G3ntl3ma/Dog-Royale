@@ -1,6 +1,7 @@
 package Dtos;
 
 import Dtos.CustomClasses.TournamentsFinished;
+import Dtos.CustomClasses.TournamentsRunning;
 import Dtos.CustomClasses.TournamentsUpcoming;
 import Enums.TypeMenue;
 import com.google.gson.Gson;
@@ -9,11 +10,11 @@ import java.util.ArrayList;
 public class ReturnTournamentListDto extends Dto {
     private int clientId;
     private ArrayList<TournamentsUpcoming> tournamentsUpcoming;
-    private ArrayList<TournamentsUpcoming> tournamentsRunning;
+    private ArrayList<TournamentsRunning> tournamentsRunning;
     private ArrayList<TournamentsFinished> tournamentsFinished;
 
     public ReturnTournamentListDto(int id, ArrayList<TournamentsUpcoming> tournamentsUpcoming,
-                                   ArrayList<TournamentsUpcoming> tournamentsRunning, ArrayList<TournamentsFinished> tournamentsFinished) {
+                                   ArrayList<TournamentsRunning> tournamentsRunning, ArrayList<TournamentsFinished> tournamentsFinished) {
         super(TypeMenue.returnTournamentList.ordinal() + 100);
         this.clientId = id;
         this.tournamentsUpcoming = tournamentsUpcoming;
@@ -42,11 +43,11 @@ public class ReturnTournamentListDto extends Dto {
         this.tournamentsUpcoming = tournamentsUpcoming;
     }
 
-    public ArrayList<TournamentsUpcoming> getTournamentsRunning() {
+    public ArrayList<TournamentsRunning> getTournamentsRunning() {
         return tournamentsRunning;
     }
 
-    public void setTournamentsRunning(ArrayList<TournamentsUpcoming> tournamentsRunning) {
+    public void setTournamentsRunning(ArrayList<TournamentsRunning> tournamentsRunning) {
         this.tournamentsRunning = tournamentsRunning;
     }
 
