@@ -191,68 +191,6 @@ public class GameLobby {
     }
 
     /**
-     * Receives and tracks responses from client
-     *
-     * @param clientId An Integer representing the Id of the client
-     */
-    public void receiveResponse(int clientId) {
-        for (Integer receivedResponse : this.receivedResponseList) {
-            if (clientId == receivedResponse) return;
-        }
-        this.receivedResponseList.add(clientId);
-    }
-
-    /**
-     * Resets List of received responses
-     */
-    public void resetResponseList() {
-        this.receivedResponseList = new ArrayList<>();
-    }
-
-    /**
-     * Checks if it is the turn of the player with a certain clientId
-     *
-     * @param clientId An Integer representing the ID of the player to check if it is their turn
-     * @return A Boolean true if it's the player's turn otherwise false
-     */
-    public boolean checkPlayerTurn(int clientId) {
-        int playerId = getPlayerId(clientId);
-        if (playerId != -1) {
-            return game.getPlayerToMoveId() == playerId;
-        }
-        //client not a player
-        return false;
-    }
-
-    //check if playerOrderList + observerList is subset of received responses
-
-//    public boolean receivedFromEveryone() {
-//        for (int idToFind : playerOrderList) {
-//            //check if this id is in the list of responses
-//            boolean found = false;
-//            for (Integer receivedResponse : receivedResponseList) {
-//                if (receivedResponse == idToFind) {
-//                    found = true;
-//                    break;
-//                }
-//            }
-//            if (!found) return false;
-//        }
-//        for (int idToFind : observerList) {
-//            //check if this id is in the list of responses
-//            boolean found = false;
-//            for (Integer integer : receivedResponseList) {
-//                if (integer == idToFind) {
-//                    found = true;
-//                    break;
-//                }
-//            }
-//            if (!found) return false;
-//        }
-//        return true;
-//    }
-
-    /**
      * Adds an observer to the lobby
      *
      * @param clientId The client id of the observer being added
@@ -353,7 +291,7 @@ public class GameLobby {
     /**
      * Sets GameState to <code>IN_PROGRESS</code> and sends board state to all clients
      */
-    public void runGame() { // TODO: Check that min 2 players are connected before starting
+    public void runGame() {
         game = new Game(lobbyConfig, id);
         gameState = GameState.RUNNING;
         BoardState boardState = boardStateService.generateBoardState(game, lobbyConfig.getPlayerOrder()); // This is how Ausrichter starts the game. Sending board states to all clients
@@ -634,77 +572,5 @@ public class GameLobby {
 
     private Integer getClientToMoveId() {
         return getClientId(game.getPlayerToMoveId());
-    }
-
-    private void sendError(int clientId, String errorMessage) {
-        log.error(errorMessage);
-        Error error = new Error();
-        error.setType(TypeMenue.error.getOrdinal());
-        error.setMessage(errorMessage);
-        String response = gson.toJson(error, Error.class);
-        messageBroker.sendMessage(ChannelType.SINGLE, clientId, response);
-    }
-
-    private void randomMoveMatch() {
-        for (int i = 0; i < lobbyConfig.getMaxPlayerCount(); i++) {
-            //clientId = playerId
-            lobbyConfig.addPlayer("test", i);
-            lobbyConfig.addColor(Colors.values()[i], i);
-        }
-        while (true) {
-            stopTurnTimer();
-            Move move = game.getRandomMove();
-            boolean skip = true;
-            Card card = null;
-            int selectedValue = 0;
-            int pieceId = 0;
-            boolean isStarter = false;
-            int opponentPieceId = 0;
-            int fakeClientId = 1; // game.getCurrentPlayer().getPlayerId(); TODO: I commented because playerId doesn't exist anymore
-
-            if (move != null) {
-                skip = false;
-                card = move.getCardUsed();
-                selectedValue = move.getSelectedValue();
-                //selected figure could be on bench
-                if (move.isStartMove()) {
-                    pieceId = game.getCurrentPlayer().getFirstOnBench().getFigureId();
-                } else {
-                    pieceId = move.getFrom().getFigure().getFigureId();
-
-                }
-                isStarter = move.isStartMove();
-                if (move.isSwapMove()) {
-                    opponentPieceId = move.getTo().getFigure().getFigureId();
-                } else {
-                    opponentPieceId = -1; //dont care
-                }
-
-            }
-            move.execute(game);
-
-            MoveValid moveValid = new MoveValid();
-
-            moveValid.setType(TypeGame.moveValid.getOrdinal());
-            moveValid.setSkip(skip);
-            moveValid.setCard(card.ordinal());
-            moveValid.setSelectedValue(selectedValue);
-            moveValid.setPieceId(pieceId);
-            moveValid.setStarter(isStarter);
-            moveValid.setOpponentPieceId(opponentPieceId);
-            moveValid.setValidMove(true);
-
-            String moveValidMessage = gson.toJson(moveValid, MoveValid.class);
-
-            lobbyPublisher.publish(moveValidMessage);
-
-            cleanUpAfterMove(fakeClientId, true);
-
-            try {
-                Thread.sleep(lobbyConfig.getThinkTimePerMove() * 1000L / 2);
-            } catch (InterruptedException e) {
-                log.error("Sleeping thread got interrupted: " + e.getMessage());
-            }
-        }
     }
 }

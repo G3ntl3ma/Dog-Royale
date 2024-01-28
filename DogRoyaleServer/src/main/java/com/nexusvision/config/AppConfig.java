@@ -1,8 +1,7 @@
 package com.nexusvision.config;
 
 import lombok.Getter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,23 +15,22 @@ import java.util.Properties;
 /**
  * @author felixwr
  */
+@Log4j2
 public class AppConfig {
     @Getter
     private static final AppConfig instance = new AppConfig();
-    private final Logger logger;
     private Properties properties;
 
     private AppConfig() {
-        logger = LogManager.getLogger(AppConfig.class);
         loadConfiguration();
     }
 
     private void loadConfiguration() {
         properties = new Properties();
-        try {
-            properties.load(new FileInputStream("src/main/java/com/nexusvision/config/config.properties"));
+        try (InputStream input = AppConfig.class.getClassLoader().getResourceAsStream("config.properties")) {
+            properties.load(input);
         } catch (IOException e) {
-            logger.error("Error while reading the properties file: " + e.getMessage());
+            log.error("Error while reading the properties file: " + e.getMessage());
         }
     }
 

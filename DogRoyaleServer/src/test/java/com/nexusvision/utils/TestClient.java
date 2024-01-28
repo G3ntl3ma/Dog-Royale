@@ -10,7 +10,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
- * Die Client-Applikation, die eine Verbindung zum Server herstellt und Nachrichten sendet
+ * Die Ausrichter-Applikation, die eine Verbindung zum Server herstellt und Nachrichten sendet
  * und empfängt
  */
 public class TestClient {
@@ -23,7 +23,7 @@ public class TestClient {
     }
 
     /**
-     * Startet den Client und verbindet sich mit dem Server
+     * Startet den Ausrichter und verbindet sich mit dem Server
      */
     public void startClient() {
         try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {

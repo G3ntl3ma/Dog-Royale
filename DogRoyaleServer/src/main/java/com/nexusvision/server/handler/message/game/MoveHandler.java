@@ -12,8 +12,6 @@ import com.nexusvision.server.model.messages.game.*;
  *
  * @author dgehse, felixwr
  */
-//respond with 3.8 (validity of move to all)
-//also kind of needs to respond with 3.4 to one client
 public class MoveHandler extends MessageHandler<Move> {
 
     /**

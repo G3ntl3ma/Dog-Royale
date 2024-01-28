@@ -3,7 +3,7 @@ package com.nexusvision.server.model.entities;
 import lombok.Data;
 
 /**
- * Client class
+ * Ausrichter class
  *
  * @author felixwr
  */

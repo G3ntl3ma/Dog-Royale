@@ -4,17 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr: Small fix, not compilable yet">
+    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr + dghese: Update to newest interface document + tweaks">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/client/Ausrichter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/client/CommandProcessor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/config/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/config/AppConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/config/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/ServerApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/ServerApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Ai.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Ai.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/LobbyConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/LobbyConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Main2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Main2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/service/BoardStateService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/service/BoardStateService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/Tournament.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/Tournament.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/ClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/game/MoveHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/game/MoveHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/entities/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/entities/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/messages/menu/ConnectToServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/messages/menu/ConnectToServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/utils/TestClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/utils/TestClient.java" afterDir="false" />
     </list>
-    <list id="ebdcc3c3-06bd-4c20-9f18-20e56b13a3a6" name="Changes by archbtw" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -30,6 +36,9 @@
   <component name="Git.Settings">
     <branch-grouping />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MavenRunner">
+    <option name="skipTests" value="true" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="ProjectErrors" />
@@ -48,13 +57,15 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.Ausrichter.executor": "Run",
     "Application.Main2.executor": "Run",
     "Application.Main3.executor": "Run",
     "Application.ServerApp.executor": "Run",
     "JUnit.ConnectToServerHandlerTest.executor": "Run",
     "JUnit.RequestGameListHandlerTest.executor": "Run",
     "JUnit.RequestGameListHandlerTest.testHandle.executor": "Run",
-    "JUnit.menu in DogRoyaleServer.executor": "Debug",
+    "JUnit.menu in DogRoyaleServer.executor": "Run",
+    "Maven.DogRoyaleServer [package].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "develop-server-felixwr",
@@ -67,11 +78,30 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "build.tools",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.menu in DogRoyaleServer">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Felix\Documents\Studium\Semester 3\SWTPra\develop-server-felixwr\group1\DogRoyaleServer\src\main\resources" />
+      <recent name="C:\Users\Felix\Documents\Studium\Semester 3\SWTPra\develop-server-felixwr\group1\DogRoyaleServer" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Ausrichter">
+    <configuration name="Ausrichter" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.nexusvision.client.Ausrichter" />
+      <module name="DogRoyaleServer" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.nexusvision.client.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ServerApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.nexusvision.server.ServerApp" />
       <module name="DogRoyaleServer" />
@@ -81,21 +111,6 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="JoinGameAsObserverHandlerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="DogRoyaleServer" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.nexusvision.server.handler.message.menu.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.nexusvision.server.handler.message.menu" />
-      <option name="MAIN_CLASS_NAME" value="com.nexusvision.server.handler.message.menu.JoinGameAsObserverHandlerTest" />
-      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -140,19 +155,19 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.Ausrichter" />
       <item itemvalue="Application.ServerApp" />
       <item itemvalue="JUnit.menu in DogRoyaleServer" />
       <item itemvalue="JUnit.RequestGameListHandlerTest.testHandle" />
       <item itemvalue="JUnit.RequestGameListHandlerTest" />
-      <item itemvalue="JUnit.JoinGameAsObserverHandlerTest" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.menu in DogRoyaleServer" />
+        <item itemvalue="Application.Ausrichter" />
         <item itemvalue="Application.ServerApp" />
+        <item itemvalue="JUnit.menu in DogRoyaleServer" />
         <item itemvalue="JUnit.RequestGameListHandlerTest.testHandle" />
         <item itemvalue="JUnit.RequestGameListHandlerTest" />
-        <item itemvalue="JUnit.JoinGameAsObserverHandlerTest" />
       </list>
     </recent_temporary>
   </component>
@@ -178,7 +193,7 @@
       <workItem from="1706229172606" duration="6000" />
       <workItem from="1706262189370" duration="699000" />
       <workItem from="1706279800172" duration="15915000" />
-      <workItem from="1706396055036" duration="55201000" />
+      <workItem from="1706396055036" duration="75417000" />
     </task>
     <task id="LOCAL-00001" summary="felixwr and dgehse: Rewriting and fixing (making code compilable)">
       <option name="closed" value="true" />
@@ -236,7 +251,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706451948093</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="felixwr + dghese: Update to newest interface document + tweaks">
+      <option name="closed" value="true" />
+      <created>1706457534639</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1706457534639</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -288,6 +311,7 @@
     <MESSAGE value="felixwr: Tournament logic fully implemented" />
     <MESSAGE value="felixwr: Full test coverage for menu (wrote all tests for tournament logic)" />
     <MESSAGE value="felixwr: Small fix, not compilable yet" />
-    <option name="LAST_COMMIT_MESSAGE" value="felixwr: Small fix, not compilable yet" />
+    <MESSAGE value="felixwr + dghese: Update to newest interface document + tweaks" />
+    <option name="LAST_COMMIT_MESSAGE" value="felixwr + dghese: Update to newest interface document + tweaks" />
   </component>
 </project>

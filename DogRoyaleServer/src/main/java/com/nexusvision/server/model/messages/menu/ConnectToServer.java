@@ -4,7 +4,7 @@ import com.nexusvision.server.model.messages.AbstractMessage;
 import lombok.Data;
 
 /**
- * Client registers with his name
+ * Ausrichter registers with his name
  *
  * @author felixwr
  */

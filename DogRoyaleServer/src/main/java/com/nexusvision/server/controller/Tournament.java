@@ -42,9 +42,8 @@ public class Tournament {
     @Getter
     private GameState tournamentState;
 
-    private ReturnLobbyConfig lobbyConfig; // TODO: check that lobbyConfig has random PlayerOrder.OrderType
-    // TODO: check that maxPlayer in lobbyConfig is 6
-    // TODO: Implement a way to set lobbyConfig
+    @Getter
+    private ReturnLobbyConfig lobbyConfig;
 
     public Tournament(int tournamentId, int maxPlayer) {
         serverController = ServerController.getInstance();

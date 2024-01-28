@@ -4,6 +4,7 @@ import com.nexusvision.server.handler.ClientHandler;
 import com.nexusvision.server.handler.ConsistencyException;
 import com.nexusvision.server.model.entities.Client;
 import com.nexusvision.server.model.enums.GameState;
+import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
 import com.nexusvision.server.model.utils.ColorMapping;
 import com.nexusvision.server.model.utils.DrawCardFields;
 import com.nexusvision.server.model.utils.PlayerElement;
@@ -288,25 +289,31 @@ public class ServerController {
                                  int consequencesForInvalidMove,
                                  int maximumGameDuration,
                                  int maximumTotalMoves) {
-        for (int key : lobbyMap.keySet()) {
-            if (key == gameId) {
-                lobbyMap.get(key).setConfiguration(
-                        gameName,
-                        maxPlayerCount,
-                        fieldSize,
-                        figuresPerPlayer,
-                        colorMap,
-                        drawCardFields,
-                        startFields,
-                        initialCardsPerPlayer,
-                        thinkTimePerMove,
-                        visualizationTimePerMove,
-                        consequencesForInvalidMove,
-                        maximumGameDuration,
-                        maximumTotalMoves
-                );
-            }
-        }
+        lobbyMap.get(gameId).setConfiguration(
+                gameName,
+                maxPlayerCount,
+                fieldSize,
+                figuresPerPlayer,
+                colorMap,
+                drawCardFields,
+                startFields,
+                initialCardsPerPlayer,
+                thinkTimePerMove,
+                visualizationTimePerMove,
+                consequencesForInvalidMove,
+                maximumGameDuration,
+                maximumTotalMoves
+        );
+    }
+
+    /**
+     * Sets the configuration parameters for a game with the given id
+     *
+     * @param gameId The game to set the config for
+     * @param returnLobbyConfig The config that will be set
+     */
+    public void setConfiguration(int gameId, ReturnLobbyConfig returnLobbyConfig) {
+        lobbyMap.get(gameId).setConfiguration(returnLobbyConfig);
     }
 
     /**
