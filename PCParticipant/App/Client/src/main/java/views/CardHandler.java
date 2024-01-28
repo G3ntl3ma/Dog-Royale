@@ -151,7 +151,14 @@ public class CardHandler {
 
                 //Animation for selecting a new different card (and no animation still running)
                 if(currentTranslate.getStatus() != Animation.Status.RUNNING && currentCard != this) {
+                    try {
 
+                        selectStage.close();
+                    }
+                    catch(Exception e)
+                    {
+                        System.out.println("no selectStage" + e);
+                    }
                     //Set selectedValue and isStarter to default
                     selectedValue = 0;
                     isStarter = false;
@@ -168,7 +175,6 @@ public class CardHandler {
                     currentTranslate.setNode(this);
                     currentTranslate.setByY(-42);
                     currentTranslate.play();
-                    selectStage.close();
 
 
                 }
