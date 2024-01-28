@@ -453,9 +453,10 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      * @param event the event that triggered the method
      */
     public void skipTurn(ActionEvent event) {
-        //TODO: implement skipTurn
         System.out.println("skippeddiskippy");
-        client.sendMessage(new MoveDto(true, Card.card2.ordinal(), 0, 0, false, -1).toJson());
+        if (CardHandler.turn) {
+            client.sendMessage(new MoveDto(true, Card.card2.ordinal(), 0, 0, false, -1).toJson());
+        }
     }
 
     /**
