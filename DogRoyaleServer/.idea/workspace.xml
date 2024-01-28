@@ -4,17 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr: Tournament logic fully implemented">
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RegisterForTournamentHandlerTest.java" afterDir="false" />
+    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr: Small fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/RegisterForTournamentHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/RegisterForTournamentHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/RequestTournamentInfoHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/RequestTournamentInfoHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/messages/menu/ReturnTournamentList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/messages/menu/ReturnTournamentList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/utils/TournamentPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/utils/TournamentPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestTournamentInfoHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestTournamentInfoHandlerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestTournamentListHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestTournamentListHandlerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/TournamentExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/TournamentExtension.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/EngineServerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/EngineServerHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Main2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Main2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Player.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,32 +42,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main2.executor": "Run",
-    "Application.Main3.executor": "Run",
-    "Application.ServerApp.executor": "Run",
-    "JUnit.ConnectToServerHandlerTest.executor": "Run",
-    "JUnit.RequestGameListHandlerTest.executor": "Run",
-    "JUnit.RequestGameListHandlerTest.testHandle.executor": "Run",
-    "JUnit.menu in DogRoyaleServer.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "develop-server-felixwr",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/archbtw/dox/swtpra/idea3tmpcopy/group1/DogRoyaleServer",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main2.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main3.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ConnectToServerHandlerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RequestGameListHandlerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RequestGameListHandlerTest.testHandle.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop-server-felixwr&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/archbtw/dox/swtpra/idea3tmpcopy/group1/DogRoyaleServer&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="JUnit.menu in DogRoyaleServer">
+}</component>
+  <component name="RunManager">
     <configuration name="ServerApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.nexusvision.server.ServerApp" />
       <module name="DogRoyaleServer" />
@@ -179,7 +172,7 @@
       <workItem from="1706229172606" duration="6000" />
       <workItem from="1706262189370" duration="699000" />
       <workItem from="1706279800172" duration="15915000" />
-      <workItem from="1706396055036" duration="45570000" />
+      <workItem from="1706396055036" duration="15738000" />
     </task>
     <task id="LOCAL-00001" summary="felixwr and dgehse: Rewriting and fixing (making code compilable)">
       <option name="closed" value="true" />
@@ -205,23 +198,7 @@
       <option name="project" value="LOCAL" />
       <updated>1706304035456</updated>
     </task>
-    <task id="LOCAL-00004" summary="felixwr + dgehse: Added tournament construct">
-      <option name="closed" value="true" />
-      <created>1706414679644</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1706414679644</updated>
-    </task>
-    <task id="LOCAL-00005" summary="felixwr: Tournament logic fully implemented">
-      <option name="closed" value="true" />
-      <created>1706440303078</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1706440303078</updated>
-    </task>
-    <option name="localTasksCounter" value="6" />
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -269,8 +246,22 @@
     <MESSAGE value="felixwr and dgehse: Rewriting and fixing (making code compilable)" />
     <MESSAGE value="felixwr: Writing tests" />
     <MESSAGE value="felixwr: hotfix" />
-    <MESSAGE value="felixwr + dgehse: Added tournament construct" />
-    <MESSAGE value="felixwr: Tournament logic fully implemented" />
-    <option name="LAST_COMMIT_MESSAGE" value="felixwr: Tournament logic fully implemented" />
+    <option name="LAST_COMMIT_MESSAGE" value="felixwr: hotfix" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/LobbyExtension.java</url>
+          <line>46</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/EngineServerHandler.java</url>
+          <line>346</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

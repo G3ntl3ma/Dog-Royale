@@ -59,8 +59,8 @@ public class EngineServerHandler{
             int type = jsonRequest.get("type").getAsInt();
             handleReceiveClientId(jsonRequest); //2.4
             
-            System.out.println("enter game id");
-            String gameId = userInput.nextLine();
+            // System.out.println("enter game id");
+            String gameId = "0"; //userInput.nextLine();
             JoinGameAsPlayer joinGameAsPlayer = new JoinGameAsPlayer();
             joinGameAsPlayer.setClientId(this.clientId);
             joinGameAsPlayer.setPlayerName("mikeoxlong");
@@ -94,16 +94,26 @@ public class EngineServerHandler{
             } else if (type == TypeMenue.returnLobbyConfig.getOrdinal()) {
                 handleLobbyConfig(jsonRequest); //2.12
             } else if (type == TypeGame.updateDrawCards.getOrdinal()) {
-                handleSynchronizeCardCounts(jsonRequest); //3.5 
+                return handleSynchronizeCardCounts(jsonRequest); //3.5
             } else if (type == TypeGame.drawCards.getOrdinal()) {
                 handleManageHandCards(jsonRequest); //3.4 
             } else if (type == TypeGame.boardState.getOrdinal()) {
                 return handleLoadBoardJson(jsonRequest); //3.3
+            } else if (type == TypeGame.kick.getOrdinal()) {
+                handleKick(jsonRequest); //3.14
             }
         } catch (JsonSyntaxException e) {
             return null;
         }
         return null;
+    }
+
+    private void handleKick(JsonObject jsonObject) { //3.14
+        Kick kick = gson.fromJson(jsonObject.toString(), Kick.class);
+        int clientId = kick.getClientId();
+        String reason = kick.getReason();
+        this.game.excludeFromGame(clientId);
+        System.out.println("player " + clientId + " was kicked. reason: " + reason);
     }
     
     //use lobby config to configure the game //dont respond
@@ -155,7 +165,7 @@ public class EngineServerHandler{
     }
 
     //
-    public void handleSynchronizeCardCounts(JsonObject jsonObject) { //3.5
+    public String handleSynchronizeCardCounts(JsonObject jsonObject) { //3.5
         System.out.println("handlesynchronizecardcounts");
         UpdateDrawCards updateDrawCards = gson.fromJson(jsonObject.toString(), UpdateDrawCards.class);
         List<UpdateDrawCards.HandCard> handCards = updateDrawCards.getHandCards();
@@ -166,6 +176,10 @@ public class EngineServerHandler{
             handCardCounts.put(clientId, count);
         }
         System.out.println("handCardCounts " + handCardCounts); //check
+        Response response = new Response();
+        response.setType(TypeGame.response.getOrdinal());
+        response.setUpdated(true);
+        return gson.toJson(response).toString(); //return response 3.6
     }
     
     public void handleManageHandCards(JsonObject jsonObject) { //3.4
@@ -219,7 +233,7 @@ public class EngineServerHandler{
             Field field = game.getBoard()[i];
             field.setFigure(null);
         }
-        
+        System.out.println("players in game: " + game.getPlayerList().size());
         for (BoardState.Piece piece : boardState.getPieces()) {
             //set piece in game to this
             int clientId = piece.getClientId();
