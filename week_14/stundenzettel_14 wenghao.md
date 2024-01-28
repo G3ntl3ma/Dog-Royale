@@ -2,17 +2,18 @@
 name: WenghaoBi
 imt: wenghao
 gruppe: 01
-woche: 12
-gesamtarbeitszeit: 7h
+woche: 14
+gesamtarbeitszeit: 10.5h
 ---
 
 # Stundenzettel des Softwaretechnikpraktikums WS 2023/24
 
 ## Projektmanagement
 - Unittest verbessern
-  2024-01-01 1,5h
-  2024-01-06 1h
-  2024-01-07 4,5h
+  2024-01-21 5h
+  2024-01-20 5h
+- Meeting
+  2024-01-18 0.5h
   
     
   
