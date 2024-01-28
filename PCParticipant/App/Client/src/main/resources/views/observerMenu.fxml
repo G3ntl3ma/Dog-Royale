@@ -32,27 +32,11 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<VBox fx:id="vbBackground" prefHeight="651.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/17.0.02-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.PCObserverControllerMenu">
+<VBox fx:id="vbBackground" prefHeight="651.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.PCObserverControllerMenu">
   <children>
     <MenuBar fx:id="mbMenu" VBox.vgrow="NEVER">
       <menus>
@@ -105,7 +89,6 @@
                      <children>
                         <Label opacity="0.0" />
                         <Button fx:id="bttnConnect" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#connectingToServer" text="Verbinden" />
-                        <Button mnemonicParsing="false" onAction="#fakeGameplay" text="fakeverbinden hehe" />
                      </children>
                   </VBox>
                   <VBox prefHeight="100.0" prefWidth="65.0" HBox.hgrow="ALWAYS">

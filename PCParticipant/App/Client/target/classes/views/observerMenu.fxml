@@ -89,7 +89,6 @@
                      <children>
                         <Label opacity="0.0" />
                         <Button fx:id="bttnConnect" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#connectingToServer" text="Verbinden" />
-                        <Button mnemonicParsing="false" onAction="#fakeGameplay" text="fakeverbinden hehe" />
                      </children>
                   </VBox>
                   <VBox prefHeight="100.0" prefWidth="65.0" HBox.hgrow="ALWAYS">
@@ -170,8 +169,8 @@
                      <columns>
                         <TableColumn fx:id="tCPTtournamentId" prefWidth="200.0" text="Name" />
                         <TableColumn fx:id="tCPTMaxPlayers" prefWidth="90.0" text="Max. Spieler" />
-                        <TableColumn fx:id="tCPTMaxRounds" prefWidth="153.0" text="Max. Runden" />
-                        <TableColumn fx:id="tCPTCurrentRound" prefWidth="153.0" text="Momentane Runde" />
+                        <TableColumn fx:id="tCPTMaxGames" prefWidth="153.0" text="Max. Spiele" />
+                        <TableColumn fx:id="tCPTCurrentPlayerCount" prefWidth="153.0" text="Momentane Spieler" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -185,8 +184,8 @@
                      <columns>
                         <TableColumn fx:id="tCRTtournamentId" prefWidth="200.0" text="Name" />
                         <TableColumn fx:id="tCRTMaxPlayers" prefWidth="90.0" text="Max. Spieler" />
-                        <TableColumn fx:id="tCRTMaxRounds" prefWidth="153.0" text="Max. Runden" />
-                        <TableColumn fx:id="tCRTCurrentRound" prefWidth="153.0" text="Momentane Runde" />
+                        <TableColumn fx:id="tCRTMaxGames" prefWidth="153.0" text="Max. Spiele" />
+                        <TableColumn fx:id="tCRTCurrentPlayerCount" prefWidth="153.0" text="Momentane Spieler" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

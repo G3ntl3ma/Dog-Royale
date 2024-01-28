@@ -150,33 +150,6 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         // call stop method when stage is closed
         stageGameplay.setOnCloseRequest(windowEvent -> controller.stop());
     }
-
-    /** //////////////////////////////////////////////////////////////////////////////////////TODO DELETE THIS METHOD after testing without server
-     * This method is used to fake a gameplay for testing purposes
-     * @param event
-     * @throws IOException
-     */
-    public void fakeGameplay(ActionEvent event) throws IOException {
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("gameplayresponsiv.fxml"));
-        Parent rootGameplay = fxmlLoader.load();
-
-        String css = this.getClass().getResource("style.css").toExternalForm();
-
-        Stage stageGameplay = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene sceneGameplay = new Scene(rootGameplay);
-        sceneGameplay.getStylesheets().add(css);
-        stageGameplay.setScene(sceneGameplay);
-        stageGameplay.setTitle("Dog Digital");
-        stageGameplay.setMinWidth(960);
-        stageGameplay.setMinHeight(1080);
-        stageGameplay.show();
-
-        // call stop method when stage is closed
-        stageGameplay.setOnCloseRequest(windowEvent -> {
-        });
-    }
-    //////////////////////////////////////////////////////////////////////////////////////////TODO DELETE fakeGameplay Method after testing manually till here
     public void checkBoxSwitch(){
         cBIsObserver.setOnAction(event-> {
             if(cBIsObserver.isSelected()) {

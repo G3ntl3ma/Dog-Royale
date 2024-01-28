@@ -46,6 +46,8 @@ public class CardHandler {
     public Card lastPlayedCard = Card.nothingCard;
     private static boolean isStarter;
 
+    private Stage selectStage;
+
     /**
      * Constructor for the CardHandler - handles the cards in your hand
      * @param pcOCG the PCObserverControllerGameplay
@@ -62,7 +64,7 @@ public class CardHandler {
      */
     public void addCard(Card card)
     {
-        HandCard handcard = new HandCard(card, 1);
+        HandCard handcard = new HandCard(card);
         handCards.add(handcard);
         cards.add(card);
         System.out.println("added card" + card);
@@ -82,9 +84,12 @@ public class CardHandler {
             System.out.println("handCards: " + handCards);
             if (removedCardsList.contains(lastRemovedCard) ) {
                 System.out.println("last removed Card" + lastRemovedCard);
+                System.out.println("last removed Card Index!!!!" + lastRemovedCardIndex);
                 removedCardsList.remove(lastRemovedCard);
                 handCards.remove(lastRemovedCardIndex );
                 cards.remove(lastRemovedCardIndex);
+                lastRemovedCardIndex = -1;
+                lastRemovedCard = Card.nothingCard;
             }
             System.out.println("after removedCardsList: " + removedCardsList);
             System.out.println("cards: " + cards);
@@ -121,18 +126,15 @@ public class CardHandler {
         private Card card;
 
         private Image image;
-        private int numberInHand;
 
         /**
          * Constructor for the HandCard
          * @param card type of card - enum
-         * @param numberInHand which place in ur hand is the card in TODO: delete if not needed
          */
-        public HandCard(Card card, int numberInHand) {
+        public HandCard(Card card) {
 
             this.card = card;
             this.image = new Image( getClass().getResource("/" + card.getCardPath() + ".png" ).toString());
-            this.numberInHand = numberInHand;
 
 
             this.setImage(image);
@@ -146,7 +148,6 @@ public class CardHandler {
 
             //if Card is clicked
             this.setOnMouseClicked(event -> {
-                System.out.println(this.card + "layed");
 
                 //Animation for selecting a new different card (and no animation still running)
                 if(currentTranslate.getStatus() != Animation.Status.RUNNING && currentCard != this) {
@@ -167,12 +168,13 @@ public class CardHandler {
                     currentTranslate.setNode(this);
                     currentTranslate.setByY(-42);
                     currentTranslate.play();
+                    selectStage.close();
 
 
                 }
                 else if(currentCard == this && (PieceImages.currentPiece != null ||PieceImages.selectEnemyPiece && PieceImages.selectedEnemyPiece != null) && !(this.card == Card.copyCard && lastPlayedCard == null) && turn) {
-                    client.sendMessage(new MoveDto(false, currentCard.getCard().ordinal(), selectedValue, PieceImages.getCurrentPieceIndex(), isStarter, PieceImages.getSelectedEnemyPieceId()).toJson()); //TODO: test
-                    lastRemovedCard = this.card;
+                    System.out.println(this.card + "layed");
+                    client.sendMessage(new MoveDto(false, currentCard.getCard().ordinal(), selectedValue, PieceImages.getCurrentPieceIndex(), isStarter, PieceImages.getSelectedEnemyPieceId()).toJson());
                     lastRemovedCardIndex = handCards.indexOf(this);
                     layCard();
                     PieceImages.currentPiece.deselect();
@@ -195,8 +197,7 @@ public class CardHandler {
                     alert.show();
                 }
             });
-            //TODO: decide whether we add error testing for illegal moves or not since they are said to punish the player so we do not have to check for them in the client but we could for some
-            //TODO: for example can u use a start card on an piece thats already in game and it would be called an illegal move and u get kicked or something or would it just not be possible?
+
         }
 
 
@@ -204,7 +205,8 @@ public class CardHandler {
          * Lays the card on the board
          */
         private void layCard() {
-            HandCard cards2 = new HandCard(currentCard.getCard(), 1);
+            selectStage.close();
+            HandCard cards2 = new HandCard(currentCard.getCard());
             cards2.setFitWidth(this.getFitWidth());
             cards2.setFitHeight(this.getFitHeight());
             cards2.setOnMouseClicked(event1 -> {
@@ -267,7 +269,7 @@ public class CardHandler {
 
 
                 //the cloned Card that is played that will be layed on the discard pile
-                HandCard discardCard = new HandCard(currentCard.getCard(), 1);
+                HandCard discardCard = new HandCard(currentCard.getCard());
                 discardCard.setFitHeight(cards2.getFitHeight());
                 discardCard.setFitWidth(cards2.getFitWidth());
                 discardCard.setScaleX(cards2.getScaleY());
@@ -307,8 +309,6 @@ public class CardHandler {
                         pcOCG.getDiscardPane().getChildren().remove(discardCard);
                     });
                     pauseTransition.play();
-                    //TODO: as soon as message sending works, remove this directly or 500ms after message send
-                    // TODO: send message that card was played with piece Information (might be using Piece.getCurrentPieceIndex() and this.getCard(); or might make static method/variable for that)
                 });
 
                 parallelTransition.play();
@@ -356,7 +356,7 @@ public class CardHandler {
 
                     PieceImages.setSelectEnemyPiece(false);
 
-                    stage = new Stage();
+                    selectStage = new Stage();
                     fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValueStartCard1.fxml"));
                     try {
                         scene = new Scene(fxmlLoader.load());
@@ -364,13 +364,13 @@ public class CardHandler {
                         throw new RuntimeException(e);
                     }
                     scene.getStylesheets().add(css);
-                    stage.setScene(scene);
-                    stage.getIcons().add(icon);
-                    stage.show();
+                    selectStage.setScene(scene);
+                    selectStage.getIcons().add(icon);
+                    selectStage.show();
                     break;
                 case startCard2:
                     PieceImages.setSelectEnemyPiece(false);
-                    stage = new Stage();
+                    selectStage = new Stage();
                     fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValueStartCard2.fxml"));
                     try {
                         scene = new Scene(fxmlLoader.load());
@@ -378,9 +378,9 @@ public class CardHandler {
                         throw new RuntimeException(e);
                     }
                     scene.getStylesheets().add(css);
-                    stage.setScene(scene);
-                    stage.getIcons().add(icon);
-                    stage.show();
+                    selectStage.setScene(scene);
+                    selectStage.getIcons().add(icon);
+                    selectStage.show();
 
                     break;
                 case swapCard:
@@ -390,7 +390,7 @@ public class CardHandler {
                     break;
                 case plusMinus4:
                     PieceImages.setSelectEnemyPiece(false);
-                    stage = new Stage();
+                    selectStage = new Stage();
                     fxmlLoader = new FXMLLoader(PCObserverGui.class.getResource("selectValuePlusMinus4.fxml"));
                     try {
                         scene = new Scene(fxmlLoader.load());
@@ -398,9 +398,9 @@ public class CardHandler {
                         throw new RuntimeException(e);
                     }
                     scene.getStylesheets().add(css);
-                    stage.setScene(scene);
-                    stage.getIcons().add(icon);
-                    stage.show();
+                    selectStage.setScene(scene);
+                    selectStage.getIcons().add(icon);
+                    selectStage.show();
                     break;
                 case oneToSeven:
                     PieceImages.setSelectEnemyPiece(false);
@@ -413,9 +413,9 @@ public class CardHandler {
                         throw new RuntimeException(e);
                     }
                     scene.getStylesheets().add(css);
-                    stage.setScene(scene);
-                    stage.getIcons().add(icon);
-                    stage.show();
+                    selectStage.setScene(scene);
+                    selectStage.getIcons().add(icon);
+                    selectStage.show();
                     break;
                 case copyCard:
                     try {

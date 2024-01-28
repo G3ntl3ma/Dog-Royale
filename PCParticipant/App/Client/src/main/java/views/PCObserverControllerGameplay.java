@@ -333,7 +333,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @FXML
     public void leaveMatch(ActionEvent event)throws IOException {
         String css = this.getClass().getResource("style.css").toExternalForm();
-
+        client.sendMessage(new LeavePlayerDto().toJson()); //TODO: see if works and doesnt bug if ure observer
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("observerMenu.fxml"));
         Parent rootMenu = fxmlLoader.load();
         controller = fxmlLoader.getController();

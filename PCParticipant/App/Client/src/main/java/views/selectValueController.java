@@ -17,52 +17,36 @@ public class selectValueController {
     public void select1Event(ActionEvent e){
         CardHandler.setSelectedValue(1);
         CardHandler.setIsStarter(false);
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.close();
     }
 
     public void select2Event(ActionEvent e){
         CardHandler.setSelectedValue(2);
         CardHandler.setIsStarter(false);
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.close();
     }
     public void select3Event(ActionEvent e){
         CardHandler.setSelectedValue(3);
         CardHandler.setIsStarter(false);
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.close();
     }
     public void select4Event(ActionEvent e){
         CardHandler.setSelectedValue(4);
         CardHandler.setIsStarter(false);
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.close();
     }
     public void select5Event(ActionEvent e){
         CardHandler.setSelectedValue(5);
         CardHandler.setIsStarter(false);
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.close();
     }
     public void select6Event(ActionEvent e){
         CardHandler.setSelectedValue(6);
         CardHandler.setIsStarter(false);
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.close();
     }
     public void select7Event(ActionEvent e){
         CardHandler.setSelectedValue(7);
         CardHandler.setIsStarter(false);
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.close();
     }
 
     public void selectMinus4Event(ActionEvent e){
         CardHandler.setSelectedValue(-4);
         CardHandler.setIsStarter(false);
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.close();
     }
     public void selectStartEvent(ActionEvent e){
         if (PieceImages.currentPiece != null) {
@@ -82,31 +66,15 @@ public class selectValueController {
                 break;
             }
         }
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.close();
     }
 
     public void select11Event(ActionEvent e){
         CardHandler.setSelectedValue(11);
         CardHandler.setIsStarter(false);
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.close();
     }
 
     public void select13Event(ActionEvent e){
         CardHandler.setSelectedValue(13);
         CardHandler.setIsStarter(false);
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.close();
-    }
-
-
-    /**
-     * If the Stage needs to be closed, for example when the Time runs out.
-     */
-    public void closeStage(){
-        if(stage.hasProperties()){
-            stage.close();
-        }
     }
 }
