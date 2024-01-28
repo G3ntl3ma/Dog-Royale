@@ -40,6 +40,7 @@ public class PCObserverGui extends Application {
         stage.getIcons().add(new Image("icon.png"));
         stage.setMinWidth(400);
         stage.setMinHeight(480);
+        stage.centerOnScreen();
         stage.show();
 
         stage.setOnCloseRequest(event -> exit(stage));

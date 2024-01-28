@@ -103,6 +103,7 @@ public class PCObserverControllerStartScreen implements Initializable {
         stageMenu.setTitle("Dog Digital");
         stageMenu.setMinWidth(960);
         stageMenu.setMinHeight(800);
+        stageMenu.centerOnScreen();
         stageMenu.show();
 
         PCObserverControllerMenu controller = fxmlLoader.getController();

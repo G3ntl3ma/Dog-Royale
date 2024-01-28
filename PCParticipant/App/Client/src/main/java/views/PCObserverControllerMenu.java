@@ -154,6 +154,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         stageGameplay.setTitle("Dog Digital");
         stageGameplay.setMinWidth(960);
         stageGameplay.setMinHeight(960);
+        stageGameplay.centerOnScreen();
         stageGameplay.show();
 
 
