@@ -888,9 +888,9 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
                     }
                 }
                 if (debugPrints) {System.out.print("For the record: pieceHandler.pieces[i].player = "); System.out.println(pieceHandler.pieces[i].player);};
-//                if (PieceHandler.pieces[i].player == -1) {
-//                    throw new AssertionError("The piece with index "+Integer.toString(i)+" is supposed to be player-"+Integer.toString(pieceClientId)+"'s piece however this was not assigned during the loop over all "+Integer.toString(board.numPlayers)+" player(s)");
-//                }
+                if (PieceHandler.pieces[i].player == -1) {
+                    throw new AssertionError("The piece with index "+Integer.toString(i)+" is supposed to be player-"+Integer.toString(pieceClientId)+"'s piece however this was not assigned during the loop over all "+Integer.toString(board.numPlayers)+" player(s)");
+                }
             }
             for(PlayerPiece piece : pieces){
                 pieceHandler.assertPieceState(piece.getPieceId(),piece.isOnBench(), piece.getPosition(), piece.getInHousePosition());
