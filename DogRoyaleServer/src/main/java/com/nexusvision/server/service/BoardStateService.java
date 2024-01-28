@@ -15,7 +15,7 @@ import java.util.List;
 
 public class BoardStateService {
 
-    public BoardState generateBoardState(Game game, PlayerOrder playerOrder) { // TODO: What about random order?
+    public BoardState generateBoardState(Game game, PlayerOrder playerOrder) {
         BoardState boardState = new BoardState();
         boardState.setType(TypeGame.boardState.getOrdinal());
 
@@ -57,8 +57,9 @@ public class BoardStateService {
         boardState.setLastPlayedCard(game.getLastCardOnPile() == null ? -1 : game.getLastCardOnPile().getOrdinal());
         boardState.setRound(game.getRound());
         boardState.setMoveCount(game.getMovesMade());
-        boardState.setNextPlayer(game.getPlayerToMoveId()); // TODO: wasCanceled
+        boardState.setNextPlayer(game.getPlayerToMoveId());
         boardState.setGameOver(game.checkGameOver());
+        boardState.setWasCanceled(game.isWasCanceled());
 
         List<WinnerOrderElement> winnerOrder = new ArrayList<>();
         for(int clientId : game.getWinnerOrder()) {

@@ -4,6 +4,7 @@ import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.FieldType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Ai {
     private int numberOfSimulations;
@@ -19,7 +20,7 @@ public class Ai {
         Player currentPlayer = game.getCurrentPlayer();
         SaveState savestate = new SaveState(game);
         // System.out.println("getting move from ai");
-        ArrayList<Integer> oldhash = game.hash();
+        List<Integer> oldhash = game.hash();
         //TODO assert same hash
         for (int i = 0; i < this.numberOfSimulations; ++i) {
             if(System.currentTimeMillis() - startTime > thinkTime) {
@@ -32,7 +33,7 @@ public class Ai {
             int value = 0;
             boolean over = false;
             Integer winner = null;
-            ArrayList<Integer> winnerOrder = null;
+            List<Integer> winnerOrder = null;
             while (true) {
                 bestchild = null;
                 float bestutc = -Float.MAX_VALUE;

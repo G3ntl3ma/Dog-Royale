@@ -89,7 +89,7 @@ public class Main2 {
             game.distributeCards();
             //first move can be null
             Integer winner = null;
-            ArrayList<Integer> winners;
+            List<Integer> winners;
             int round = 0;
             while (winner == null) {
                 game.printBoard();

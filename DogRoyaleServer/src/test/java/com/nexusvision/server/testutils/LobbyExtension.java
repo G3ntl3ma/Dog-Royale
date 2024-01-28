@@ -61,7 +61,7 @@ public class LobbyExtension implements BeforeAllCallback, AfterAllCallback {
         messageBroker.addIdentifier(CLIENT_ID_LOBBY_5, new MessageListener());
         lobby5.addPlayer("clientId:" + CLIENT_ID_LOBBY_5, CLIENT_ID_LOBBY_5);
         runLobby(lobby5, "lobby5config.json", 2);
-        lobby5.finishGame();
+        lobby5.cancelGame();
     }
 
     private void runLobby(GameLobby lobby, String fileName, int playerCount) {

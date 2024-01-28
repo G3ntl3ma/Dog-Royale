@@ -57,12 +57,12 @@ public class GameLobby {
     private final LobbyConfig lobbyConfig;
     private ScheduledFuture<?> liveTimerTask;
     private ScheduledFuture<?> turnTimerTask;
-    private int gameDuration; // TODO: Populate properly when starting
+    private int gameDuration;
     private int turnTime;
     private int liveTimerSendCount;
     private int turnTimerSendCount;
 
-    private Game game; // TODO: Populate
+    private Game game;
     @Getter
     private GameState gameState;
     @Getter
@@ -363,6 +363,7 @@ public class GameLobby {
 
         game.initDeck();
         setupNewRound();
+        gameDuration = lobbyConfig.getMaximumGameDuration();
         startLiveTimer();
     }
 
@@ -413,7 +414,6 @@ public class GameLobby {
         moveValid.setOpponentPieceId(opponentPieceId);
         moveValid.setValidMove(isValidMove);
         String moveValidMessage = gson.toJson(moveValid, MoveValid.class);
-        //TODO check if the game over
         lobbyPublisher.publish(moveValidMessage);
 
         cleanUpAfterMove(clientId, isValidMove);
@@ -446,19 +446,19 @@ public class GameLobby {
             }
         }
 
+        if (game.checkGameOver()) {
+            finishGame();
+            return;
+        }
+
         BoardState boardState = boardStateService.generateBoardState(game, lobbyConfig.getPlayerOrder());
         String boardStateMessage = gson.toJson(boardState);
 
         lobbyPublisher.publish(boardStateMessage);
 
-        if (!game.nextPlayer()) { // maybe round is over or maybe game is over
-            if (game.checkGameOver()) {
-                finishGame();
-                return;
-            } else {
-                game.reInit();
-                setupNewRound();
-            }
+        if (!game.nextPlayer()) { // game is not over
+            game.reInit();
+            setupNewRound();
         }
         int nextMoveClientId = getClientToMoveId();
         if (!serverController.setWaitingForMove(nextMoveClientId)) {
@@ -490,17 +490,26 @@ public class GameLobby {
         lobbyPublisher.publish(updateDrawCardsMessage);
     }
 
+    private void finishGame() {
+        gameState = GameState.FINISHED;
+        stopLiveTimer();
+        BoardState boardState = boardStateService.generateBoardState(game, lobbyConfig.getPlayerOrder());
+        String boardStateMessage = gson.toJson(boardState);
+
+        lobbyPublisher.publish(boardStateMessage);
+    }
+
     /**
      * Can be used internally or by Ausrichter to cancel/finish the game
      */
-    public void finishGame() {
+    public void cancelGame() {
         gameState = GameState.FINISHED;
         stopLiveTimer();
         Cancel cancel = new Cancel();
         cancel.setType(TypeGame.cancel.getOrdinal());
-        cancel.setWinnerOrder(game.getWinnerOrder());
+        cancel.setWinnerOrder(lobbyConfig.getWinnerOrder());
         lobbyPublisher.publish(gson.toJson(cancel));
-        canceled = true;
+        game.setWasCanceled(true);
     }
 
     private synchronized void removeFromRound(int clientId, Player player) {
@@ -518,9 +527,8 @@ public class GameLobby {
         UpdateDrawCards updateDrawCards = updateDrawCardsService.generateClientWithNoCards(clientId);
         String updateDrawCardsMessage = gson.toJson(updateDrawCards, UpdateDrawCards.class);
 
-        // TODO: Only one player gets removed from the list? DEFINITELY CHECK THIS
         messageBroker.unregisterSubscriber(clientId, id);
-        lobbyPublisher.publish(updateDrawCardsMessage); // TODO: Check: Observer will also receive this message...
+        lobbyPublisher.publish(updateDrawCardsMessage);
         messageBroker.registerSubscriber(clientId, id);
     }
 

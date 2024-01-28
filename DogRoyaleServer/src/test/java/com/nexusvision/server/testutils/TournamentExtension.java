@@ -62,7 +62,7 @@ public class TournamentExtension implements BeforeAllCallback, AfterAllCallback 
         do {
             int tempLobbyId = tournament5.getGameRunning();
             GameLobby tempLobby = serverController.getLobbyById(tempLobbyId);
-            tempLobby.finishGame();
+            tempLobby.cancelGame();
             successful = tournament5.startNextGameAndFinishUpCurrent();
         } while (successful);
     }

@@ -7,10 +7,8 @@ import com.nexusvision.server.model.enums.FieldType;
 import com.nexusvision.server.model.enums.OrderType;
 import com.nexusvision.server.model.messages.game.BoardState;
 import com.nexusvision.server.model.utils.PlayerElement;
-import com.nexusvision.server.model.utils.PlayerOrder;
 import com.nexusvision.server.model.utils.WinnerOrderElement;
 import com.nexusvision.server.service.CardService;
-import com.nexusvision.server.service.KickService;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
@@ -48,6 +46,7 @@ public final class Game {
     private int round; //round counter
     private boolean firstMoveOfRound;
     private int[] startIndexes; //indexes of startFields, unused
+    private boolean wasCanceled;
 
     private CardService cardService;
 
@@ -307,11 +306,13 @@ public final class Game {
 //        System.out.println("playerorder " + lobbyConfig.getPlayerOrder().toString());
 //        System.out.println("playerorder.getorder " + lobbyConfig.getPlayerOrder().getOrder().toString());
         List<Integer> playerOrder = lobbyConfig.getPlayerOrder().getClientIdList();
-        if(lobbyConfig.getPlayerOrder().getType() == OrderType.random) { //shuffle the order randomly if random order
+        if (lobbyConfig.getPlayerOrder().getType() == OrderType.random) { //shuffle the order randomly if random order
             Collections.shuffle(playerOrder);
         }
         for (int playerOrderIndex = 0; playerOrderIndex < playerOrder.size(); playerOrderIndex++) {
-            this.playerList.add(new Player(playerOrderIndex, playerOrder.get(playerOrderIndex), lobbyConfig.getFiguresPerPlayer()));
+            int clientId = playerOrder.get(playerOrderIndex);
+            String playerName = lobbyConfig.getPlayerOrder().getOrder().get(playerOrderIndex).getName();
+            this.playerList.add(new Player(clientId, playerName, playerOrderIndex, lobbyConfig.getFiguresPerPlayer()));
         }
 //        System.out.println("playersOrder " + playerOrder.size());
 //        System.out.println("_playerOrder " + _playerOrder.size());
@@ -409,12 +410,22 @@ public final class Game {
         return 0;
     }
 
+    public void updateWinnerOrder() {
+        List<Player> playerList = new ArrayList<>(this.playerList);
+        Collections.shuffle(playerList);
+
+        playerList.sort(this::compare);
+        Collections.reverse(playerList);
+
+        lobbyConfig.updateWinnerOrder(playerList);
+    }
+
     /**
      * Determines all the winners ordered from highest to lowest
      *
      * @return A list with all the winners
      */
-    public List<WinnerOrderElement> getWinnerOrder() {
+    public List<Integer> getWinnerOrder() {
         // iterate through players in random order to make ties random order
         List<Player> randomOrderPlayers = new ArrayList<>(playerList);
         Collections.shuffle(randomOrderPlayers);
@@ -436,7 +447,7 @@ public final class Game {
                 playerWinOrder.add(player);
             }
         }
-        return (ArrayList<Integer>) playerWinOrder.stream().map(Player::getClientId).collect(Collectors.toList()); // TODO: This doesn't work
+        return playerWinOrder.stream().map(Player::getClientId).collect(Collectors.toList());
     }
 
     /**
@@ -564,6 +575,7 @@ public final class Game {
         } else {
             move.execute(this);
         }
+        updateWinnerOrder();
         return move != null;
     }
 

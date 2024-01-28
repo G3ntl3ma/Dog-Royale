@@ -35,7 +35,7 @@ public class LobbyConfig {
 
     private final HashMap<Colors, Integer> colorMap;
     private PlayerOrder playerOrder;
-    private final List<WinnerOrderElement> winnerOrder; // TODO: stay consistent
+    private final List<WinnerOrderElement> winnerOrder;
     private final List<ObserverElement> observerList;
     private String gameName;
     private int maxPlayerCount;
@@ -256,5 +256,20 @@ public class LobbyConfig {
             }
         }
         return null; // Should never happen
+    }
+
+    public synchronized void updateWinnerOrder(List<Player> winnerSortedPlayerList) {
+        winnerOrder.clear();
+        for (Player player : winnerSortedPlayerList) {
+            WinnerOrderElement winnerOrderElement = new WinnerOrderElement();
+            winnerOrderElement.setClientId(player.getClientId());
+            winnerOrderElement.setName(player.getName());
+            winnerOrderElement.setPoints(player.getFiguresInHouse());
+            winnerOrder.add(winnerOrderElement);
+        }
+    }
+
+    public synchronized List<WinnerOrderElement> getWinnerOrder() {
+        return winnerOrder;
     }
 }

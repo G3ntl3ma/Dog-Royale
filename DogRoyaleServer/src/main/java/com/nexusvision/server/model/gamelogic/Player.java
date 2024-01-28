@@ -1,7 +1,6 @@
 package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.Card;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -13,7 +12,8 @@ import java.util.ArrayList;
  */
 @Data
 public final class Player {
-    private int clientId; // The clientId of this very player
+    private final int clientId; // The clientId of this very player
+    private final String name;
     private boolean outThisRound = false;
     private ArrayList<Figure> figureList = new ArrayList<>();
     private ArrayList<Card> cardList = new ArrayList<>();
@@ -29,8 +29,9 @@ public final class Player {
      *
      * @param figureCount An Integer representing the amount of figures a player has
      */
-    public Player(int playerOrderIndex, int clientId, int figureCount) {
+    public Player(int clientId, String name, int playerOrderIndex, int figureCount) {
         this.clientId = clientId;
+        this.name = name;
         this.figuresInBank = figureCount;
         this.lastMoveCountFigureMovedIntoHouse = 0;
         for (int i = 0; i < figureCount; i++) { 
@@ -45,7 +46,7 @@ public final class Player {
         return null;
     }
 
-    // public TournamentPlayer copy() {
+    // public Player copy() {
         // ArrayList<Figure> figureList = this.figureList.copy();
         //for figure in figure list copy the figure and put in array
         // ArrayList<Card> cardList = this.cardList.copy();
