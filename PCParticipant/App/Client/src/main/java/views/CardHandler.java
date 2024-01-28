@@ -183,6 +183,7 @@ public class CardHandler {
                     client.sendMessage(new MoveDto(false, currentCard.getCard().ordinal(), selectedValue, PieceImages.getCurrentPieceIndex(), isStarter, PieceImages.getSelectedEnemyPieceId()).toJson());
                     System.out.println("MoveDto: " + new MoveDto(false, currentCard.getCard().ordinal(), selectedValue, PieceImages.getCurrentPieceIndex(), isStarter, PieceImages.getSelectedEnemyPieceId()).toJson());
                     lastRemovedCardIndex = handCards.indexOf(this);
+                    lastRemovedCard = this.card;
                     layCard();
                     PieceImages.currentPiece.deselect();
                     PieceImages.currentPiece = null;
