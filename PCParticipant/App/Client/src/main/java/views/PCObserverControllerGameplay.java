@@ -870,7 +870,6 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
             for (int i = 0; i < pieces.size(); i++) {
                 int pieceClientId = pieces.get(i).getClientId();// alternatively: boardStateDto.getPieces().get(i).getClientId()
 
-                PieceHandler.pieces[i].player = -1;
                 if (debugPrints) {System.out.print("piece = "); System.out.println(i); System.out.print("pieceClientId = ");System.out.println(pieceClientId);};
                 for (int playerIndex = 0; playerIndex < board.numPlayers; playerIndex++) {
                     int playerId = lobbyConfig.getPlayerOrder().getOrder().get(playerIndex).getClientId();
