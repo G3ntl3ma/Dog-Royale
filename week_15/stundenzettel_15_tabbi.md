@@ -3,7 +3,7 @@ name: Abderrahmane Tabbi
 imt: tabbi
 gruppe: 01
 woche: 15
-gesamtarbeitszeit: 16,5h
+gesamtarbeitszeit: 24,5h
 ---
 
 <!--
@@ -28,6 +28,8 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
     - 2024-01-22 1,5h
 - Online Meeting
     - 2024-01-25 1,00h
+    - 2024-01-27 0,30h
+    - 2024-01-28 0,30h
 ## Programmieren
 - Android Beobachter
  - 2024-01-22 2,00h
@@ -37,6 +39,8 @@ also zum Beispiel: `stundenzettel_01_maxm.md` oder `stundenzettel_10_maxm.md`.
  - 2024-01-24 4,00h
 - Testen der Funktionalität der PC-Teilnehmer
  - 2024-01-26 5,00h
+- Packaging testing PC-Teilnehmer
+ - 2024-01-28 7,00h
  
 
  
