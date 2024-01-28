@@ -272,14 +272,13 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      * @param resourceBundle This parameter is used to pass a ResourceBundle to the controller
      */
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) { //TODO: Delete testing data
+    public void initialize(URL url, ResourceBundle resourceBundle) {
 
         currentPiece = new PieceImages(paneBoard);
         // init board
         board = new Board(fieldSize, numPlayers, numPieces);
         houseBoard = new HouseBoard(numPlayers, numPieces);
         pieceHandler = new PieceHandler(board, houseBoard);
-
 
 
         houseBoard.calculateHouseCoordinates(pieceHandler); // recalculate, now that we have the pieceHandler
@@ -390,7 +389,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @FXML
     public void leaveMatch(ActionEvent event)throws IOException {
         String css = this.getClass().getResource("style.css").toExternalForm();
-        client.sendMessage(new LeavePlayerDto().toJson()); //TODO: see if works and doesnt bug if ure observer
+        client.sendMessage(new LeavePlayerDto().toJson());
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("observerMenu.fxml"));
         Parent rootMenu = fxmlLoader.load();
         controller = fxmlLoader.getController();
@@ -461,7 +460,6 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      * @param event the event that triggered the method
      */
     public void skipTurn(ActionEvent event) {
-        System.out.println("skippeddiskippy");
         if (CardHandler.turn) {
             client.sendMessage(new MoveDto(true, Card.card2.ordinal(), 0, 0, false, -1).toJson());
         }
@@ -616,11 +614,9 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      */
     @Override @FXML
     public void handleLobbyConfig(ReturnLobbyConfigDto lobbyConfig) throws IOException {
-        System.out.println("Lobby config:" + lobbyConfig.toJson());
         Platform.runLater(()-> {
             this.lobbyConfig = lobbyConfig;
             this.animationTime = lobbyConfig.getVisualizationTimePerMove();
-            System.out.println("lobby Config animatetime: " + animationTime);
             paneBoard.getChildren().clear();
             try {
                 initBoard(lobbyConfig);
@@ -646,7 +642,6 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      */
     @Override
     public void handleMoveValid(MoveValidDto moveValid) {
-        System.out.println("MoveValid handelt: " + moveValid.toJson());
         Platform.runLater(() -> {
             if(!moveValid.isValidMove()){
                 updatePieceLabels();
@@ -751,15 +746,12 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      */
     @Override
     public void handleDrawCards(DrawCardsDto drawCards) {
-        System.out.println("DrawCards handelt: " + drawCards.toJson());
         Platform.runLater(() -> {
-            System.out.println("drawn Cards");
 
             Card[] droppedCards = new Card[lobbyConfig.getInitialCardsPerPlayer()+lobbyConfig.getDrawCardFields().getCount()];
             int count = 0;
             for (int i : drawCards.getDroppedCards())
             {
-                System.out.println("dropped card: " + Card.getByOrdinal(i));
                 droppedCards[count] = Card.getByOrdinal(i);
                 count++;
             }
@@ -783,8 +775,6 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      */
     @Override
     public void handleBoardState(BoardStateDto boardStateDto) {
-
-        System.out.println("boardstate handelt oqwudhaisudhwi: " + boardStateDto.toJson());
 
         Platform.runLater(()->{
             if(boardStateDto.isGameOver()){
@@ -869,25 +859,19 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
             boolean debugPrints = false; // Debugging for Legs
             for (int i = 0; i < pieces.size(); i++) {
                 int pieceClientId = pieces.get(i).getClientId();// alternatively: boardStateDto.getPieces().get(i).getClientId()
-
-                if (debugPrints) {System.out.print("piece = "); System.out.println(i); System.out.print("pieceClientId = ");System.out.println(pieceClientId);};
                 for (int playerIndex = 0; playerIndex < board.numPlayers; playerIndex++) {
                     int playerId = lobbyConfig.getPlayerOrder().getOrder().get(playerIndex).getClientId();
-                    if (debugPrints) {System.out.print(" - player = "); System.out.println(playerIndex); System.out.print(" - ..having Id = "); System.out.println(playerId);};
 
 
                     if (playerId == pieceClientId) {
-                        if (debugPrints) {System.out.println("  -> it's a match!");};
-                        System.out.println("Piece " + PieceHandler.pieces[i] + " " + i + " gets " + playerIndex);
                         int pieceID = boardStateDto.getPieces().get(i).getPieceId();
-                        System.out.println("Piece ID" + pieceID);
                         PieceHandler.pieces[pieceID].setPlayer(playerIndex); //mtwardy: modified
                         PieceHandler.pieces[pieceID].fieldImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
                         PieceHandler.pieces[pieceID].houseImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
                         PieceHandler.pieces[pieceID].isOnBench = pieces.get(i).isOnBench();
                     }
                 }
-                if (debugPrints) {System.out.print("For the record: pieceHandler.pieces[i].player = "); System.out.println(pieceHandler.pieces[i].player);};
+
                 if (PieceHandler.pieces[i].player == -1) {
                     throw new AssertionError("The piece with index "+Integer.toString(i)+" is supposed to be player-"+Integer.toString(pieceClientId)+"'s piece however this was not assigned during the loop over all "+Integer.toString(board.numPlayers)+" player(s)");
                 }

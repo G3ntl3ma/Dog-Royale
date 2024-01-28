@@ -106,7 +106,6 @@ public class PieceImages extends ImageView {
     private void select(int radiusField)
     {
         if (playerIndex == clientPlayerIndex) {
-            System.out.println(clientPlayerIndex);
             if (currentPiece != this) {
                 makeShiny(radiusField);
                 currentPiece = this;

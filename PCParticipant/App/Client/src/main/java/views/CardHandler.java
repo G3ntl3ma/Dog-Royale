@@ -67,7 +67,6 @@ public class CardHandler {
         HandCard handcard = new HandCard(card);
         handCards.add(handcard);
         cards.add(card);
-        System.out.println("added card" + card);
     }
 
     /**
@@ -79,25 +78,16 @@ public class CardHandler {
 
         if (removedCards[0] != null) {
             List<Card> removedCardsList = new ArrayList<Card>(Arrays.asList(removedCards));
-            System.out.println("befor removedCardsList: " + removedCardsList);
-            System.out.println("cards: " + cards);
-            System.out.println("handCards: " + handCards);
             if (removedCardsList.contains(lastRemovedCard) ) {
-                System.out.println("last removed Card" + lastRemovedCard);
-                System.out.println("last removed Card Index!!!!" + lastRemovedCardIndex);
                 removedCardsList.remove(lastRemovedCard);
                 handCards.remove(lastRemovedCardIndex );
                 cards.remove(lastRemovedCardIndex);
                 lastRemovedCardIndex = -1;
                 lastRemovedCard = Card.nothingCard;
             }
-            System.out.println("after removedCardsList: " + removedCardsList);
-            System.out.println("cards: " + cards);
-            System.out.println("handCards: " + handCards);
             for (Card card : removedCardsList) {
                 if(card != null) {
                     int cardsIndex = cards.indexOf(card);
-                    System.out.println("cardsIndex: " + cardsIndex);
                     cards.remove(card);
                     handCards.remove(cardsIndex);
                 }
@@ -152,7 +142,6 @@ public class CardHandler {
                 //Animation for selecting a new different card (and no animation still running)
                 if(currentTranslate.getStatus() != Animation.Status.RUNNING && currentCard != this) {
                     try {
-
                         selectStage.close();
                     }
                     catch(Exception e)
@@ -179,9 +168,7 @@ public class CardHandler {
 
                 }
                 else if(currentCard == this && (PieceImages.currentPiece != null ||PieceImages.selectEnemyPiece && PieceImages.selectedEnemyPiece != null) && !(this.card == Card.copyCard && lastPlayedCard == null) && turn) {
-                    System.out.println(this.card + "layed");
                     client.sendMessage(new MoveDto(false, currentCard.getCard().ordinal(), selectedValue, PieceImages.getCurrentPieceIndex(), isStarter, PieceImages.getSelectedEnemyPieceId()).toJson());
-                    System.out.println("MoveDto: " + new MoveDto(false, currentCard.getCard().ordinal(), selectedValue, PieceImages.getCurrentPieceIndex(), isStarter, PieceImages.getSelectedEnemyPieceId()).toJson());
                     lastRemovedCardIndex = handCards.indexOf(this);
                     lastRemovedCard = this.card;
                     layCard();
@@ -311,7 +298,6 @@ public class CardHandler {
 
                 parallelTransition.setOnFinished(event2 -> {
                     PauseTransition pauseTransition = new PauseTransition(javafx.util.Duration.millis(pcOCG.getAnimationTime() * 1000));
-                    System.out.println("animation time: " + pcOCG.getAnimationTime());
                     pauseTransition.setOnFinished(event3 -> {
                         pcOCG.getPaneBoardView().getChildren().remove(cards2);
                         pcOCG.getDiscardPane().getChildren().remove(discardCard);

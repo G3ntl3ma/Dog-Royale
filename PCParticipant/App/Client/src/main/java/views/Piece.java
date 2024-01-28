@@ -108,8 +108,6 @@ public class Piece {
      * @param values a 2D array of integers representing coordinates
      */
     public void animateHouse(int[][] values) {
-        System.out.println("animatingHouse");
-        System.out.println(values.length);
         for (int[] v : values) {
             System.out.print(v[0]);
             System.out.print(", ");
