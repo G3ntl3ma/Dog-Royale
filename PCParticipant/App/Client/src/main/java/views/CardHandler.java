@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * made to handle ur handcards
+ * made to handle your handcards
  * author: mtwardy
  */
 public class CardHandler {

@@ -7,6 +7,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
+/**
+ * This class is responsible for the pieces on the board.
+ * It contains the images of the pieces and the methods to move them.
+ *
+ * @author mtwardy
+ */
 public class Piece {
     public double transitionDuration = 1000.0; // in milliseconds
     protected int position = 0;
@@ -25,12 +31,21 @@ public class Piece {
     public boolean goIntoHouse = false; // whether the piece goes into its house as soon as it can
 
 
+    /**
+     * Constructor for Piece
+     * @param i is the index of the piece
+     */
     public Piece(int i)
     {
         this.fieldImage.pieceIndex = i;
         this.houseImage.pieceIndex = i;
     }
 
+    /**
+     * responsible for setting the player index for various components related to the game board
+     *
+     * @param playerindex Represents the index of the player.
+     */
     public void setPlayer(int playerindex)
     {
         this.player = playerindex;
@@ -38,34 +53,60 @@ public class Piece {
         this.fieldImage.playerIndex = playerindex;
     }
 
-    /* updates the piece position and sets the piece onto the field*/
+    /**
+     *  updates the piece position and sets the piece onto the field
+     *
+     * @param fieldPosition Represents the position of the field
+     */
     public void moveToField(int fieldPosition) {
         position = fieldPosition;
         inHouse = false;
         inField = true;
         fieldImage.setVisible(true); // not technically needed, since the animation contains visibleProperty
     }
-    /* updates the piece position and sets the piece into the house*/
+    /**
+     *  updates the piece position and sets the piece into the house
+     *
+     * @param housePosition Represents the position of the house
+     */
     public void moveToHouse(int housePosition) {
         position = housePosition;
         inHouse = true;
         inField = false;
         houseImage.setVisible(true);
     }
-    /* updates the piece position (wherever it is: field, house)*/
+    /**
+     * updates the piece position (wherever it is: field, house)
+     *
+     * @param pos Represents the position of the piece
+     */
     public void moveTo(int pos) {
         position = pos;
     }
+
+    /**
+     * resets the state of an object
+     */
     public void getKicked() {
         inHouse = false;
         inField = false;
         position = 0;
     }
 
-
+    /**
+     * serves as a wrapper for a more generalized animate method, where it specifically applies the animation to a field
+     *
+     * @param values represents a 2D array of integers, likely containing data associated with the animation of a field
+     */
     public void animateField(int[][] values) {
         animate(fieldAnimation, fieldImage, values);
     }
+
+    /**
+     * initiate the house animation based on the given coordinates
+     *
+     * @param values a 2D array of integers representing coordinates
+     */
     public void animateHouse(int[][] values) {
         System.out.println("animatingHouse");
         System.out.println(values.length);
@@ -76,6 +117,14 @@ public class Piece {
         }
         animate(houseAnimation, houseImage, values);
     }
+
+    /**
+     * responsible for creating and executing a timeline-based animation for an ImageView
+     *
+     * @param timeline Represents a JavaFX Timeline, a class used for defining animations
+     * @param image Represents an ImageView, which is an image container in JavaFX
+     * @param values Represents a 2D array of integer values defining the coordinates for animation
+     */
     private void animate(Timeline timeline, ImageView image, int[][] values) {
         // special case: if a value is {0, 0}, the piece is set to not visible
         // otherwise it will be visible

@@ -3,6 +3,12 @@ package views;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ * This class is responsible for handling the pieces.
+ * It contains the pieces and methods to move them.
+ *
+ * @author mtwardy
+ */
 public class PieceHandler {
     public static Piece[] pieces;
     private final Board board;
@@ -20,8 +26,13 @@ public class PieceHandler {
         }
     }
 
-    /*
-    For this piece, if anything is not right, it gets updated accordingly.
+    /**
+     * checks whether the piece is on the bench or in the field/house, updating the piece's visibility and position accordingly
+     *
+     * @param pieceIndex Represents the index of the game piece
+     * @param onBench A boolean indicating whether the piece is on the bench
+     * @param positionInField  The position of the piece in the field (if on the field)
+     * @param positionInHouse The position of the piece in the house (if in the house)
      */
     public void assertPieceState(int pieceIndex, boolean onBench, int positionInField, int positionInHouse) {
         Piece piece = pieces[pieceIndex];
@@ -77,12 +88,15 @@ public class PieceHandler {
         }
     }
 
-    /*
-    Handles moving the piece, updating its attribute piece.position.
-    Also sets off the animations fot the movement.
-    Does all regular movements which excludes: swapping, magnet, startPiece
-    This method assumes that the piece cannot do an extra round. It always takes the route into its house.
-    If it halts on another piece, the other piece gets kicked
+    /**
+     * Handles moving the piece, updating its attribute piece.position.
+     * Also sets off the animations fot the movement.
+     * Does all regular movements which excludes: swapping, magnet, startPiece
+     * This method assumes that the piece cannot do an extra round. It always takes the route into its house.
+     * If it halts on another piece, the other piece gets kicked
+     *
+     * @param numFields The number of fields the piece moves
+     * @param pieceIndex The index of the piece that moves
      */
     public void movePiece(int numFields, int pieceIndex) {
         if (numFields == 0) {
@@ -147,8 +161,10 @@ public class PieceHandler {
         }
     }
 
-    /*
-    Sets this piece in front of his house
+    /**
+     * Sets this piece in front of his house
+     *
+     * @param pieceIndex The index of the piece that moves
      */
     public void startPiece(int pieceIndex) {
         Piece piece = pieces[pieceIndex];
@@ -156,6 +172,13 @@ public class PieceHandler {
         piece.moveToField(newPos);
         pieces[pieceIndex].animateField(new int[][] {getBenchCoordinate(piece.player), board.fieldCoordinates[newPos]});
     }
+
+    /**
+     * Handles swapping two pieces, updating their attributes
+     *
+     * @param pieceOne The index of the first piece
+     * @param pieceTwo The index of the second piece
+     */
     public void switchPieces(int pieceOne, int pieceTwo){
         int posOne = pieces[pieceOne].position;
         int posTwo = pieces[pieceTwo].position;
@@ -165,15 +188,22 @@ public class PieceHandler {
         pieces[pieceTwo].animateField(new int[][]{board.fieldCoordinates[posTwo], board.fieldCoordinates[posOne]});
     }
 
-    /* piece walks forward until reaching otherPiece, halting directly behind it */
+    /**
+     * piece walks forward until reaching otherPiece, halting directly behind it
+     *
+     * @param piece The index of the first piece
+     * @param otherPiece The index of the second piece
+     */
     public void magnet(int piece, int otherPiece) {
         pieces[piece].position = Math.floorMod((pieces[otherPiece].position - 1), board.fieldSize);
     }
 
-    /*
-    Returns whether there is a piece in any house at the given index.
-    Useful for drawing the house popup that doesn't show spots without pieces in any house.
-    */
+    /**
+     * Returns whether there is a piece in any house at the given index.
+     * Useful for drawing the house popup that doesn't show spots without pieces in any house.
+     *
+     * @param index The index of the field
+     */
     public boolean pieceInAnyHouse(int index) {
         for (Piece piece : pieces) {
             if (piece.position == index && piece.inHouse) {
@@ -183,8 +213,10 @@ public class PieceHandler {
         return false;
     }
 
-    /*
-    for a given player (index), returns the number of pieces that are on the bench
+    /**
+     * for a given player (index), returns the number of pieces that are on the bench
+     *
+     * @param player The index of the player
      */
     public int numPiecesOnBench(int player) {
         int counter = board.numPieces;
@@ -195,10 +227,13 @@ public class PieceHandler {
         }
         return counter;
     }
-    /*
-    returns an integer array with all the coordinates of fields between indices from and to (including both end points)
-    e.g. fieldCoordsFromTo(3, 5)  -> {coordinate of field 3, coordinate of field 4, coordinate of field 5}
-    */
+    /**
+     * returns an integer array with all the coordinates of fields between indices from and to (including both end points)
+     * e.g. fieldCoordsFromTo(3, 5)  -> {coordinate of field 3, coordinate of field 4, coordinate of field 5}
+     *
+     * @param from The index of the first field
+     * @param to The index of the second field
+     */
     private int[][] fieldCoordsFromTo(int from, int to) {
         if (from <= to) {
             return Arrays.copyOfRange(board.fieldCoordinates, from, to+1);
@@ -210,15 +245,22 @@ public class PieceHandler {
             return coordinates;
         }
     }
-    /*
-    If the piece gets kicked or starts, it flies over the screen.
-    For this, an approximate bench coordinate is needed
+    /**
+     * If the piece gets kicked or starts, it flies over the screen.
+     * For this, an approximate bench coordinate is needed
+     *
+     * @param player The index of the player
      */
     private int[] getBenchCoordinate(int player) {
         int y = (int) (board.height * (player+0.5) / board.numPlayers);
         return new int[] {0, y};
     }
-    /* only for applying the animation to the piece walking around the corner */
+    /**
+     * only for applying the animation to the piece walking around the corner
+     *
+     * @param pieceIndex The index of the piece
+     * @param positionInHouse The position of the piece in the house
+     */
     private void animateMovementIntoHouse(int pieceIndex, int positionInHouse) {
         Piece piece = pieces[pieceIndex];
         int oldPos = piece.position;

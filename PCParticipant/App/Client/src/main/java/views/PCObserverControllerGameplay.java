@@ -242,6 +242,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         return discardPane;
     }
 
+    /**
+     * returns the animationTime
+     *
+     * @return An Integer containing the animationTime
+     */
     public int getAnimationTime() {
         return animationTime;
     }
@@ -308,6 +313,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      * funtionality for "Haus anzeigen" button
      *
      * @param event the event that triggered the method
+     * @throws IOException if an input or output exception occurs
      */
     @FXML
     private void openHousePopup(ActionEvent event) throws IOException {
@@ -344,6 +350,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      * functionality for "Info" button
      *
      * @param event the event that triggered the method
+     * @throws IOException if an input or output exception occurs
      */
     @FXML
     private void openInfoWindow(ActionEvent event) throws IOException {
@@ -378,6 +385,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      * functionality for "Spiel verlassen" button
      *
      * @param event the event that triggered the method
+     * @throws IOException if an input or output exception occurs
      */
     @FXML
     public void leaveMatch(ActionEvent event)throws IOException {
@@ -604,6 +612,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      * functionality for handling the update of the live timer
      *
      * @param lobbyConfig Represents an object of type ReturnLobbyConfigDto, which contains configuration information related to a lobby
+     * @throws IOException if an input or output exception occurs
      */
     @Override @FXML
     public void handleLobbyConfig(ReturnLobbyConfigDto lobbyConfig) throws IOException {

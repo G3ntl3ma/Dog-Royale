@@ -5,6 +5,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
+/**
+ * This class is responsible for the pieces on the board.
+ * It contains the images of the pieces and the methods to move them.
+ *
+ * @author mtwardy
+ */
 public class PieceImages extends ImageView {
     int pieceIndex;
     boolean onboard;
@@ -27,7 +33,8 @@ public class PieceImages extends ImageView {
 
     /**
      * Constructor for Piece
-     * paneBoardd is the Pane the pieces are drawn on
+     *
+     * @param paneBoardd is the Pane the pieces are drawn on
      */
     public PieceImages(Pane paneBoardd) {
         paneBoard = paneBoardd;
@@ -44,22 +51,48 @@ public class PieceImages extends ImageView {
         });
     }
 
-
+    /**
+     * getter method for the index of the piece
+     *
+     * @return the index of the piece
+     */
     public int getPieceIndex() {
         return pieceIndex;
     }
 
+    /**
+     * setter method for the index of the piece
+     *
+     * @param playerIndex An Integer representing the index of the player
+     */
     public void setPlayerIndex(int playerIndex)
     {
         this.playerIndex = playerIndex;
     }
 
+    /**
+     * getter method for the current piece index
+     *
+     * @return the current piece index
+     */
     public static int getCurrentPieceIndex() {
         return currentPiece.getPieceIndex();
     }
+
+    /**
+     * getter method for the current piece
+     *
+     * @return the current piece
+     */
     public PieceImages getCurrentPiece() {
         return currentPiece;
     }
+
+    /**
+     * getter methd for shine
+     *
+     * @return the shine
+     */
     public ImageView getShine() {
         return shine;
     }
@@ -67,6 +100,7 @@ public class PieceImages extends ImageView {
 
     /**
      * selects the piece
+     *
      * @param radiusField is the size of a field
      */
     private void select(int radiusField)
@@ -90,8 +124,8 @@ public class PieceImages extends ImageView {
         }
     }
 
-    /**deselects the enemy piece
-     *
+    /**
+     * deselects the enemy piece
      */
     public static void deselectEnemyPiece()
     {
@@ -110,6 +144,7 @@ public class PieceImages extends ImageView {
 
     /**
      * gives the piece the "selected look"
+     *
      * @param radiusField is the sice of a field
      */
     private void makeShiny(int radiusField) {
@@ -136,6 +171,11 @@ public class PieceImages extends ImageView {
         }
     }
 
+    /**
+     * responsible for giving the enemy piece the "selected look"
+     *
+     * @param radiusField is the radius of a field
+     */
     private void makeShinyRed(int radiusField) {
         redShine = new ImageView(new Image("/pawnShineRed.png"));
         redShine.setPreserveRatio(true);
@@ -152,18 +192,27 @@ public class PieceImages extends ImageView {
         }
     }
 
-
-
-    //removes the shine from the piece (removes the "selected look")
+    /**
+     * removes the shine from the piece (removes the "selected look")
+     */
     public void removeShine()
     {
         paneBoard.getChildren().remove(shine);
     }
+
+    /**
+     * removes the red shine from the piece (removes the "selected look")
+     */
     public static void removeRedShine()
     {
         paneBoard.getChildren().remove(redShine);
     }
 
+    /**
+     * setter method for SelectEnemyPiece
+     *
+     * @param selectEnemyPiece is a boolean representing whether the enemy piece is selected
+     */
     public static void setSelectEnemyPiece(boolean selectEnemyPiece) {
 
         PieceImages.selectEnemyPiece = selectEnemyPiece;
@@ -173,6 +222,11 @@ public class PieceImages extends ImageView {
         }
     }
 
+    /**
+     * getter method for the selected enemy piece
+     *
+     * @return the selected enemy piece
+     */
     public static int getSelectedEnemyPieceId()
     {
         if (selectedEnemyPiece == null)

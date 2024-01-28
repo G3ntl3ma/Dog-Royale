@@ -9,6 +9,11 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the observer info window
+ *
+ * @author gruppe 8
+ */
 public class PCObserverControllerInfoWindow implements Initializable {
 
     @FXML
@@ -36,10 +41,20 @@ public class PCObserverControllerInfoWindow implements Initializable {
 
     private ReturnLobbyConfigDto lobbyConfig;
 
+    /**
+     * Method to set the lobby config
+     * @param lobbyConfig the lobby config
+     */
     public void setLobbyConfig(ReturnLobbyConfigDto lobbyConfig) {
         this.lobbyConfig = lobbyConfig;
     }
 
+    /**
+     * update various JavaFX UI components with information from the lobbyConfig
+     *
+     * @param url represents the URL of the location from which the FXML file is loaded
+     * @param resourceBundle a ResourceBundle object used for localization
+     */
     @Override
     // sets infoWindow parameters with given lobbyConfig
     public void initialize(URL url, ResourceBundle resourceBundle) {

@@ -28,7 +28,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-
+/**
+ * Controller for the observer menu
+ *
+ * @author gruppe 8
+ */
 public class PCObserverControllerMenu implements Initializable, IClientObserverMenu {
     // attr related to connecting
     @FXML
@@ -117,6 +121,12 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
     private PCObserverControllerGameplay controller;
     private ReturnTournamentInfoDto tournamentInfo;
 
+    /**
+     * responsible for transitioning to the gameplay view in a JavaFX application
+     *
+     * @param event Represents the action event triggered by a user interaction
+     * @throws IOException if an error occurs during the loading of the FXML file
+     */
     @FXML
     public void switchToGameplay(ActionEvent event) throws IOException {
         if(client == null) {
@@ -150,6 +160,10 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         // call stop method when stage is closed
         stageGameplay.setOnCloseRequest(windowEvent -> controller.stop());
     }
+
+    /**
+     * responds to changes in the state of the cBIsObserver CheckBox
+     */
     public void checkBoxSwitch(){
         cBIsObserver.setOnAction(event-> {
             if(cBIsObserver.isSelected()) {
@@ -161,6 +175,10 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         });
 
     }
+
+    /**
+     * checks the selected tab and corresponding table view in a graphical user interface
+     */
     public void joinGameAsObserver(){
         Tab selectedTab = tPGameList.getSelectionModel().getSelectedItem();
         TableView selectedTableview = (TableView) selectedTab.getContent();
@@ -180,7 +198,9 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
 
     }
 
-
+    /**
+     * retrieves information about the selected tournament game from a TabView
+     */
     // see also @handleReturnTournamentInfo()
     public void joinTournamentGame(){
         Tab selectedTab = tPTournaments.getSelectionModel().getSelectedItem();
@@ -196,25 +216,46 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         }
         requestTournamentInfo(tournamentId);
     }
+
+    /**
+     * sends a request to the server for a list of available games
+     */
     public void requestGameList(){
         client.sendMessage(new RequestGameListDto(client.getClientID(), 100,100,100).toJson());
     }
+
+    /**
+     * sends a request for a tournament list to the server
+     */
     public void findTournament(){
         client.sendMessage(new RequestTournamentListDto(client.getClientID(), 100, 100, 100).toJson());
     }
 
+    /**
+     * triggers the reloading of games and tournaments
+     */
     @FXML
     public void reloadGamesAndTournaments(){
         requestGameList();
         findTournament();
     }
+
+    /**
+     * responsible for sending a message to the server requesting information about a tournament
+     *
+     * @param tournamentId Represents the unique identifier of the tournament for which information is being requested
+     */
     public void requestTournamentInfo(int tournamentId){
          client.sendMessage(new RequestTournamentInfoDto(client.getClientID(), tournamentId).toJson());
     }
 
-
-    // registers class as observer on client after connection to server is established
-    // immediately sends requestGameList and findTournament
+    /**
+     * registers class as observer on client after connection to server is established
+     * immediately sends requestGameList and findTournament
+     *
+     * @param event Represents the ActionEvent triggered by a user's interaction
+     * @throws IOException
+     */
     @FXML
     public void connectingToServer(ActionEvent event) throws IOException {
         if (client != null) {
@@ -256,6 +297,13 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
 
     }
 
+    /**
+     *  initializes various JavaFX controls and configures table columns
+     *  for displaying information about planned, running, and finished games and tournaments
+     *
+     * @param url Represents the URL of the resource.
+     * @param resourceBundle Represents a resource bundle containing localized resources
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -342,6 +390,9 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         checkBoxSwitch();
     }
 
+    /**
+     * responsible for handling the closure of a client connection
+     */
     public void stop() {
         if (client == null) {
             return; // Prevents nasty error messages on program closure
@@ -358,6 +409,11 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         });
     }
 
+    /**
+     * responsible for handling the update of the game list
+     *
+     * @param gameList represents an object containing information about the state of various games in a list
+     */
     @Override
     public void handleGameListUpdate(ReturnGameListDto gameList) {
         this.gameList=gameList;
@@ -376,6 +432,11 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
 
     }
 
+    /**
+     * updates the UI components associated with planned, running, and finished tournaments based on the information provided
+     *
+     * @param findTournament An object holding information about upcoming, running, and finished tournaments
+     */
     @Override
     public void handleReturnFindTournament(ReturnTournamentListDto findTournament) {
         this.findTournament = findTournament;
@@ -393,7 +454,11 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         }
     }
 
-    //
+    /**
+     * sends a message to the server, requesting to join the specified game as an observer
+     *
+     * @param tournamentInfo Represents an object providing information about a tournament
+     */
     // to join tournamentGame
     @Override
     public void handleReturnTournamentInfo(ReturnTournamentInfoDto tournamentInfo) {

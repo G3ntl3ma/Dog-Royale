@@ -9,6 +9,11 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * This class is responsible for the client.
+ *
+ * @author mtwardy
+ */
 public class Client implements IClientObservable {
     private Socket socket;
     private BufferedReader bufferedReader;
@@ -20,6 +25,7 @@ public class Client implements IClientObservable {
 
     /**
      * constructor for client class
+     *
      * @param socket socket client is connecting with server
      * @param username username user choose for client
      */
@@ -41,6 +47,7 @@ public class Client implements IClientObservable {
 
     /**
      * getter method for clientID
+     *
      * @return returns clientID server has choosen for client
      */
     public int getClientID(){
@@ -51,6 +58,7 @@ public class Client implements IClientObservable {
 
     /**
      * opens a new thread for messages from client
+     *
      * @param message stream of String characters
      */
     public void sendMessage(String message) {
@@ -60,6 +68,7 @@ public class Client implements IClientObservable {
 
     /**
      * buffering String characters of client messages
+     *
      * @param message stream of String characters
      */
     private synchronized void sendMessageSync(String message){
@@ -176,30 +185,51 @@ public class Client implements IClientObservable {
     }
 
     /**
-     * puts Observer in List of Observer
-     * @param observer
+     * puts Observer in List of gameplay observer
+     *
+     * @param observer Observer to be added
      */
     @Override
     public void registerObserverGameplay(IClientObserverGameplay observer) {
         cOGameplay.add(observer);
     }
 
+    /**
+     * removes Observer from List of gameplay observer
+     *
+     * @param observer Observer to be removed
+     */
     @Override
     public void removeObserverGameplay(IClientObserverGameplay observer) {
         cOGameplay.remove(observer);
     }
 
+    /**
+     * puts Observer in List of menu observer
+     *
+     * @param observer Observer to be added
+     */
     @Override
     public void registerObserverMenu(IClientObserverMenu observer) {
         cOMenu.add(observer);
 
     }
 
+    /**
+     * removes Observer from List of menu observer
+     *
+     * @param observer Observer to be removed
+     */
     @Override
     public void removeObserverMenu(IClientObserverMenu observer) {
         cOMenu.remove(observer);
     }
 
+    /**
+     * updates Observer with new game list
+     *
+     * @param dto new game list
+     */
     @Override
     public void updateGameList(ReturnGameListDto dto) {
             for(IClientObserverMenu observer : cOMenu){
@@ -207,6 +237,11 @@ public class Client implements IClientObservable {
             }
     }
 
+    /**
+     * updates Observer with new tournament list
+     *
+     * @param findTournament new tournament list
+     */
     @Override
     public void updateFindTournament(ReturnTournamentListDto findTournament) {
         for (IClientObserverMenu observer : cOMenu) {
@@ -214,21 +249,42 @@ public class Client implements IClientObservable {
         }
     }
 
+    /**
+     * updates Observer with new tournament info
+     *
+     * @param tournamentInfo new tournament info
+     */
     @Override
     public void updateTournamentInfo(ReturnTournamentInfoDto tournamentInfo) {
 
     }
 
+    /**
+     * updates Observer with new error
+     *
+     * @param error new error
+     */
     @Override
     public void updateError(ErrorDto error) {
 
     }
 
+    /**
+     * updates Observer with new tech data
+     *
+     * @param techData new tech data
+     */
     @Override
     public void updateTechData(ReturnTechDataDto techData) {
 
     }
 
+    /**
+     * updates Observer with new lobby config
+     *
+     * @param lobbyConfig new lobby config
+     * @throws IOException if the fxml file can't be loaded
+     */
     @Override
     public void updateGameConfig(ReturnLobbyConfigDto lobbyConfig) throws IOException {
         for(IClientObserverGameplay observer : cOGameplay){
@@ -236,6 +292,11 @@ public class Client implements IClientObservable {
         }
     }
 
+    /**
+     * updates Observer with new move valid
+     *
+     * @param move new move valid
+     */
     @Override
     public void updateMoveValid(MoveValidDto move) {
         for(IClientObserverGameplay observer : cOGameplay){
@@ -243,6 +304,11 @@ public class Client implements IClientObservable {
         }
     }
 
+    /**
+     * updates Observer with new draw cards
+     *
+     * @param drawCards new draw cards
+     */
     @Override
     public void updateDrawCards(DrawCardsDto drawCards) {
         for (IClientObserverGameplay observer :cOGameplay){
@@ -250,6 +316,11 @@ public class Client implements IClientObservable {
         }
     }
 
+    /**
+     * updates Observer with new board state
+     *
+     * @param boardState new board state
+     */
     @Override
     public void updateBoardState(BoardStateDto boardState) {
         for (IClientObserverGameplay observer : cOGameplay){
@@ -257,6 +328,11 @@ public class Client implements IClientObservable {
         }
     }
 
+    /**
+     * updates Observer with new update draw cards
+     *
+     * @param updateDrawCards new update draw cards
+     */
     @Override
     public void updateUpdateDrawCards(UpdateDrawCardsDto updateDrawCards) {
         for(IClientObserverGameplay observer : cOGameplay){
@@ -264,26 +340,51 @@ public class Client implements IClientObservable {
         }
     }
 
+    /**
+     * updates Observer with new freeze
+     *
+     * @param freeze new freeze
+     */
     @Override
     public void updateFreeze(FreezeDto freeze) {
 
     }
 
+    /**
+     * updates Observer with new unfreeze
+     *
+     * @param unfreeze new unfreeze
+     */
     @Override
     public void updateUnfreeze(UnfreezeDto unfreeze) {
 
     }
 
+    /**
+     * updates Observer with new cancel
+     *
+     * @param cancel new cancel
+     */
     @Override
     public void updateCancel(CancelDto cancel) {
 
     }
 
+    /**
+     * updates Observer with new kick
+     *
+     * @param kick new kick
+     */
     @Override
     public void updateKick(KickDto kick) {
 
     }
 
+    /**
+     * updates Observer with new live timer
+     *
+     * @param liveTimer new live timer
+     */
     @Override
     public void updateLiveTimer(LiveTimerDto liveTimer) {
         for(IClientObserverGameplay observer : cOGameplay){
@@ -291,6 +392,11 @@ public class Client implements IClientObservable {
         }
     }
 
+    /**
+     * updates Observer with new turn timer
+     *
+     * @param turnTimerDto new turn timer
+     */
     @Override
     public void updateTurnTimer(TurnTimerDto turnTimerDto) {
         for(IClientObserverGameplay observer : cOGameplay){

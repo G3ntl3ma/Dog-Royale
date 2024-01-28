@@ -12,9 +12,21 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * This class is the main class of the PCObserverGui.
+ * It starts the GUI and handles the exit of the application.
+ *
+ * @author mtwardy
+ */
 public class PCObserverGui extends Application {
     private PCObserverControllerStartScreen pcOCStartScreen;
 
+    /**
+     * This method starts the GUI and loads the fxml file.
+     *
+     * @param stage represents the main window or stage of the JavaFX application where the user interface will be displayed
+     * @throws IOException if the fxml file can't be loaded
+     */
     @Override
     public void start(Stage stage) throws IOException {
         String css = this.getClass().getResource("style.css").toExternalForm();
@@ -33,11 +45,20 @@ public class PCObserverGui extends Application {
         stage.setOnCloseRequest(event -> exit(stage));
     }
 
+    /**
+     * This method starts the application.
+     *
+     * @param args command line arguments
+     */
     public static void main (String[]args){
             launch();
-        }
+    }
 
-     //Method gets called when pressing the X in the top right Corner
+    /**
+     * this method is called when the exit button is pressed.
+     *
+     * @param stage represents the main window or stage of the JavaFX application where the user interface will be displayed
+     */
     public void exit(Stage stage){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Exit");

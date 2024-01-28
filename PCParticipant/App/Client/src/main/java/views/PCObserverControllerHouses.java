@@ -9,7 +9,11 @@ import javafx.scene.layout.Pane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-
+/**
+ * Controller for the observer houses
+ *
+ * @author gruppe 8
+ */
 public class PCObserverControllerHouses implements Initializable {
     @FXML
     private ScrollPane scrollPaneHolderPane;
@@ -20,10 +24,23 @@ public class PCObserverControllerHouses implements Initializable {
     private PieceHandler pieceHandler;
 
     PieceImages currentPiece = new PieceImages(paneContent);
+
+    /**
+     * Method to set the board attributes
+     * @param houseBoard the board
+     * @param pieceHandler the piece handler
+     */
     public void setBoardAttr(HouseBoard houseBoard, PieceHandler pieceHandler){
         this.houseBoard = houseBoard;
         this.pieceHandler = pieceHandler;
     }
+
+    /**
+     * initializes the UI elements when the associated FXML file is loaded
+     *
+     * @param url represents the URL of the location from which the FXML file is loaded
+     * @param resourceBundle a ResourceBundle object used for localization
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         paneContent = new Pane();

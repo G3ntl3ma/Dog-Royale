@@ -23,7 +23,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * observer controller for the start screen
+ *
+ * @author gruppe 8
+ */
 public class PCObserverControllerStartScreen implements Initializable {
 
     @FXML
@@ -32,34 +36,60 @@ public class PCObserverControllerStartScreen implements Initializable {
     @FXML
     private Button bttnStart;
     int fastness=10000;
+
+    /**
+     * shift the bttnStart button horizontally by -300 units and fade it out
+     */
     @FXML
     protected void handleImageTranslate() {
         imageTranslate(bttnStart,-300,0);
         imageFade(bttnStart);
     }
     int movement=2;
+
+    /**
+     * Translates the bttnStart and bttnExit buttons vertically by a distance specified by the movement variable
+     */
     public void handleUp(){
         imageTranslate(bttnStart, 0,movement);
         imageTranslate(bttnExit, 0,movement);
         movement= (int) (movement*1.5);
     }
+
+    /**
+     * Translates the bttnStart and bttnExit buttons vertically by a distance specified by the movement variable
+     */
     public void handleDown(){
         imageTranslate(bttnStart, 0,-movement);
         imageTranslate(bttnExit, 0,-movement);
         movement= (int) (movement*1.5);
     }
+
+    /**
+     * Translates the bttnStart and bttnExit buttons horizontally by a distance specified by the movement variable
+     */
     public void handleLeft(){
         imageTranslate(bttnStart, -movement,0);
         imageTranslate(bttnExit, -movement,0);
         movement= (int) (movement*1.5);
     }
+
+    /**
+     * Translates the bttnStart and bttnExit buttons horizontally by a distance specified by the movement variable
+     */
     public void handleRight(){
         imageTranslate(bttnStart, movement,0);
         imageTranslate(bttnExit, movement,0);
         movement= (int) (movement*1.5);
     }
 
-    // gives functionality to the "Start" Button. Is directly ripped and modified from "PCObserverControllerMenu
+    /**
+     * gives functionality to the "Start" Button. Is directly ripped and modified from "PCObserverControllerMenu
+     *
+     * @param event represents the event triggered by a user action
+     * @throws IOException if an input or output exception occurs
+     * @throws InterruptedException if a thread is interrupted
+     */
     @FXML
     public void switchToObserverMenu(ActionEvent event) throws IOException, InterruptedException {
 
@@ -79,7 +109,11 @@ public class PCObserverControllerStartScreen implements Initializable {
         stageMenu.setOnCloseRequest(windowEvent -> controller.stop());
     }
 
-// gives functionality to the exit button
+    /**
+     * gives functionality to the exit button
+     *
+     * @param event represents the event triggered by a user action
+     */
     @FXML
     public void bttnExit(ActionEvent event){
         // get a handle to the stage
@@ -88,6 +122,13 @@ public class PCObserverControllerStartScreen implements Initializable {
         stage.close();
     }
 
+    /**
+     * moves the image by the specified distances along the X and Y axes, creating a visual effect
+     *
+     * @param imgName Represents a JavaFX Node object that is intended to undergo translation animation
+     * @param setByX Represents the distance by which the image is translated along the X-axis.
+     * @param setByY Represents the distance by which the image is translated along the Y-axis.
+     */
     public void imageTranslate(Node imgName, int setByX, int setByY){
         TranslateTransition translate = new TranslateTransition();
         translate.setNode(imgName);
@@ -95,8 +136,15 @@ public class PCObserverControllerStartScreen implements Initializable {
         translate.setByX(setByX);
         translate.setByY(-setByY);
         translate.setAutoReverse(true);
-        translate.play();}
+        translate.play();
+    }
 
+    /**
+     * rotates the image by 360 degrees along the Z-axis, creating a visual effect
+     *
+     * @param imgName Represents a JavaFX Node object that is intended to undergo rotation animation
+     * @param speed Represents the speed at which the image is rotated
+     */
     public void imageRotate(Node imgName,int speed) {
         RotateTransition rotate = new RotateTransition();
         rotate.setNode(imgName);
@@ -107,7 +155,13 @@ public class PCObserverControllerStartScreen implements Initializable {
         rotate.setAxis(Rotate.Z_AXIS);
         rotate.play();
 
-}
+    }
+
+    /**
+     * fades the image out, creating a visual effect
+     *
+     * @param imgName Represents a JavaFX Node object that is intended to undergo fade animation
+     */
     // fade
     public void imageFade(Node imgName){
         FadeTransition fade = new FadeTransition();
@@ -118,6 +172,12 @@ public class PCObserverControllerStartScreen implements Initializable {
         fade.setToValue(0);
         fade.play();}
 
+    /**
+     * Method to initialize the start screen.
+     *
+     * @param url Represents the URL of the location from which the FXML file is loaded
+     * @param resourceBundle Represents a ResourceBundle object used for localization
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
