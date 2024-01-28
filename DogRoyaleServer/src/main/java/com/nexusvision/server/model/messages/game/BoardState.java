@@ -16,6 +16,7 @@ public class BoardState extends AbstractMessage {
     private int moveCount;
     private int nextPlayer;
     private boolean gameOver;
+    private boolean wasCanceled;
     private List<WinnerOrderElement> winnerOrder;
 
     @Data

@@ -57,7 +57,7 @@ public class BoardStateService {
         boardState.setLastPlayedCard(game.getLastCardOnPile() == null ? -1 : game.getLastCardOnPile().getOrdinal());
         boardState.setRound(game.getRound());
         boardState.setMoveCount(game.getMovesMade());
-        boardState.setNextPlayer(game.getPlayerToMoveId());
+        boardState.setNextPlayer(game.getPlayerToMoveId()); // TODO: wasCanceled
         boardState.setGameOver(game.checkGameOver());
 
         List<WinnerOrderElement> winnerOrder = new ArrayList<>();

@@ -8,6 +8,7 @@ import com.nexusvision.server.model.enums.OrderType;
 import com.nexusvision.server.model.messages.game.BoardState;
 import com.nexusvision.server.model.utils.PlayerElement;
 import com.nexusvision.server.model.utils.PlayerOrder;
+import com.nexusvision.server.model.utils.WinnerOrderElement;
 import com.nexusvision.server.service.CardService;
 import com.nexusvision.server.service.KickService;
 import lombok.Data;
@@ -411,15 +412,15 @@ public final class Game {
     /**
      * Determines all the winners ordered from highest to lowest
      *
-     * @return An ArrayList with all the winners
+     * @return A list with all the winners
      */
-    public ArrayList<Integer> getWinnerOrder() {
-        //iterate through players in random order to make ties random order
-        ArrayList<Player> randomOrderPlayers = new ArrayList<>(playerList);
+    public List<WinnerOrderElement> getWinnerOrder() {
+        // iterate through players in random order to make ties random order
+        List<Player> randomOrderPlayers = new ArrayList<>(playerList);
         Collections.shuffle(randomOrderPlayers);
 
-        ArrayList<Player> playerWinOrder = new ArrayList<>();
-        ArrayList<Integer> playerIdWinOrder = new ArrayList<>();
+        List<Player> playerWinOrder = new ArrayList<>();
+        List<Integer> playerIdWinOrder = new ArrayList<>();
         for (Player player : randomOrderPlayers) {
             //find first 1, insert before
             boolean inserted = false;

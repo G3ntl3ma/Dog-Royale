@@ -35,7 +35,7 @@ public class LobbyConfig {
 
     private final HashMap<Colors, Integer> colorMap;
     private PlayerOrder playerOrder;
-    private final List<WinnerOrderElement> winnerOrder;
+    private final List<WinnerOrderElement> winnerOrder; // TODO: stay consistent
     private final List<ObserverElement> observerList;
     private String gameName;
     private int maxPlayerCount;

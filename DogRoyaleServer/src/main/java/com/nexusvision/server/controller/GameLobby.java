@@ -190,10 +190,6 @@ public class GameLobby {
         tryMove(0, true, 0, 0, 0, false, 0);
     }
 
-    public Integer getWinnerPlayerId() {
-        return game.getWinnerOrder().get(0);
-    }
-
     /**
      * Receives and tracks responses from client
      *
@@ -405,7 +401,7 @@ public class GameLobby {
      */
     public synchronized void tryMove(int clientId, boolean skip, int card, int selectedValue,
                                      int pieceId, boolean isStarter, Integer opponentPieceId) {
-        stopTurnTimer();
+        stopTurnTimer(); // TODO: If paused then don't accept move
         boolean isValidMove = game.tryMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
         MoveValid moveValid = new MoveValid();
         moveValid.setType(TypeGame.moveValid.getOrdinal());

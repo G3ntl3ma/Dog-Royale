@@ -1,6 +1,7 @@
 package com.nexusvision.server.model.messages.game;
 
 import com.nexusvision.server.model.messages.AbstractMessage;
+import com.nexusvision.server.model.utils.WinnerOrderElement;
 import lombok.Data;
 
 import java.util.List;
@@ -12,5 +13,5 @@ import java.util.List;
  */
 @Data
 public class Cancel extends AbstractMessage {
-    private List<Integer> winnerOrder;
+    private List<WinnerOrderElement> winnerOrder;
 }
