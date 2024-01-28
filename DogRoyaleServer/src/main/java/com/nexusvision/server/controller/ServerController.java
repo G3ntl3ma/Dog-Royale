@@ -33,10 +33,13 @@ public class ServerController {
 
     private final HashMap<Integer, Client> clientMap = new HashMap<>();
     private final HashMap<Integer, GameLobby> lobbyMap = new HashMap<>();
+    private final HashMap<Integer, Tournament> tournamentMap = new HashMap<>();
 
     private final HashMap<Integer, ClientHandler> handlerMap = new HashMap<>();
 
     private int clientIdCounter = 1;
+    private int lobbyIdCounter = 1;
+    private int tournamentIdCounter = 1;
 
     private ServerController() {
     }
@@ -147,15 +150,16 @@ public class ServerController {
      * @return The generated client id
      */
     public int createNewClient() {
-        int newClientID;
+        int newClientId;
 
         do {
-            newClientID = clientIdCounter++;
+            clientIdCounter++;
             if (clientIdCounter < 0) clientIdCounter = 1;
-        } while (clientMap.containsKey(newClientID));
+            newClientId = clientIdCounter;
+        } while (clientMap.containsKey(newClientId));
 
-        clientMap.put(newClientID, new Client());
-        return newClientID;
+        clientMap.put(newClientId, new Client());
+        return newClientId;
     }
 
     /**
@@ -175,25 +179,56 @@ public class ServerController {
      * @return The lobby id
      */
     public int createNewLobby() {
-        Random random = new Random();
-        int newLobbyID;
+        int newLobbyId;
 
         do {
-            newLobbyID = random.nextInt(Integer.MAX_VALUE);
-        } while (lobbyMap.containsKey(newLobbyID));
+            lobbyIdCounter++;
+            if (lobbyIdCounter < 0) lobbyIdCounter = 1;
+            newLobbyId = lobbyIdCounter;
+        } while (lobbyMap.containsKey(newLobbyId));
 
-        lobbyMap.put(newLobbyID, new GameLobby(newLobbyID));
-        return newLobbyID;
+        lobbyMap.put(newLobbyId, new GameLobby(newLobbyId));
+        return newLobbyId;
     }
 
     /**
-     * Gets the lobby object linked to lobbyID
+     * Gets the lobby object linked to lobbyId
      *
-     * @param lobbyID The search parameter to find the lobby object
+     * @param lobbyId The search parameter to find the lobby object
      * @return The lobby object
      */
-    public GameLobby getLobbyById(int lobbyID) {
-        return lobbyMap.get(lobbyID);
+    public GameLobby getLobbyById(int lobbyId) {
+        return lobbyMap.get(lobbyId);
+    }
+
+    /**
+     * Generates a tournament id that doesn't exist yet and saves a new tournament object
+     * linked to that id
+     *
+     * @param maxPlayer Max Players for this tournament
+     * @return The tournament id
+     */
+    public int createNewTournament(int maxPlayer) {
+        int tournamentId;
+
+        do {
+            tournamentIdCounter++;
+            if (tournamentIdCounter < 0) tournamentIdCounter = 1;
+            tournamentId = tournamentIdCounter;
+        } while (tournamentMap.containsKey(tournamentId));
+
+        tournamentMap.put(tournamentId, new Tournament(tournamentId, maxPlayer));
+        return tournamentId;
+    }
+
+    /**
+     * Gets the tournament object linked to <code>tournamentId</code>>
+     *
+     * @param tournamentId The search parameter to find the tournament object
+     * @return The tournament object
+     */
+    public Tournament getTournamentById(int tournamentId) {
+        return tournamentMap.get(tournamentId);
     }
 
     /**

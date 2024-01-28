@@ -1,6 +1,7 @@
 package com.nexusvision.server.model.messages.menu;
 
 import com.nexusvision.server.model.messages.AbstractMessage;
+import com.nexusvision.server.model.utils.TournamentPlayer;
 import lombok.Data;
 
 import java.util.List;
@@ -42,13 +43,6 @@ public class ReturnTournamentInfo extends AbstractMessage {
             private int gameId;
             private boolean wasCanceled;
             private List<TournamentPlayer> winnerOrder;
-        }
-
-        @Data
-        public static class TournamentPlayer {
-            private int clientId;
-            private String name;
-            private int points;
         }
     }
 }

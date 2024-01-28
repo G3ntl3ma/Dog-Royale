@@ -14,6 +14,7 @@ import com.nexusvision.server.model.gamelogic.Player;
 import com.nexusvision.server.model.messages.game.*;
 import com.nexusvision.server.model.messages.menu.ConnectedToGame;
 import com.nexusvision.server.model.messages.menu.Error;
+import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
 import com.nexusvision.server.model.utils.*;
 import com.nexusvision.server.service.BoardStateService;
@@ -606,6 +607,10 @@ public class GameLobby {
 //        this.game = new Game(fieldStringBuild.toString(), figuresPerPlayer, initialCardsPerPlayer, maxTotalMoves, consequencesForInvalidMove);
     }
 
+    public void setConfiguration(ReturnLobbyConfig returnLobbyConfig) {
+        lobbyConfig.importLobbyConfig(returnLobbyConfig);
+    }
+
     public void setConfiguration(String path) {
         lobbyConfig.importLobbyConfig(path);
     }
@@ -651,7 +656,7 @@ public class GameLobby {
             int pieceId = 0;
             boolean isStarter = false;
             int opponentPieceId = 0;
-            int fakeClientId = 1; // game.getCurrentPlayer().getPlayerId(); TODO: I uncommented because playerId doesn't exist anymore
+            int fakeClientId = 1; // game.getCurrentPlayer().getPlayerId(); TODO: I commented because playerId doesn't exist anymore
 
             if (move != null) {
                 skip = false;
