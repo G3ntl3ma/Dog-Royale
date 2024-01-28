@@ -36,7 +36,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
 
-
+/**
+ * Controller for the observer gameplay screen
+ *
+ * @author grupp 8, mtwardy
+ */
 public class PCObserverControllerGameplay implements Initializable, IClientObserverGameplay {
 
     @FXML
@@ -195,10 +199,21 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
     public int animationTime = 1000;
 
+    /**
+     * returns the handCards
+     *
+     * @return An HBox containing the handCards
+     */
     public HBox getHandCards() {
         return handCards;
     }
 
+
+    /**
+     * returns the paneBoard
+     *
+     * @return A Pane containing the paneBoard
+     */
     public Pane getPaneBoardView()
     {
         return paneBoardView;
@@ -207,10 +222,21 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     public PieceImages currentPiece = new PieceImages(paneBoard);
     private CardHandler cardHandler = new CardHandler(this);
 
+
+    /**
+     * returns the cardHandler
+     *
+     * @return A CardHandler containing the cardHandler
+     */
     public ImageView getDiscardPile() {
         return ivDiscardPile;
     }
 
+    /**
+     * returns the discardPane
+     *
+     * @return A Pane containing the discardPane
+     */
     public Pane getDiscardPane()
     {
         return discardPane;
@@ -223,12 +249,23 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
 ////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Sets the client
+     *
+     * @param client the client to be set
+     */
     public void setClient(Client client){
         this.client = client;
         CardHandler.client = client;
         client.registerObserverGameplay(this);
     }
 
+    /**
+     * Sets the lobbyConfig
+     *
+     * @param url This parameter represents the location of the FXML file that defines the user interface associated with this controller
+     * @param resourceBundle This parameter is used to pass a ResourceBundle to the controller
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { //TODO: Delete testing data
 
@@ -267,7 +304,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         //
     }
 
-    // functionality for "Haus anzeigen" button
+    /**
+     * funtionality for "Haus anzeigen" button
+     *
+     * @param event the event that triggered the method
+     */
     @FXML
     private void openHousePopup(ActionEvent event) throws IOException {
         if (housePopupState){  // checks if an info window is already open; true when open
@@ -299,7 +340,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         }
     }
 
-    //functionality for "Info" button
+    /**
+     * functionality for "Info" button
+     *
+     * @param event the event that triggered the method
+     */
     @FXML
     private void openInfoWindow(ActionEvent event) throws IOException {
         if (infoWindowState) { //checks if a house window is already open; true when open
@@ -329,7 +374,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         }
     }
 
-    // functionality for "Spiel verlassen" button
+    /**
+     * functionality for "Spiel verlassen" button
+     *
+     * @param event the event that triggered the method
+     */
     @FXML
     public void leaveMatch(ActionEvent event)throws IOException {
         String css = this.getClass().getResource("style.css").toExternalForm();
@@ -349,11 +398,21 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     }
 
 
-    // zooming functionalities
+    /**
+     * zooming functionalities
+     *
+     * @param event the event that triggered the method
+     */
     @FXML
     void btnResetViewClicked(ActionEvent event) {
         resetView();
     }
+
+    /**
+     * functionality for mouse events
+     *
+     * @param mouseEvent the event that triggered the method
+     */
     @FXML
     void onMousePressed(MouseEvent mouseEvent) {
         mousePrevX = mouseEvent.getSceneX();
@@ -362,6 +421,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         translateYPrev = paneBoard.getTranslateY();
     }
 
+    /**
+     * functionality for mouse events
+     *
+     * @param mouseEvent the event that triggered the method
+     */
     @FXML
     void onMouseDrag(MouseEvent mouseEvent) {
         double mouseXDelta = mouseEvent.getSceneX() - mousePrevX;
@@ -394,6 +458,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         client.sendMessage(new MoveDto(true, Card.card2.ordinal(), 0, 0, false, -1).toJson());
     }
 
+    /**
+     * functionality for Zooming
+     *
+     * @param zoomFactor A Double containing the zoomFactor
+     */
     private void zoomView(double zoomFactor){
         zoom += zoomFactor;
 
@@ -407,6 +476,9 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         paneBoard.setScaleY(zoom);
     }
 
+    /**
+     * functionality for resetting the view
+     */
     private void resetView(){
         paneBoard.setTranslateX(paneBoardView.getWidth() / 2 - paneBoard.getWidth() / 2);
         paneBoard.setTranslateY(paneBoardView.getHeight() / 2 - paneBoard.getHeight() / 2);
@@ -423,6 +495,9 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     }
     // zooming functionalities end
 
+    /**
+     * functionality for hiding the player icons
+     */
     private void hidePlayerIcons() {
         if (board.numPlayers < 6) {
             playerSixVBox.setVisible(false);
@@ -438,6 +513,9 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         }
     }
 
+    /**
+     * responsible for updating the drawing of houses on the graphical interface based on the calculated house coordinates
+     */
     private void updateDrawing() {
         houseBoard.calculateHouseCoordinates(pieceHandler);
         try{
@@ -448,6 +526,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
     }
 
+    /**
+     * functionality for displaying the player names
+     *
+     * @param lobbyConfig the lobbyConfig used to initialize the players
+     */
     public void initPlayerNames(ReturnLobbyConfigDto lobbyConfig){
         Platform.runLater(() -> {
             Label[] playerNames = new Label[]{lblPlayer1, lblPlayer2, lblPlayer3, lblPlayer4,lblPlayer5, lblPlayer6};
@@ -460,6 +543,12 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
             }
             });
     }
+
+    /**
+     * functionality for displaying the number of cards per player
+     *
+     * @param lobbyConfig the lobbyConfig used to initialize the number of cards per player
+     */
     public void initCardNums(ReturnLobbyConfigDto lobbyConfig){
         Platform.runLater(() -> {
             Label[] numCardsPerPlayer = new Label[]{lblCardsPOne, lblCardsPTwo, lblCardsPThree, lblCardsPFour, lblCardsPFive, lblCardsPSix};
@@ -469,6 +558,12 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         });
 
     }
+
+    /**
+     * functionality for initializing the bench
+     *
+     * @param lobbyConfig the lobbyConfig used to initialize the bench
+     */
     public void initBench(ReturnLobbyConfigDto lobbyConfig){
         Platform.runLater(() -> {
             Label[] numFiguresPerPlayer = new Label[]{lblFiguresPOne, lblFiguresPTwo, lblFiguresPThree, lblFiguresPFour, lblFiguresPFive, lblFiguresPSix};
@@ -478,6 +573,12 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         });
 
     }
+
+    /**
+     * functionality for initializing the board
+     *
+     * @param lobbyConfig the lobbyConfig used to initialize the board
+     */
     public void initBoard(ReturnLobbyConfigDto lobbyConfig){
         board = new Board(lobbyConfig.getFieldsize(), lobbyConfig.getMaxPlayerCount(), lobbyConfig.getFiguresPerPlayer());
         houseBoard = new HouseBoard(lobbyConfig.getMaxPlayerCount(), lobbyConfig.getFiguresPerPlayer());
@@ -497,6 +598,12 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
 
     // observerInterface methods
+
+    /**
+     * functionality for handling the update of the live timer
+     *
+     * @param lobbyConfig Represents an object of type ReturnLobbyConfigDto, which contains configuration information related to a lobby
+     */
     @Override @FXML
     public void handleLobbyConfig(ReturnLobbyConfigDto lobbyConfig) throws IOException {
 
@@ -522,6 +629,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         });
     }
 
+    /**
+     * functionality for handling move validity
+     *
+     * @param moveValid Represents an object of type MoveValidDto, which contains information about the validity of a move
+     */
     @Override
     public void handleMoveValid(MoveValidDto moveValid) {
         Platform.runLater(() -> {
@@ -569,11 +681,24 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
             client.sendMessage(new ResponseDto().toJson());
         });
     }
+
+    /**
+     * updates piece labels
+     */
     private void updatePieceLabels() {
         for (int player = 0; player < board.numPlayers; player++) {
             lblPlayerFigures[player].setText("x " + pieceHandler.numPiecesOnBench(player));
         }
     }
+
+    /**
+     * returns the corresponding numerical value based on a predefined array (cardValues).
+     * It handles special cases for certain cards
+     *
+     * @param ordinalValue Represents the ordinal value of a card, typically ranging from 0 to 14.
+     * @param selectedValue Represents the selected value associated with a card.
+     * @return An Integer containing the card number
+     */
     public int cardNumber(int ordinalValue, int selectedValue) {
         int[] cardValues = {2, 3, 5, 6, 8, 9, 10, 12, 0, 0, 0, 0, 100, 200, 0}; // 100 = swapcard, 200 = magnetcard
         if (ordinalValue < cardValues.length) {
@@ -608,6 +733,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         }
     }
 
+    /**
+     * handles the drawing and dropping of cards in the game
+     *
+     * @param drawCards Represents an object of type DrawCardsDto containing information about drawn and dropped cards in the game.
+     */
     @Override
     public void handleDrawCards(DrawCardsDto drawCards) {
         Platform.runLater(() -> {
@@ -632,6 +762,13 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
     }
 
+    /**
+     * It prints debug information, updates UI elements such as player labels,
+     * displays the current player's turn, and updates the visual representation of pieces on the board.
+     * Additionally, it manages the display of the discard pile
+     *
+     * @param boardStateDto Represents an object containing the current state of the game board
+     */
     @Override
     public void handleBoardState(BoardStateDto boardStateDto) {
 
@@ -759,6 +896,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         });
     }
 
+    /**
+     * updates the UI labels representing the number of draw cards for each player based on the information provided
+     *
+     * @param updateDrawCards contains information about the hand cards held by players.
+     */
     @Override
     public void handleUpdateDrawCards(UpdateDrawCardsDto updateDrawCards) {
         Platform.runLater(() ->{
@@ -792,6 +934,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
     }
 
+    /**
+     * updates the local liveTimer variable and the UI label representing the live timer
+     *
+     * @param liveTimerDto an object of type LiveTimerDto representing the live timer data
+     */
     @Override
     public void handleUpdateLiveTimer(LiveTimerDto liveTimerDto) {
         liveTimer = liveTimerDto.getLiveTime();
@@ -814,6 +961,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         }
     }
 
+    /**
+     * updates the local turnTimer variable and the UI label representing the turn timer
+     *
+     * @param turnTimerDto represents a data transfer object (TurnTimerDto) containing information about the turn timer
+     */
     @Override
     public void handleUpdateTurnTimer(TurnTimerDto turnTimerDto) {
         turnTimer = turnTimerDto.getTurnTime();
@@ -835,6 +987,9 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         }
     }
 
+    /**
+     * closes the connection
+     */
     public void stop(){
         if(liveTimerThread != null) liveTimerThread.interrupt();
         if(turnTimerThread != null) turnTimerThread.interrupt();
@@ -867,7 +1022,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         handleRotate(bttnPlayer6);
     }*/
 
-    //the handler, used to rotate the playerIcon
+    /**
+     * the handler, used to rotate the playerIcon
+     *
+     * @param playerIndex Represents the index of the player whose image needs to be rotated
+     */
     //a second parameter could be used to limit the cycle count to the maximum time per turn
     public void handleRotate(int playerIndex) {
         if(rotatePlayer != null){
@@ -887,21 +1046,41 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     }
 
 
+    /**
+     * functionality for handling the freeze of a player
+     *
+     * @param freeze Represents an object of type FreezeDto
+     */
     @Override
     public void handleFreeze(FreezeDto freeze) {
 
     }
 
+    /**
+     * functionality for handling the unfreeze of a player
+     *
+     * @param unfreeze Represents an object of type UnfreezeDto
+     */
     @Override
     public void handleUnFreeze(UnfreezeDto unfreeze) {
 
     }
 
+    /**
+     * functionality for handling cancel
+     *
+     * @param cancel Represents an object of type CancelDto
+     */
     @Override
     public void handleCancel(CancelDto cancel) {
 
     }
 
+    /**
+     * functionality for handling kicking a player
+     *
+     * @param kick Represents an object of type KickDto
+     */
     @Override
     public void handleKick(KickDto kick) {
 
