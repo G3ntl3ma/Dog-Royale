@@ -8,7 +8,7 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class FindTournament  {
+public class FindTournament extends AbstractMenuMessage {
     private int clientId;
     private int tournamentStarting;
     private int tournamentInProgress;

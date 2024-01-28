@@ -9,10 +9,8 @@ import lombok.Data;
  * @author kellerb
  */
 @Data
-public class ConnectedToGame {
+public class ConnectedToGame extends AbstractMenuMessage {
     private boolean success;
 
-    public boolean isSuccess() {
-        return success;
-    }
+
 }

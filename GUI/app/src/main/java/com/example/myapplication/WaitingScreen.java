@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.myapplication.controller.ClientController;
 import com.example.myapplication.databinding.FragmentWaitingScreenBinding;
 
 /**
@@ -55,6 +56,7 @@ public class WaitingScreen extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ClientController.getInstance().getWaitingScreen(this);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -67,6 +69,10 @@ public class WaitingScreen extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_waiting_screen, container, false);
     }
+    public void navigateToGame(){
+        NavHostFragment.findNavController(WaitingScreen.this)
+                .navigate(R.id.action_waitingScreen_to_game_board_layout);
+    }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -76,8 +82,7 @@ public class WaitingScreen extends Fragment {
         binding.continuebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(WaitingScreen.this)
-                        .navigate(R.id.action_waitingScreen_to_game_board_layout);
+
             }
         });
 

@@ -5,6 +5,7 @@ package com.example.myapplication;
 import android.app.ActionBar;
 import android.os.Bundle;
 
+import com.example.myapplication.controller.ClientController;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+    ClientController clientController = ClientController.getInstance();
 
     static ServerViewModel serverViewModel;
     static GameboardViewModel gameboardViewModel;
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        clientController = ClientController.getInstance();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 

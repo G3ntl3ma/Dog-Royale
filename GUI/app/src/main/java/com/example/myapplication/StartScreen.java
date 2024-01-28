@@ -78,9 +78,20 @@ public class StartScreen extends Fragment {
                     //serverViewModel.addMatchHistoryList(new ArrayList<ReturnGameList.FinishedGame>(Arrays.asList(new ReturnGameList.FinishedGame(1, 1), new ReturnGameList.FinishedGame(2, 2), new ReturnGameList.FinishedGame(3, 3), new ReturnGameList.FinishedGame(4, 4), new ReturnGameList.FinishedGame(5, 5) )));
                     //serverViewModel.addSpectateGamesList(new ArrayList<ReturnGameList.StartingGame>(Arrays.asList(new ReturnGameList.StartingGame(1, 1, 2), new ReturnGameList.StartingGame(2, 2, 3), new ReturnGameList.StartingGame(3, 3, 4), new ReturnGameList.StartingGame(4, 4, 5), new ReturnGameList.StartingGame(5, 5, 6) )));
                     //serverViewModel.addRunningGameList(new ArrayList<ReturnGameList.RunningGame>(Arrays.asList(new ReturnGameList.RunningGame(1, 1, 2), new ReturnGameList.RunningGame(2, 2, 3), new ReturnGameList.RunningGame(3, 3, 4), new ReturnGameList.RunningGame(4, 4, 5), new ReturnGameList.RunningGame(5, 5, 6) )));
+
+//                    binding.button.setEnabled(true);
+                    try{
+                        clientController.sendConnectToServerRequest(username,StartScreen.this);
+                    }
+                    catch (
+                            HandlingException e) {
+                        binding.button.setError("connection failed");
+                    }
                     viewModel.setUsername(username);
                     NavHostFragment.findNavController(StartScreen.this)
                             .navigate(R.id.action_startScreen_to_FirstFragment);
+
+
                 }
             }
         });

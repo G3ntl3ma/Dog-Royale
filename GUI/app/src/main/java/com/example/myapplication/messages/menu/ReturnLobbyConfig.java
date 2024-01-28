@@ -10,7 +10,7 @@ import java.util.List;
  * @author Mattes
  */
 @Data
-public class ReturnLobbyConfig{
+public class ReturnLobbyConfig extends AbstractMenuMessage{
     private enum Penalty {
         excludeFromRound,
         kickFromGame
