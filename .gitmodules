@@ -1,0 +1,3 @@
+[submodule "nexusvision"]
+	path = nexusvision
+	url = https://github.com/CraigUnshallach/nexusvision
