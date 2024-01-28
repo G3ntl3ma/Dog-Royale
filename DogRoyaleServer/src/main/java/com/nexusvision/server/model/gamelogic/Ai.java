@@ -17,16 +17,21 @@ public class Ai {
 
     public Move getMove(Game game, long startTime) {
         Node root = new Node(null, null);
+        if(root == null) {
+            System.out.println("root is null after init (and thats a bad thing)");
+            System.exit(222);
+        }
         Player currentPlayer = game.getCurrentPlayer();
         SaveState savestate = new SaveState(game);
         // System.out.println("getting move from ai");
         List<Integer> oldhash = game.hash();
         //TODO assert same hash
         for (int i = 0; i < this.numberOfSimulations; ++i) {
+            System.out.println("ai simulation " + i);
             if(System.currentTimeMillis() - startTime > thinkTime) {
+                System.out.println("abort simulation before the " + i + "th simulation");
                 break;
             }
-            // System.out.println("ai simulation " + i);
             Node currentnode = root;
             // System.out.println("visits root node: " + currentnode.getVisits());
             Node bestchild = currentnode;
@@ -41,7 +46,7 @@ public class Ai {
                 currentnode.expand(game);
                 float utc = bestutc;
                 ArrayList<Node> children = currentnode.getChildren();
-                // System.out.println("num of children " + children.size());
+                System.out.println("num of children " + children.size());
                 for (Node child : children) {
                     utc = child.getutc();
                     // System.out.println("utc " + utc + "bestutc " + bestutc);
@@ -137,11 +142,17 @@ public class Ai {
             
             // game.shuffleUnknown(currentPlayer);
         }
-        
         //choose child node of root node with highest val
+        System.out.println("done with simulation, load state");
         savestate.loadState(game);
+        System.out.println("state loaded");
         int avgval = -Integer.MAX_VALUE;
         Move bestmove = null;
+        System.out.println("num of children " + root.getChildren().size());
+        if(root.getChildren() == null) {
+            System.out.println("childless");
+            System.exit(222);
+        }
         for (Node child : root.getChildren()) {
             if (child.getVisits() == 0) {
                 continue; //avoid div by zero

@@ -20,6 +20,7 @@ public final class Move {
     private final Player player;
     private final Card cardUsed;
     private final Figure playerFigure;
+    private final int selectedValue;
 
     /**
      * Constructor for the Move
@@ -30,6 +31,22 @@ public final class Move {
      * @param isSwapMove A Boolean indicating if it is a swap move or not
      * @param cardUsed   An object representing the card used for the move
      */
+    public Move(Player player, Field from, Field to, boolean isSwapMove, Card cardUsed, int selectedValue) {
+        this.player = player;
+        this.from = from;
+        this.to = to;
+        this.isSwapMove = isSwapMove;
+        this.isStartMove = false;
+        this.cardUsed = cardUsed;
+        if(from != null) {
+            this.playerFigure = from.getFigure();
+        }
+        else {
+            this.playerFigure = player.getFirstOnBench();
+        }
+        this.selectedValue = selectedValue;
+    }
+
     public Move(Player player, Field from, Field to, boolean isSwapMove, Card cardUsed) {
         this.player = player;
         this.from = from;
@@ -43,6 +60,7 @@ public final class Move {
         else {
             this.playerFigure = player.getFirstOnBench();
         }
+        this.selectedValue = -1;
     }
 
     public Integer getPieceId() {
@@ -50,21 +68,24 @@ public final class Move {
         else return playerFigure.getFigureId();
     }
 
-    public int getSelectedValue() {
-        //formula
-        //(startfieldofplayervalue + tofieldvalue - firsthousefieldinx) - currentfieldvalue
+    public int _getSelectedValue(int mainfields) {
+        // formula
+        // (startfieldofplayervalue + tofieldvalue - firsthousefieldinx) - currentfieldvalue
         if (isStartMove){
             return -1;
         }
         if(to.getType() == FieldType.HOUSE && from.getType() != FieldType.HOUSE) {
-            int toValue = player.getStartField().getFieldId() + to.getFieldId() - player.getHouseFirstIndex();
+            int houseFieldId = to.getFieldId() - player.getHouseFirstIndex();
+            System.out.println("houseFieldId " + houseFieldId);
+            int toValue = player.getStartField().getFieldId() + houseFieldId;
             int fromvalue = from.getFieldId();
+            System.out.println("toValue " + toValue + "fromvalue " + fromvalue);
             return toValue - fromvalue;
         }
         else {
-            return to.getFieldId() - from.getFieldId();
+            // return (to.getFieldId() - from.getFieldId() + mainfields) %mainfields;
+            return to.getFieldId() - from.getFieldId(); 
         }
-
     }
 
     /**
@@ -86,6 +107,7 @@ public final class Move {
         else {
             this.playerFigure = player.getFirstOnBench();
         }
+        this.selectedValue = -1;
     }
 
     /**

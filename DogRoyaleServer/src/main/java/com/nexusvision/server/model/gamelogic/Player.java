@@ -175,11 +175,11 @@ public final class Player {
      * @return An ArrayList storing the represented moves
      */
     public ArrayList<Move> generateMoves(Game game) {
-        System.out.print("generating moves for a player "+ this.clientId + " with the follwing handcards");
-        for(Card card : this.getCardList()) {
-            System.out.print(card + " ");
-        }
-        System.out.println("");
+        // System.out.print("generating moves for a player "+ this.clientId + " with the follwing handcards");
+        // for(Card card : this.getCardList()) {
+            // System.out.print(card + " ");
+        // }
+        // System.out.println("");
         ArrayList<Move> moves = new ArrayList<>();
         boolean[] seenCardTypes = new boolean[Card.values().length];
         boolean seenBenchFigure = false;
@@ -202,13 +202,13 @@ public final class Player {
                 game.getCardService().getMoves(game, figure, moves, this);
             }
         }
-        System.out.println("size of moves array" + moves.size());
+        // System.out.println("size of moves array" + moves.size());
         return moves;
     }
 
     public int hash() { //compute a hah of things that can change in simulation
         ArrayList<Integer> handCardValues = this.cardList.stream()
-            .map(card -> card.ordinal())
+            .map(card -> card.getOrdinal())
             .sorted()
             .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 

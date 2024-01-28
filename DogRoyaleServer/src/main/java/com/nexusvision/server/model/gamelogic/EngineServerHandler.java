@@ -26,6 +26,7 @@ public class EngineServerHandler{
     private HashMap<Integer, Integer> handCardCounts = new HashMap<>(); //clientId key
     private Game game;
     private Ai ai;
+    private BoardState boardState;
     private int initialCardsPerPlayer=0;
     protected static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
@@ -96,9 +97,11 @@ public class EngineServerHandler{
             } else if (type == TypeGame.updateDrawCards.getOrdinal()) {
                 return handleSynchronizeCardCounts(jsonRequest); //3.5
             } else if (type == TypeGame.drawCards.getOrdinal()) {
-                handleManageHandCards(jsonRequest); //3.4 
+                return handleManageHandCards(jsonRequest); //3.4 
             } else if (type == TypeGame.boardState.getOrdinal()) {
-                return handleLoadBoardJson(jsonRequest); //3.3
+                handleLoadBoardJson(jsonRequest); //3.3
+            } else if (type == TypeGame.moveValid.getOrdinal()) {
+                handleMoveValid(jsonRequest); //3.8
             } else if (type == TypeGame.kick.getOrdinal()) {
                 handleKick(jsonRequest); //3.14
             }
@@ -106,6 +109,16 @@ public class EngineServerHandler{
             return null;
         }
         return null;
+    }
+    
+    private void handleMoveValid(JsonObject jsonObject) {
+        MoveValid moveValid = gson.fromJson(jsonObject.toString(), MoveValid.class);
+        boolean validMove = moveValid.isValidMove();
+        // if(!validMove) {
+        //     System.out.println("invalid move was passed to the server");
+        //     System.out.println("Card " + Card.getType(moveValid.getCard()) + " selected value " + moveValid.getSelectedValue() + " pieceId " + moveValid.getPieceId() + " isStarter " + moveValid.isStarter() + " opponentPieceId " + moveValid.getOpponentPieceId());
+        //     System.exit(234);
+        // }
     }
 
     private void handleKick(JsonObject jsonObject) { //3.14
@@ -122,7 +135,7 @@ public class EngineServerHandler{
         
         System.out.println("handle lobby config");
         ReturnLobbyConfig lobbyConfig = gson.fromJson(jsonObject.toString(), ReturnLobbyConfig.class);
-        this.ai = new Ai(100000, lobbyConfig.getThinkTimePerMove()-500);
+        this.ai = new Ai(100000, lobbyConfig.getThinkTimePerMove()*1000-500); //???
         //dont handle if its not the final thing
         //if startfields < maxplayers dont do anything
         if (lobbyConfig.getStartFields().getCount() < lobbyConfig.getMaxPlayerCount()) {
@@ -182,27 +195,28 @@ public class EngineServerHandler{
         return gson.toJson(response).toString(); //return response 3.6
     }
     
-    public void handleManageHandCards(JsonObject jsonObject) { //3.4
+    public String handleManageHandCards(JsonObject jsonObject) { //3.4
         System.out.println("handlemanagehandcards");
         DrawCards drawCards = gson.fromJson(jsonObject.toString(), DrawCards.class);
         List<Integer> droppedInts = drawCards.getDroppedCards();
         List<Integer> drawnInts = drawCards.getDrawnCards();
         // Process dropped cards
         for (int dropped : droppedInts) {
-            handcards.remove(Card.values()[dropped]);
+            handcards.remove(Card.getType(dropped));
         }
         // Process drawn cards
         for (int drawn : drawnInts) {
-            handcards.add(Card.values()[drawn]);
+            handcards.add(Card.getType(drawn));
         }
         System.out.println("handcards " + handcards);
+        return sendMove(); //TODO send this only when appropriate
     }
     
-    public String handleLoadBoardJson(JsonObject jsonObject) { //3.3
+    public void handleLoadBoardJson(JsonObject jsonObject) { //3.3
         System.out.println("handle load board");
-        BoardState boardState = null;
+        this.boardState = null;
         try {
-            boardState = gson.fromJson(jsonObject.toString(), BoardState.class);
+            this.boardState = gson.fromJson(jsonObject.toString(), BoardState.class);
         } catch (JsonSyntaxException e) {
             System.out.println("json syntax error in handle load board json");
             e.printStackTrace();
@@ -212,9 +226,13 @@ public class EngineServerHandler{
         } catch (Exception e) {
             e.printStackTrace();
         }
+       
+    }
 
+    private String sendMove() {
         System.out.println("game over bool=" + boardState.isGameOver());
-        if(boardState.isGameOver()) { 
+        if(boardState.isGameOver()) {
+            this.game.printBoard();
             System.out.println("game over");
             System.exit(666);
         }
@@ -225,7 +243,7 @@ public class EngineServerHandler{
         }
         
         System.out.println("my turn");
-        game.setPlayerToMoveId(boardState.getNextPlayer());
+        game._setPlayerToMoveId(boardState.getNextPlayer()); //TODO BUGGG
         
         //parse field
         //set piece stuff
@@ -294,7 +312,7 @@ public class EngineServerHandler{
         //distribute stuffs
         //handcardCounts
         int lastPlayedCardInt = boardState.getLastPlayedCard(); //TODO make sure last card is in pile
-        game.setLastCardOnPile(lastPlayedCardInt == -1 ? null : Card.values()[lastPlayedCardInt]);
+        game.setLastCardOnPile(lastPlayedCardInt == -1 ? null : Card.getType(lastPlayedCardInt));
         ArrayList<Card> unknownCardPool = new ArrayList<>();
         game.fillWithAllCards(unknownCardPool);
         game.setDeck(new ArrayList<Card>()); //ZERO
@@ -313,7 +331,7 @@ public class EngineServerHandler{
         int pilesize = boardState.getDiscardPile().size();
         for (int i = 0; i < pilesize; i++) {
             int cardix = boardState.getDiscardPile().get(pilesize - i - 1).getCard();
-            Card card = Card.values()[cardix];
+            Card card = Card.getType(cardix);
             unknownCardPool.remove(card);
             game.getPile().add(card); 
         }
@@ -324,28 +342,34 @@ public class EngineServerHandler{
         System.out.println("handcardcounts " + handCardCounts);
         System.out.println("unknowncardpool before distributing to players and deck " + unknownCardPool.size());
         
-        int currentId = 0;
+        int playerListInx = 0;
         while(unknownCardPool.size() > 0) {
             Card card = unknownCardPool.get(0);
-            if(currentId >= game.getPlayerList().size()) {
+            if(playerListInx >= game.getPlayerList().size()) {
                 game.getDeck().add(card);
                 unknownCardPool.remove(card);
                 continue;
             }
-            Player currentPlayer = game.getPlayerList().get(currentId);
+            Player currentPlayer = game.getPlayerList().get(playerListInx);
+            int clientId = currentPlayer.getClientId();
             int handCardCount = currentPlayer.getCardList().size();
-            if(handCardCount < handCardCounts.get(currentId)) {
+            if(clientId == this.clientId) {
+                playerListInx++;
+                continue;
+            }
+            if(handCardCount < handCardCounts.get(clientId)) {
                 currentPlayer.getCardList().add(card);
                 unknownCardPool.remove(card);
             }
             else {
-                currentId++;
+                playerListInx++;
             }
         }
 
         this.game.printBoard();
         //choose random move
         System.out.println("choose move");
+        System.out.println("handcards " + handcards);
         long startTime = System.currentTimeMillis();
         Move move = game.getRandomMove();
         //choose ai move
@@ -365,8 +389,10 @@ public class EngineServerHandler{
         if(move != null) {
             //convert to json
             _move.setSkip(false);
-            _move.setCard(move.getCardUsed().ordinal());
-            _move.setSelectedValue(move.getSelectedValue());
+            _move.setCard(move.getCardUsed().getOrdinal()); //idkmate
+            int _selectedValue = move.getSelectedValue();
+            System.out.println("selected value " + _selectedValue);
+            _move.setSelectedValue(_selectedValue);
             Figure playerFigure = move.getPlayerFigure();
             Integer pieceId = null;
             if(playerFigure != null) {

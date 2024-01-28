@@ -573,4 +573,76 @@ public class GameLobby {
     private Integer getClientToMoveId() {
         return getClientId(game.getPlayerToMoveId());
     }
+
+    private void sendError(int clientId, String errorMessage) {
+        log.error(errorMessage);
+        Error error = new Error();
+        error.setType(TypeMenue.error.getOrdinal());
+        error.setMessage(errorMessage);
+        String response = gson.toJson(error, Error.class);
+        messageBroker.sendMessage(ChannelType.SINGLE, clientId, response);
+    }
+
+    private void randomMoveMatch() {
+        for (int i = 0; i < lobbyConfig.getMaxPlayerCount(); i++) {
+            //clientId = playerId
+            lobbyConfig.addPlayer("test", i);
+            lobbyConfig.addColor(Colors.values()[i], i);
+        }
+        while (true) {
+            stopTurnTimer();
+            Move move = game.getRandomMove();
+            boolean skip = true;
+            Card card = null;
+            int selectedValue = 0;
+            int pieceId = 0;
+            boolean isStarter = false;
+            int opponentPieceId = 0;
+            int fakeClientId = 1; // game.getCurrentPlayer().getPlayerId(); TODO: I commented because playerId doesn't exist anymore
+
+            if (move != null) {
+                skip = false;
+                card = move.getCardUsed();
+                selectedValue = move.getSelectedValue();
+                //selected figure could be on bench
+                if (move.isStartMove()) {
+                    pieceId = game.getCurrentPlayer().getFirstOnBench().getFigureId();
+                } else {
+                    pieceId = move.getFrom().getFigure().getFigureId();
+
+                }
+                isStarter = move.isStartMove();
+                if (move.isSwapMove()) {
+                    opponentPieceId = move.getTo().getFigure().getFigureId();
+                } else {
+                    opponentPieceId = -1; //dont care
+                }
+
+            }
+            move.execute(game);
+
+            MoveValid moveValid = new MoveValid();
+
+            moveValid.setType(TypeGame.moveValid.getOrdinal());
+            moveValid.setSkip(skip);
+            moveValid.setCard(card.getOrdinal());
+            moveValid.setSelectedValue(selectedValue);
+            moveValid.setPieceId(pieceId);
+            moveValid.setStarter(isStarter);
+            moveValid.setOpponentPieceId(opponentPieceId);
+            moveValid.setValidMove(true);
+
+            String moveValidMessage = gson.toJson(moveValid, MoveValid.class);
+
+            lobbyPublisher.publish(moveValidMessage);
+
+            cleanUpAfterMove(fakeClientId, true);
+
+            try {
+                Thread.sleep(lobbyConfig.getThinkTimePerMove() * 1000L / 2);
+            } catch (InterruptedException e) {
+                log.error("Sleeping thread got interrupted: " + e.getMessage());
+            }
+        }
+    }
 }

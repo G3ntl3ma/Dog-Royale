@@ -25,7 +25,7 @@ public enum Card {
      * @return The correct ordinal value
      */
     public int getOrdinal() {
-        return ordinal();
+        return ordinal(); 
     }
 
     /**
