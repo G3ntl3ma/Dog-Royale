@@ -14,11 +14,11 @@ public abstract class MessageHandler<M extends AbstractMessage> extends Handler 
      * Handle the received message
      *
      * @param message The deserialized json string that's getting processed
-     * @param clientID The clientID specified for the request
+     * @param clientId The clientId specified for the request
      */
-    public final void handle(M message, int clientID) throws HandlingException {
+    public final void handle(M message, int clientId) throws HandlingException {
         try {
-            performHandle(message, clientID);
+            performHandle(message, clientId);
         } catch (HandlingException e) {
             throw e;
         } catch (Exception e) {
@@ -31,22 +31,22 @@ public abstract class MessageHandler<M extends AbstractMessage> extends Handler 
      * Handle the received message internally
      *
      * @param message The deserialized json string that's getting processed
-     * @param clientID The clientID specified for the request
+     * @param clientId The clientId specified for the request
      */
-    protected abstract void performHandle(M message, int clientID) throws HandlingException;
+    protected abstract void performHandle(M message, int clientId) throws HandlingException;
 
     /**
-     * Compares <code>expectedID</code> and <code>actualID</code> and throws a <code>HandlingException</code>
+     * Compares <code>expectedId</code> and <code>actualId</code> and throws a <code>HandlingException</code>
      * if they are not the same
      *
-     * @param expectedID The expected client ID
-     * @param actualID The actual client ID
+     * @param expectedId The expected client ID
+     * @param actualId The actual client ID
      * @throws HandlingException If both IDs are not the same
      */
-    protected void verifyClientID(int expectedID , int actualID) throws HandlingException {
-        if (expectedID  != actualID) {
+    protected void verifyClientId(int expectedId , int actualId) throws HandlingException {
+        if (expectedId  != actualId) {
             throw new HandlingException(
-                    "Received wrong client id: Expected " + expectedID  + ", but received " + actualID,
+                    "Received wrong client id: Expected " + expectedId  + ", but received " + actualId,
                     TypeMenue.error.getOrdinal());
         }
     }

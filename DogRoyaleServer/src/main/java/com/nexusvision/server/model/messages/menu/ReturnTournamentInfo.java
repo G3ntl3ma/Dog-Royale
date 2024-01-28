@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Data
 public class ReturnTournamentInfo extends AbstractMessage {
-    private List<TournamentInfo> tournamentInfo;
+    private TournamentInfo tournamentInfo;
 
     @Data
     public static class TournamentInfo{

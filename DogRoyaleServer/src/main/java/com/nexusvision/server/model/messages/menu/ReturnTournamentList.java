@@ -15,12 +15,12 @@ import java.util.List;
 @Data
 public class ReturnTournamentList extends AbstractMessage {
     private int clientId;
-    private List<TournamentStart> tournamentsUpcoming;
-    private List<TournamentInProgression> tournamentsRunning;
-    private List<TournamentFinish> tournamentsFinished;
+    private List<UpcomingTournament> tournamentsUpcoming;
+    private List<RunningTournament> tournamentsRunning;
+    private List<FinishedTournament> tournamentsFinished;
 
     @Data
-    public static class TournamentStart{
+    public static class UpcomingTournament {
         private int tournamentId;
         private int maxPlayer;
         private int maxGames;
@@ -28,7 +28,7 @@ public class ReturnTournamentList extends AbstractMessage {
     }
 
     @Data
-    public static class TournamentInProgression{
+    public static class RunningTournament {
         private int tournamentId;
         private int maxPlayer;
         private int maxGames;
@@ -36,7 +36,7 @@ public class ReturnTournamentList extends AbstractMessage {
     }
 
     @Data
-    public static class TournamentFinish{
+    public static class FinishedTournament {
         private int tournamentId;
         private List<WinnerOrderElement> winnerOrder;
     }

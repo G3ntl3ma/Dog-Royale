@@ -28,7 +28,7 @@ public class JoinGameAsPlayerHandler extends MessageHandler<JoinGameAsPlayer> {
     @Override
     protected void performHandle(JoinGameAsPlayer message, int clientId) throws HandlingException {
 
-        verifyClientID(clientId, message.getClientId());
+        verifyClientId(clientId, message.getClientId());
         ServerController serverController = ServerController.getInstance();
 
         GameLobby lobby = serverController.getLobbyById(message.getGameId());

@@ -303,8 +303,8 @@ public final class Game {
 
         //add players
         List<PlayerElement> _playerOrder = lobbyConfig.getPlayerOrder().getOrder();
-        System.out.println("playerorder " + lobbyConfig.getPlayerOrder().toString());
-        System.out.println("playerorder.getorder " + lobbyConfig.getPlayerOrder().getOrder().toString());
+//        System.out.println("playerorder " + lobbyConfig.getPlayerOrder().toString());
+//        System.out.println("playerorder.getorder " + lobbyConfig.getPlayerOrder().getOrder().toString());
         List<Integer> playerOrder = lobbyConfig.getPlayerOrder().getClientIdList();
         if(lobbyConfig.getPlayerOrder().getType() == OrderType.random) { //shuffle the order randomly if random order
             Collections.shuffle(playerOrder);
@@ -312,8 +312,8 @@ public final class Game {
         for (int playerOrderIndex = 0; playerOrderIndex < playerOrder.size(); playerOrderIndex++) {
             this.playerList.add(new Player(playerOrderIndex, playerOrder.get(playerOrderIndex), lobbyConfig.getFiguresPerPlayer()));
         }
-        System.out.println("playersOrder " + playerOrder.size());
-        System.out.println("_playerOrder " + _playerOrder.size());
+//        System.out.println("playersOrder " + playerOrder.size());
+//        System.out.println("_playerOrder " + _playerOrder.size());
         int seenStarts = 0;
         for (int i = 0; i < conf.length(); i++) {
             int prev = ((i - 1) + conf.length()) % conf.length();

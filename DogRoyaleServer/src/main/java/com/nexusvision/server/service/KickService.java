@@ -28,7 +28,7 @@ public class KickService {
         Kick kick = new Kick();
         kick.setType(TypeGame.kick.getOrdinal());
         kick.setClientId(clientId);
-        kick.setReason("TournamentPlayer got kicked");
+        kick.setReason("Player got kicked");
 
         messageBroker.sendMessage(ChannelType.LOBBY, lobbyId, gson.toJson(kick));
     }

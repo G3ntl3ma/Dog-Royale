@@ -12,6 +12,7 @@ import com.nexusvision.server.model.messages.menu.ReturnGameList;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Handling all requests of type <code>requestGameList</code>
@@ -30,16 +31,16 @@ public class RequestGameListHandler extends MessageHandler<RequestGameList> {
      */
     @Override
     protected void performHandle(RequestGameList message, int clientId) throws HandlingException {
-        verifyClientID(clientId, message.getClientId());
+        verifyClientId(clientId, message.getClientId());
         ServerController serverController = ServerController.getInstance();
 
-        ArrayList<GameLobby> startingLobbyList = serverController.getStateGames(message.getGamesUpcomingCount(), GameState.STARTING);
-        ArrayList<GameLobby> runningLobbyList = serverController.getStateGames(message.getGamesRunningCount(), GameState.IN_PROGRESS);
-        ArrayList<GameLobby> finishedLobbyList = serverController.getStateGames(message.getGamesFinishedCount(), GameState.FINISHED);
+        List<GameLobby> startingLobbyList = serverController.getStateGames(message.getGamesUpcomingCount(), GameState.UPCOMING);
+        List<GameLobby> runningLobbyList = serverController.getStateGames(message.getGamesRunningCount(), GameState.RUNNING);
+        List<GameLobby> finishedLobbyList = serverController.getStateGames(message.getGamesFinishedCount(), GameState.FINISHED);
 
-        ArrayList<ReturnGameList.NotFinishedGame> startingGameList = new ArrayList<>();
-        ArrayList<ReturnGameList.NotFinishedGame> runningGameList = new ArrayList<>();
-        ArrayList<ReturnGameList.FinishedGame> finishedGameList = new ArrayList<>();
+        List<ReturnGameList.NotFinishedGame> startingGameList = new ArrayList<>();
+        List<ReturnGameList.NotFinishedGame> runningGameList = new ArrayList<>();
+        List<ReturnGameList.FinishedGame> finishedGameList = new ArrayList<>();
 
         for (GameLobby lobby : startingLobbyList) {
             ReturnGameList.NotFinishedGame game = getNotFinishedGame(lobby);

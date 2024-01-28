@@ -80,7 +80,7 @@ public class GameLobby {
     public GameLobby(int id) {
         this.id = id;
         lobbyConfig = new LobbyConfig();
-        this.gameState = GameState.STARTING;
+        this.gameState = GameState.UPCOMING;
         this.isPaused = false;
         this.serverController = ServerController.getInstance();
         this.boardStateService = new BoardStateService();
@@ -130,7 +130,7 @@ public class GameLobby {
     }
 
     private void sendLiveTimer() {
-        if (gameState == GameState.IN_PROGRESS && !isPaused) {
+        if (gameState == GameState.RUNNING && !isPaused) {
             LiveTimer liveTimer = new LiveTimer();
             liveTimer.setType(TypeGame.liveTimer.getOrdinal());
             liveTimer.setLiveTime(gameDuration * 1000);
@@ -146,7 +146,7 @@ public class GameLobby {
 
     private void countdownLiveTime() {
         while (gameDuration > 0) {
-            if (gameState == GameState.IN_PROGRESS && !isPaused) {
+            if (gameState == GameState.RUNNING && !isPaused) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -158,7 +158,7 @@ public class GameLobby {
     }
 
     private void sendTurnTimer() {
-        if (gameState == GameState.IN_PROGRESS && !isPaused) {
+        if (gameState == GameState.RUNNING && !isPaused) {
             TurnTimer turnTimer = new TurnTimer();
             turnTimer.setType(TypeGame.turnTimer.getOrdinal());
             turnTimer.setTurnTime(turnTime * 1000);
@@ -174,7 +174,7 @@ public class GameLobby {
 
     private void countdownTurnTimer() {
         while (turnTime > 0) {
-            if (gameState == GameState.IN_PROGRESS && !isPaused) {
+            if (gameState == GameState.RUNNING && !isPaused) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -278,7 +278,7 @@ public class GameLobby {
         lobbyPublisher.publish(gson.toJson(joinObs));
         // If game started already send him boardState
         gson.toJson(connectedToGame);
-        if (gameState == GameState.IN_PROGRESS) {
+        if (gameState == GameState.RUNNING) {
             BoardState boardState = boardStateService.generateBoardState(game, lobbyConfig.getPlayerOrder());
             String boardStateMessage = gson.toJson(boardState);
             lobbyPublisher.publish(boardStateMessage);
@@ -322,7 +322,7 @@ public class GameLobby {
      * @return         True if adding the player was successful and false else
      */
     public boolean addPlayer(String name, int clientId, Colors color) {
-        if (gameState != GameState.STARTING) return false;
+        if (gameState != GameState.UPCOMING) return false;
         boolean successful = lobbyConfig.addPlayer(name, clientId);
         if (!successful) return false;
         lobbyConfig.addColor(color, clientId);
@@ -338,7 +338,7 @@ public class GameLobby {
     public void removePlayer(int clientId) {
         int playerOrderIndex = getPlayerId(clientId);
         switch (gameState) {
-            case IN_PROGRESS:
+            case RUNNING:
                 Player player = game.getPlayerList().get(playerOrderIndex);
                 game.removePlayerFromBoard(player);
                 game.excludeFromGame(player);
@@ -359,7 +359,7 @@ public class GameLobby {
      */
     public void runGame() { // TODO: Check that min 2 players are connected before starting
         game = new Game(lobbyConfig, id);
-        gameState = GameState.IN_PROGRESS;
+        gameState = GameState.RUNNING;
         BoardState boardState = boardStateService.generateBoardState(game, lobbyConfig.getPlayerOrder()); // This is how Ausrichter starts the game. Sending board states to all clients
         String boardStateMessage = gson.toJson(boardState);
         serverController.startGameForLobby(this);

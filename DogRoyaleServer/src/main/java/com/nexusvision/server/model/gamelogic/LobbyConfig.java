@@ -1,9 +1,12 @@
 package com.nexusvision.server.model.gamelogic;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.nexusvision.server.model.enums.Colors;
 import com.nexusvision.server.model.enums.Penalty;
 import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
 import com.nexusvision.server.model.utils.*;
+import com.nexusvision.utils.NewLineAppendingSerializer;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
@@ -19,14 +22,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.nexusvision.server.model.gamelogic.EngineServerHandler.gson;
-
 /**
  * @author felixwr
  */
 @Log4j2
 @Getter
 public class LobbyConfig {
+
+    protected static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
+            .create();
 
     private final HashMap<Colors, Integer> colorMap;
     private PlayerOrder playerOrder;

@@ -34,10 +34,10 @@ class RequestGameListHandlerTest extends HandlerTest {
 
         ReturnGameList returnGameList = handleAndRetrieve(request, clientId1, messageListener1);
 
+        assertEquals(TypeMenue.returnGameList.getOrdinal(), returnGameList.getType());
         assertNotNull(returnGameList.getGamesUpcoming());
         assertNotNull(returnGameList.getGamesRunning());
         assertNotNull(returnGameList.getGamesFinished());
-        assertEquals(returnGameList.getType(), TypeMenue.returnGameList.getOrdinal());
         assertEquals(1, returnGameList.getGamesUpcoming().size());
         assertEquals(1, returnGameList.getGamesRunning().size());
         assertEquals(1, returnGameList.getGamesFinished().size());

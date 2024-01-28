@@ -6,7 +6,7 @@ import com.nexusvision.server.model.messages.game.Response;
 public class ResponseHandler extends MessageHandler<Response> {
 
     @Override
-    protected void performHandle(Response message, int clientID) {
+    protected void performHandle(Response message, int clientId) {
         // TODO: Implement (if necessary, only optional)
     }
 }

@@ -28,7 +28,7 @@ public class MoveHandler extends MessageHandler<Move> {
         GameLobby gameLobby = serverController.getLobbyOfPlayer(clientId); //find game corresponding to clientId
 
         //try the move only if game running and not paused
-        if (gameLobby.getGameState() != GameState.IN_PROGRESS || gameLobby.isPaused()) {
+        if (gameLobby.getGameState() != GameState.RUNNING || gameLobby.isPaused()) {
             throw new HandlingException("Game is either not in progress or paused",
                     TypeGame.move.getOrdinal());
         }

@@ -28,7 +28,7 @@ public class JoinGameAsObserverHandler extends MessageHandler<JoinGameAsObserver
     @Override
     protected void performHandle(JoinGameAsObserver message, int clientId) throws HandlingException {
 
-        verifyClientID(clientId, message.getClientId());
+        verifyClientId(clientId, message.getClientId());
         ServerController serverController = ServerController.getInstance();
         MessageBroker messageBroker = MessageBroker.getInstance();
 

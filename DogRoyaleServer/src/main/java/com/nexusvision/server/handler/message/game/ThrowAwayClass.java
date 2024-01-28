@@ -19,7 +19,7 @@ import java.util.ArrayList;
 //TODO move this code to where it belongs
 public class ThrowAwayClass extends MessageHandler<Move> {
     @Override
-    protected void performHandle(Move message, int clientID) {
+    protected void performHandle(Move message, int clientId) {
 //        ServerController serverController = ServerController.getInstance();
 //        GameLobby gameLobby = serverController.getGameOfPlayer(clientID);
 //        Game game = gameLobby.getGame();

@@ -1,87 +1,88 @@
 package com.nexusvision.server.handler.message.menu;
 
+import com.nexusvision.server.common.MessageListener;
+import com.nexusvision.server.controller.Tournament;
+import com.nexusvision.server.handler.HandlerTest;
 import com.nexusvision.server.model.messages.menu.RequestTournamentList;
+import com.nexusvision.server.model.messages.menu.ReturnTournamentList;
+import com.nexusvision.server.model.messages.menu.TypeMenue;
+import com.nexusvision.server.testutils.TournamentExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
-public class RequestTournamentListHandlerTest {
-
-    @Mock
-    private RequestTournamentList requestTournamentList;
-
-    @InjectMocks
-    private FindTournamentHandler findTournamentHandler;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-    }
-
-    @Test
-    public void testHandle() {
-        // mocking every input for tournaments as 0
-        when(requestTournamentList.getTournamentsUpcomingCount()).thenReturn(0);
-        when(requestTournamentList.getTournamentsFinishedCount()).thenReturn(0);
-        when(requestTournamentList.getTournamentsRunningCount()).thenReturn(0);
-
-        //copy the result of handlerError for zero tournaments
-        String expectedResult = "{\"dataId\":0,\"message\":\"Failed to find tournament (no tournaments)\",\"type\":108}";
-
-        int mockClientID = 123;
-        when(requestTournamentList.getClientId()).thenReturn(mockClientID);
-
-        // Call the method being tested TODO: Catch exception here
-        // String result = findTournamentHandler.handle(requestTournamentList, mockClientID);
-
-        // Verify the result TODO: change
-        //assertEquals(expectedResult, result);
-    }
-}
-        /*
-        @Test
-        void testHandleWithTournaments() {
-            // make an example
-            when(mockFindTournament.getTournamentStarting()).thenReturn(1);
-            when(mockFindTournament.getTournamentFinished()).thenReturn(2);
-            when(mockFindTournament.getTournamentInProgress()).thenReturn(3);
-
-            // mocking of tournament message
-            String result = findTournamentHandler.handle(mockFindTournament, 456);
-
-
-            ReturnTournamentList expectedReturnFindTournament = new ReturnTournamentList();
-            expectedReturnFindTournament.setType(TypeMenue.returnFindTournament);
-            expectedReturnFindTournament.setClientId(456);
-            expectedReturnFindTournament.setTournamentFinished(Collections.emptyList()); // Replace with expected list
-            expectedReturnFindTournament.setTournamentStarting(Collections.emptyList()); // Replace with expected list
-            expectedReturnFindTournament.setTournamentInProgress(Collections.emptyList()); // Replace with expected list
-            String expectedJson = gson.toJson(expectedReturnFindTournament);
-            assertEquals(expectedJson, result);
-        }
-
-         */
-
-/*
-    @Test
-    void testEquals() {
-    }
-
-    @Test
-    void canEqual() {
-    }
-
-    @Test
-    void testHashCode() {
-    }
-
-    @Test
-    void testToString() {
-    }
-}
-
+/**
+ * @author felixwr
  */
+@ExtendWith(TournamentExtension.class)
+class RequestTournamentListHandlerTest extends HandlerTest {
+
+    RequestTournamentListHandler handler = new RequestTournamentListHandler();
+
+    @Test
+    void testHandle() {
+        RequestTournamentList request = new RequestTournamentList();
+        request.setType(TypeMenue.requestTournamentList.getOrdinal());
+        request.setClientId(clientId1);
+        request.setTournamentsUpcomingCount(1);
+        request.setTournamentsRunningCount(1);
+        request.setTournamentsFinishedCount(1);
+
+        ReturnTournamentList returnTournamentList = handleAndRetrieve(request, clientId1, messageListener1);
+
+        assertEquals(TypeMenue.returnTournamentList.getOrdinal(), returnTournamentList.getType());
+        assertNotNull(returnTournamentList.getTournamentsUpcoming());
+        assertNotNull(returnTournamentList.getTournamentsRunning());
+        assertNotNull(returnTournamentList.getTournamentsFinished());
+        assertEquals(1, returnTournamentList.getTournamentsUpcoming().size());
+        assertEquals(1, returnTournamentList.getTournamentsRunning().size());
+        assertEquals(1, returnTournamentList.getTournamentsFinished().size());
+
+        ReturnTournamentList.UpcomingTournament upcomingTournament = returnTournamentList.getTournamentsUpcoming().get(0);
+        checkUpcomingTournament(upcomingTournament);
+
+        ReturnTournamentList.RunningTournament runningTournament = returnTournamentList.getTournamentsRunning().get(0);
+        checkRunningTournament(runningTournament);
+
+        ReturnTournamentList.FinishedTournament finishedTournament = returnTournamentList.getTournamentsFinished().get(0);
+        checkFinishedTournament(finishedTournament);
+    }
+
+    private static void checkUpcomingTournament(ReturnTournamentList.UpcomingTournament tournamentResponse) {
+        Tournament tournament = serverController.getTournamentById(tournamentResponse.getTournamentId());
+        assertNotNull(tournament);
+        assertEquals(tournament.getTournamentId(), tournamentResponse.getTournamentId());
+        assertEquals(tournament.getMaxPlayer(), tournamentResponse.getMaxPlayer());
+        assertEquals(tournament.getMaxGames(), tournamentResponse.getMaxGames());
+        assertEquals(tournament.getCurrentPlayerCount(), tournamentResponse.getCurrentPlayerCount());
+    }
+
+    private static void checkRunningTournament(ReturnTournamentList.RunningTournament tournamentResponse) {
+        Tournament tournament = serverController.getTournamentById(tournamentResponse.getTournamentId());
+        assertNotNull(tournament);
+        assertEquals(tournament.getTournamentId(), tournamentResponse.getTournamentId());
+        assertEquals(tournament.getMaxPlayer(), tournamentResponse.getMaxPlayer());
+        assertEquals(tournament.getMaxGames(), tournamentResponse.getMaxGames());
+        assertEquals(tournament.getGameRunning(), tournamentResponse.getGameRunning());
+    }
+
+    private static void checkFinishedTournament(ReturnTournamentList.FinishedTournament tournamentResponse) {
+        Tournament tournament = serverController.getTournamentById(tournamentResponse.getTournamentId());
+        assertNotNull(tournament);
+        assertEquals(tournament.getTournamentId(), tournamentResponse.getTournamentId());
+        System.out.println(tournament.getWinnerOrder());
+        assertEquals(tournament.getWinnerOrder(), tournamentResponse.getWinnerOrder());
+    }
+
+    private ReturnTournamentList handleAndRetrieve(RequestTournamentList request,
+                                                   int clientId, MessageListener messageListener) {
+        return handleAndRetrieve(request, handler, clientId, messageListener, ReturnTournamentList.class);
+    }
+}

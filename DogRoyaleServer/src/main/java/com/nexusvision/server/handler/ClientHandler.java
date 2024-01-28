@@ -131,15 +131,20 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
                 return;
             }
             int type = jsonRequest.get("type").getAsInt();
+
             if (type == TypeMenue.connectToServer.getOrdinal()) {
                 handleConnectToServer(request);
             } else if (type == TypeMenue.requestGameList.getOrdinal()
                     || type == TypeMenue.requestTournamentList.getOrdinal()) {
-                handleRequestGameListAndFindTournament(request, type);
+                handleRequestGameTournamentList(request, type);
             } else if (type == TypeMenue.joinGameAsObserver.getOrdinal()) {
                 handleJoinGameAsObserver(request);
             } else if (type == TypeMenue.joinGameAsPlayer.getOrdinal()) {
-                handleJoinGameAsParticipant(request);
+                handleJoinGameAsPlayer(request);
+            } else if (type == TypeMenue.registerForTournament.getOrdinal()) {
+                handleRegisterForTournament(request);
+            } else if (type == TypeMenue.requestTournamentInfo.getOrdinal()) {
+                handleRequestTournamentInfo(request);
             } else if (type == TypeMenue.requestTechData.getOrdinal()) {
                 handleRequestTechData(request);
             } else if (type == TypeGame.response.getOrdinal()) {
@@ -175,7 +180,7 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
         try {
             ConnectToServer connectToServer = gson.fromJson(request, ConnectToServer.class);
             new ConnectToServerHandler().handle(connectToServer, clientId);
-            expectedState = State.REQUEST_GAME_LIST_AND_FIND_TOURNAMENT;
+            expectedState = State.REQUEST_GAME_TOURNAMENT_LIST;
             log.info("Client " + clientId + " connected successfully");
         } catch (JsonSyntaxException e) {
             handleError("Wrong message format from type connectToServer",
@@ -190,33 +195,33 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
      * @param type An Integer representing the type of the request
      * @throws HandlingException If anything goes wrong while handling the message
      */
-    private void handleRequestGameListAndFindTournament(String request, int type) throws HandlingException {
+    private void handleRequestGameTournamentList(String request, int type) throws HandlingException {
         switch (expectedState) {
-            case REQUEST_GAME_LIST_AND_FIND_TOURNAMENT:
+            case REQUEST_GAME_TOURNAMENT_LIST:
                 if (type == TypeMenue.requestGameList.getOrdinal()) {
-                    handleRequestGameList(request, State.FIND_TOURNAMENT);
+                    handleRequestGameList(request, State.REQUEST_TOURNAMENT_LIST);
                 } else {
-                    handleFindTournament(request, State.REQUEST_GAME_LIST);
+                    handleRequestTournamentList(request, State.REQUEST_GAME_LIST);
                 }
                 break;
             case REQUEST_GAME_LIST:
                 if (type != TypeMenue.requestGameList.getOrdinal()) {
-                    handleError("Received requestTournamentInfo but expected requestGameList",
+                    handleError("Received requestTournamentList but expected requestGameList",
                             TypeMenue.requestTournamentList.getOrdinal());
                     return;
                 }
                 handleRequestGameList(request, State.REQUEST_JOIN);
                 break;
-            case FIND_TOURNAMENT:
+            case REQUEST_TOURNAMENT_LIST:
                 if (type != TypeMenue.requestTournamentList.getOrdinal()) {
-                    handleError("Received requestGameList but expected findTournament",
+                    handleError("Received requestGameList but expected requestTournamentList",
                             TypeMenue.requestGameList.getOrdinal());
                     return;
                 }
-                handleFindTournament(request, State.REQUEST_JOIN);
+                handleRequestTournamentList(request, State.REQUEST_JOIN);
                 break;
             default:
-                handleError("Received wrong type, expected requestGameList or findTournament");
+                handleError("Received wrong type, expected requestGameList or requestTournamentList");
         }
     }
 
@@ -233,7 +238,7 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
             RequestGameList requestGameList = gson.fromJson(request, RequestGameList.class);
             new RequestGameListHandler().handle(requestGameList, clientId);
             expectedState = nextState;
-            log.info("Game list request was successful");
+            log.info("Request game list was successful");
         } catch (JsonSyntaxException e) {
             handleError("Wrong message format from type requestGameList",
                     TypeMenue.requestGameList.getOrdinal(), e);
@@ -247,15 +252,15 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
      * @param nextState An object representing the next expected state after successfully handling the current request
      * @throws HandlingException If anything goes wrong while handling the message
      */
-    private void handleFindTournament(String request, State nextState) throws HandlingException {
+    private void handleRequestTournamentList(String request, State nextState) throws HandlingException {
         log.info("Trying to handle tournament info request");
         try {
             RequestTournamentList requestTournamentList = gson.fromJson(request, RequestTournamentList.class);
-            new FindTournamentHandler().handle(requestTournamentList, clientId);
+            new RequestTournamentListHandler().handle(requestTournamentList, clientId);
             expectedState = nextState;
-            log.info("Find tournament request was successful");
+            log.info("Request tournament list was successful");
         } catch (JsonSyntaxException e) {
-            handleError("Wrong message format from type findTournament",
+            handleError("Wrong message format from type requestTournamentList",
                     TypeMenue.requestTournamentList.getOrdinal(), e);
         }
     }
@@ -284,23 +289,53 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
     }
 
     /**
-     * Responsible for handling requests of type <code>joinGameAsParticipant</code>
+     * Responsible for handling requests of type <code>joinGameAsPlayer</code>
      *
      * @param request A String representing the request received from the client
      * @throws HandlingException If anything goes wrong while handling the message
      */
-    private void handleJoinGameAsParticipant(String request) throws HandlingException {
+    private void handleJoinGameAsPlayer(String request) throws HandlingException {
         if (expectedState != State.REQUEST_JOIN) {
-            handleError("Received wrong type, didn't expect joinGameAsParticipant");
+            handleError("Received wrong type, didn't expect joinGameAsPlayer");
+            return;
         }
-        log.info("Trying to handle join game as participant request");
+        log.info("Trying to handle join game as player request");
         try {
             JoinGameAsPlayer joinGameAsPlayer = gson.fromJson(request, JoinGameAsPlayer.class);
             new JoinGameAsPlayerHandler().handle(joinGameAsPlayer, clientId);
             expectedState = State.WAITING_FOR_GAME_START;
-            log.info("Join game as participant was successful");
+            log.info("Join game as player was successful");
         } catch (JsonSyntaxException e) {
-            handleError("Wrong message format from type joinGameAsParticipant",
+            handleError("Wrong message format from type joinGameAsPlayer",
+                    TypeMenue.joinGameAsPlayer.getOrdinal(), e);
+        }
+    }
+
+    private void handleRegisterForTournament(String request) throws HandlingException {
+        if (expectedState != State.REQUEST_JOIN) {
+            handleError("Received wrong type, didn't expect registerForTournament");
+            return;
+        }
+        log.info("Trying to handle register for tournament request");
+        try {
+            RegisterForTournament registerForTournament = gson.fromJson(request, RegisterForTournament.class);
+            new RegisterForTournamentHandler().handle(registerForTournament, clientId);
+            expectedState = State.WAITING_FOR_GAME_START;
+            log.info("Register for tournament was successful");
+        } catch (JsonSyntaxException e) {
+            handleError("Wrong message format from type registerForTournament",
+                    TypeMenue.joinGameAsPlayer.getOrdinal(), e);
+        }
+    }
+
+    private void handleRequestTournamentInfo(String request) throws HandlingException {
+        log.info("Trying to handle request tournament info");
+        try {
+            RequestTournamentInfo requestTournamentInfo = gson.fromJson(request, RequestTournamentInfo.class);
+            new RequestTournamentInfoHandler().handle(requestTournamentInfo, clientId);
+            log.info("Request tournament info was successful");
+        } catch (JsonSyntaxException e) {
+            handleError("Wrong message format from type requestTournamentInfo",
                     TypeMenue.joinGameAsPlayer.getOrdinal(), e);
         }
     }
@@ -489,9 +524,9 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
 
     private enum State {
         CONNECT_TO_SERVER,
-        REQUEST_GAME_LIST_AND_FIND_TOURNAMENT,
+        REQUEST_GAME_TOURNAMENT_LIST,
         REQUEST_GAME_LIST,
-        FIND_TOURNAMENT,
+        REQUEST_TOURNAMENT_LIST,
         REQUEST_JOIN,
         WAITING_FOR_GAME_START,
         WAITING_FOR_MOVE,

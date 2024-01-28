@@ -25,7 +25,7 @@ public final class Player {
     private int houseOccupationIndex; //index of housefield that with last figure TODO unused
 
     /**
-     * Constructor for the TournamentPlayer
+     * Constructor for the Player
      *
      * @param figureCount An Integer representing the amount of figures a player has
      */

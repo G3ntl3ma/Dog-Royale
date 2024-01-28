@@ -17,7 +17,7 @@ import java.util.ArrayList;
 //TODO move this code to where it belongs
 public class ResponseReceivedMoveHandler extends MessageHandler<Response> {
     @Override
-    protected void performHandle(Response message, int clientID) {
+    protected void performHandle(Response message, int clientId) {
         // TODO: Implement
 //        ServerController serverController = ServerController.getInstance();
 //        GameLobby gameLobby = serverController.getGameOfPlayer(clientID);

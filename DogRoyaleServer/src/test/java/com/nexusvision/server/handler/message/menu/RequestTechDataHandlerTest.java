@@ -20,7 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
-public class RequestTechDataHandlerTest extends HandlerTest {
+/**
+ * @author felixwr
+ */
+class RequestTechDataHandlerTest extends HandlerTest {
 
     RequestTechDataHandler handler = new RequestTechDataHandler();
 

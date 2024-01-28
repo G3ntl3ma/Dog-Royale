@@ -27,21 +27,21 @@ public class LobbyExtension implements BeforeAllCallback, AfterAllCallback {
     private final static String JSON_FILE_PATH = "src/test/java/com/nexusvision/server/testutils/";
 
     @Override
-    public void beforeAll(ExtensionContext extensionContext) throws Exception {
+    public void beforeAll(ExtensionContext extensionContext) {
         serverController = ServerController.getInstance();
         messageBroker = MessageBroker.getInstance();
 
-        int lobbyID1 = serverController.createNewLobby();
-        int lobbyID2 = serverController.createNewLobby();
-        int lobbyID3 = serverController.createNewLobby();
-        int lobbyID4 = serverController.createNewLobby();
-        int lobbyID5 = serverController.createNewLobby();
+        int lobbyId1 = serverController.createNewLobby();
+        int lobbyId2 = serverController.createNewLobby();
+        int lobbyId3 = serverController.createNewLobby();
+        int lobbyId4 = serverController.createNewLobby();
+        int lobbyId5 = serverController.createNewLobby();
 
-        GameLobby lobby1 = serverController.getLobbyById(lobbyID1); // UPCOMING
-        GameLobby lobby2 = serverController.getLobbyById(lobbyID2); // UPCOMING
-        GameLobby lobby3 = serverController.getLobbyById(lobbyID3); // RUNNING
-        GameLobby lobby4 = serverController.getLobbyById(lobbyID4); // RUNNING
-        GameLobby lobby5 = serverController.getLobbyById(lobbyID5); // FINISHED
+        GameLobby lobby1 = serverController.getLobbyById(lobbyId1); // UPCOMING
+        GameLobby lobby2 = serverController.getLobbyById(lobbyId2); // UPCOMING
+        GameLobby lobby3 = serverController.getLobbyById(lobbyId3); // RUNNING
+        GameLobby lobby4 = serverController.getLobbyById(lobbyId4); // RUNNING
+        GameLobby lobby5 = serverController.getLobbyById(lobbyId5); // FINISHED
 
         messageBroker.addIdentifier(CLIENT_ID_LOBBY_1, new MessageListener());
         lobby1.addPlayer("clientId:" + CLIENT_ID_LOBBY_1, CLIENT_ID_LOBBY_1); // artificial player to find lobby
@@ -75,7 +75,7 @@ public class LobbyExtension implements BeforeAllCallback, AfterAllCallback {
     }
 
     @Override
-    public void afterAll(ExtensionContext extensionContext) throws Exception {
+    public void afterAll(ExtensionContext extensionContext) {
         serverController = null;
         messageBroker = null;
     }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 //3.5
 public class ResponseDrawCardsHandler extends MessageHandler<Response> {
     @Override
-    protected void performHandle(Response message, int clientID) {
+    protected void performHandle(Response message, int clientId) {
         //update draw card
         // TODO: Implement
 //        ServerController serverController = ServerController.getInstance();

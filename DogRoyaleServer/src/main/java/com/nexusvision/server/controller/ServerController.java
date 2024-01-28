@@ -7,7 +7,6 @@ import com.nexusvision.server.model.enums.GameState;
 import com.nexusvision.server.model.utils.ColorMapping;
 import com.nexusvision.server.model.utils.DrawCardFields;
 import com.nexusvision.server.model.utils.StartFields;
-import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
@@ -16,7 +15,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -95,29 +93,42 @@ public class ServerController {
     /**
      * Gets a specific number of game lobbies in a particular game state
      *
-     * @param gameCount An Integer representing the maximum number of games to retrieve
-     * @param state An Enum representing the game state for filtering
-     * @return An ArrayList containing gameCount amount (or less) of Game lobbies
+     * @param gameCount An <code>Integer</code> representing the maximum number of games to retrieve
+     * @param state An <code>Enum</code> representing the game state for filtering
+     * @return A <code>List</code> containing gameCount amount (or less) of game lobbies
      */
-    public ArrayList<GameLobby> getStateGames(int gameCount, GameState state) {
-        int foundCount = 0;
-        ArrayList<GameLobby> gameLobbys = new ArrayList<>();
-        for (int lobbyID : lobbyMap.keySet()) {
-            GameLobby lobby = lobbyMap.get(lobbyID);
-            if (lobby.getGameState() == state) {
-                gameLobbys.add(lobby);
-                foundCount++;
-            }
-            if (foundCount == gameCount) break;
+    public List<GameLobby> getStateGames(int gameCount, GameState state) {
+        List<GameLobby> gameLobbyList = new ArrayList<>();
+        for (int lobbyId : lobbyMap.keySet()) {
+            GameLobby lobby = lobbyMap.get(lobbyId);
+            if (lobby.getGameState() == state) gameLobbyList.add(lobby);
+            if (gameLobbyList.size() == gameCount) break;
         }
-        return gameLobbys;
+        return gameLobbyList;
+    }
+
+    /**
+     * Gets a specific number of tournaments in a particular game state
+     *
+     * @param tournamentCount An <code>Integer</code> representing the maximum number of tournaments to retrieve
+     * @param state An <code>Enum</code> representing the tournament state for filtering
+     * @return A <code>List</code> containing tournamentCount amount (or less) of tournaments
+     */
+    public List<Tournament> getStateTournaments(int tournamentCount, GameState state) {
+        List<Tournament> tournamentList = new ArrayList<>();
+        for (int tournamentId : tournamentMap.keySet()) {
+            Tournament tournament = tournamentMap.get(tournamentId);
+            if (tournament.getTournamentState() == state) tournamentList.add(tournament);
+            if (tournamentList.size() == tournamentCount) break;
+        }
+        return tournamentList;
     }
 
     /**
      * Notifies the client handler that he needs to wait for a move
      *
      * @param clientId The client handler getting notified
-     * @return true if successful
+     * @return <code>true</code> if successful
      */
     public boolean setWaitingForMove(int clientId) {
         ClientHandler handler = handlerMap.get(clientId);
