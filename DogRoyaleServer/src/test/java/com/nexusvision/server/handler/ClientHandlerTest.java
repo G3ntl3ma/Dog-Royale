@@ -14,32 +14,31 @@ import java.net.Socket;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-/*
+
 @ExtendWith(MockitoExtension.class)
 public class ClientHandlerTest {
-    @Mock
-    private BufferedReader reader;
-
-    @Mock
-    private PrintWriter writer;
-
-    @InjectMocks
-    private ClientHandler clientHandler;
-
-    @Test
-    public void testRun() throws IOException {
-        when(reader.readLine()).thenReturn("Hello", "World", null);
-
-        clientHandler = new ClientHandler(new Socket());
-        clientHandler.run();
-
-        // Verify that the processMessage method was called for each received message
-        // Assert that the response message sent to the client is consistent with the processed message
-
-        verify(writer).println("Nachricht erhalten");
-        verify(writer).println("Message processed: Hello");
-        verify(writer).println("Message processed: World");
-    }
+//    @Mock
+//    private BufferedReader reader;
+//
+//    @Mock
+//    private PrintWriter writer;
+//
+//    @InjectMocks
+//    private ClientHandler clientHandler;
+//
+//    @Test
+//    public void testRun() throws IOException {
+//        when(reader.readLine()).thenReturn("Hello", "World", null);
+//
+//        clientHandler = new ClientHandler(new Socket(), -5);
+//        clientHandler.run();
+//
+//        // Verify that the processMessage method was called for each received message
+//        // Assert that the response message sent to the client is consistent with the processed message
+//
+//        verify(writer).println("Nachricht erhalten");
+//        verify(writer).println("Message processed: Hello");
+//        verify(writer).println("Message processed: World");
+//    }
 }
 
-     */
