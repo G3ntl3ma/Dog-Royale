@@ -55,7 +55,7 @@ public class CardService {
         if (to == null) return;
 
         if (!to.isEmpty()) { //check.isEmpty()ness first otherwise to.figure is null and therefore to.figure.color bug
-            Field startField = figure.getStartFieldByOwner(game);
+            Field startField = to.getFigure().getStartFieldByOwner(game);
             if ((to.getType() == FieldType.START
                     && to == startField)
                     || to.getType() == FieldType.HOUSE) {

@@ -361,9 +361,9 @@ public class EngineServerHandler{
         //choose random move
         System.out.println("choose move");
         long startTime = System.currentTimeMillis();
-        //Move move = game.getRandomMove();
+        Move move = game.getRandomMove();
         //choose ai move
-        Move move = this.ai.getMove(game, startTime);
+        // Move move = this.ai.getMove(game, startTime);
         //TODO put this into a function ?
         System.out.println("about to print move");
         if (move != null) {
