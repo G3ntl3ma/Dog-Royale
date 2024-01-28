@@ -26,6 +26,7 @@ public class EngineServerHandler{
     private HashMap<Integer, Integer> handCardCounts = new HashMap<>(); //clientId key
     private Game game;
     private Ai ai;
+    private BoardState boardState;
     private int initialCardsPerPlayer=0;
     protected static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
@@ -96,9 +97,9 @@ public class EngineServerHandler{
             } else if (type == TypeGame.updateDrawCards.getOrdinal()) {
                 return handleSynchronizeCardCounts(jsonRequest); //3.5
             } else if (type == TypeGame.drawCards.getOrdinal()) {
-                handleManageHandCards(jsonRequest); //3.4 
+                return handleManageHandCards(jsonRequest); //3.4 
             } else if (type == TypeGame.boardState.getOrdinal()) {
-                return handleLoadBoardJson(jsonRequest); //3.3
+                handleLoadBoardJson(jsonRequest); //3.3
             } else if (type == TypeGame.moveValid.getOrdinal()) {
                 handleMoveValid(jsonRequest); //3.8
             } else if (type == TypeGame.kick.getOrdinal()) {
@@ -113,11 +114,11 @@ public class EngineServerHandler{
     private void handleMoveValid(JsonObject jsonObject) {
         MoveValid moveValid = gson.fromJson(jsonObject.toString(), MoveValid.class);
         boolean validMove = moveValid.isValidMove();
-        if(!validMove) {
-            System.out.println("invalid move was passed to the server");
-            System.out.println("Card " + Card.getType(moveValid.getCard()) + " selected value " + moveValid.getSelectedValue() + " pieceId " + moveValid.getPieceId() + " isStarter " + moveValid.isStarter() + " opponentPieceId " + moveValid.getOpponentPieceId());
-            System.exit(234);
-        }
+        // if(!validMove) {
+        //     System.out.println("invalid move was passed to the server");
+        //     System.out.println("Card " + Card.getType(moveValid.getCard()) + " selected value " + moveValid.getSelectedValue() + " pieceId " + moveValid.getPieceId() + " isStarter " + moveValid.isStarter() + " opponentPieceId " + moveValid.getOpponentPieceId());
+        //     System.exit(234);
+        // }
     }
 
     private void handleKick(JsonObject jsonObject) { //3.14
@@ -194,7 +195,7 @@ public class EngineServerHandler{
         return gson.toJson(response).toString(); //return response 3.6
     }
     
-    public void handleManageHandCards(JsonObject jsonObject) { //3.4
+    public String handleManageHandCards(JsonObject jsonObject) { //3.4
         System.out.println("handlemanagehandcards");
         DrawCards drawCards = gson.fromJson(jsonObject.toString(), DrawCards.class);
         List<Integer> droppedInts = drawCards.getDroppedCards();
@@ -208,13 +209,14 @@ public class EngineServerHandler{
             handcards.add(Card.getType(drawn));
         }
         System.out.println("handcards " + handcards);
+        return sendMove(); //TODO send this only when appropriate
     }
     
-    public String handleLoadBoardJson(JsonObject jsonObject) { //3.3
+    public void handleLoadBoardJson(JsonObject jsonObject) { //3.3
         System.out.println("handle load board");
-        BoardState boardState = null;
+        this.boardState = null;
         try {
-            boardState = gson.fromJson(jsonObject.toString(), BoardState.class);
+            this.boardState = gson.fromJson(jsonObject.toString(), BoardState.class);
         } catch (JsonSyntaxException e) {
             System.out.println("json syntax error in handle load board json");
             e.printStackTrace();
@@ -224,7 +226,10 @@ public class EngineServerHandler{
         } catch (Exception e) {
             e.printStackTrace();
         }
+       
+    }
 
+    private String sendMove() {
         System.out.println("game over bool=" + boardState.isGameOver());
         if(boardState.isGameOver()) {
             this.game.printBoard();
@@ -348,6 +353,10 @@ public class EngineServerHandler{
             Player currentPlayer = game.getPlayerList().get(playerListInx);
             int clientId = currentPlayer.getClientId();
             int handCardCount = currentPlayer.getCardList().size();
+            if(clientId == this.clientId) {
+                playerListInx++;
+                continue;
+            }
             if(handCardCount < handCardCounts.get(clientId)) {
                 currentPlayer.getCardList().add(card);
                 unknownCardPool.remove(card);
@@ -360,6 +369,7 @@ public class EngineServerHandler{
         this.game.printBoard();
         //choose random move
         System.out.println("choose move");
+        System.out.println("handcards " + handcards);
         long startTime = System.currentTimeMillis();
         Move move = game.getRandomMove();
         //choose ai move
