@@ -637,6 +637,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      */
     @Override
     public void handleMoveValid(MoveValidDto moveValid) {
+        System.out.println("MoveValid handelt: " + moveValid.toJson());
         Platform.runLater(() -> {
             if(!moveValid.isValidMove()){
                 updatePieceLabels();
@@ -741,6 +742,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      */
     @Override
     public void handleDrawCards(DrawCardsDto drawCards) {
+        System.out.println("DrawCards handelt: " + drawCards.toJson());
         Platform.runLater(() -> {
             System.out.println("drawn Cards");
 
@@ -773,7 +775,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @Override
     public void handleBoardState(BoardStateDto boardStateDto) {
 
-        System.out.println("boardstate handelt oqwudhaisudhwi");
+        System.out.println("boardstate handelt oqwudhaisudhwi: " + boardStateDto.toJson());
 
         Platform.runLater(()->{
             if(boardStateDto.isGameOver()){
@@ -907,7 +909,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         Platform.runLater(() ->{
             HandCards[] listNumCards = updateDrawCards.getHandCards();
             lblCardsPOne.setText(" x " + listNumCards[0].getCount());
-            //lblCardsPTwo.setText(" x " + listNumCards[1].getCount());
+            lblCardsPTwo.setText(" x " + listNumCards[1].getCount());
             if(lobbyConfig.getMaxPlayerCount() >= 3){
                 lblCardsPThree.setText(" x " + listNumCards[2].getCount());
                 if(lobbyConfig.getMaxPlayerCount() >= 4){
