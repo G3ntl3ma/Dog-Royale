@@ -330,7 +330,7 @@ public final class Game {
                 int off = fieldCount;
                 this.playerList.get(seenStarts).setHouseFirstIndex(fieldCount);
                 for (int j = off; j < lobbyConfig.getFiguresPerPlayer() + off; j++) {
-                    this.board[fieldCount++] = new Field(fieldCount, FieldType.HOUSE);
+                    this.board[fieldCount] = new Field(fieldCount++, FieldType.HOUSE);
                 }
                 for (int j = off; j < lobbyConfig.getFiguresPerPlayer() - 1 + off; j++) {
                     this.board[j].setNext(this.board[j + 1]);
@@ -599,6 +599,10 @@ public final class Game {
         this.playersRemaining--;
         this.discardHandCards();
     }
+    public void excludeFromGame(int clientId) {
+        excludeFromGame(getPlayer(clientId));
+    }
+
 
     private Integer getClientIdFromPlayer(Player player) {
         return lobbyConfig.getPlayerOrder().getOrder().get(playerList.indexOf(player)).getClientId();

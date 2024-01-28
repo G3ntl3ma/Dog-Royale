@@ -99,7 +99,7 @@ public class Main2 {
                 Move move = game.getRandomMove();
                 System.out.println("executing");
                 if(move != null)                move.printMove();
-                if(game.getCurrentPlayer().getClientId() == 0) {
+                if(game.getCurrentPlayer().getClientId() == -1) {
                     // System.out.println("ai generated move");
                     move = ai.getMove(game, System.currentTimeMillis());
                 }

@@ -111,6 +111,12 @@ public final class Player {
         Field house = this.startField.getHouse();
         System.out.print("house: ");
         while (house != null) {
+            System.out.print(house.getFieldId() + "-");
+            house = house.getNext();
+        }
+        System.out.println("");
+        house = this.startField.getHouse();
+        while (house != null) {
             if (!house.isEmpty()) System.out.print(house.getFigure().getClientId() + "-");
             else System.out.print("_" + "-");
             house = house.getNext();
