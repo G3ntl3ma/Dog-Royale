@@ -63,7 +63,7 @@ public class CardService {
             }
         }
 
-        if (range || steps == 0) moves.add(new Move(player, figure.getField(), to, false, this.usedType));
+        if (range || steps == 0) moves.add(new Move(player, figure.getField(), to, false, this.usedType, argSteps-steps));
 
         while (steps != 0) {
             // System.out.println("steps " + steps);
@@ -91,7 +91,7 @@ public class CardService {
                 }
             }
             if (range || steps == 0) {
-                moves.add(new Move(player, figure.getField(), to, false, this.usedType));
+                moves.add(new Move(player, figure.getField(), to, false, this.usedType, argSteps - steps));
             }
         }
     }
@@ -114,7 +114,8 @@ public class CardService {
         ArrayList<Move> moves = new ArrayList<>();
         switch (this.emulatedType) {
             case swapCard:
-                moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this.usedType));
+                int _selectedValue = figure.getField().getFieldId() - oppfigure.getField().getFieldId();
+                moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this.usedType, _selectedValue));
                 break;
             case startCard1:
                 /*fallthrough*/
@@ -145,18 +146,20 @@ public class CardService {
      * @param moves  An ArrayList where the method adds possible moves
      * @param player An object representing the player to whom the figure belongs
      */
-    //move generator for card
+    //move generator for card 
     public void getMoves(Game game, Figure figure, ArrayList<Move> moves, Player player) { //target figure
         // System.out.println("get moves " + this.emulatedType);
         Field to;
         switch (this.emulatedType) {
             case swapCard:
                 if (figure.isOnBench() || figure.isInHouse()) break;
+                if (figure.getField() == player.getStartField()) break; //dont allow swapping with own figure if on startfield??
                 for (Player opponent : game.getPlayerList()) {
                     if (opponent.getClientId() == figure.getClientId()) continue; // don't swap with own figure
                     for (int j = 0; j < opponent.getFigureList().size(); j++) {
                         Figure oppfigure = opponent.getFigureList().get(j);
-                        if (!oppfigure.isOnBench() && !oppfigure.isInHouse() && oppfigure.getField().getType() != FieldType.START) {
+                        if(oppfigure.getField() == opponent.getStartField()) continue; //dont swap with locked figure
+                        if (!oppfigure.isOnBench() && !oppfigure.isInHouse()) {
                             moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this.usedType));
                         }
                     }
@@ -170,6 +173,7 @@ public class CardService {
                     to = next;
                     next = next.getNext();
                 }
+                if(next.getFigure() == figure) return; //cant use magnetcard on the figure itself
                 if (figure.getField() != to) { //move that does nothing allowed???
                     moves.add(new Move(player, figure.getField(), to, false, this.usedType));
                 }

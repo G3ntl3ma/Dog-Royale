@@ -29,7 +29,7 @@ public final class Game {
     private final LobbyConfig lobbyConfig;
     private final int lobbyId;
 
-    private boolean[] occupied; //unused
+    // private boolean[] occupied; //unused
     private ArrayList<Player> playerList;
     private Field[] board;
     private ArrayList<Card> deck;
@@ -46,7 +46,7 @@ public final class Game {
     private int playersRemaining;
     private int round; //round counter
     private boolean firstMoveOfRound;
-    private int[] startIndexes; //indexes of startFields, unused
+    // private int[] startIndexes; //indexes of startFields, unused
 
     private CardService cardService;
 
@@ -164,7 +164,7 @@ public final class Game {
             for (Card card : player.getCardList()) {
                 BoardState.DiscardItem discardItem = new BoardState.DiscardItem();
                 discardItem.setClientId(player.getClientId());
-                discardItem.setCard(card.ordinal());
+                discardItem.setCard(card.getOrdinal());
                 pileInfo.add(discardItem);
             }
             pile.addAll(player.getCardList());
@@ -190,7 +190,11 @@ public final class Game {
      */
     public void printBoard() { // TODO: Fix prints
         System.out.println("BOARD=================");
-        System.out.println("player to move " + playerToMoveId);
+        System.out.println("player to moveid (not clientId) " + playerToMoveId);
+        if(playerToMoveId > playerList.size()) {
+            System.out.println("impossible playerToMoveId");
+            System.exit(232);
+        }
         System.out.println("players remaining " + playersRemaining);
         for (Player p : playerList) {
             p.printInfo();
@@ -292,7 +296,7 @@ public final class Game {
         int totalFieldCount = fieldCount + lobbyConfig.getFiguresPerPlayer() * players; //playerCount
         this.board = new Field[totalFieldCount];
 
-        this.startIndexes = new int[players];
+        //this.startIndexes = new int[players];
         //this.occupied = new boolean[players];
 
         // System.out.println("conf string length " + max);
@@ -324,7 +328,7 @@ public final class Game {
 
             if (conf.charAt(i) == 's') {
                 // this.players.get(seenStarts++).startField = this.board.get(i); //init starts
-                this.startIndexes[seenStarts] = i;
+                //this.startIndexes[seenStarts] = i;
                 this.playerList.get(seenStarts).setStartField(this.board[i]); //init starts
                 int off = fieldCount;
                 this.playerList.get(seenStarts).setHouseFirstIndex(fieldCount);
@@ -685,7 +689,7 @@ public final class Game {
         variables.add(round);
         variables.add(firstMoveOfRound ? 0 : 1);
         // if (drawnCard != null) {
-        //     variables.add(drawnCard.ordinal());
+        //     variables.add(drawnCard.getOrdinal());
         // }
         // else {
         //     variables.add(-1);
@@ -714,6 +718,15 @@ public final class Game {
             if(player.getClientId() == clientId) return player;
         }
         return null;
+    }
+
+    public void _setPlayerToMoveId(int clientId) {
+        for (int i = 0; i < playerList.size(); i++) {
+            if (playerList.get(i).getClientId() == clientId) {
+                playerToMoveId = i;
+                return;
+            }
+        }
     }
 
 }

@@ -27,7 +27,7 @@ public class ThrowAwayClass extends MessageHandler<Move> {
 //        for(int playerId = 0; playerId < gameLobby.getPlayerOrderList().size(); playerId++) {
 //            if(clientID == gameLobby.getPlayerOrderList().get(playerId)) {
 //                for(Card card : game.getPlayerList().get(playerId).getCardList()) {
-//                    _drawnCards.add(card.ordinal());
+//                    _drawnCards.add(card.getOrdinal());
 //                }
 //            }
 //        }

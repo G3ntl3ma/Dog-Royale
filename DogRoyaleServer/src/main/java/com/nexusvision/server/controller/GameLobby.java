@@ -683,7 +683,7 @@ public class GameLobby {
 
             moveValid.setType(TypeGame.moveValid.getOrdinal());
             moveValid.setSkip(skip);
-            moveValid.setCard(card.ordinal());
+            moveValid.setCard(card.getOrdinal());
             moveValid.setSelectedValue(selectedValue);
             moveValid.setPieceId(pieceId);
             moveValid.setStarter(isStarter);

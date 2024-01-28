@@ -25,7 +25,7 @@ public class ResponseReceivedMoveHandler extends MessageHandler<Response> {
 //        DrawCards drawCards = new DrawCards();
 //        ArrayList<Integer> _droppedCards = new ArrayList<>();
 //        for(Card card : game.getDiscardedCardList()) {
-//            _droppedCards.add(card.ordinal());
+//            _droppedCards.add(card.getOrdinal());
 //        }
 //        drawCards.setType(TypeGame.drawCards.getOrdinal());
 //        drawCards.setDroppedCards(_droppedCards);
