@@ -3,7 +3,7 @@ name: Abdelkarim Meziane
 imt: ameziane
 gruppe: 01
 woche: 15
-gesamtarbeitszeit: 8,00h
+gesamtarbeitszeit: 14,00h
 ---
 
 
@@ -22,3 +22,4 @@ gesamtarbeitszeit: 8,00h
     - 2024-01-25 1,30h
     - 2024-01-26 2,00h
     - 2024-01-27 2,00h
+    - 2024-01-28 6,00h
