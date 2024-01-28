@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.myapplication.controller.ClientController;
 import com.example.myapplication.databinding.FragmentStartScreenBinding;
+import com.example.myapplication.handler.HandlingException;
 import com.example.myapplication.messages.menu.ReturnGameList;
 
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ public class StartScreen extends Fragment {
     private StartScreenViewModel viewModel;
     FragmentStartScreenBinding binding;
     ServerViewModel serverViewModel;
+
+    ClientController clientController;
     public StartScreen() {
         // Required empty public constructor
     }
@@ -95,5 +99,11 @@ public class StartScreen extends Fragment {
                 }
             }
         });
+    }
+
+    public void navigateToFirstFragment()
+    {
+        NavHostFragment.findNavController(StartScreen.this)
+                .navigate(R.id.action_startScreen_to_FirstFragment);
     }
 }

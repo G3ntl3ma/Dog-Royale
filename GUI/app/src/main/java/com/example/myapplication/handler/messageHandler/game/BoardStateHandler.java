@@ -1,7 +1,7 @@
 package com.example.myapplication.handler.messageHandler.game;
 
 
-import com.example.myapplication.BoardUpdater;
+import com.example.myapplication.updater.BoardUpdater;
 import com.example.myapplication.handler.Handler;
 import com.example.myapplication.handler.HandlingException;
 import com.example.myapplication.messages.game.TypeGame;

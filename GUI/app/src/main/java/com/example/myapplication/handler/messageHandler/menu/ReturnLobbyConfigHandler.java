@@ -1,7 +1,7 @@
 package com.example.myapplication.handler.messageHandler.menu;
 
 import com.example.myapplication.Game;
-import com.example.myapplication.GameInformation;
+import com.example.myapplication.GUILogic.GameInformation;
 import com.example.myapplication.handler.Handler;
 import com.example.myapplication.handler.HandlingException;
 import com.example.myapplication.messages.menu.ReturnLobbyConfig;

@@ -5,7 +5,7 @@ import static com.example.myapplication.handler.messageHandler.menu.MenuMessageH
 import android.os.AsyncTask;
 
 import com.example.myapplication.Game_board;
-import com.example.myapplication.SpectateGames;
+import com.example.myapplication.RunningGames;
 import com.example.myapplication.StartScreen;
 import com.example.myapplication.StartingGames;
 import com.example.myapplication.WaitingScreen;
@@ -52,7 +52,7 @@ public class ClientController {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(100);
     private StartingGames startingGames;//instance that is sent to now what window to control
-    private SpectateGames spectateGames;
+    private RunningGames spectateGames;
     private boolean startingGamesActive;//to know what was the last active window so the controller can act accordingly, like navigateToNextfragment
     private boolean spectateGamesActive;
     @Getter@Setter
@@ -132,8 +132,8 @@ public class ClientController {
             this.startingGames = (StartingGames) gameFragment;
             this.startingGamesActive = true;
             this.spectateGamesActive = false;
-        } else if (gameFragment instanceof SpectateGames) {
-            this.spectateGames = (SpectateGames) gameFragment;
+        } else if (gameFragment instanceof RunningGames) {
+            this.spectateGames = (RunningGames) gameFragment;
             this.startingGamesActive = false;
             this.spectateGamesActive = true;
         }

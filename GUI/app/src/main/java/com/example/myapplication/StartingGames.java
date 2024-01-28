@@ -119,6 +119,6 @@ public class StartingGames extends Fragment {
 
     public void navigateToLobby() {
         NavHostFragment.findNavController(StartingGames.this)
-                .navigate(R.id.action_StartingGames_to_game_board_layout);
+                .navigate(R.id.action_StartingGames_to_FirstFragment);
     }
 }
