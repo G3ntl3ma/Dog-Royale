@@ -4,38 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr + dgehse: Added tournament construct">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/RegisterForTournamentHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/TournamentExtension.java" afterDir="false" />
+    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr: Tournament logic fully implemented">
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RegisterForTournamentHandlerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/Tournament.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/Tournament.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/MessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/MessageHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/game/LeavePlayerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/game/LeavePlayerHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/game/MoveHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/game/MoveHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/game/ResponseDrawCardsHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/game/ResponseDrawCardsHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/game/ResponseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/game/ResponseHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/game/ResponseReceivedMoveHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/game/ResponseReceivedMoveHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/game/ThrowAwayClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/game/ThrowAwayClass.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/FindTournamentHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/RequestTournamentListHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/JoinGameAsObserverHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/JoinGameAsObserverHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/JoinGameAsPlayerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/JoinGameAsPlayerHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/RequestGameListHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/RequestGameListHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/RegisterForTournamentHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/RegisterForTournamentHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/RequestTournamentInfoHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/RequestTournamentInfoHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/enums/GameState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/enums/GameState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/LobbyConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/LobbyConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/messages/menu/ReturnTournamentInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/messages/menu/ReturnTournamentInfo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/messages/menu/ReturnTournamentList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/messages/menu/ReturnTournamentList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/service/KickService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/service/KickService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestGameListHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestGameListHandlerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestTechDataHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestTechDataHandlerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/utils/TournamentPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/utils/TournamentPlayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestTournamentInfoHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestTournamentInfoHandlerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestTournamentListHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/RequestTournamentListHandlerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/LobbyExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/LobbyExtension.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/TournamentExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/testutils/TournamentExtension.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -200,7 +179,7 @@
       <workItem from="1706229172606" duration="6000" />
       <workItem from="1706262189370" duration="699000" />
       <workItem from="1706279800172" duration="15915000" />
-      <workItem from="1706396055036" duration="37672000" />
+      <workItem from="1706396055036" duration="45570000" />
     </task>
     <task id="LOCAL-00001" summary="felixwr and dgehse: Rewriting and fixing (making code compilable)">
       <option name="closed" value="true" />
@@ -234,7 +213,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706414679644</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="felixwr: Tournament logic fully implemented">
+      <option name="closed" value="true" />
+      <created>1706440303078</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1706440303078</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -283,6 +270,7 @@
     <MESSAGE value="felixwr: Writing tests" />
     <MESSAGE value="felixwr: hotfix" />
     <MESSAGE value="felixwr + dgehse: Added tournament construct" />
-    <option name="LAST_COMMIT_MESSAGE" value="felixwr + dgehse: Added tournament construct" />
+    <MESSAGE value="felixwr: Tournament logic fully implemented" />
+    <option name="LAST_COMMIT_MESSAGE" value="felixwr: Tournament logic fully implemented" />
   </component>
 </project>

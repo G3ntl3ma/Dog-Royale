@@ -9,11 +9,18 @@ import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
+/**
+ * @author felixwr
+ */
 public class TournamentExtension implements BeforeAllCallback, AfterAllCallback {
 
     private static ServerController serverController;
     private static MessageBroker messageBroker;
-
+    private final static int CLIENT_ID_TOURNAMENT_1 = -201;
+    private final static int CLIENT_ID_TOURNAMENT_2 = -202;
+    private final static int CLIENT_ID_TOURNAMENT_3 = -203;
+    private final static int CLIENT_ID_TOURNAMENT_4 = -204;
+    private final static int CLIENT_ID_TOURNAMENT_5 = -205;
     private final static String JSON_FILE_PATH = "src/test/java/com/nexusvision/server/testutils/";
 
     @Override
@@ -21,7 +28,7 @@ public class TournamentExtension implements BeforeAllCallback, AfterAllCallback 
         serverController = ServerController.getInstance();
         messageBroker = MessageBroker.getInstance();
 
-        int tournamentId1 = serverController.createNewTournament(10);
+        int tournamentId1 = serverController.createNewTournament(6);
         int tournamentId2 = serverController.createNewTournament(20);
         int tournamentId3 = serverController.createNewTournament(30);
         int tournamentId4 = serverController.createNewTournament(40);
@@ -33,8 +40,22 @@ public class TournamentExtension implements BeforeAllCallback, AfterAllCallback 
         Tournament tournament4 = serverController.getTournamentById(tournamentId4); // RUNNING
         Tournament tournament5 = serverController.getTournamentById(tournamentId5); // FINISHED
 
+        messageBroker.addIdentifier(CLIENT_ID_TOURNAMENT_1, new MessageListener());
+        tournament1.addPlayer(CLIENT_ID_TOURNAMENT_1, "clientId:" + CLIENT_ID_TOURNAMENT_1);
+
+        messageBroker.addIdentifier(CLIENT_ID_TOURNAMENT_2, new MessageListener());
+        tournament2.addPlayer(CLIENT_ID_TOURNAMENT_2, "clientId:" + CLIENT_ID_TOURNAMENT_2);
+
+        messageBroker.addIdentifier(CLIENT_ID_TOURNAMENT_3, new MessageListener());
+        tournament3.addPlayer(CLIENT_ID_TOURNAMENT_3, "clientId:" + CLIENT_ID_TOURNAMENT_3);
         runTournament(tournament3, "lobby4config.json", 8);
+
+        messageBroker.addIdentifier(CLIENT_ID_TOURNAMENT_4, new MessageListener());
+        tournament4.addPlayer(CLIENT_ID_TOURNAMENT_4, "clientId:" + CLIENT_ID_TOURNAMENT_4);
         runTournament(tournament4, "lobby4config.json", 11);
+
+        messageBroker.addIdentifier(CLIENT_ID_TOURNAMENT_5, new MessageListener());
+        tournament5.addPlayer(CLIENT_ID_TOURNAMENT_5, "clientId:" + CLIENT_ID_TOURNAMENT_5);
         runTournament(tournament5, "lobby4config.json", 15);
 
         boolean successful;

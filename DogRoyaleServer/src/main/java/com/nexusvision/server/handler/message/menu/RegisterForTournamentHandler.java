@@ -25,13 +25,19 @@ public class RegisterForTournamentHandler extends MessageHandler<RegisterForTour
         String name = serverController.getClientById(clientId).getName();
         boolean successful = tournament.addPlayer(clientId, name);
 
+        RegisteredForTournament registeredForTournament = getRegisteredForTournament(successful, tournament);
+        String response = gson.toJson(registeredForTournament);
+        MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientId, response);
+    }
+
+    private static RegisteredForTournament getRegisteredForTournament(boolean successful, Tournament tournament) {
         RegisteredForTournament registeredForTournament = new RegisteredForTournament();
         registeredForTournament.setType(TypeMenue.registeredForTournament.getOrdinal());
+        registeredForTournament.setSuccess(successful);
         registeredForTournament.setTournamentId(tournament.getTournamentId());
         registeredForTournament.setMaxPlayer(tournament.getMaxPlayer());
         registeredForTournament.setPlayers(tournament.getPlayerElements());
         registeredForTournament.setMaxGames(tournament.getMaxGames());
-        String response = gson.toJson(registeredForTournament);
-        MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientId, response);
+        return registeredForTournament;
     }
 }

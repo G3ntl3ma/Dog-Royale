@@ -77,7 +77,6 @@ class RequestTournamentListHandlerTest extends HandlerTest {
         Tournament tournament = serverController.getTournamentById(tournamentResponse.getTournamentId());
         assertNotNull(tournament);
         assertEquals(tournament.getTournamentId(), tournamentResponse.getTournamentId());
-        System.out.println(tournament.getWinnerOrder());
         assertEquals(tournament.getWinnerOrder(), tournamentResponse.getWinnerOrder());
     }
 

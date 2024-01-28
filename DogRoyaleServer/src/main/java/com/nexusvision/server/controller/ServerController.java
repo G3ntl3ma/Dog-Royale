@@ -6,6 +6,7 @@ import com.nexusvision.server.model.entities.Client;
 import com.nexusvision.server.model.enums.GameState;
 import com.nexusvision.server.model.utils.ColorMapping;
 import com.nexusvision.server.model.utils.DrawCardFields;
+import com.nexusvision.server.model.utils.PlayerElement;
 import com.nexusvision.server.model.utils.StartFields;
 import lombok.extern.log4j.Log4j2;
 
@@ -80,11 +81,24 @@ public class ServerController {
      * @return An object representing the game the player is participating otherwise null
      */
     public GameLobby getLobbyOfPlayer(int clientId) {
-        for (int key : lobbyMap.keySet()) {
-            GameLobby lobby = lobbyMap.get(key);
-            //see if player in players of game
+        for (GameLobby lobby : lobbyMap.values()) {
             for (int player : lobby.getLobbyConfig().getPlayerOrder().getClientIdList()) {
                 if (player == clientId) return lobby;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Searching for a tournament associated with a specific player
+     *
+     * @param clientId An integer representing the id of the play for whom the associated tournament is being searched
+     * @return An object representing the first found tournament of the player or null if it doesn't exist
+     */
+    public Tournament getTournamentOfPlayer(int clientId) {
+        for (Tournament tournament : tournamentMap.values()) {
+            for (PlayerElement playerElement : tournament.getPlayerElements()) {
+                if (playerElement.getClientId() == clientId) return tournament;
             }
         }
         return null;

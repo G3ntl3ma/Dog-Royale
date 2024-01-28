@@ -24,7 +24,7 @@ public class RequestTournamentInfoHandler extends MessageHandler<RequestTourname
         Tournament tournament = serverController.getTournamentById(message.getTournamentId());
 
         ReturnTournamentInfo returnTournamentInfo = new ReturnTournamentInfo();
-        returnTournamentInfo.setType(TypeMenue.requestTournamentInfo.getOrdinal());
+        returnTournamentInfo.setType(TypeMenue.returnTournamentInfo.getOrdinal());
 
         ReturnTournamentInfo.TournamentInfo tournamentInfo = getTournamentInfo(tournament);
         returnTournamentInfo.setTournamentInfo(tournamentInfo);
