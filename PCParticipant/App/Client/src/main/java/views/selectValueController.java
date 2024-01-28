@@ -263,6 +263,7 @@ public class selectValueController {
         System.out.println("PieceHandler.pieces.length: " + PieceHandler.pieces.length);
         for (int i = 0; i < PieceHandler.pieces.length; i++)
         {
+
             System.out.println("Players Piece: " + PieceHandler.pieces[i].player + " isOnBench: " + PieceHandler.pieces[i].isOnBench + "my PlayerIndex: " + PieceImages.clientPlayerIndex);
             if (PieceHandler.pieces[i].player == PieceImages.clientPlayerIndex && PieceHandler.pieces[i].isOnBench)
             {
