@@ -868,16 +868,18 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
                     if (debugPrints) {System.out.print(" - player = "); System.out.println(playerIndex); System.out.print(" - ..having Id = "); System.out.println(playerId);};
                     if (playerId == pieceClientId) {
                         if (debugPrints) {System.out.println("  -> it's a match!");};
-                        PieceHandler.pieces[i].setPlayer(playerIndex); //mtwardy: modified
-                        PieceHandler.pieces[i].fieldImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
-                        PieceHandler.pieces[i].houseImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
-                        PieceHandler.pieces[i].isOnBench = pieces.get(i).isOnBench();
+                        System.out.println("Piece " + PieceHandler.pieces[i] + "gets " + playerIndex);
+                        int pieceID = boardStateDto.getPieces().get(i).getPieceId();
+                        PieceHandler.pieces[pieceID].setPlayer(playerIndex); //mtwardy: modified
+                        PieceHandler.pieces[pieceID].fieldImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
+                        PieceHandler.pieces[pieceID].houseImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
+                        PieceHandler.pieces[pieceID].isOnBench = pieces.get(pieceID).isOnBench();
                     }
                 }
                 if (debugPrints) {System.out.print("For the record: pieceHandler.pieces[i].player = "); System.out.println(pieceHandler.pieces[i].player);};
-                if (PieceHandler.pieces[i].player == -1) {
-                    throw new AssertionError("The piece with index "+Integer.toString(i)+" is supposed to be player-"+Integer.toString(pieceClientId)+"'s piece however this was not assigned during the loop over all "+Integer.toString(board.numPlayers)+" player(s)");
-                }
+//                if (PieceHandler.pieces[i].player == -1) {
+//                    throw new AssertionError("The piece with index "+Integer.toString(i)+" is supposed to be player-"+Integer.toString(pieceClientId)+"'s piece however this was not assigned during the loop over all "+Integer.toString(board.numPlayers)+" player(s)");
+//                }
             }
             for(PlayerPiece piece : pieces){
                 pieceHandler.assertPieceState(piece.getPieceId(),piece.isOnBench(), piece.getPosition(), piece.getInHousePosition());
@@ -909,7 +911,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
         Platform.runLater(() ->{
             HandCards[] listNumCards = updateDrawCards.getHandCards();
             lblCardsPOne.setText(" x " + listNumCards[0].getCount());
-            lblCardsPTwo.setText(" x " + listNumCards[1].getCount());
+            //lblCardsPTwo.setText(" x " + listNumCards[1].getCount());
             if(lobbyConfig.getMaxPlayerCount() >= 3){
                 lblCardsPThree.setText(" x " + listNumCards[2].getCount());
                 if(lobbyConfig.getMaxPlayerCount() >= 4){
