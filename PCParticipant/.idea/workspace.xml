@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="unnamed" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="deeefcb7-2fcf-4829-8815-fe782a949e67" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../GUI/app/src/androidTest/java/com/example/myapplication/StartScreenTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../GUI/app/src/androidTest/java/com/example/myapplication/WaitingScreenTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/NavigationHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../GUI/app/src/test/java/com/example/myapplication/ServerViewModelTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../GUI/app/src/test/java/com/example/myapplication/TimerviewModelTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/.idea/androidTestResultsUserPreferences.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/.idea/androidTestResultsUserPreferences.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/.idea/deploymentTargetDropDown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/.idea/deploymentTargetDropDown.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/androidTest/java/com/example/myapplication/FirstFragmentTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/androidTest/java/com/example/myapplication/FirstFragmentTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/androidTest/java/com/example/myapplication/Game_boardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/androidTest/java/com/example/myapplication/Game_boardTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/androidTest/java/com/example/myapplication/MatchHistoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/androidTest/java/com/example/myapplication/MatchHistoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/androidTest/java/com/example/myapplication/RunningGamesTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/androidTest/java/com/example/myapplication/RunningGamesTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/androidTest/java/com/example/myapplication/StartingGamesTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/androidTest/java/com/example/myapplication/StartingGamesTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/RunningGames.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/RunningGames.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/RunningGamesAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/RunningGamesAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/StartScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/StartScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/StartingGames.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/StartingGames.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/WaitingScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/WaitingScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/controller/ClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/controller/ClientController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/Handler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/Handler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/ServerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/ServerHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/messageHandler/game/BoardStateHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/messageHandler/game/BoardStateHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/messageHandler/game/CancelHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/messageHandler/game/CancelHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/messageHandler/game/FirstBoardStateHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/messageHandler/game/FirstBoardStateHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/messageHandler/menu/ConnectedToGameHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/messageHandler/menu/ConnectedToGameHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/messageHandler/menu/ConnectedToServerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/messageHandler/menu/ConnectedToServerHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/messageHandler/menu/ReturnFindTournamentHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/messageHandler/menu/ReturnFindTournamentHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/messageHandler/menu/ReturnLobbyConfigHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/handler/messageHandler/menu/ReturnLobbyConfigHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/ConnectToServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/ConnectToServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/ConnectedToGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/ConnectedToGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/ConnectedToServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/ConnectedToServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/FindTournament.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/FindTournament.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/JoinGameAsObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/JoinGameAsObserver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/JoinGameAsParticipant.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/JoinGameAsParticipant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/RegisterForTournament.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/RegisterForTournament.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/RegisteredForTournament.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/RegisteredForTournament.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/RequestGameList.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/RequestGameList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/RequestTournamentInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/RequestTournamentInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/ReturnFindTournament.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/ReturnFindTournament.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/ReturnLobbyConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/ReturnLobbyConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/ReturnTechData.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/ReturnTechData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/ReturnTournamentInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/java/com/example/myapplication/messages/menu/ReturnTournamentInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/res/layout/fragment_starting_games.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/res/layout/fragment_starting_games.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/res/layout/fragment_waiting_screen.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/res/layout/fragment_waiting_screen.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/main/res/navigation/nav_graph.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/main/res/navigation/nav_graph.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/test/java/com/example/myapplication/Game_fieldTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/test/java/com/example/myapplication/Game_fieldTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/test/java/com/example/myapplication/LastCardTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/app/src/test/java/com/example/myapplication/TimerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/app/src/test/java/com/example/myapplication/TimerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../GUI/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../GUI/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2bN6xA1dI5I8lwaFtphf9jfYu7m" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.PCObserverGui.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "Merging feature-gui-demo-therealone",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "H:/unisheesh/SWTPRA - gurppe/group1.2/group1/PCParticipant",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "MavenSettings",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="PCObserverGui" type="Application" factoryName="Application" singleton="false" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="views.PCObserverGui" />
+      <module name="client" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-11.0.21-corretto-11.0.21-f644763e9732-97de7592" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="deeefcb7-2fcf-4829-8815-fe782a949e67" name="Changes" comment="" />
+      <created>1706043432195</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1706043432195</updated>
+      <workItem from="1706043433339" duration="3117000" />
+      <workItem from="1706103020176" duration="600000" />
+      <workItem from="1706109837766" duration="8000" />
+      <workItem from="1706109853294" duration="25000" />
+      <workItem from="1706218666274" duration="210000" />
+      <workItem from="1706220413682" duration="15000" />
+      <workItem from="1706380801918" duration="25737000" />
+      <workItem from="1706438880846" duration="138000" />
+      <workItem from="1706439117733" duration="2922000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
