@@ -160,7 +160,8 @@ public class CardService {
                         Figure oppfigure = opponent.getFigureList().get(j);
                         if(oppfigure.getField() == opponent.getStartField()) continue; //dont swap with locked figure
                         if (!oppfigure.isOnBench() && !oppfigure.isInHouse()) {
-                            moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this.usedType));
+                            int _selectedValue = figure.getField().getFieldId() - oppfigure.getField().getFieldId();
+                            moves.add(new Move(player, figure.getField(), oppfigure.getField(), true, this.usedType, _selectedValue));
                         }
                     }
                 }
