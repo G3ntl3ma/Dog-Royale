@@ -616,7 +616,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      */
     @Override @FXML
     public void handleLobbyConfig(ReturnLobbyConfigDto lobbyConfig) throws IOException {
-
+        System.out.println("Lobby config:" + lobbyConfig.toJson());
         Platform.runLater(()-> {
             this.lobbyConfig = lobbyConfig;
             this.animationTime = lobbyConfig.getVisualizationTimePerMove();
@@ -875,10 +875,12 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
                 for (int playerIndex = 0; playerIndex < board.numPlayers; playerIndex++) {
                     int playerId = lobbyConfig.getPlayerOrder().getOrder().get(playerIndex).getClientId();
                     if (debugPrints) {System.out.print(" - player = "); System.out.println(playerIndex); System.out.print(" - ..having Id = "); System.out.println(playerId);};
+                    System.out.println(playerId + " == " + pieceClientId + "?");
                     if (playerId == pieceClientId) {
                         if (debugPrints) {System.out.println("  -> it's a match!");};
-                        System.out.println("Piece " + PieceHandler.pieces[i] + "gets " + playerIndex);
+                        System.out.println("Piece " + PieceHandler.pieces[i] + " " + i + " gets " + playerIndex);
                         int pieceID = boardStateDto.getPieces().get(i).getPieceId();
+                        System.out.println("Piece ID" + pieceID);
                         PieceHandler.pieces[pieceID].setPlayer(playerIndex); //mtwardy: modified
                         PieceHandler.pieces[pieceID].fieldImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
                         PieceHandler.pieces[pieceID].houseImage.setImage(new Image(drawBoard.playerImagePath(playerIndex)));
