@@ -7,7 +7,7 @@ gesamtarbeitszeit: 52,5h
 ---
 
 
-# Stundenzettel des Softwaretechnikpraktikums WS 2022/23
+# Stundenzettel des Softwaretechnikpraktikums WS 2023/24
 
 ## Projektmanagement
 - Präsenz-Meeting
