@@ -82,15 +82,15 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
     @FXML
     private TableColumn<TournamentsUpcoming, Integer> tCPTCurrentPlayerCount;
     @FXML
-    private TableView<TournamentsUpcoming> tVRunningTournaments;
+    private TableView<TournamentsRunning> tVRunningTournaments;
     @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCRTtournamentId;
+    private TableColumn<TournamentsRunning, Integer> tCRTtournamentId;
     @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCRTMaxPlayers;
+    private TableColumn<TournamentsRunning, Integer> tCRTMaxPlayers;
     @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCRTMaxGames;
+    private TableColumn<TournamentsRunning, Integer> tCRTMaxGames;
     @FXML
-    private TableColumn<TournamentsUpcoming, Integer> tCRTCurrentPlayerCount;
+    private TableColumn<TournamentsRunning, Integer> tCRTCurrentPlayerCount;
     @FXML
     private TableView<TournamentsFinished> tVFinishedTournaments;
     @FXML
@@ -384,8 +384,8 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
             tVPlannedTournaments.getItems().add(tournament);
         }
         tVRunningTournaments.getItems().clear();
-        for(TournamentsUpcoming tournament : findTournament.getTournamentsRunning()){
-            tVPlannedTournaments.getItems().add(tournament);
+        for(TournamentsRunning tournament : findTournament.getTournamentsRunning()){
+            tVRunningTournaments.getItems().add(tournament);
         }
         tVFinishedTournaments.getItems().clear();
         for (TournamentsFinished tournament : findTournament.getTournamentsFinished()){
