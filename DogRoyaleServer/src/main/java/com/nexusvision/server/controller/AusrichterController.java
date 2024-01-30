@@ -1,6 +1,5 @@
 package com.nexusvision.server.controller;
 
-import com.nexusvision.client.CommandProcessor;
 import com.nexusvision.config.AppConfig;
 import lombok.extern.log4j.Log4j2;
 
@@ -65,9 +64,10 @@ public class AusrichterController {
                 writer.flush();
             }
         } catch (IOException e) {
-            log.error("Ausrichter disconnected: " + e.getMessage());
+            log.error("Error: " + e.getMessage());
         } finally {
             try {
+                log.info("Ausrichter disconnected");
                 ausrichterSocket.close();
             } catch (IOException e) {
                 log.error("Error while trying to close the connection: " + e.getMessage());

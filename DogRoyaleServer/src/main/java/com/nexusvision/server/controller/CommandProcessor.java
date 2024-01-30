@@ -1,4 +1,4 @@
-package com.nexusvision.client;
+package com.nexusvision.server.controller;
 
 import com.google.gson.Gson;
 import com.nexusvision.server.controller.GameLobby;
@@ -21,6 +21,8 @@ public class CommandProcessor {
         String action = tokens.get(0).toLowerCase();
 
         switch (action) {
+            case "help":
+                return help();
             case "ls":
                 return showGames(tokens);
             case "touch":
@@ -61,6 +63,31 @@ public class CommandProcessor {
         }
         if (constructingQuot) tokens.add(quot);
         return tokens;
+    }
+
+    private String help() {
+        return "Type 'help' to see this list.\n"
+                + "Angles <arg> mean that this argument is required.\n"
+                + "Brackets [arg] mean that this argument is optional.\n"
+                + "Quotation marks \"file path\" allow you to pass arguments with spaces, such as a filepath"
+                + " that contains spaces for example.\n"
+                + "---COMMANDS---\n"
+                + "'add-player <client-id> <kind> <kind-id>': Adds player with <client-id> to <kind>"
+                    + " with <kind-id>. <kind> needs to be one of {game, tournament}\n"
+                + "'exec <kind> <kind-id>': Starts <kind> with <kind-id>."
+                    + " <kind> needs to be one of {game, tournament}\n"
+                + "'help': Shows this list\n"
+                + "'kill <game-id>': Cancels the game with <game-id>\n"
+                + "'ls <kind>': Lists all of <kind> with all necessary information."
+                    + " <kind> needs to be one of {game, tournament}\n"
+                + "'pause <game-id>: Pauses the game with <game-id>\n"
+                + "'rm-player' <client-id> <kind> <kind-id>: Removes player with <client-id> from <kind>"
+                    + " with <kind-id>. <kind> needs to be one of {game, tournament}\n"
+                + "'touch <kind> <config-file-path> [maxPlayers]': Creates a <kind> with config from"
+                    + " <config-file-path>. <kind> needs to be one of {game, tournament}."
+                    + " [maxPlayers] will be ignored when <kind> is game, but is strictly required"
+                    + " when <kind> is tournament\n"
+                + "'unpause <game-id>: Unpauses the game with <game-id>\n";
     }
 
     private String showGames(ArrayList<String> tokens) {
@@ -136,7 +163,7 @@ public class CommandProcessor {
     }
 
     private String runGame(ArrayList<String> tokens) {
-        if (tokens.size() < 3) return "Required argument: exec <kind> <<kind>Id>\n";
+        if (tokens.size() < 3) return "Required argument: exec <kind> <kind-id>\n";
 
         String kind = tokens.get(1).toLowerCase();
         int id;
@@ -149,7 +176,7 @@ public class CommandProcessor {
         switch (kind) {
             case "game":
                 GameLobby game = serverController.getLobbyById(id);
-                if (game == null) return "Error: game with " + id + " doesn't exist\n";
+                if (game == null) return "Error: game with gameId " + id + " doesn't exist\n";
                 boolean gameSuccessful = game.runGame();
                 if (!gameSuccessful) {
                     return "Couldn't start game with gameId " + id + ", game is not ready yet\n";
