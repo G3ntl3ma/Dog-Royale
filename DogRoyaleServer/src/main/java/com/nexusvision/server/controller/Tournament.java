@@ -54,11 +54,13 @@ public class Tournament {
         tournamentState = GameState.UPCOMING;
     }
 
-    public void startTournament() {
+    public boolean startTournament() {
+        if (tournamentPlayerMap.size() < 2) return false;
         initLobbies();
         GameLobby newLobby = lobbyList.get(runningLobbyIndex);
         newLobby.runGame();
         tournamentState = GameState.RUNNING;
+        return true;
     }
 
     private void initLobbies() {

@@ -46,6 +46,7 @@ public class MessageBroker {
                 break;
             case LOBBY:
                 List<Subscriber> subList = lobbySubLists.get(channel);
+                if (subList == null) return;
                 for (Subscriber sub : subList) {
                     sub.sendMessage(message);
                 }

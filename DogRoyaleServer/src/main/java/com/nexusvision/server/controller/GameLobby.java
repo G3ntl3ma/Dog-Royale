@@ -291,7 +291,8 @@ public class GameLobby {
     /**
      * Sets GameState to <code>IN_PROGRESS</code> and sends board state to all clients
      */
-    public void runGame() {
+    public boolean runGame() {
+        if (lobbyConfig.getPlayerOrder().getOrder().size() < 2) return false;
         game = new Game(lobbyConfig, id);
         gameState = GameState.RUNNING;
         BoardState boardState = boardStateService.generateBoardState(game, lobbyConfig.getPlayerOrder()); // This is how Ausrichter starts the game. Sending board states to all clients
@@ -303,6 +304,7 @@ public class GameLobby {
         setupNewRound();
         gameDuration = lobbyConfig.getMaximumGameDuration();
         startLiveTimer();
+        return true;
     }
 
     /**

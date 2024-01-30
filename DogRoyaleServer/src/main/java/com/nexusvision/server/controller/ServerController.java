@@ -37,9 +37,9 @@ public class ServerController {
 
     private final HashMap<Integer, ClientHandler> handlerMap = new HashMap<>();
 
-    private int clientIdCounter = 1;
-    private int lobbyIdCounter = 1;
-    private int tournamentIdCounter = 1;
+    private int clientIdCounter = 0;
+    private int lobbyIdCounter = 0;
+    private int tournamentIdCounter = 0;
 
     private ServerController() {
     }
@@ -180,7 +180,7 @@ public class ServerController {
 
         do {
             clientIdCounter++;
-            if (clientIdCounter < 0) clientIdCounter = 1;
+            if (clientIdCounter < 0) clientIdCounter = 0;
             newClientId = clientIdCounter;
         } while (clientMap.containsKey(newClientId));
 
@@ -209,7 +209,7 @@ public class ServerController {
 
         do {
             lobbyIdCounter++;
-            if (lobbyIdCounter < 0) lobbyIdCounter = 1;
+            if (lobbyIdCounter < 0) lobbyIdCounter = 0;
             newLobbyId = lobbyIdCounter;
         } while (lobbyMap.containsKey(newLobbyId));
 
@@ -239,7 +239,7 @@ public class ServerController {
 
         do {
             tournamentIdCounter++;
-            if (tournamentIdCounter < 0) tournamentIdCounter = 1;
+            if (tournamentIdCounter < 0) tournamentIdCounter = 0;
             tournamentId = tournamentIdCounter;
         } while (tournamentMap.containsKey(tournamentId));
 

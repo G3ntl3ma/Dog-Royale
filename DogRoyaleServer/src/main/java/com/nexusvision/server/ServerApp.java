@@ -1,6 +1,7 @@
 package com.nexusvision.server;
 
 import com.nexusvision.config.AppConfig;
+import com.nexusvision.server.controller.AusrichterController;
 import com.nexusvision.server.controller.ServerController;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -28,7 +29,7 @@ public class ServerApp {
                 log.error("Expected the argument to be an integer, but was actually " + args[0]);
             }
         }
-        ServerController serverController = ServerController.getInstance();
-        serverController.startServer(PORT);
+        AusrichterController.getInstance().startAusrichter();
+        ServerController.getInstance().startServer(PORT);
     }
 }

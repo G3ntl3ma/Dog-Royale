@@ -4,8 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr: Added Ausrichter + fixes">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/ClientHandler.java" afterDir="false" />
+    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr + dghese: Fixes">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/AusrichterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/client/Ausrichter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/client/Ausrichter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/client/CommandProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/client/CommandProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/ServerApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/ServerApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/MessageBroker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/MessageBroker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/Tournament.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/Tournament.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,40 +50,44 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Ausrichter.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main2.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main3.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ServerApp.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ConnectToServerHandlerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.RequestGameListHandlerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.RequestGameListHandlerTest.testHandle.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.menu in DogRoyaleServer.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.DogRoyaleServer [package].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop-server-felixwr&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/archbtw/dox/swtpra/idea3tmpcopy/group1/DogRoyaleServer&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;build.tools&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Ausrichter.executor": "Run",
+    "Application.Main2.executor": "Run",
+    "Application.Main3.executor": "Run",
+    "Application.ServerApp.executor": "Run",
+    "Attach to process.pid 8656.executor": "ProcessAttachDebug",
+    "JUnit.ClientHandlerTest.testRun.executor": "Run",
+    "JUnit.ConnectToServerHandlerTest.executor": "Run",
+    "JUnit.RequestGameListHandlerTest.executor": "Run",
+    "JUnit.RequestGameListHandlerTest.testHandle.executor": "Run",
+    "JUnit.ServerControllerTest.executor": "Run",
+    "JUnit.java in DogRoyaleServer.executor": "Run",
+    "JUnit.menu in DogRoyaleServer.executor": "Run",
+    "Maven.DogRoyaleServer [package].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "develop-server-felixwr",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/archbtw/dox/swtpra/idea3tmpcopy/group1/DogRoyaleServer",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "build.tools",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Felix\Documents\Studium\Semester 3\SWTPra\develop-server-felixwr\group1\DogRoyaleServer\src\main\resources" />
       <recent name="C:\Users\Felix\Documents\Studium\Semester 3\SWTPra\develop-server-felixwr\group1\DogRoyaleServer" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.java in DogRoyaleServer">
+  <component name="RunManager" selected="Application.ServerApp">
     <configuration name="Ausrichter" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.nexusvision.client.Ausrichter" />
       <module name="DogRoyaleServer" />
@@ -149,11 +162,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Ausrichter" />
+        <item itemvalue="Application.ServerApp" />
         <item itemvalue="JUnit.java in DogRoyaleServer" />
         <item itemvalue="JUnit.ClientHandlerTest.testRun" />
         <item itemvalue="JUnit.ServerControllerTest" />
-        <item itemvalue="Application.Ausrichter" />
-        <item itemvalue="Application.ServerApp" />
       </list>
     </recent_temporary>
   </component>
@@ -179,7 +192,8 @@
       <workItem from="1706229172606" duration="6000" />
       <workItem from="1706262189370" duration="699000" />
       <workItem from="1706279800172" duration="15915000" />
-      <workItem from="1706396055036" duration="75828000" />
+      <workItem from="1706396055036" duration="77238000" />
+      <workItem from="1706555153419" duration="15865000" />
     </task>
     <task id="LOCAL-00001" summary="felixwr and dgehse: Rewriting and fixing (making code compilable)">
       <option name="closed" value="true" />
@@ -253,7 +267,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706482118573</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="felixwr + dghese: Fixes">
+      <option name="closed" value="true" />
+      <created>1706482500005</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1706482500005</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -307,6 +329,7 @@
     <MESSAGE value="felixwr: Small fix, not compilable yet" />
     <MESSAGE value="felixwr + dghese: Update to newest interface document + tweaks" />
     <MESSAGE value="felixwr: Added Ausrichter + fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="felixwr: Added Ausrichter + fixes" />
+    <MESSAGE value="felixwr + dghese: Fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="felixwr + dghese: Fixes" />
   </component>
 </project>
