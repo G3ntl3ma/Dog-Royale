@@ -1,11 +1,18 @@
 package com.nexusvision.server.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.nexusvision.server.common.ChannelType;
 import com.nexusvision.server.controller.GameLobby;
 import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.controller.Tournament;
+import com.nexusvision.server.model.entities.Client;
 import com.nexusvision.server.model.enums.GameState;
+import com.nexusvision.server.model.messages.menu.ConnectedToGame;
+import com.nexusvision.server.model.messages.menu.ConnectedToServer;
 import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
+import com.nexusvision.server.model.messages.menu.TypeMenue;
+import com.nexusvision.utils.NewLineAppendingSerializer;
 
 import java.io.FileReader;
 import java.io.Reader;
@@ -15,20 +22,31 @@ import java.util.List;
 public class CommandProcessor {
 
     private static final ServerController serverController = ServerController.getInstance();
+    private static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
+            .create();
 
     public String processCommand(String command) {
         ArrayList<String> tokens = parseCommand(command);
         String action = tokens.get(0).toLowerCase();
 
         switch (action) {
-            case "help":
-                return help();
-            case "ls":
-                return showGames(tokens);
-            case "touch":
-                return createGame(tokens);
+            case "add-player":
+                return addPlayer(tokens);
             case "exec":
                 return runGame(tokens);
+            case "help":
+                return help();
+            case "kill":
+                return cancelGame(tokens);
+            case "ls":
+                return showGames(tokens);
+            case "pause":
+                return pauseGame(tokens);
+            case "unpause":
+                return unpauseGame(tokens);
+            case "touch":
+                return createGame(tokens);
             default:
                 return "No such command: " + action + "\n";
         }
@@ -80,14 +98,14 @@ public class CommandProcessor {
                 + "'kill <game-id>': Cancels the game with <game-id>\n"
                 + "'ls <kind>': Lists all of <kind> with all necessary information."
                     + " <kind> needs to be one of {game, tournament}\n"
-                + "'pause <game-id>: Pauses the game with <game-id>\n"
-                + "'rm-player' <client-id> <kind> <kind-id>: Removes player with <client-id> from <kind>"
+                + "'pause <game-id>': Pauses the game with <game-id>\n"
+                + "'rm-player <client-id> <kind> <kind-id>': Removes player with <client-id> from <kind>"
                     + " with <kind-id>. <kind> needs to be one of {game, tournament}\n"
                 + "'touch <kind> <config-file-path> [maxPlayers]': Creates a <kind> with config from"
                     + " <config-file-path>. <kind> needs to be one of {game, tournament}."
                     + " [maxPlayers] will be ignored when <kind> is game, but is strictly required"
                     + " when <kind> is tournament\n"
-                + "'unpause <game-id>: Unpauses the game with <game-id>\n";
+                + "'unpause <game-id>': Unpauses the game with <game-id>\n";
     }
 
     private String showGames(ArrayList<String> tokens) {
@@ -170,18 +188,18 @@ public class CommandProcessor {
         try {
             id = Integer.parseInt(tokens.get(2));
         } catch (NumberFormatException e) {
-            return "Expected the argument to be an integer, but was actually " + tokens.get(1) + "\n";
+            return "Expected the argument to be an integer, but was actually " + tokens.get(2) + "\n";
         }
 
         switch (kind) {
             case "game":
                 GameLobby game = serverController.getLobbyById(id);
-                if (game == null) return "Error: game with gameId " + id + " doesn't exist\n";
+                if (game == null) return "Error: game with game-id " + id + " doesn't exist\n";
                 boolean gameSuccessful = game.runGame();
                 if (!gameSuccessful) {
-                    return "Couldn't start game with gameId " + id + ", game is not ready yet\n";
+                    return "Couldn't start game with game-id " + id + ", game is not ready yet\n";
                 }
-                return "Started game with gameId " + id + " and name " + game.getLobbyConfig().getGameName()
+                return "Started game with game-id " + id + " and name " + game.getLobbyConfig().getGameName()
                         + ": " + game.getGameState() + "\n";
             case "tournament":
                 Tournament tournament = serverController.getTournamentById(id);
@@ -197,12 +215,102 @@ public class CommandProcessor {
         }
     }
 
+    private String addPlayer(ArrayList<String> tokens) {
+        if (tokens.size() < 4) return "Required argument: add-player <client-id> <kind> <kind-id>\n";
+
+        String kind = tokens.get(2).toLowerCase();
+        int clientId;
+        try {
+            clientId = Integer.parseInt(tokens.get(1));
+        } catch (NumberFormatException e) {
+            return "Expected the argument to be an integer, but was actually " + tokens.get(1) + "\n";
+        }
+        int kindId;
+        try {
+            kindId = Integer.parseInt(tokens.get(3));
+        } catch (NumberFormatException e) {
+            return "Expected the argument to be an integer, but was actually " + tokens.get(3) + "\n";
+        }
+
+        Client client = serverController.getClientById(clientId);
+        if (client == null || client.isObserver()) return "Provided clientId is invalid\n";
+
+        switch (kind) {
+            case "game":
+                GameLobby lobby = serverController.getLobbyById(kindId);
+                if (lobby == null) return "Provided gameId is invalid\n";
+                boolean successfulGame = lobby.addPlayer(client.getName(), clientId);
+                if (!successfulGame) return "Couldn't add player with clientId " + clientId + "\n";
+                break;
+            case "tournament":
+                Tournament tournament = serverController.getTournamentById(kindId);
+                if (tournament == null) return "Provided tournamentId is invalid\n";
+                boolean successfulTournament = tournament.addPlayer(clientId, client.getName());
+                if (!successfulTournament) return "Couldn't add player with clientId " + clientId + "\n";
+                break;
+            default:
+                return "Invalid <kind>: {game, tournament}\n";
+        }
+
+        ConnectedToGame connectedToGame = new ConnectedToGame();
+        connectedToGame.setType(TypeMenue.connectedToGame.ordinal());
+        connectedToGame.setSuccess(true);
+        MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientId, gson.toJson(connectedToGame));
+        serverController.setWaitingForMove(clientId);
+        return "Added player with clientId " + client + " to " + kind + " with " + kind + "-id " + kindId + "\n";
+    }
+
+    private String cancelGame(ArrayList<String> tokens) {
+        if (tokens.size() < 2) return "Required argument: kill <game-id>\n";
+
+        int gameId;
+        try {
+            gameId = Integer.parseInt(tokens.get(1));
+        } catch (NumberFormatException e) {
+            return "Expected the argument to be an integer, but was actually " + tokens.get(1) + "\n";
+        }
+        GameLobby game = serverController.getLobbyById(gameId);
+        if (game == null) return "Error: game with game-id " + gameId + " doesn't exist\n";
+        game.cancelGame();
+        return "Canceled game with game-id " + gameId + "\n";
+    }
+
+    private String pauseGame(ArrayList<String> tokens) {
+        if (tokens.size() < 2) return "Required argument: pause <game-id>\n";
+
+        int gameId;
+        try {
+            gameId = Integer.parseInt(tokens.get(1));
+        } catch (NumberFormatException e) {
+            return "Expected the argument to be an integer, but was actually " + tokens.get(1) + "\n";
+        }
+        GameLobby game = serverController.getLobbyById(gameId);
+        if (game == null) return "Error: game with game-id " + gameId + " doesn't exist\n";
+        game.pauseGame();
+        return "Paused game with game-id " + gameId + "\n";
+    }
+
+    private String unpauseGame(ArrayList<String> tokens) {
+        if (tokens.size() < 2) return "Required argument: unpause <game-id>\n";
+
+        int gameId;
+        try {
+            gameId = Integer.parseInt(tokens.get(1));
+        } catch (NumberFormatException e) {
+            return "Expected the argument to be an integer, but was actually " + tokens.get(1) + "\n";
+        }
+        GameLobby game = serverController.getLobbyById(gameId);
+        if (game == null) return "Error: game with game-id " + gameId + " doesn't exist\n";
+        game.unpauseGame();
+        return "Unpaused game with game-id " + gameId + "\n";
+    }
+
     private static String getLobbyListString(List<GameLobby> lobbyList) {
         String response = "";
         for (GameLobby lobby : lobbyList) {
-            response += "gameId: ";
+            response += "game-id: ";
             response += lobby.getId();
-            response += ", gameName: ";
+            response += ", game-name: ";
             String gameName = lobby.getLobbyConfig().getGameName();
             response += gameName == null ? "null" : gameName;
             response += "\n";
@@ -213,9 +321,9 @@ public class CommandProcessor {
     private static String getTournamentListString(List<Tournament> tournamentList) {
         String response = "";
         for (Tournament tournament : tournamentList) {
-            response += "tournamentId: ";
+            response += "tournament-id: ";
             response += tournament.getTournamentId();
-            response += ", tournamentName: ";
+            response += ", tournament-name: ";
             String tournamentName = tournament.getLobbyConfig() == null ? "null" : tournament.getLobbyConfig().getGameName();
             response += tournamentName;
             response += "\n";

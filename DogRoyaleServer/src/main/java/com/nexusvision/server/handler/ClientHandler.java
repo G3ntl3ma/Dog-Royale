@@ -117,6 +117,10 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
         return true;
     }
 
+    public void moveIntoGame() {
+        expectedState = State.WAITING_FOR_GAME_START;
+    }
+
     /**
      * Responsible for processing and handling a client request
      *
@@ -180,7 +184,7 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
             ConnectToServer connectToServer = gson.fromJson(request, ConnectToServer.class);
             new ConnectToServerHandler().handle(connectToServer, clientId);
             expectedState = State.REQUEST_GAME_TOURNAMENT_LIST;
-            log.info("Ausrichter " + clientId + " connected successfully");
+            log.info("Client " + clientId + " connected successfully");
         } catch (JsonSyntaxException e) {
             handleError("Wrong message format from type connectToServer",
                     TypeMenue.connectToServer.getOrdinal(), e);
@@ -196,6 +200,7 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
      */
     private void handleRequestGameTournamentList(String request, int type) throws HandlingException {
         switch (expectedState) {
+            case REQUEST_JOIN:
             case REQUEST_GAME_TOURNAMENT_LIST:
                 if (type == TypeMenue.requestGameList.getOrdinal()) {
                     handleRequestGameList(request, State.REQUEST_TOURNAMENT_LIST);
@@ -252,7 +257,7 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
      * @throws HandlingException If anything goes wrong while handling the message
      */
     private void handleRequestTournamentList(String request, State nextState) throws HandlingException {
-        log.info("Trying to handle tournament info request");
+        log.info("Trying to handle tournament list request");
         try {
             RequestTournamentList requestTournamentList = gson.fromJson(request, RequestTournamentList.class);
             new RequestTournamentListHandler().handle(requestTournamentList, clientId);

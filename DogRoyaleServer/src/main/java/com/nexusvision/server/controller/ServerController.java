@@ -151,6 +151,16 @@ public class ServerController {
     }
 
     /**
+     * Moves the client handler into a game (should only be used by Ausrichter)
+     *
+     * @param clientId The client id of the client handler to move
+     */
+    public void moveIntoGame(int clientId) {
+        ClientHandler handler = handlerMap.get(clientId);
+        handler.moveIntoGame();
+    }
+
+    /**
      * Starts the game for all clients of the specified lobby
      *
      * @param lobby The lobby whose clients should get their game started

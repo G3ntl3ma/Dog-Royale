@@ -44,10 +44,11 @@ public abstract class MessageHandler<M extends AbstractMessage> extends Handler 
      * @throws HandlingException If both IDs are not the same
      */
     protected void verifyClientId(int expectedId , int actualId) throws HandlingException {
-        if (expectedId  != actualId) {
-            throw new HandlingException(
-                    "Received wrong client id: Expected " + expectedId  + ", but received " + actualId,
-                    TypeMenue.error.getOrdinal());
-        }
+        return; // Turned off for the moment being
+//        if (expectedId  != actualId) {
+//            throw new HandlingException(
+//                    "Received wrong client id: Expected " + expectedId  + ", but received " + actualId,
+//                    TypeMenue.error.getOrdinal());
+//        }
     }
 }

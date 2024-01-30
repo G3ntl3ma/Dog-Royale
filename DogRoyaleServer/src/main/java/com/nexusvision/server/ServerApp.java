@@ -19,7 +19,7 @@ public class ServerApp {
     /**
      * Entry point for the server, sets up controller and connects to port
      *
-     * @param args Command-line arguments (Optional).
+     * @param args Command-line arguments (optional)
      */
     public static void main(String[] args) {
         if (args.length >= 1) {
