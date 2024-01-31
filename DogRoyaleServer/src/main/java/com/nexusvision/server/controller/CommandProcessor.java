@@ -16,6 +16,7 @@ import com.nexusvision.server.model.messages.menu.TypeMenue;
 import com.nexusvision.server.model.utils.ObserverElement;
 import com.nexusvision.server.model.utils.PlayerElement;
 import com.nexusvision.server.model.utils.PlayerOrder;
+import com.nexusvision.server.service.PlayerService;
 import com.nexusvision.utils.NewLineAppendingSerializer;
 
 import java.io.FileReader;
@@ -28,6 +29,12 @@ public class CommandProcessor {
 
     private static final ServerController serverController = ServerController.getInstance();
     private static final Gson gson = new Gson();
+
+    private final PlayerService playerService;
+
+    public CommandProcessor() {
+        playerService = new PlayerService();
+    }
 
     public String processCommand(String command) {
         ArrayList<String> tokens = parseCommand(command);
@@ -252,30 +259,25 @@ public class CommandProcessor {
         }
 
         Client client = serverController.getClientById(clientId);
-        if (client == null || client.isObserver()) return "Provided clientId is invalid\n";
+        if (client == null || client.isObserver()) return "Provided client-id is invalid\n";
 
         switch (kind) {
             case "game":
                 GameLobby lobby = serverController.getLobbyById(kindId);
-                if (lobby == null) return "Provided gameId is invalid\n";
-                boolean successfulGame = lobby.addPlayer(client.getName(), clientId);
-                if (!successfulGame) return "Couldn't add player with clientId " + clientId + "\n";
+                if (lobby == null) return "Provided game-id is invalid\n";
+                boolean successfulGame = playerService.movePlayerToLobby(clientId, lobby);
+                if (!successfulGame) return "Couldn't add player with client-id " + clientId + "\n";
                 break;
             case "tournament":
                 Tournament tournament = serverController.getTournamentById(kindId);
-                if (tournament == null) return "Provided tournamentId is invalid\n";
+                if (tournament == null) return "Provided tournament-id is invalid\n";
                 boolean successfulTournament = tournament.addPlayer(clientId, client.getName());
-                if (!successfulTournament) return "Couldn't add player with clientId " + clientId + "\n";
+                if (!successfulTournament) return "Couldn't add player with client-id " + clientId + "\n"; // TODO
                 break;
             default:
                 return "Invalid <kind>: {game, tournament}\n";
         }
 
-        ConnectedToGame connectedToGame = new ConnectedToGame();
-        connectedToGame.setType(TypeMenue.connectedToGame.ordinal());
-        connectedToGame.setSuccess(true);
-        MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientId, gson.toJson(connectedToGame));
-        serverController.setWaitingForMove(clientId);
         return "Added player with client-id " + clientId + " to " + kind + " with " + kind + "-id " + kindId + "\n";
     }
 

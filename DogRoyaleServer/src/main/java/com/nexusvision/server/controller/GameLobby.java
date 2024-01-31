@@ -65,8 +65,6 @@ public class GameLobby {
     private GameState gameState;
     @Getter
     private boolean isPaused;
-    @Getter
-    private boolean canceled;
 
     private ArrayList<Integer> receivedResponseList = new ArrayList<>();
 
@@ -259,6 +257,7 @@ public class GameLobby {
         if (!successful) return false;
         lobbyConfig.addColor(color, clientId);
         messageBroker.registerSubscriber(clientId, id);
+//        lobbyPublisher.publish(gson.toJson(lobbyConfig.getReturnLobbyConfig()));
         return true;
     }
 
@@ -555,6 +554,10 @@ public class GameLobby {
 
     public void setConfiguration(String path) {
         lobbyConfig.importLobbyConfig(path);
+    }
+
+    public boolean isCanceled() {
+        return game.isWasCanceled();
     }
 
     /**

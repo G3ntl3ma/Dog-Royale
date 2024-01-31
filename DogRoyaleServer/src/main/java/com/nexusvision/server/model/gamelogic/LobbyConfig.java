@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.nexusvision.server.model.enums.Colors;
 import com.nexusvision.server.model.enums.Penalty;
 import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
+import com.nexusvision.server.model.messages.menu.TypeMenue;
 import com.nexusvision.server.model.utils.*;
 import com.nexusvision.utils.NewLineAppendingSerializer;
 import lombok.Getter;
@@ -269,5 +270,43 @@ public class LobbyConfig {
 
     public synchronized List<WinnerOrderElement> getWinnerOrder() {
         return winnerOrder;
+    }
+
+    /**
+     * Returns the equivalent <code>returnLobbyConfig</code> object
+     *
+     * @return The equivalent <code>returnLobbyConfig</code> object
+     */
+    public ReturnLobbyConfig getReturnLobbyConfig() {
+        ReturnLobbyConfig returnLobbyConfig = new ReturnLobbyConfig();
+        returnLobbyConfig.setType(TypeMenue.returnLobbyConfig.getOrdinal());
+        returnLobbyConfig.setGameName(gameName);
+        returnLobbyConfig.setMaxPlayerCount(maxPlayerCount);
+        returnLobbyConfig.setFieldsize(fieldSize);
+        returnLobbyConfig.setFiguresPerPlayer(figuresPerPlayer);
+
+        List<ColorMapping> colorMappingList = new ArrayList<>();
+        for (Map.Entry<Colors, Integer> entry : colorMap.entrySet()) {
+            if (entry.getKey() == null) continue;
+            ColorMapping colorMapping = new ColorMapping();
+            colorMapping.setClientId(entry.getValue());
+            colorMapping.setColor(entry.getKey().ordinal());
+            colorMappingList.add(colorMapping);
+        }
+        returnLobbyConfig.setColors(colorMappingList);
+
+        returnLobbyConfig.setDrawCardFields(drawCardFields);
+        returnLobbyConfig.setStartFields(startFields);
+        returnLobbyConfig.setInitialCardsPerPlayer(initialCardsPerPlayer);
+        returnLobbyConfig.setPlayerOrder(playerOrder);
+        returnLobbyConfig.setWinnerOrder(winnerOrder);
+        returnLobbyConfig.setObserver(observerList);
+        returnLobbyConfig.setThinkTimePerMove(thinkTimePerMove);
+        returnLobbyConfig.setVisualizationTimePerMove(visualizationTimePerMove);
+        returnLobbyConfig.setConsequencesForInvalidMove(consequencesForInvalidMove == null ? 0 : consequencesForInvalidMove.ordinal());
+        returnLobbyConfig.setMaximumGameDuration(maximumGameDuration);
+        returnLobbyConfig.setMaximumTotalMoves(maximumTotalMoves);
+
+        return returnLobbyConfig;
     }
 }
