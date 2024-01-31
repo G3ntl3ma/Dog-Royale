@@ -14,9 +14,7 @@ import lombok.extern.log4j.Log4j2;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -324,6 +322,10 @@ public class ServerController {
      */
     public void setConfiguration(int gameId, ReturnLobbyConfig returnLobbyConfig) {
         lobbyMap.get(gameId).setConfiguration(returnLobbyConfig);
+    }
+
+    public Set<Map.Entry<Integer, Client>> getClientEntrySet() {
+        return clientMap.entrySet();
     }
 
     /**

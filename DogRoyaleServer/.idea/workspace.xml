@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr: Added feature for Ausrichter">
+    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr: Small fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/CommandProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/CommandProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/LobbyConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/LobbyConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/service/PlayerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/service/PlayerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +84,7 @@
       <recent name="com.nexusvision.server.controller" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.java in DogRoyaleServer">
+  <component name="RunManager" selected="Application.ServerApp">
     <configuration name="Ausrichter" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.nexusvision.client.Ausrichter" />
       <module name="DogRoyaleServer" />
@@ -161,9 +159,9 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.java in DogRoyaleServer" />
         <item itemvalue="Application.Ausrichter" />
         <item itemvalue="Application.ServerApp" />
+        <item itemvalue="JUnit.java in DogRoyaleServer" />
         <item itemvalue="JUnit.ClientHandlerTest.testRun" />
         <item itemvalue="JUnit.ServerControllerTest" />
       </list>
@@ -282,7 +280,23 @@
       <option name="project" value="LOCAL" />
       <updated>1706736800445</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="felixwr: Final ausrichter + server">
+      <option name="closed" value="true" />
+      <created>1706741569792</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1706741569792</updated>
+    </task>
+    <task id="LOCAL-00013" summary="felixwr: Small fix">
+      <option name="closed" value="true" />
+      <created>1706741591279</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1706741591279</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -338,7 +352,9 @@
     <MESSAGE value="felixwr: Added Ausrichter + fixes" />
     <MESSAGE value="felixwr + dghese: Fixes" />
     <MESSAGE value="felixwr: Added feature for Ausrichter" />
-    <option name="LAST_COMMIT_MESSAGE" value="felixwr: Added feature for Ausrichter" />
+    <MESSAGE value="felixwr: Final ausrichter + server" />
+    <MESSAGE value="felixwr: Small fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="felixwr: Small fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

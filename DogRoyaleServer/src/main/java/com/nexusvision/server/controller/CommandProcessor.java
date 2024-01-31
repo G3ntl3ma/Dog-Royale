@@ -21,9 +21,8 @@ import com.nexusvision.utils.NewLineAppendingSerializer;
 
 import java.io.FileReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CommandProcessor {
 
@@ -107,7 +106,7 @@ public class CommandProcessor {
                 + "'help': Shows this list\n"
                 + "'kill <game-id>': Cancels the game with <game-id>\n"
                 + "'ls <kind>': Lists all of <kind> with all necessary information."
-                    + " <kind> needs to be one of {game, tournament}\n"
+                    + " <kind> needs to be one of {client, game, tournament}\n"
                 + "'pause <game-id>': Pauses the game with <game-id>\n"
                 + "'rm-player <client-id> <kind> <kind-id>': Removes player with <client-id> from <kind>"
                     + " with <kind-id>. <kind> needs to be one of {game, tournament}\n"
@@ -165,8 +164,31 @@ public class CommandProcessor {
                 tournamentResponse += getTournamentListString(tournamentsFinished);
                 tournamentResponse += "---------------\n";
                 return tournamentResponse;
+            case "client":
+                String clientResponse = "";
+                Set<Map.Entry<Integer, Client>> clientEntrySet = serverController.getClientEntrySet();
+
+                clientResponse += "observers:\n";
+                for (Map.Entry<Integer, Client> entry : clientEntrySet) {
+                    Client client = entry.getValue();
+                    int id = entry.getKey();
+                    if (client.isObserver()) {
+                        clientResponse += "    client-id: " + id + ", client-name: " + client.getName() + "\n";
+                    }
+                }
+
+                clientResponse += "players:\n";
+                for (Map.Entry<Integer, Client> entry : clientEntrySet) {
+                    Client client = entry.getValue();
+                    int id = entry.getKey();
+                    if (!client.isObserver()) {
+                        clientResponse += "    client-id: " + id + ", client-name: " + client.getName() + "\n";
+                    }
+                }
+
+                return clientResponse;
             default:
-                return "Invalid <kind>: {game, tournament}\n";
+                return "Invalid <kind>: {client, game, tournament}\n";
         }
     }
 
