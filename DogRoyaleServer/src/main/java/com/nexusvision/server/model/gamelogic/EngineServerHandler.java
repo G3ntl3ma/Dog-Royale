@@ -59,21 +59,21 @@ public class EngineServerHandler{
             writer.println(tosend);
             writer.flush();
 
-            //extra stuffs TODO delete
             request = reader.readLine();
             JsonObject jsonRequest = JsonParser.parseString(request).getAsJsonObject();
             int type = jsonRequest.get("type").getAsInt();
             handleReceiveClientId(jsonRequest); //2.4
             
+            //extra stuffs TODO delete
             // System.out.println("enter game id");
-            String gameId = "0"; //this.userInput.nextLine();
-            JoinGameAsPlayer joinGameAsPlayer = new JoinGameAsPlayer();
-            joinGameAsPlayer.setClientId(this.clientId);
-            joinGameAsPlayer.setPlayerName("mike oxlong");
-            joinGameAsPlayer.setType(TypeMenue.joinGameAsPlayer.getOrdinal());
-            tosend = gson.toJson(joinGameAsPlayer).toString();
-            writer.println(tosend);
-            writer.flush();
+            // String gameId = "0"; //this.userInput.nextLine();
+            // JoinGameAsPlayer joinGameAsPlayer = new JoinGameAsPlayer();
+            // joinGameAsPlayer.setClientId(this.clientId);
+            // joinGameAsPlayer.setPlayerName("mike oxlong");
+            // joinGameAsPlayer.setType(TypeMenue.joinGameAsPlayer.getOrdinal());
+            // tosend = gson.toJson(joinGameAsPlayer).toString();
+            // writer.println(tosend);
+            // writer.flush();
 
             while (true) {
                 if ((request = reader.readLine()) != null
