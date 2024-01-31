@@ -116,26 +116,42 @@ public class CommandProcessor {
             case "game":
                 String lobbyResponse = "";
                 lobbyResponse += "Upcoming games:\n";
+                lobbyResponse += "---------------\n";
                 List<GameLobby> upcomingLobbyList = serverController.getStateGames(100, GameState.UPCOMING);
                 lobbyResponse += getLobbyListString(upcomingLobbyList);
+                lobbyResponse += "---------------\n";
+                lobbyResponse += " \n";
                 lobbyResponse += "Running games:\n";
+                lobbyResponse += "---------------\n";
                 List<GameLobby> runningLobbyList = serverController.getStateGames(100, GameState.RUNNING);
                 lobbyResponse += getLobbyListString(runningLobbyList);
+                lobbyResponse += "---------------\n";
+                lobbyResponse += " \n";
                 lobbyResponse += "Finished games:\n";
+                lobbyResponse += "---------------\n";
                 List<GameLobby> finishedLobbyList = serverController.getStateGames(100, GameState.FINISHED);
                 lobbyResponse += getLobbyListString(finishedLobbyList);
+                lobbyResponse += "---------------\n";
                 return lobbyResponse;
             case "tournament":
                 String tournamentResponse = "";
                 tournamentResponse += "Upcoming tournaments:\n";
+                tournamentResponse += "---------------\n";
                 List<Tournament> tournamentsUpcoming = serverController.getStateTournaments(100, GameState.UPCOMING);
                 tournamentResponse += getTournamentListString(tournamentsUpcoming);
+                tournamentResponse += "---------------\n";
+                tournamentResponse += " \n";
                 tournamentResponse += "Running tournaments:\n";
+                tournamentResponse += "---------------\n";
                 List<Tournament> tournamentsRunning = serverController.getStateTournaments(100, GameState.RUNNING);
                 tournamentResponse += getTournamentListString(tournamentsRunning);
+                tournamentResponse += "---------------\n";
+                tournamentResponse += " \n";
                 tournamentResponse += "Finished tournaments:\n";
+                tournamentResponse += "---------------\n";
                 List<Tournament> tournamentsFinished = serverController.getStateTournaments(100, GameState.FINISHED);
                 tournamentResponse += getTournamentListString(tournamentsFinished);
+                tournamentResponse += "---------------\n";
                 return tournamentResponse;
             default:
                 return "Invalid <kind>: {game, tournament}\n";
@@ -312,6 +328,10 @@ public class CommandProcessor {
             String gameName = lobby.getLobbyConfig().getGameName();
             response += gameName == null ? "null" : gameName;
             response += "\n";
+            response += "    players: ";
+            response += lobby.getLobbyConfig().getPlayerOrder().getOrder() + "\n";
+            response += "    observers: ";
+            response += lobby.getLobbyConfig().getObserverList() + "\n";
         }
         return response;
     }
