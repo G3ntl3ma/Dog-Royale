@@ -28,13 +28,20 @@ public class EngineServerHandler{
     private Ai ai;
     private BoardState boardState;
     private int initialCardsPerPlayer=0;
-    protected static final Gson gson = new Gson();
+    private State state;
+    private boolean sentNull = false;
+    private Scanner userInput = new Scanner(System.in);
+    private boolean myTurn = false;
+    
+    protected static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
+            .create();
 
     public EngineServerHandler() {
+        this.state = State.WAIT_SYNC_MOVE;
     }
 
     public void run(String SERVER_ADDRESS, int PORT) {
-        Scanner userInput = new Scanner(System.in);
         try {        
             Socket clientSocket = new Socket(SERVER_ADDRESS, PORT);
             BufferedReader reader = new BufferedReader(
@@ -45,28 +52,28 @@ public class EngineServerHandler{
             //send 2.3 (join game with name and isobs bool = false)
             ConnectToServer connectToServer = new ConnectToServer();
             connectToServer.setType(TypeMenue.connectToServer.getOrdinal());
-            connectToServer.setName("mikeoxlong");
+            connectToServer.setName("mike oxlong");
             connectToServer.setObserver(false);
             String tosend = gson.toJson(connectToServer).toString();
             System.out.println("trying to send " + tosend);
             writer.println(tosend);
             writer.flush();
 
-            //extra stuffs TODO delete
             request = reader.readLine();
             JsonObject jsonRequest = JsonParser.parseString(request).getAsJsonObject();
             int type = jsonRequest.get("type").getAsInt();
             handleReceiveClientId(jsonRequest); //2.4
             
+            //extra stuffs TODO delete
             // System.out.println("enter game id");
-            String gameId = "0"; //userInput.nextLine();
-            JoinGameAsPlayer joinGameAsPlayer = new JoinGameAsPlayer();
-            joinGameAsPlayer.setClientId(this.clientId);
-            joinGameAsPlayer.setPlayerName("mikeoxlong");
-            joinGameAsPlayer.setType(TypeMenue.joinGameAsPlayer.getOrdinal());
-            tosend = gson.toJson(joinGameAsPlayer).toString();
-            writer.println(tosend);
-            writer.flush();
+            // String gameId = "0"; //this.userInput.nextLine();
+            // JoinGameAsPlayer joinGameAsPlayer = new JoinGameAsPlayer();
+            // joinGameAsPlayer.setClientId(this.clientId);
+            // joinGameAsPlayer.setPlayerName("mike oxlong");
+            // joinGameAsPlayer.setType(TypeMenue.joinGameAsPlayer.getOrdinal());
+            // tosend = gson.toJson(joinGameAsPlayer).toString();
+            // writer.println(tosend);
+            // writer.flush();
 
             while (true) {
                 if ((request = reader.readLine()) != null
@@ -93,15 +100,40 @@ public class EngineServerHandler{
             } else if (type == TypeMenue.returnLobbyConfig.getOrdinal()) {
                 handleLobbyConfig(jsonRequest); //2.12
             } else if (type == TypeGame.updateDrawCards.getOrdinal()) {
-                return handleSynchronizeCardCounts(jsonRequest); //3.5
+                handleSynchronizeCardCounts(jsonRequest); //3.5
+                if (this.state == State.WAIT_SYNC_MOVE) {
+                    System.out.println("send the move");
+                    this.state = State.SEND_MOVE;
+                }
+                else {
+                    System.out.println("we were not waiting for this");
+                    this.state = State.NO_MOVE;
+                }
             } else if (type == TypeGame.drawCards.getOrdinal()) {
-                return handleManageHandCards(jsonRequest); //3.4 
+                handleManageHandCards(jsonRequest); //3.4 
             } else if (type == TypeGame.boardState.getOrdinal()) {
                 handleLoadBoardJson(jsonRequest); //3.3
+                loadBoardState();
+                if (this.handcards.size() == 0) {
+                    System.out.println("wait sync move");
+                    this.state = State.WAIT_SYNC_MOVE;
+                }
+                else {
+                    System.out.println("send move immediately");
+                    this.state = State.SEND_MOVE;
+                }
             } else if (type == TypeGame.moveValid.getOrdinal()) {
                 handleMoveValid(jsonRequest); //3.8
             } else if (type == TypeGame.kick.getOrdinal()) {
                 handleKick(jsonRequest); //3.14
+            }
+            if (state == State.SEND_MOVE) {
+                if(this.clientId == this.game.getCurrentPlayer().getClientId()) {
+                    // System.out.println("myTurn " + this.myTurn + "my client id " + this.clientId + " to move client id " + this.game.getCurrentPlayer().getClientId());
+                    state = State.NO_MOVE;
+                    // return sendManualMove();
+                    return sendMove();
+                }
             }
         } catch (JsonSyntaxException e) {
             return null;
@@ -109,13 +141,16 @@ public class EngineServerHandler{
         return null;
     }
     
-    private void handleMoveValid(JsonObject jsonObject) {
+    private void handleMoveValid(JsonObject jsonObject) { //3.8
         MoveValid moveValid = gson.fromJson(jsonObject.toString(), MoveValid.class);
         boolean validMove = moveValid.isValidMove();
-        // if(!validMove) {
-        //     System.out.println("invalid move was passed to the server");
-        //     System.out.println("Card " + Card.getType(moveValid.getCard()) + " selected value " + moveValid.getSelectedValue() + " pieceId " + moveValid.getPieceId() + " isStarter " + moveValid.isStarter() + " opponentPieceId " + moveValid.getOpponentPieceId());
-        //     System.exit(234);
+        // if(!validMove && !this.sentNull) {//this check has false positives when opponent makes null move
+        //     System.out.println("++++++++++++++++++++++++++++");
+        //     System.out.println("invalid move was passed to the server (not null)");
+        //     System.out.println("selected value " + moveValid.getSelectedValue() + " pieceId " + moveValid.getPieceId() + " isStarter " + moveValid.isStarter() + " opponentPieceId " + moveValid.getOpponentPieceId());
+        //     System.out.println("++++++++++++++++++++++++++++");
+        //     System.out.println("waiting for input to resume");
+        //     this.userInput.nextLine();
         // }
     }
 
@@ -129,10 +164,11 @@ public class EngineServerHandler{
     
     //use lobby config to configure the game //dont respond
     private void handleLobbyConfig(JsonObject jsonObject) { //2.12
-        //TODO yeah im converting it back to a string eventhough i could have passed it directly
+        // TODO yeah im converting it back to a string eventhough i could have passed it directly
         
         System.out.println("handle lobby config");
         ReturnLobbyConfig lobbyConfig = gson.fromJson(jsonObject.toString(), ReturnLobbyConfig.class);
+
         this.ai = new Ai(100000, lobbyConfig.getThinkTimePerMove()*1000-500); //???
         //dont handle if its not the final thing
         //if startfields < maxplayers dont do anything
@@ -167,7 +203,15 @@ public class EngineServerHandler{
         this.game = new Game(convertedLobbyConfig, 0);
         game.initDeck(); //TODO might also be unnecessary
         // game.distributeCards(); //dont
-        this.game.printBoard();
+        this.myTurn = true;
+        ////if its our turn make move
+        int clientToMove = this.game.getCurrentPlayer().getClientId();
+        if (clientToMove != this.clientId) { 
+            System.out.println("dont load the state because its not our turn our clientId" + this.clientId + " to move " + clientToMove);
+            this.myTurn = false;
+            System.out.println("myturn= " + this.myTurn);
+            return;
+        }
     }
     
     private void handleReceiveClientId(JsonObject jsonObject) { //2.4
@@ -176,7 +220,7 @@ public class EngineServerHandler{
     }
 
     //
-    public String handleSynchronizeCardCounts(JsonObject jsonObject) { //3.5
+    public void handleSynchronizeCardCounts(JsonObject jsonObject) { //3.5
         System.out.println("handlesynchronizecardcounts");
         UpdateDrawCards updateDrawCards = gson.fromJson(jsonObject.toString(), UpdateDrawCards.class);
         List<UpdateDrawCards.HandCard> handCards = updateDrawCards.getHandCards();
@@ -186,14 +230,10 @@ public class EngineServerHandler{
             int count = handcard.getCount();
             handCardCounts.put(clientId, count);
         }
-        System.out.println("handCardCounts " + handCardCounts); //check
-        Response response = new Response();
-        response.setType(TypeGame.response.getOrdinal());
-        response.setUpdated(true);
-        return gson.toJson(response).toString(); //return response 3.6
+
     }
     
-    public String handleManageHandCards(JsonObject jsonObject) { //3.4
+    public void handleManageHandCards(JsonObject jsonObject) { //3.4
         System.out.println("handlemanagehandcards");
         DrawCards drawCards = gson.fromJson(jsonObject.toString(), DrawCards.class);
         List<Integer> droppedInts = drawCards.getDroppedCards();
@@ -207,7 +247,6 @@ public class EngineServerHandler{
             handcards.add(Card.getType(drawn));
         }
         System.out.println("handcards " + handcards);
-        return sendMove(); //TODO send this only when appropriate
     }
     
     public void handleLoadBoardJson(JsonObject jsonObject) { //3.3
@@ -224,24 +263,27 @@ public class EngineServerHandler{
         } catch (Exception e) {
             e.printStackTrace();
         }
-       
     }
 
-    private String sendMove() {
-        System.out.println("game over bool=" + boardState.isGameOver());
-        if(boardState.isGameOver()) {
+    private void loadBoardState() {
+        System.out.println("++++++++++++load board state+++++++");
+        // System.out.println("game over bool=" + this.boardState.isGameOver());
+        if(this.boardState.isGameOver()) {
             this.game.printBoard();
             System.out.println("game over");
             System.exit(666);
         }
-        ////if its our turn make move
-        if (boardState.getNextPlayer() != this.clientId) {
-             System.out.println("dont load the state because its not our turn");
-             return null;
-        }
         
-        System.out.println("my turn");
-        game._setPlayerToMoveId(boardState.getNextPlayer()); //TODO BUGGG
+        ////if its our turn make move
+        // int clientToMove = this.game.getCurrentPlayer().getClientId();
+        // if (clientToMove != this.clientId) {
+        //     System.out.println("dont load the state because its not our turn our clientId" + this.clientId + " to move " + clientToMove);
+        //     return;
+        // }
+        // System.out.println("my turn");
+        // this.myTurn = true;
+        
+        game._setPlayerToMoveId(this.boardState.getNextPlayer());
         
         //parse field
         //set piece stuff
@@ -250,7 +292,7 @@ public class EngineServerHandler{
             field.setFigure(null);
         }
         System.out.println("players in game: " + game.getPlayerList().size());
-        for (BoardState.Piece piece : boardState.getPieces()) {
+        for (BoardState.Piece piece : this.boardState.getPieces()) {
             //set piece in game to this
             int clientId = piece.getClientId();
             //if this is the first time parsing
@@ -266,7 +308,7 @@ public class EngineServerHandler{
             //variables to set
             boolean isOnBench = piece.isOnBench();
             figure.setOnBench(isOnBench);
-            game.setMovesMade(boardState.getMoveCount());
+            game.setMovesMade(this.boardState.getMoveCount());
             if(isOnBench) {
                 figure.setField(null);
                 figure.setInHouse(false);
@@ -363,17 +405,43 @@ public class EngineServerHandler{
                 playerListInx++;
             }
         }
-
+        System.out.println("+++end load board state++++");
         this.game.printBoard();
+    }
+
+    private String sendManualMove() {
+        System.out.println("choose manual move");
+        System.out.println("handcards " + handcards);
+        com.nexusvision.server.model.messages.game.Move _move = new com.nexusvision.server.model.messages.game.Move();
+        _move.setType(TypeGame.move.getOrdinal());
+        System.out.println("isStartMove: ");
+        boolean isStartMove = this.userInput.nextLine() == "y";
+        System.out.println("cardInx: ");
+        String cardInx = this.userInput.nextLine();
+        System.out.println("selectedValue: ");
+        String _selectedValue = this.userInput.nextLine();
+        System.out.println("pieceId: ");
+        String pieceId = this.userInput.nextLine();
+        System.out.println("opponentPieceId: ");
+        String opponentPieceId = this.userInput.nextLine();
+        
+        _move.setStarter(isStartMove);
+        _move.setCard(Integer.parseInt(cardInx));
+        _move.setSelectedValue(Integer.parseInt(_selectedValue));
+        _move.setPieceId(Integer.parseInt(pieceId));
+        _move.setOpponentPieceId(Integer.parseInt(opponentPieceId));
+        System.out.println("returning _movejson " + _move);
+        return gson.toJson(_move).toString(); //return the _move 3.7
+    }
+
+    private String sendMove() {
         //choose random move
         System.out.println("choose move");
         System.out.println("handcards " + handcards);
         long startTime = System.currentTimeMillis();
-        Move move = game.getRandomMove();
+        // Move move = game.getRandomMove();
         //choose ai move
-        // Move move = this.ai.getMove(game, startTime);
-        //TODO put this into a function ?
-        System.out.println("about to print move");
+        Move move = this.ai.getMove(game, startTime);
         if (move != null) {
             System.out.println("move not null");
             move.printMove();
@@ -381,13 +449,13 @@ public class EngineServerHandler{
         else {
             System.out.println("null move becaues there is no valid move");
         }
-
         com.nexusvision.server.model.messages.game.Move _move = new com.nexusvision.server.model.messages.game.Move();
         _move.setType(TypeGame.move.getOrdinal());
+        this.sentNull = move == null;
         if(move != null) {
             //convert to json
             _move.setSkip(false);
-            _move.setCard(move.getCardUsed().getOrdinal()); //idkmate
+            _move.setCard(move.getCardUsed().getOrdinal()); //test
             int _selectedValue = move.getSelectedValue();
             System.out.println("selected value " + _selectedValue);
             _move.setSelectedValue(_selectedValue);
@@ -413,8 +481,17 @@ public class EngineServerHandler{
             _move.setStarter(false);
             _move.setOpponentPieceId(-1);
         }
+        System.out.println("++++++++++move+++++++++++");
         System.out.println("returning _movejson " + _move);
+        System.out.println("+++++++++++++++++++++");
         return gson.toJson(_move).toString(); //return the _move 3.7
     }
+
+    private enum State {
+        SEND_MOVE,
+        WAIT_SYNC_MOVE,
+        NO_MOVE
+    }
+    
 }
 
