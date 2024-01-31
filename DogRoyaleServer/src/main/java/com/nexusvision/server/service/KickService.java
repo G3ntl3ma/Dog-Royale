@@ -11,10 +11,7 @@ import com.nexusvision.utils.NewLineAppendingSerializer;
 
 public class KickService {
 
-    protected static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
-            .create();
-
+    protected static final Gson gson = new Gson();
     MessageBroker messageBroker;
 
     public KickService() {

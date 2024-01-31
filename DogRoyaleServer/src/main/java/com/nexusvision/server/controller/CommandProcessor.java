@@ -22,9 +22,7 @@ import java.util.List;
 public class CommandProcessor {
 
     private static final ServerController serverController = ServerController.getInstance();
-    private static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
-            .create();
+    private static final Gson gson = new Gson();
 
     public String processCommand(String command) {
         ArrayList<String> tokens = parseCommand(command);

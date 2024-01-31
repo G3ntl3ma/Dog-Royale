@@ -22,9 +22,7 @@ import java.util.*;
  */
 @Log4j2
 public class Tournament {
-    protected static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
-            .create();
+    protected static final Gson gson = new Gson();
 
     private static final int[] SCORE_LOOKUP_TABLE = {10,7,4,1};
     private final ServerController serverController;

@@ -10,13 +10,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Abstract class implementing error handling
+ * Abstract class to provide the gson object
  *
  * @author felixwr
  */
 @Log4j2
 public abstract class Handler {
-    protected static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
-            .create();
+    protected static final Gson gson = new Gson();
 }

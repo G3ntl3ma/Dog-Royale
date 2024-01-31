@@ -87,7 +87,7 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
      */
     @Override
     public synchronized void sendMessage(String message) {
-        messageSender.write(message);
+        messageSender.write(message + "\n");
         messageSender.flush();
     }
 

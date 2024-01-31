@@ -29,9 +29,7 @@ import java.util.Map;
 @Getter
 public class LobbyConfig {
 
-    protected static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
-            .create();
+    protected static final Gson gson = new Gson();
 
     private final HashMap<Colors, Integer> colorMap;
     private PlayerOrder playerOrder;

@@ -6,14 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr + dghese: Fixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/ServerApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/ServerApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/CommandProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/CommandProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/Tournament.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/Tournament.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/ClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/ClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/MessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/MessageHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/entities/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/entities/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/messages/menu/ConnectToServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/messages/menu/ConnectToServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/utils/TestClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/utils/TestClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/Handler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/Handler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/EngineServerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/EngineServerHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/LobbyConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/LobbyConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/service/KickService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/service/KickService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/HandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/HandlerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,6 +67,7 @@
     "Maven.DogRoyaleServer [package].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "develop-server-felixwr",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/archbtw/dox/swtpra/idea3tmpcopy/group1/DogRoyaleServer",
@@ -89,7 +91,7 @@
       <recent name="com.nexusvision.server.controller" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.ServerApp">
+  <component name="RunManager" selected="Application.Ausrichter">
     <configuration name="Ausrichter" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.nexusvision.client.Ausrichter" />
       <module name="DogRoyaleServer" />

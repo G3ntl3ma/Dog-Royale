@@ -39,9 +39,7 @@ import java.util.concurrent.TimeUnit;
 @Log4j2
 public class GameLobby {
 
-    protected static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
-            .create();
+    protected static final Gson gson = new Gson();
 
     @Getter
     private final int id;

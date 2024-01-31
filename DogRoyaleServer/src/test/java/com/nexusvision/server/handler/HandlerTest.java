@@ -25,9 +25,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 public abstract class HandlerTest {
 
-    protected static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
-            .create();
+    protected static final Gson gson = new Gson();
 
     protected static ServerController serverController;
     protected static MessageBroker messageBroker;

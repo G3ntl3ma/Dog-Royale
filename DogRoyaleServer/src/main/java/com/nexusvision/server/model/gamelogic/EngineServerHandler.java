@@ -28,9 +28,7 @@ public class EngineServerHandler{
     private Ai ai;
     private BoardState boardState;
     private int initialCardsPerPlayer=0;
-    protected static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Object.class, new NewLineAppendingSerializer<>())
-            .create();
+    protected static final Gson gson = new Gson();
 
     public EngineServerHandler() {
     }
