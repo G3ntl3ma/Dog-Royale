@@ -8,15 +8,20 @@ import com.nexusvision.server.controller.ServerController;
 import com.nexusvision.server.controller.Tournament;
 import com.nexusvision.server.model.entities.Client;
 import com.nexusvision.server.model.enums.GameState;
+import com.nexusvision.server.model.gamelogic.LobbyConfig;
 import com.nexusvision.server.model.messages.menu.ConnectedToGame;
 import com.nexusvision.server.model.messages.menu.ConnectedToServer;
 import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
+import com.nexusvision.server.model.utils.ObserverElement;
+import com.nexusvision.server.model.utils.PlayerElement;
+import com.nexusvision.server.model.utils.PlayerOrder;
 import com.nexusvision.utils.NewLineAppendingSerializer;
 
 import java.io.FileReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class CommandProcessor {
@@ -271,7 +276,7 @@ public class CommandProcessor {
         connectedToGame.setSuccess(true);
         MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientId, gson.toJson(connectedToGame));
         serverController.setWaitingForMove(clientId);
-        return "Added player with clientId " + client + " to " + kind + " with " + kind + "-id " + kindId + "\n";
+        return "Added player with client-id " + clientId + " to " + kind + " with " + kind + "-id " + kindId + "\n";
     }
 
     private String cancelGame(ArrayList<String> tokens) {
@@ -322,16 +327,29 @@ public class CommandProcessor {
     private static String getLobbyListString(List<GameLobby> lobbyList) {
         String response = "";
         for (GameLobby lobby : lobbyList) {
+            LobbyConfig lobbyConfig = lobby.getLobbyConfig();
             response += "game-id: ";
             response += lobby.getId();
             response += ", game-name: ";
             String gameName = lobby.getLobbyConfig().getGameName();
             response += gameName == null ? "null" : gameName;
             response += "\n";
-            response += "    players: ";
-            response += lobby.getLobbyConfig().getPlayerOrder().getOrder() + "\n";
-            response += "    observers: ";
-            response += lobby.getLobbyConfig().getObserverList() + "\n";
+            response += "    players: [";
+            Iterator<PlayerElement> playerIterator = lobbyConfig.getPlayerOrder().getOrder().iterator();
+            while (playerIterator.hasNext()) {
+                PlayerElement playerElement = playerIterator.next();
+                response += "{client-id=" + playerElement.getClientId() + ", name=" + playerElement.getName() + "}";
+                if (playerIterator.hasNext()) response += ", ";
+            }
+            response += "]\n";
+            response += "    observers: [";
+            Iterator<ObserverElement> observerIterator = lobbyConfig.getObserverList().iterator();
+            while (observerIterator.hasNext()) {
+                ObserverElement observerElement = observerIterator.next();
+                response += "{client-id=" + observerElement.getClientId() + ", name=" + observerElement.getName() + "}";
+                if (observerIterator.hasNext()) response += ", ";
+            }
+            response += "]\n";
         }
         return response;
     }
@@ -341,10 +359,15 @@ public class CommandProcessor {
         for (Tournament tournament : tournamentList) {
             response += "tournament-id: ";
             response += tournament.getTournamentId();
-            response += ", tournament-name: ";
-            String tournamentName = tournament.getLobbyConfig() == null ? "null" : tournament.getLobbyConfig().getGameName();
-            response += tournamentName;
             response += "\n";
+            response += "    players: [";
+            Iterator<PlayerElement> playerIterator = tournament.getPlayerElements().iterator();
+            while (playerIterator.hasNext()) {
+                PlayerElement playerElement = playerIterator.next();
+                response += "{client-id=" + playerElement.getClientId() + ", name=" + playerElement.getName() + "}";
+                if (playerIterator.hasNext()) response += ", ";
+            }
+            response += "]\n";
         }
         return response;
     }
