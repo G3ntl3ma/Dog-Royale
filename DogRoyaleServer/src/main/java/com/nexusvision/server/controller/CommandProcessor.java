@@ -272,7 +272,7 @@ public class CommandProcessor {
                 Tournament tournament = serverController.getTournamentById(kindId);
                 if (tournament == null) return "Provided tournament-id is invalid\n";
                 boolean successfulTournament = tournament.addPlayer(clientId, client.getName());
-                if (!successfulTournament) return "Couldn't add player with client-id " + clientId + "\n"; // TODO
+                if (!successfulTournament) return "Couldn't add player with client-id " + clientId + "\n";
                 break;
             default:
                 return "Invalid <kind>: {game, tournament}\n";
