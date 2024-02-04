@@ -4,17 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr: Added function for ausrichter">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/service/ConnectedToGameService.java" afterDir="false" />
+    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr: Few fixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/JoinGameAsPlayerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/JoinGameAsPlayerHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/LobbyConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/LobbyConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/SaveState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/SaveState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/service/BoardStateService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/service/BoardStateService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +27,13 @@
     <enabled-run-configurations>
       <run-configuration type="JUnit" name="JoinGameAsPlayerHandlerTest.testHandleRunningLobby" />
     </enabled-run-configurations>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="downloadSourcesAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
   </component>
   <component name="MavenRunner">
     <option name="skipTests" value="true" />
@@ -70,7 +68,13 @@
     "JUnit.ServerControllerTest.executor": "Run",
     "JUnit.java in DogRoyaleServer.executor": "Run",
     "JUnit.menu in DogRoyaleServer.executor": "Run",
+    "Maven.DogRoyaleServer [clean].executor": "Run",
+    "Maven.DogRoyaleServer [compile].executor": "Run",
+    "Maven.DogRoyaleServer [deploy].executor": "Run",
+    "Maven.DogRoyaleServer [install].executor": "Run",
+    "Maven.DogRoyaleServer [org.apache.maven.plugins:maven-install-plugin:3.1.1:install].executor": "Run",
     "Maven.DogRoyaleServer [package].executor": "Run",
+    "Maven.DogRoyaleServer [verify].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
@@ -81,10 +85,10 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
+    "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "build.tools",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.importing",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -182,13 +186,6 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="jdk-11.0.22-corretto-11.0.22-3183f394aec4-cd32a1c5" />
-      </set>
-    </attachedChunks>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -207,7 +204,9 @@
       <workItem from="1706396055036" duration="77238000" />
       <workItem from="1706555153419" duration="15865000" />
       <workItem from="1706748532110" duration="830000" />
-      <workItem from="1707063476300" duration="11123000" />
+      <workItem from="1707063476300" duration="12534000" />
+      <workItem from="1707081723431" duration="380000" />
+      <workItem from="1707082110627" duration="1553000" />
     </task>
     <task id="LOCAL-00001" summary="felixwr and dgehse: Rewriting and fixing (making code compilable)">
       <option name="closed" value="true" />
@@ -321,7 +320,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706743010050</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="felixwr: Few fixes">
+      <option name="closed" value="true" />
+      <created>1707081090766</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1707081090766</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -380,7 +387,8 @@
     <MESSAGE value="felixwr: Final ausrichter + server" />
     <MESSAGE value="felixwr: Small fix" />
     <MESSAGE value="felixwr: Added function for ausrichter" />
-    <option name="LAST_COMMIT_MESSAGE" value="felixwr: Added function for ausrichter" />
+    <MESSAGE value="felixwr: Few fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="felixwr: Few fixes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
