@@ -1,12 +1,12 @@
 package com.nexusvision.server.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.nexusvision.server.common.ChannelType;
 import com.nexusvision.server.common.Publisher;
 import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.Colors;
 import com.nexusvision.server.model.enums.GameState;
+import com.nexusvision.server.model.enums.OrderType;
 import com.nexusvision.server.model.gamelogic.Game;
 import com.nexusvision.server.model.gamelogic.LobbyConfig;
 import com.nexusvision.server.model.gamelogic.Move;
@@ -18,9 +18,9 @@ import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
 import com.nexusvision.server.model.utils.*;
 import com.nexusvision.server.service.BoardStateService;
+import com.nexusvision.server.service.ConnectedToGameService;
 import com.nexusvision.server.service.KickService;
 import com.nexusvision.server.service.UpdateDrawCardsService;
-import com.nexusvision.utils.NewLineAppendingSerializer;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
@@ -65,8 +65,6 @@ public class GameLobby {
     private GameState gameState;
     @Getter
     private boolean isPaused;
-
-    private ArrayList<Integer> receivedResponseList = new ArrayList<>();
 
     /**
      * Creates a GameLobby with the given id
@@ -236,7 +234,7 @@ public class GameLobby {
      *
      * @param name     The name of the player to add
      * @param clientId The client id of the player being added
-     * @return         True if adding the player was successful and false else
+     * @return         true if adding the player was successful and false else
      */
     public boolean addPlayer(String name, int clientId) {
         Colors color = lobbyConfig.findUnusedColor();
@@ -249,15 +247,23 @@ public class GameLobby {
      * @param name     The name of the player to add
      * @param clientId The client id of the player being added
      * @param color    The color of the player being added
-     * @return         True if adding the player was successful and false else
+     * @return         true if adding the player was successful and false else
      */
     public boolean addPlayer(String name, int clientId, Colors color) {
-        if (gameState != GameState.UPCOMING) return false;
+        ConnectedToGameService connectedToGameService = new ConnectedToGameService();
+
+        if (gameState != GameState.UPCOMING) {
+            messageBroker.sendMessage(ChannelType.SINGLE, clientId, connectedToGameService.getConnectedToGame(false));
+            return false;
+        }
+
         boolean successful = lobbyConfig.addPlayer(name, clientId);
+        messageBroker.sendMessage(ChannelType.SINGLE, clientId, connectedToGameService.getConnectedToGame(successful));
         if (!successful) return false;
+
         lobbyConfig.addColor(color, clientId);
         messageBroker.registerSubscriber(clientId, id);
-//        lobbyPublisher.publish(gson.toJson(lobbyConfig.getReturnLobbyConfig()));
+        lobbyPublisher.publish(gson.toJson(lobbyConfig.getReturnLobbyConfig()));
         return true;
     }
 
@@ -372,15 +378,6 @@ public class GameLobby {
                     sendDrawCardFromField(clientId, card, player);
                 }
             }
-        } else {
-            switch (lobbyConfig.getConsequencesForInvalidMove()) {
-                case kickFromGame:
-                    removePlayer(clientId);
-                    break;
-                case excludeFromRound:
-                    removeFromRound(clientId, player);
-                    break;
-            }
         }
 
         if (game.checkGameOver()) {
@@ -388,15 +385,16 @@ public class GameLobby {
             return;
         }
 
+        if (!game.nextPlayer()) { // game is not over
+            game.reInit();
+            setupNewRound();
+        }
+
         BoardState boardState = boardStateService.generateBoardState(game, lobbyConfig.getPlayerOrder());
         String boardStateMessage = gson.toJson(boardState);
 
         lobbyPublisher.publish(boardStateMessage);
 
-        if (!game.nextPlayer()) { // game is not over
-            game.reInit();
-            setupNewRound();
-        }
         int nextMoveClientId = getClientToMoveId();
         if (!serverController.setWaitingForMove(nextMoveClientId)) {
             throw new RuntimeException("Failed to keep up consistency because setting up next move failed");
@@ -498,6 +496,7 @@ public class GameLobby {
         updateDrawCards.setHandCards(handCards);
         String updateDrawCardsMessage = gson.toJson(updateDrawCards, UpdateDrawCards.class);
         lobbyPublisher.publish(updateDrawCardsMessage);
+        serverController.setWaitingForMove(getClientToMoveId());
     }
 
     /**
@@ -511,6 +510,7 @@ public class GameLobby {
      * @param drawCardFields             A List of Integers representing the position of the draw fields in the game
      * @param startFields                A List of Integers representing the positions of start fields on the game board
      * @param initialCardsPerPlayer      An Integer representing the initial number of cards each player receives
+     * @param playerOrderType
      * @param thinkTimePerMove           An Integer representing the maximum time a player has to make a move
      * @param visualizationTimePerMove   The time provided to visualize the move
      * @param consequencesForInvalidMove An Integer representing the consequences for an invalid move
@@ -525,6 +525,7 @@ public class GameLobby {
                                  DrawCardFields drawCardFields,
                                  StartFields startFields,
                                  int initialCardsPerPlayer,
+                                 OrderType playerOrderType,
                                  int thinkTimePerMove,
                                  int visualizationTimePerMove,
                                  int consequencesForInvalidMove,
@@ -539,6 +540,7 @@ public class GameLobby {
                 drawCardFields,
                 startFields,
                 initialCardsPerPlayer,
+                playerOrderType,
                 thinkTimePerMove,
                 visualizationTimePerMove,
                 consequencesForInvalidMove,
@@ -574,7 +576,7 @@ public class GameLobby {
     }
 
     private Integer getClientToMoveId() {
-        return getClientId(game.getPlayerToMoveId());
+        return game.getCurrentPlayer().getClientId();
     }
 
     private void sendError(int clientId, String errorMessage) {

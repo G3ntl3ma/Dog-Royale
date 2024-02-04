@@ -7,7 +7,6 @@ import com.nexusvision.server.model.enums.FieldType;
 import com.nexusvision.server.model.enums.OrderType;
 import com.nexusvision.server.model.messages.game.BoardState;
 import com.nexusvision.server.model.utils.PlayerElement;
-import com.nexusvision.server.model.utils.WinnerOrderElement;
 import com.nexusvision.server.service.CardService;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -37,7 +36,7 @@ public final class Game {
     private ArrayList<BoardState.DiscardItem> pileInfo; //exact same as pile but with more info
     private int mainFieldCount;
     private int playerToStartColor;
-    private int playerToMoveId;
+    private int playerToMoveIndex;
     // private Card drawnCard; // for server communication
     private HashMap<Integer, Card> drawnCards; // for server communication 3.4
     private ArrayList<Card> discardedCardList; // for server communication
@@ -62,7 +61,7 @@ public final class Game {
         this.deck = new ArrayList<>();
         this.pile = new ArrayList<>();
         this.pileInfo = new ArrayList<>();
-        this.playerToMoveId = 0;
+        this.playerToMoveIndex = 0;
         this.playerToStartColor = 0;
         this.movesMade = 0;
         this.round = 0;
@@ -147,8 +146,8 @@ public final class Game {
         this.playersRemaining = playerList.size();
         int excludedCount = 0;
         // TODO: What if game over
-        playerToMoveId = (playerToStartColor + 1) % playerList.size(); // TODO: Check if this is correct
-        playerToStartColor = playerToMoveId;
+        playerToMoveIndex = (playerToStartColor + 1) % playerList.size(); // TODO: Check if this is correct
+        playerToStartColor = playerToMoveIndex;
         round++;
         // System.out.println(this.round);
     }
@@ -189,8 +188,8 @@ public final class Game {
      */
     public void printBoard() { // TODO: Fix prints
         System.out.println("BOARD=================");
-        System.out.println("player to moveid (not clientId) " + playerToMoveId);
-        if(playerToMoveId > playerList.size()) {
+        System.out.println("player to moveid (not clientId) " + playerToMoveIndex);
+        if(playerToMoveIndex > playerList.size()) {
             System.out.println("impossible playerToMoveId");
             System.exit(232);
         }
@@ -354,7 +353,7 @@ public final class Game {
      * @return The current player
      */
     public Player getCurrentPlayer() {
-        return playerList.get(playerToMoveId);
+        return playerList.get(playerToMoveIndex);
     }
 
     /**
@@ -369,7 +368,7 @@ public final class Game {
         // System.out.println("playersRemaining " + playersRemaining);
         //get next player who is not out yet if there is anyone
         do {
-            playerToMoveId = (playerToMoveId + 1) % playerList.size();
+            playerToMoveIndex = (playerToMoveIndex + 1) % playerList.size();
             if (count >= playerList.size()) {
                 System.out.println("BUG: UNREACHABLE");
                 System.exit(423);
@@ -695,7 +694,7 @@ public final class Game {
         ArrayList<Integer> variables = new ArrayList<>();
         variables.add(mainFieldCount);
         variables.add(playerToStartColor);
-        variables.add(playerToMoveId);
+        variables.add(playerToMoveIndex);
         variables.add(movesMade);
         variables.add(playersRemaining);
         variables.add(round);
@@ -735,7 +734,7 @@ public final class Game {
     public void _setPlayerToMoveId(int clientId) {
         for (int i = 0; i < playerList.size(); i++) {
             if (playerList.get(i).getClientId() == clientId) {
-                playerToMoveId = i;
+                playerToMoveIndex = i;
                 return;
             }
         }

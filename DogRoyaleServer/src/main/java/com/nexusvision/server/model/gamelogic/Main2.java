@@ -1,6 +1,7 @@
 package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.Colors;
+import com.nexusvision.server.model.enums.OrderType;
 import com.nexusvision.server.model.enums.Penalty;
 import com.nexusvision.server.model.utils.*;
 
@@ -72,6 +73,7 @@ public class Main2 {
                 drawCardFields,
                 startFields,
                 10,
+                OrderType.random,
                 1,
                 10,
                 0,

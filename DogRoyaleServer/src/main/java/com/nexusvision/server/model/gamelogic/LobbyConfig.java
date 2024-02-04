@@ -3,6 +3,7 @@ package com.nexusvision.server.model.gamelogic;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nexusvision.server.model.enums.Colors;
+import com.nexusvision.server.model.enums.OrderType;
 import com.nexusvision.server.model.enums.Penalty;
 import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
@@ -67,6 +68,7 @@ public class LobbyConfig {
                                   DrawCardFields drawCardFields,
                                   StartFields startFields,
                                   int initialCardsPerPlayer,
+                                  OrderType playerOrderType,
                                   int thinkTimePerMove,
                                   int visualizationTimePerMove,
                                   int consequencesForInvalidMove,
@@ -96,6 +98,7 @@ public class LobbyConfig {
         this.drawCardFields = drawCardFields;
         this.startFields = startFields;
         this.initialCardsPerPlayer = initialCardsPerPlayer;
+        this.playerOrder.setType(playerOrderType);
         this.thinkTimePerMove = thinkTimePerMove;
         this.visualizationTimePerMove = visualizationTimePerMove;
         this.consequencesForInvalidMove = Penalty.values()[consequencesForInvalidMove];
@@ -118,6 +121,7 @@ public class LobbyConfig {
                 returnLobbyConfig.getDrawCardFields(),
                 returnLobbyConfig.getStartFields(),
                 returnLobbyConfig.getInitialCardsPerPlayer(),
+                returnLobbyConfig.getPlayerOrder().getType(),
                 returnLobbyConfig.getThinkTimePerMove(),
                 returnLobbyConfig.getVisualizationTimePerMove(),
                 returnLobbyConfig.getConsequencesForInvalidMove(),
@@ -138,6 +142,7 @@ public class LobbyConfig {
                 returnLobbyConfig.getDrawCardFields(),
                 returnLobbyConfig.getStartFields(),
                 returnLobbyConfig.getInitialCardsPerPlayer(),
+                returnLobbyConfig.getPlayerOrder().getType(),
                 returnLobbyConfig.getThinkTimePerMove(),
                 returnLobbyConfig.getVisualizationTimePerMove(),
                 returnLobbyConfig.getConsequencesForInvalidMove(),

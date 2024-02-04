@@ -4,10 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr: Small fix">
+    <list default="true" id="d565edc2-e62b-4f90-8625-25654b4de6f5" name="Changes" comment="felixwr: Added function for ausrichter">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/service/ConnectedToGameService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/CommandProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/CommandProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/GameLobby.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/controller/ServerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/JoinGameAsPlayerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/handler/message/menu/JoinGameAsPlayerHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/LobbyConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/LobbyConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/SaveState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/SaveState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/service/BoardStateService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nexusvision/server/service/BoardStateService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +31,11 @@
   <component name="Git.Settings">
     <branch-grouping />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="JavaAutoRunManager">
+    <enabled-run-configurations>
+      <run-configuration type="JUnit" name="JoinGameAsPlayerHandlerTest.testHandleRunningLobby" />
+    </enabled-run-configurations>
   </component>
   <component name="MavenRunner">
     <option name="skipTests" value="true" />
@@ -52,6 +64,7 @@
     "Attach to process.pid 8656.executor": "ProcessAttachDebug",
     "JUnit.ClientHandlerTest.testRun.executor": "Run",
     "JUnit.ConnectToServerHandlerTest.executor": "Run",
+    "JUnit.JoinGameAsPlayerHandlerTest.testHandleRunningLobby.executor": "Run",
     "JUnit.RequestGameListHandlerTest.executor": "Run",
     "JUnit.RequestGameListHandlerTest.testHandle.executor": "Run",
     "JUnit.ServerControllerTest.executor": "Run",
@@ -63,7 +76,7 @@
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "develop-server-felixwr",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/archbtw/dox/swtpra/idea3tmpcopy/group1/DogRoyaleServer",
+    "last_opened_file_path": "C:/Users/Felix/Documents/Studium/Semester 3/SWTPra/feature-gui/group1",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -84,7 +97,7 @@
       <recent name="com.nexusvision.server.controller" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.ServerApp">
+  <component name="RunManager" selected="JUnit.java in DogRoyaleServer">
     <configuration name="Ausrichter" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.nexusvision.client.Ausrichter" />
       <module name="DogRoyaleServer" />
@@ -127,17 +140,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ServerControllerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="JoinGameAsPlayerHandlerTest.testHandleRunningLobby" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="DogRoyaleServer" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.nexusvision.server.controller.*" />
+          <option name="PATTERN" value="com.nexusvision.server.handler.message.menu.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.nexusvision.server.controller" />
-      <option name="MAIN_CLASS_NAME" value="com.nexusvision.server.controller.ServerControllerTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="PACKAGE_NAME" value="com.nexusvision.server.handler.message.menu" />
+      <option name="MAIN_CLASS_NAME" value="com.nexusvision.server.handler.message.menu.JoinGameAsPlayerHandlerTest" />
+      <option name="METHOD_NAME" value="testHandleRunningLobby" />
+      <option name="TEST_OBJECT" value="method" />
+      <dir value="$PROJECT_DIR$/src/test/java" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -153,17 +168,17 @@
     <list>
       <item itemvalue="Application.Ausrichter" />
       <item itemvalue="Application.ServerApp" />
+      <item itemvalue="JUnit.JoinGameAsPlayerHandlerTest.testHandleRunningLobby" />
       <item itemvalue="JUnit.ClientHandlerTest.testRun" />
-      <item itemvalue="JUnit.ServerControllerTest" />
       <item itemvalue="JUnit.java in DogRoyaleServer" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.java in DogRoyaleServer" />
         <item itemvalue="Application.Ausrichter" />
         <item itemvalue="Application.ServerApp" />
-        <item itemvalue="JUnit.java in DogRoyaleServer" />
+        <item itemvalue="JUnit.JoinGameAsPlayerHandlerTest.testHandleRunningLobby" />
         <item itemvalue="JUnit.ClientHandlerTest.testRun" />
-        <item itemvalue="JUnit.ServerControllerTest" />
       </list>
     </recent_temporary>
   </component>
@@ -191,6 +206,8 @@
       <workItem from="1706279800172" duration="15915000" />
       <workItem from="1706396055036" duration="77238000" />
       <workItem from="1706555153419" duration="15865000" />
+      <workItem from="1706748532110" duration="830000" />
+      <workItem from="1707063476300" duration="11123000" />
     </task>
     <task id="LOCAL-00001" summary="felixwr and dgehse: Rewriting and fixing (making code compilable)">
       <option name="closed" value="true" />
@@ -296,7 +313,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706741591279</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="felixwr: Added function for ausrichter">
+      <option name="closed" value="true" />
+      <created>1706743010050</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1706743010050</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -354,17 +379,27 @@
     <MESSAGE value="felixwr: Added feature for Ausrichter" />
     <MESSAGE value="felixwr: Final ausrichter + server" />
     <MESSAGE value="felixwr: Small fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="felixwr: Small fix" />
+    <MESSAGE value="felixwr: Added function for ausrichter" />
+    <option name="LAST_COMMIT_MESSAGE" value="felixwr: Added function for ausrichter" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.util.NoSuchElementException" package="java.util" />
+          <option name="timeStamp" value="7" />
+        </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/nexusvision/server/model/gamelogic/LobbyConfig.java</url>
-          <line>292</line>
-          <option name="timeStamp" value="8" />
+          <url>file://$PROJECT_DIR$/src/test/java/com/nexusvision/server/handler/message/menu/JoinGameAsPlayerHandlerTest.java</url>
+          <line>43</line>
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="((ClientHandler)this).messageSender" custom="com.nexusvision.server.handler.ClientHandler" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

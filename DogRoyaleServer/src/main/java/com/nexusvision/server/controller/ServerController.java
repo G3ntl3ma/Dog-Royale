@@ -4,6 +4,7 @@ import com.nexusvision.server.handler.ClientHandler;
 import com.nexusvision.server.handler.ConsistencyException;
 import com.nexusvision.server.model.entities.Client;
 import com.nexusvision.server.model.enums.GameState;
+import com.nexusvision.server.model.enums.OrderType;
 import com.nexusvision.server.model.messages.menu.ReturnLobbyConfig;
 import com.nexusvision.server.model.utils.ColorMapping;
 import com.nexusvision.server.model.utils.DrawCardFields;
@@ -145,6 +146,7 @@ public class ServerController {
      */
     public boolean setWaitingForMove(int clientId) {
         ClientHandler handler = handlerMap.get(clientId);
+        if (handler == null) return false;
         return handler.setWaitingForMove();
     }
 
@@ -292,6 +294,7 @@ public class ServerController {
                                  DrawCardFields drawCardFields,
                                  StartFields startFields,
                                  int initialCardsPerPlayer,
+                                 OrderType playerOrderType,
                                  int thinkTimePerMove,
                                  int visualizationTimePerMove,
                                  int consequencesForInvalidMove,
@@ -306,6 +309,7 @@ public class ServerController {
                 drawCardFields,
                 startFields,
                 initialCardsPerPlayer,
+                playerOrderType,
                 thinkTimePerMove,
                 visualizationTimePerMove,
                 consequencesForInvalidMove,

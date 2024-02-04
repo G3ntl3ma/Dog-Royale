@@ -2,14 +2,9 @@ package com.nexusvision.server.model.gamelogic;
 
 import com.nexusvision.server.model.enums.Card;
 import com.nexusvision.server.model.enums.FieldType;
-import com.nexusvision.server.model.enums.Penalty;
-import com.nexusvision.server.service.CardService;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.stream.Collectors;
 
 @Data
 public final class SaveState {
@@ -97,7 +92,7 @@ public final class SaveState {
     public SaveState(Game game) {
         // this.mainFieldCount = game.getMainFieldCount();
         this.playerToStartColor = game.getPlayerToStartColor();
-        this.playerToMoveId = game.getPlayerToMoveId();
+        this.playerToMoveId = game.getPlayerToMoveIndex();
         this.movesMade = game.getMovesMade();
         this.playersRemaining = game.getPlayersRemaining();
         this.round = game.getRound();
@@ -122,7 +117,7 @@ public final class SaveState {
     public void loadState(Game game){
         // game.setMainFieldCount(this.mainFieldCount);
         game.setPlayerToStartColor(this.playerToStartColor);
-        game.setPlayerToMoveId(this.playerToMoveId);
+        game.setPlayerToMoveIndex(this.playerToMoveId);
         game.setMovesMade(this.movesMade);
         game.setPlayersRemaining(this.playersRemaining);
         game.setRound(this.round);

@@ -9,6 +9,7 @@ import com.nexusvision.server.handler.message.MessageHandler;
 import com.nexusvision.server.model.messages.menu.JoinGameAsPlayer;
 import com.nexusvision.server.model.messages.menu.ConnectedToGame;
 import com.nexusvision.server.model.messages.menu.TypeMenue;
+import com.nexusvision.server.service.ConnectedToGameService;
 
 /**
  * Handles a <code>JoinGameAsPlayer</code> request
@@ -16,6 +17,9 @@ import com.nexusvision.server.model.messages.menu.TypeMenue;
  * @author felixwr, dgehse
  */
 public class JoinGameAsPlayerHandler extends MessageHandler<JoinGameAsPlayer> {
+
+    private static final MessageBroker messageBroker = MessageBroker.getInstance();
+    private static final ConnectedToGameService connectedToGameService = new ConnectedToGameService();
 
     /**
      * Handles the logic for a client joining a game as a participant.
@@ -32,12 +36,10 @@ public class JoinGameAsPlayerHandler extends MessageHandler<JoinGameAsPlayer> {
         ServerController serverController = ServerController.getInstance();
 
         GameLobby lobby = serverController.getLobbyById(message.getGameId());
-        boolean successful = lobby != null && lobby.addPlayer(message.getPlayerName(), message.getClientId());
-
-        ConnectedToGame connectedToGame = new ConnectedToGame();
-        connectedToGame.setType(TypeMenue.connectedToGame.getOrdinal());
-        connectedToGame.setSuccess(successful);
-        String response = gson.toJson(connectedToGame);
-        MessageBroker.getInstance().sendMessage(ChannelType.SINGLE, clientId, response);
+        if (lobby == null) {
+            messageBroker.sendMessage(ChannelType.SINGLE, clientId, connectedToGameService.getConnectedToGame(false));
+        } else {
+            lobby.addPlayer(message.getPlayerName(), message.getClientId());
+        }
     }
 }
