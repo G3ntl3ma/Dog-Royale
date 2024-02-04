@@ -30,9 +30,9 @@ public class Board {
         this.numPieces = numPieces;
         fieldCoordinates = new int[fieldSize][2];
         houseCoordinates = new int[numPlayers][Math.min(numPieces, numHouses+1)][2]; // +1 for the ellipse
-        this.startingPosIndices = new int[startingPosIndices.size()];
-        for(int i = 0; i < startingPosIndices.size(); ++i){
-            this.startingPosIndices[i] = startingPosIndices.get(i);
+        this.startingPosIndices = new int[numPlayers];
+        for(int i = 0; i < numPlayers; ++i){
+            this.startingPosIndices[i] =  (i * fieldSize / numPlayers);
         }
         this.drawCardFields = new int[drawCardFields.size()];
         for(int i = 0; i < drawCardFields.size(); ++i){
