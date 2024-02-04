@@ -133,12 +133,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
             return;
         }
         // check for which tab is selected to send proper join-msg
-        Tab selectedTab = tPGameList.getSelectionModel().getSelectedItem();
-        if(selectedTab != null)
-            joinGameAsObserver();
-        else {
-            joinTournamentGame();
-        }
+
 
         String css = this.getClass().getResource("style.css").toExternalForm();
 
@@ -156,6 +151,13 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
         stageGameplay.setMinHeight(960);
         stageGameplay.centerOnScreen();
         stageGameplay.show();
+
+        Tab selectedTab = tPGameList.getSelectionModel().getSelectedItem();
+        if(selectedTab != null)
+            joinGameAsObserver();
+        else {
+            joinTournamentGame();
+        }
 
 
         // call stop method when stage is closed
