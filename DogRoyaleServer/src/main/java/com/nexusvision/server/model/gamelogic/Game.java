@@ -573,7 +573,7 @@ public final class Game {
         Card card = Card.getType(cardOrdinal);
         Move move = getMove(skip, card, selectedValue, pieceId, isStarter, opponentPieceId);
         if (move == null) {
-            handleIllegalMove();
+            //handleIllegalMove();
         } else {
             move.execute(this);
         }

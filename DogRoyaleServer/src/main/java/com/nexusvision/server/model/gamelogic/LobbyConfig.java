@@ -19,10 +19,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author felixwr
@@ -175,6 +172,18 @@ public class LobbyConfig {
      */
     public void exportLobbyConfig() {
 
+    }
+
+    public void cleanUp() {
+        Set<Colors> colorsToRemove = new HashSet<>();
+        for (Map.Entry<Colors, Integer> entry : colorMap.entrySet()) {
+            if (entry.getValue() == -1) colorsToRemove.add(entry.getKey());
+        }
+        for (Colors color : colorsToRemove) {
+            colorMap.remove(color);
+        }
+
+        playerOrder.getOrder().removeIf(playerElement -> playerElement.getClientId() == -1);
     }
 
     /**

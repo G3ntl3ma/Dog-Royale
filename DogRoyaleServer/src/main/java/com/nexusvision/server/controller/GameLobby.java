@@ -295,7 +295,10 @@ public class GameLobby {
      * Sets GameState to <code>IN_PROGRESS</code> and sends board state to all clients
      */
     public boolean runGame() {
+        if (gameState != GameState.UPCOMING) return false;
+        lobbyConfig.cleanUp();
         if (lobbyConfig.getPlayerOrder().getOrder().size() < 2) return false;
+        lobbyPublisher.publish(gson.toJson(lobbyConfig.getReturnLobbyConfig()));
         game = new Game(lobbyConfig, id);
         gameState = GameState.RUNNING;
         BoardState boardState = boardStateService.generateBoardState(game, lobbyConfig.getPlayerOrder()); // This is how Ausrichter starts the game. Sending board states to all clients
@@ -377,6 +380,16 @@ public class GameLobby {
                 if (card != null){
                     sendDrawCardFromField(clientId, card, player);
                 }
+            }
+        } else {
+            switch (lobbyConfig.getConsequencesForInvalidMove()) {
+                case kickFromGame:
+                    game.excludeFromGame(game.getCurrentPlayer());
+                    kickService.kick(lobbyConfig, clientId, id);
+                    break;
+                case excludeFromRound:
+                    removeFromRound(clientId, game.getCurrentPlayer());
+                    break;
             }
         }
 
