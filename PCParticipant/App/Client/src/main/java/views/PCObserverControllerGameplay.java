@@ -614,6 +614,8 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      */
     @Override @FXML
     public void handleLobbyConfig(ReturnLobbyConfigDto lobbyConfig) throws IOException {
+        System.out.println("LobbyConfig: " + lobbyConfig.toJson());
+
         Platform.runLater(()-> {
             this.lobbyConfig = lobbyConfig;
             this.animationTime = lobbyConfig.getVisualizationTimePerMove();
@@ -642,6 +644,8 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      */
     @Override
     public void handleMoveValid(MoveValidDto moveValid) {
+        System.out.println("moveValid: " + moveValid.toJson());
+
         Platform.runLater(() -> {
             if(!moveValid.isValidMove()){
                 updatePieceLabels();
@@ -746,6 +750,8 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      */
     @Override
     public void handleDrawCards(DrawCardsDto drawCards) {
+        System.out.println("DrawnCards: " + drawCards.toJson());
+
         Platform.runLater(() -> {
 
             Card[] droppedCards = new Card[lobbyConfig.getInitialCardsPerPlayer()+lobbyConfig.getDrawCardFields().getCount()];
@@ -775,6 +781,8 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      */
     @Override
     public void handleBoardState(BoardStateDto boardStateDto) {
+
+        System.out.println("boardState: " + boardStateDto.toJson());
 
         Platform.runLater(()->{
             if(boardStateDto.isGameOver()){
@@ -904,22 +912,24 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @Override
     public void handleUpdateDrawCards(UpdateDrawCardsDto updateDrawCards) {
         Platform.runLater(() ->{
+            /**
             HandCards[] listNumCards = updateDrawCards.getHandCards();
             lblCardsPOne.setText(" x " + listNumCards[0].getCount());
-            //lblCardsPTwo.setText(" x " + listNumCards[1].getCount());
-            if(lobbyConfig.getMaxPlayerCount() >= 3){
+            lblCardsPTwo.setText(" x " + listNumCards[1].getCount());
+            if(listNumCards.length >= 3){
                 lblCardsPThree.setText(" x " + listNumCards[2].getCount());
-                if(lobbyConfig.getMaxPlayerCount() >= 4){
+                if(listNumCards.length >= 4){
                     lblCardsPFour.setText(" x " + listNumCards[3].getCount());
-                    if(lobbyConfig.getMaxPlayerCount() >= 5){
+                    if(listNumCards.length >= 5){
                         lblCardsPFive.setText(" x " + listNumCards[4].getCount());
-                        if(lobbyConfig.getMaxPlayerCount() >= 6){
+                        if(listNumCards.length >= 6){
                             lblCardsPSix.setText(" x " + listNumCards[5].getCount());
 
                         }
                     }
                 }
             }
+
 
             // gray out player
             for (HBox hBox : playerHbArray) {
@@ -930,6 +940,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
                     playerHbArray[i].setDisable(true);
                 }
             }
+             */
         });
 
     }

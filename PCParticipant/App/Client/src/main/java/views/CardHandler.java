@@ -169,6 +169,7 @@ public class CardHandler {
                 }
                 else if(currentCard == this && (PieceImages.currentPiece != null ||PieceImages.selectEnemyPiece && PieceImages.selectedEnemyPiece != null) && !(this.card == Card.copyCard && lastPlayedCard == null) && turn) {
                     client.sendMessage(new MoveDto(false, currentCard.getCard().ordinal(), selectedValue, PieceImages.getCurrentPieceIndex(), isStarter, PieceImages.getSelectedEnemyPieceId()).toJson());
+                    System.out.println("Send Move: " + new MoveDto(false, currentCard.getCard().ordinal(), selectedValue, PieceImages.getCurrentPieceIndex(), isStarter, PieceImages.getSelectedEnemyPieceId()).toJson());
                     lastRemovedCardIndex = handCards.indexOf(this);
                     lastRemovedCard = this.card;
                     layCard();
