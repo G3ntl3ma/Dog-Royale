@@ -2,13 +2,13 @@ package Dtos.CustomClasses;
 
 import java.util.ArrayList;
 
-public class GamesFinishedTournament extends Games {
-    // Game class for finished games in ReturnGameListDto and TournamentInfo
+public class GamesFinishedTournament extends GamesTournament {
+    // Game class for finished games in TournamentInfo
     private ArrayList<PlayerPoints> winnerOrder;
     private boolean wasCanceled;
 
-    public GamesFinishedTournament(int gameId, String gameName, ArrayList<PlayerPoints> winnerOrder, boolean wasCanceled) {
-        super(gameId, gameName);
+    public GamesFinishedTournament(int gameId, boolean wasCanceled, ArrayList<PlayerPoints> winnerOrder) {
+        super(gameId);
         this.winnerOrder = winnerOrder;
         this.wasCanceled = wasCanceled;
     }

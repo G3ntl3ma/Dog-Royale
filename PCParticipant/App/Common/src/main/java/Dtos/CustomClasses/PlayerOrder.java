@@ -12,6 +12,8 @@ public class PlayerOrder {
         this.order = order;
     }
 
+    public PlayerOrder(){}
+
     public int getType() {
         return type;
     }

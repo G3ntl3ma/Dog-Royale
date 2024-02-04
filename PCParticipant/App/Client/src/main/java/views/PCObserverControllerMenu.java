@@ -17,6 +17,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -26,6 +28,7 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 
@@ -90,7 +93,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
     @FXML
     private TableColumn<TournamentsRunning, Integer> tCRTMaxGames;
     @FXML
-    private TableColumn<TournamentsRunning, Integer> tCRTCurrentPlayerCount;
+    private TableColumn<TournamentsRunning, Integer> tCRTGameRunningId;
     @FXML
     private TableView<TournamentsFinished> tVFinishedTournaments;
     @FXML
@@ -230,6 +233,9 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
 
             requestGameList();
             findTournament();
+
+            client.sendMessage(new RequestTournamentInfoDto(client.getClientID(), 1).toJson());
+
             client.registerObserverMenu(this);
 
             bttnReloadGameList.setDisable(false);
@@ -238,6 +244,16 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
             tAClientLog.setText("Es konnte keine Verbindung hergestellt werden!");
         }
 
+    }
+    @FXML
+    private void miInfoClicked(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, ("Dies ist der PC-Observer von Team LOGO. \nEntwickler: Ali Cem Kaynak, Cedric Hartz, David Fröse, Dennis Meseli, Daniel Reimer, Julian Janke, Luca Schriek, Luis Kaimann, Nico Nowak, Robin Heß, Timm Wickert"));
+        alert.getDialogPane().getStylesheets().add(
+                getClass().getResource("style.css").toExternalForm());
+        Image image = new Image("logo.png");
+        ImageView imageView = new ImageView(image);
+        alert.setGraphic(imageView);
+        alert.show();
     }
 
     @Override
@@ -278,7 +294,7 @@ public class PCObserverControllerMenu implements Initializable, IClientObserverM
             tCRTtournamentId.setCellValueFactory(new PropertyValueFactory<>("tournamentId"));
             tCRTMaxPlayers.setCellValueFactory(new PropertyValueFactory<>("maxPlayer"));
             tCRTMaxGames.setCellValueFactory(new PropertyValueFactory<>("maxGames"));
-            tCRTCurrentPlayerCount.setCellValueFactory(new PropertyValueFactory<>("currentPlayerCount"));
+            tCRTGameRunningId.setCellValueFactory(new PropertyValueFactory<>("gameRunning"));
             tCFTtournamentId.setCellValueFactory(new PropertyValueFactory<>("tournamentId"));
             tCFTwinnerOrder.setCellValueFactory(new PropertyValueFactory<>("winnerOrder"));
         });

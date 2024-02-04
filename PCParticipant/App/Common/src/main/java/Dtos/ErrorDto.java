@@ -13,6 +13,10 @@ public class ErrorDto extends Dto  {
         this.message = message;
     }
 
+    public ErrorDto(){
+        super(TypeMenue.error.ordinal() + 100);
+    }
+
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);

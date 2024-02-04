@@ -39,7 +39,6 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -52,25 +51,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="vbBackground" prefHeight="651.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.PCObserverControllerMenu">
+<VBox fx:id="vbBackground" prefHeight="651.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.PCObserverControllerMenu">
   <children>
     <MenuBar fx:id="mbMenu" VBox.vgrow="NEVER">
       <menus>
         <Menu mnemonicParsing="false" text="Hilfe">
-          <items>
-            <MenuItem mnemonicParsing="false" text="New" />
-            <MenuItem mnemonicParsing="false" text="Open…" />
-            <Menu mnemonicParsing="false" text="Open Recent" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Close" />
-            <MenuItem mnemonicParsing="false" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Save As…" />
-            <MenuItem mnemonicParsing="false" text="Revert" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Preferences…" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
-          </items>
+               <items>
+                  <MenuItem fx:id="observerInfo" mnemonicParsing="false" onAction="#miInfoClicked" text="Software Info" />
+               </items>
         </Menu>
       </menus>
     </MenuBar>
@@ -183,7 +171,7 @@
                <content>
                   <TableView fx:id="tVPlannedTournaments">
                      <columns>
-                        <TableColumn fx:id="tCPTtournamentId" prefWidth="200.0" text="Name" />
+                        <TableColumn fx:id="tCPTtournamentId" prefWidth="200.0" text="Turnier ID" />
                         <TableColumn fx:id="tCPTMaxPlayers" prefWidth="90.0" text="Max. Spieler" />
                         <TableColumn fx:id="tCPTMaxGames" prefWidth="153.0" text="Max. Spiele" />
                         <TableColumn fx:id="tCPTCurrentPlayerCount" prefWidth="153.0" text="Momentane Spieler" />
@@ -198,10 +186,10 @@
                <content>
                   <TableView fx:id="tVRunningTournaments">
                      <columns>
-                        <TableColumn fx:id="tCRTtournamentId" prefWidth="200.0" text="Name" />
+                        <TableColumn fx:id="tCRTtournamentId" prefWidth="200.0" text="Turnier ID" />
                         <TableColumn fx:id="tCRTMaxPlayers" prefWidth="90.0" text="Max. Spieler" />
                         <TableColumn fx:id="tCRTMaxGames" prefWidth="153.0" text="Max. Spiele" />
-                        <TableColumn fx:id="tCRTCurrentPlayerCount" prefWidth="153.0" text="Momentane Spieler" />
+                        <TableColumn fx:id="tCRTGameRunningId" prefWidth="153.0" text="Laufendes Spiel ID" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -213,7 +201,7 @@
                <content>
                   <TableView fx:id="tVFinishedTournaments">
                      <columns>
-                        <TableColumn fx:id="tCFTtournamentId" prefWidth="200.0" text="Turniernummer" />
+                        <TableColumn fx:id="tCFTtournamentId" prefWidth="200.0" text="Turnier ID" />
                         <TableColumn fx:id="tCFTwinnerOrder" prefWidth="90.0" text="Ergebnis" />
                      </columns>
                      <columnResizePolicy>

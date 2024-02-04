@@ -16,6 +16,8 @@ public class PlayerPiece {
         this.inHousePosition = inHousePosition;
     }
 
+    public PlayerPiece(){}
+
     public int getPieceId() {
         return pieceId;
     }

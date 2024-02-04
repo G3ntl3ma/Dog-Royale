@@ -12,6 +12,8 @@ public class Field {
         this.positions = positions;
     }
 
+    public Field(){}
+
     public int getCount() {
         return count;
     }

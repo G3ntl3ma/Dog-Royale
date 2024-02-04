@@ -11,6 +11,10 @@ public class ConnectedToGameDto extends Dto {
         this.success = success;
     }
 
+    public ConnectedToGameDto(){
+        super(TypeMenue.connectedToGame.ordinal() + 100);
+    }
+
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);

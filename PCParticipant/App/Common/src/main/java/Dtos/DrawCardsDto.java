@@ -14,6 +14,10 @@ public class DrawCardsDto extends Dto {
         this.drawnCards = drawnCards;
     }
 
+    public DrawCardsDto(){
+        super(TypeGame.drawCards.ordinal() + 200);
+    }
+
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);

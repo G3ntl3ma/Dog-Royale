@@ -21,6 +21,10 @@ public class RegisteredForTournamentDto extends Dto {
         this.maxGames = maxGames;
     }
 
+    public RegisteredForTournamentDto() {
+        super(TypeMenue.registeredForTournament.ordinal() + 100);
+    }
+
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);

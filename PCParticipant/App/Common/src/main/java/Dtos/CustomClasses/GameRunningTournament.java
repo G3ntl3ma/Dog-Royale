@@ -2,23 +2,13 @@ package Dtos.CustomClasses;
 
 import java.util.ArrayList;
 
-public class GameRunningTournament extends Games {
+public class GameRunningTournament extends GamesTournament {
     // Game object for upcoming tournament games in TournamentInfo
-    private int startInGames;
     private ArrayList<PlayerPoints> players;
 
-    public GameRunningTournament(int gameId, String gameName, int startInGames , ArrayList<PlayerPoints> players) {
-        super(gameId, gameName);
-        this.startInGames = startInGames;
+    public GameRunningTournament(int gameId, ArrayList<PlayerPoints> players) {
+        super(gameId);
         this.players = players;
-    }
-
-    public int getStartInGames() {
-        return startInGames;
-    }
-
-    public void setStartInGames(int startInGames) {
-        this.startInGames = startInGames;
     }
 
     public ArrayList<PlayerPoints> getPlayers() {

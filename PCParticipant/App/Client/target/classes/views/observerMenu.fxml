@@ -52,7 +52,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="vbBackground" prefHeight="651.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.PCObserverControllerMenu">
+<VBox fx:id="vbBackground" prefHeight="651.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.PCObserverControllerMenu">
   <children>
     <MenuBar fx:id="mbMenu" VBox.vgrow="NEVER">
       <menus>

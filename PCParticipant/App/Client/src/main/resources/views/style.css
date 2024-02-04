@@ -210,7 +210,23 @@
     -fx-background-radius : 2.0em;
 }
 
-.pane{
-    -fx-background-color: transparent;
+.alert .dialog-pane {
+    -fx-background-color: rgb(36, 63, 136);
+    -fx-text-fill: white;
 }
-
+.alert .header-panel {
+    -fx-background-color: #244088;
+}
+.alert .content {
+    -fx-background-color: rgb(36, 63, 136);
+}
+.alert .button-bar {
+    -fx-background-color: rgb(36, 63, 136);
+}
+.alert .button {
+    -fx-background-color: #1C355B;
+    -fx-text-fill: white;
+}
+.alert .button:hover {
+    -fx-background-color: #20366C;
+}

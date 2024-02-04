@@ -19,6 +19,10 @@ public class ReturnGameListDto extends Dto {
         this.gamesFinished = gamesFinished;
     }
 
+    public ReturnGameListDto() {
+        super(TypeMenue.returnGameList.ordinal() + 100);
+    }
+
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);

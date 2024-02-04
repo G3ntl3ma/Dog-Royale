@@ -35,6 +35,10 @@ public class BoardStateDto extends Dto {
         this.winnerOrder = winnerOrder;
     }
 
+    public BoardStateDto(){
+        super(TypeGame.boardState.ordinal() + 200);
+    }
+
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);

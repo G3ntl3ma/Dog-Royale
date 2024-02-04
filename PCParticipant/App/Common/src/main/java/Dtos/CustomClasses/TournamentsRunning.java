@@ -6,7 +6,7 @@ public class TournamentsRunning extends Tournament {
     private int maxGames;
     private int gameRunning;
 
-    public TournamentsRunning(int tournamentId, int maxPlayer, int maxGame, int gameRunning) {
+    public TournamentsRunning(int tournamentId, int maxPlayer, int maxGames, int gameRunning) {
         super(tournamentId);
         this.maxPlayer = maxPlayer;
         this.maxGames = maxGames;
