@@ -5,9 +5,8 @@ import java.util.ArrayList;
 public class GamesProgressing extends Games {
     // Game objects starting und running games in ReturnGameListDto
     private ArrayList<PlayerName> playerOrder;
-    private int maxPlayerCount;
-
     private ArrayList<PlayerPoints> winnerOrder;
+    private int maxPlayerCount;
 
     public GamesProgressing(int gameId, String gameName, ArrayList<PlayerName> playerOrder, ArrayList<PlayerPoints> winnerOrder, int maxPlayerCount) {
         super(gameId, gameName);

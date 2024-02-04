@@ -8,6 +8,8 @@ public abstract class Player {
         this.clientId = clientId;
     }
 
+    public  Player(){}
+
     public int getClientId() {
         return clientId;
     }

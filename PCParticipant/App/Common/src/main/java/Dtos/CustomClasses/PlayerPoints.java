@@ -9,6 +9,8 @@ public class PlayerPoints  extends PlayerName {
         this.points = points;
     }
 
+    public PlayerPoints(){}
+
     public int getPoints() {
         return points;
     }

@@ -22,6 +22,8 @@ public class MoveDto extends Dto {
         this.opponentPieceId = opponentPieceId;
     }
 
+    public MoveDto(){super(TypeGame.move.ordinal() + 200);}
+
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);

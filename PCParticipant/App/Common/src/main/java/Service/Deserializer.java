@@ -115,6 +115,9 @@ public class Deserializer {
                 case requestTournamentInfo:
                     messageDtoClass = RequestTournamentInfoDto.class;
                     break;
+                case returnTournamentInfo:
+                    messageDtoClass = ReturnTournamentInfoDto.class;
+                    break;
                 case returnLobbyConfig:
                     messageDtoClass = ReturnLobbyConfigDto.class;
                     break;

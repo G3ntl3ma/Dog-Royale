@@ -8,6 +8,8 @@ public class PlayerName extends Player {
         this.name = name;
     }
 
+    public PlayerName(){}
+
     public String getName() {
         return name;
     }

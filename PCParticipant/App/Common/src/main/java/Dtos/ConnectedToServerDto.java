@@ -11,6 +11,10 @@ public class ConnectedToServerDto extends Dto {
         this.clientId = id;
     }
 
+    public ConnectedToServerDto(){
+        super(TypeMenue.connectedToServer.ordinal() + 100);
+    }
+
     public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);

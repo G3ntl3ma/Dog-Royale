@@ -276,7 +276,11 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
 
         currentPiece = new PieceImages(paneBoard);
         // init board
-        board = new Board(fieldSize, numPlayers, numPieces);
+        ArrayList<Integer> startingPositions = new ArrayList<>();
+        for(int i = 0; i < numPlayers; ++i){
+            startingPositions.add((int)((fieldSize / numPlayers) * (i + 0.5)));
+        }
+        board = new Board(fieldSize, numPlayers, numPieces, startingPositions, new ArrayList<>());
         houseBoard = new HouseBoard(numPlayers, numPieces);
         pieceHandler = new PieceHandler(board, houseBoard);
 
@@ -587,7 +591,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
      * @param lobbyConfig the lobbyConfig used to initialize the board
      */
     public void initBoard(ReturnLobbyConfigDto lobbyConfig){
-        board = new Board(lobbyConfig.getFieldsize(), lobbyConfig.getMaxPlayerCount(), lobbyConfig.getFiguresPerPlayer());
+        board = new Board(lobbyConfig.getFieldsize(), lobbyConfig.getMaxPlayerCount(), lobbyConfig.getFiguresPerPlayer(), lobbyConfig.getStartFields().getPositions(), lobbyConfig.getDrawCardFields().getPositions());
         houseBoard = new HouseBoard(lobbyConfig.getMaxPlayerCount(), lobbyConfig.getFiguresPerPlayer());
         pieceHandler = new PieceHandler(board, houseBoard);
 
@@ -633,7 +637,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
                 e.printStackTrace();
             }
             // handleUpdateTurnTimer(new TurnTimerDto(lobbyConfig.getThinkTimePerMove()));
-            handleUpdateLiveTimer(new LiveTimerDto(lobbyConfig.getMaximumGameDuration()));
+            handleUpdateLiveTimer(new LiveTimerDto(lobbyConfig.getMaximumGameDuration() * 1000));
         });
     }
 
@@ -953,8 +957,7 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @Override
     public void handleUpdateLiveTimer(LiveTimerDto liveTimerDto) {
         liveTimer = liveTimerDto.getLiveTime();
-        String time = new SimpleDateFormat("mm:ss").format(liveTimer);
-        Platform.runLater(() -> lbLiveTimer.setText(time));
+        Platform.runLater(() -> lbLiveTimer.setText(new SimpleDateFormat("mm:ss").format(liveTimer)));
 
         if(liveTimerThread == null){
             liveTimerThread = new Thread(() -> {
@@ -980,17 +983,16 @@ public class PCObserverControllerGameplay implements Initializable, IClientObser
     @Override
     public void handleUpdateTurnTimer(TurnTimerDto turnTimerDto) {
         turnTimer = turnTimerDto.getTurnTime();
-        Platform.runLater(() -> pbTime.setProgress(turnTimer / (float) lobbyConfig.getThinkTimePerMove()));
+        Platform.runLater(() -> pbTime.setProgress((turnTimer / (float) lobbyConfig.getThinkTimePerMove()) / 1000));
 
         if(turnTimerThread == null){
             turnTimerThread = new Thread(() -> {
                 try {
-                    while(turnTimer > 0){
+                    while(true){
                         Thread.sleep(1);
                         turnTimer -= 1;
-                        Platform.runLater(() -> pbTime.setProgress(turnTimer / (float) lobbyConfig.getThinkTimePerMove()));
+                        Platform.runLater(() -> pbTime.setProgress((turnTimer / (float) lobbyConfig.getThinkTimePerMove()) / 1000));
                     }
-                    turnTimer = 0;
                 } catch (InterruptedException ignored) {
                 }
             });

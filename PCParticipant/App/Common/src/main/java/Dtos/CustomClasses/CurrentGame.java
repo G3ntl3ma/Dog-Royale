@@ -2,15 +2,15 @@ package Dtos.CustomClasses;
 
 import java.util.ArrayList;
 
-public class CurrentGame extends Games {
+public class CurrentGame extends GamesTournament {
     // Game object for the current tournament game in TournamentInfo
     private int playerCount;
     private int maxPlayerCount;
     private int currentRound;
     private ArrayList<PlayerPoints> players;
 
-    public CurrentGame(int gameId, String gameName, int playerCount, int maxPlayerCount, int currentRound, ArrayList<PlayerPoints> players) {
-        super(gameId, gameName);
+    public CurrentGame(int gameId,  int playerCount, int maxPlayerCount, int currentRound, ArrayList<PlayerPoints> players) {
+        super(gameId);
         this.playerCount = playerCount;
         this.maxPlayerCount = maxPlayerCount;
         this.currentRound = currentRound;

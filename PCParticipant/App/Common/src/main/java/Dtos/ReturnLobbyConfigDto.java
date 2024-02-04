@@ -1,6 +1,7 @@
 package Dtos;
 
 import Dtos.CustomClasses.*;
+import Enums.Penalty;
 import Enums.TypeMenue;
 import com.google.gson.Gson;
 
@@ -48,6 +49,10 @@ public class ReturnLobbyConfigDto extends Dto {
         this.consequencesForInvalidMove = consequencesForInvalidMove;
         this.maximumGameDuration = maximumGameDuration;
         this.maximumTotalMoves = maximumTotalMoves;
+    }
+
+    public ReturnLobbyConfigDto(){
+        super(TypeMenue.returnLobbyConfig.ordinal() + 100);
     }
 
     public String toJson() {
@@ -179,5 +184,24 @@ public class ReturnLobbyConfigDto extends Dto {
 
     public void setMaximumTotalMoves(int maximumTotalMoves) {
         this.maximumTotalMoves = maximumTotalMoves;
+    }
+
+    public static ReturnLobbyConfigDto GetDefault() {
+         return( new ReturnLobbyConfigDto("Game",
+                2,
+                64,
+                6,
+                new ArrayList<>(),
+                new Field(64, new ArrayList<>()),
+                new Field(6, new ArrayList<>()),
+                6,
+                new PlayerOrder(0, new ArrayList<>()),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                5,
+                1,
+                Penalty.excludeFromRound.ordinal(),
+                1800,
+                60));
     }
 }

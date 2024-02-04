@@ -9,6 +9,8 @@ public class PlayerColor extends Player {
         this.color = color;
     }
 
+    public  PlayerColor(){}
+
     public int getColor() {
         return color;
     }

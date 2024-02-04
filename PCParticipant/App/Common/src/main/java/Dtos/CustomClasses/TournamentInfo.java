@@ -6,11 +6,11 @@ public class TournamentInfo extends Tournament {
     // TournamentInfo object for ReturnTournamentInfoDto
     private CurrentGame gameRunning;
     private ArrayList<GameRunningTournament> gamesUpcoming;
-    private ArrayList<GamesFinished> gamesFinished;
+    private ArrayList<GamesFinishedTournament> gamesFinished;
     private ArrayList<PlayerPoints> currentRankings;
 
     public TournamentInfo(int tournamentId, CurrentGame gameRunning, ArrayList<GameRunningTournament> gamesUpcoming,
-                          ArrayList<GamesFinished> gamesFinished, ArrayList<PlayerPoints> currentRankings) {
+                          ArrayList<GamesFinishedTournament> gamesFinished, ArrayList<PlayerPoints> currentRankings) {
         super(tournamentId);
         this.gameRunning = gameRunning;
         this.gamesUpcoming = gamesUpcoming;
@@ -34,11 +34,11 @@ public class TournamentInfo extends Tournament {
         this.gamesUpcoming = gameUpcomingGamesTournaments;
     }
 
-    public ArrayList<GamesFinished> getGamesFinished() {
+    public ArrayList<GamesFinishedTournament> getGamesFinished() {
         return gamesFinished;
     }
 
-    public void setGamesFinished(ArrayList<GamesFinished> gamesFinished) {
+    public void setGamesFinished(ArrayList<GamesFinishedTournament> gamesFinished) {
         this.gamesFinished = gamesFinished;
     }
 

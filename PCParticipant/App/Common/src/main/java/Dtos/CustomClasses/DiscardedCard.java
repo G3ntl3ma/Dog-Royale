@@ -10,6 +10,8 @@ public class DiscardedCard {
         this.card = card;
     }
 
+    public DiscardedCard(){}
+
     public int getClientId() {
         return clientId;
     }

@@ -1,5 +1,6 @@
 package views;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -23,25 +24,19 @@ public class Board {
     public final int[][] fieldCoordinates;// = new int[fieldSize][2]; // for each field their coordinate onscreen
     public final int[][][] houseCoordinates;// = new int[numPlayers][numPieces][2]; // for each player, for each of the 4 house-fields, their coordinate
     public final int[] drawCardFields;
-
-    /**
-     * Constructor for Board class
-    * @param fieldSize An Integer representing the size of the field
-    * @param numPlayers An Integer representing the number of players
-    * @param numPieces An Integer representing the number of pieces
-    */
-    public Board(int fieldSize, int numPlayers, int numPieces) {
+    public Board(int fieldSize, int numPlayers, int numPieces, ArrayList<Integer> startingPosIndices, ArrayList<Integer> drawCardFields) {
         this.fieldSize = fieldSize;
         this.numPlayers = numPlayers;
         this.numPieces = numPieces;
-        startingPosIndices = new int[numPlayers];
         fieldCoordinates = new int[fieldSize][2];
         houseCoordinates = new int[numPlayers][Math.min(numPieces, numHouses+1)][2]; // +1 for the ellipse
-        drawCardFields = new int[numPlayers];
-        // distribute the players in equal distance from each other
-        for (int i = 0; i < numPlayers; i++) {
-            startingPosIndices[i] = (i * fieldSize / numPlayers);
-            drawCardFields[i] = (int) ((i+0.5) * fieldSize / numPlayers);
+        this.startingPosIndices = new int[startingPosIndices.size()];
+        for(int i = 0; i < startingPosIndices.size(); ++i){
+            this.startingPosIndices[i] = startingPosIndices.get(i);
+        }
+        this.drawCardFields = new int[drawCardFields.size()];
+        for(int i = 0; i < drawCardFields.size(); ++i){
+            this.drawCardFields[i] = drawCardFields.get(i);
         }
         calculateCoordinates();
     }
