@@ -146,7 +146,7 @@ public final class Game {
         this.playersRemaining = playerList.size();
         int excludedCount = 0;
         // TODO: What if game over
-        playerToMoveIndex = (playerToStartColor + 1) % playerList.size(); // TODO: Check if this is correct
+        playerToMoveIndex = 0; // (playerToStartColor + 1) % playerList.size(); // TODO: Check if this is correct
         playerToStartColor = playerToMoveIndex;
         round++;
         // System.out.println(this.round);
@@ -546,7 +546,8 @@ public final class Game {
         }
         if (foundCard == null) return null;
         cardService.setType(foundCard);
-        Move move = cardService.getMove(this, selectedValue, pieceId, isStarter, opponentPieceId, player);
+        Move move = cardService.getMove(this, selectedValue, pieceId % lobbyConfig.getFiguresPerPlayer(),
+                isStarter, opponentPieceId % lobbyConfig.getFiguresPerPlayer(), player);
         //for m in legalMoves see if functionally the same
         ArrayList<Move> moves = player.generateMoves(this); //TODO only need to gen moves for a particular card type
         for (Move value : moves) {

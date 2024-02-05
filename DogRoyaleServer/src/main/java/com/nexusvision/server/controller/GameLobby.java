@@ -308,6 +308,7 @@ public class GameLobby {
 
         game.initDeck();
         setupNewRound();
+        serverController.setWaitingForMove(getClientToMoveId());
         gameDuration = lobbyConfig.getMaximumGameDuration();
         startLiveTimer();
         return true;
@@ -403,15 +404,15 @@ public class GameLobby {
             setupNewRound();
         }
 
+        if (!serverController.setWaitingForMove(getClientToMoveId())) {
+            throw new RuntimeException("Failed to keep up consistency because setting up next move failed");
+        }
+
         BoardState boardState = boardStateService.generateBoardState(game, lobbyConfig.getPlayerOrder());
         String boardStateMessage = gson.toJson(boardState);
 
         lobbyPublisher.publish(boardStateMessage);
 
-        int nextMoveClientId = getClientToMoveId();
-        if (!serverController.setWaitingForMove(nextMoveClientId)) {
-            throw new RuntimeException("Failed to keep up consistency because setting up next move failed");
-        }
         startTurnTimer();
     }
 
@@ -509,7 +510,6 @@ public class GameLobby {
         updateDrawCards.setHandCards(handCards);
         String updateDrawCardsMessage = gson.toJson(updateDrawCards, UpdateDrawCards.class);
         lobbyPublisher.publish(updateDrawCardsMessage);
-        serverController.setWaitingForMove(getClientToMoveId());
     }
 
     /**

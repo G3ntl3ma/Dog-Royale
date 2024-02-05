@@ -70,6 +70,11 @@ public class ClientHandler extends Handler implements Runnable, Subscriber {
             }
         } catch (IOException e) {
             log.error("Error while trying to read the client message: " + e.getMessage());
+        } catch (Exception e) {
+            for (StackTraceElement s : e.getStackTrace()) {
+                System.out.println(s.toString());
+            }
+            log.error(e.getMessage());
         } finally {
             try {
                 clientSocket.close();
